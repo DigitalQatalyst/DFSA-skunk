@@ -37,16 +37,45 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Primary - Red/Burgundy (DFSA Platform)
         primary: {
-          DEFAULT: "#0030E3",
-          dark: "#002080",
-          light: "#99B2FF",
+          DEFAULT: "#9b1823",
+          dark: "#7a1219",
+          light: "#c5505c",
+          50: '#fef2f2',
+          100: '#fee2e2',
+          600: '#9b1823',
+          700: '#7a1219',
+          800: '#621015',
+          900: '#4a0c10',
         },
+        // DFSA Secondary - Gold
+        'dfsa-gold': {
+          DEFAULT: '#A39161',
+          50: '#f9f7f1',
+          100: '#f3efe3',
+          500: '#b5a273',
+          600: '#A39161',
+          700: '#8a7a51',
+          800: '#6f6241',
+        },
+        // DFSA Accent - Teal
+        'dfsa-teal': {
+          DEFAULT: '#0891B2',
+          50: '#ECFEFF',
+          100: '#CFFAFE',
+          500: '#06B6D4',
+          600: '#0891B2',
+          700: '#0E7490',
+          800: '#155E75',
+        },
+        // Keep existing teal for backward compatibility
         teal: {
           DEFAULT: "#00E5D1",
           dark: "#00665C",
           light: "#99FFF5",
         },
+        // Keep existing purple for backward compatibility
         purple: {
           DEFAULT: "#954BF9",
           dark: "#4F2E80",
@@ -54,8 +83,11 @@ module.exports = {
         },
       },
       fontFamily: {
-        display: ["Palatino", "serif"],
-        body: ["Helvetica Neue", "Helvetica", "Arial", "sans-serif"],
+        display: ['Crimson Pro', 'Georgia', 'serif'],
+        heading: ['Inter', 'DM Sans', 'system-ui', 'sans-serif'],
+        body: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        serif: ['Crimson Pro', 'Georgia', 'serif'],
       },
       zIndex: {
         400: 400,

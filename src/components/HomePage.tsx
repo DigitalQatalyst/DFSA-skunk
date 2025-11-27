@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import HeroSection from './HeroSection';
+import LicenseCategoriesSection from './LicenseCategoriesSection';
+import AuthorizationJourneySection from './AuthorizationJourneySection';
+import KeyPersonnelSection from './KeyPersonnelSection';
+import ComplianceServicesSection from './ComplianceServicesSection';
+import TestimonialsSection from './TestimonialsSection';
+import PricingSection from './PricingSection';
+import FAQSection from './FAQSection';
+import ResourceLibrarySection from './ResourceLibrarySection';
 import ProofAndTrust from './ProofAndTrust';
-import EnterpriseStages from './EnterpriseStages';
-import Home from './Home';
-import KnowledgeHub from './KnowledgeHub';
 import CallToAction from './CallToAction';
-import KhalifaFundAttribution from './KhalifaFundAttribution';
-import FeaturedProgramSpotlight from './FeaturedProgramSpotlight';
 
 const HomePage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -27,12 +30,12 @@ const HomePage: React.FC = () => {
     return (
       <div className="fixed inset-0 bg-gradient-to-r from-blue-900 to-indigo-900 flex items-center justify-center z-50">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <h2 className="text-white text-xl font-bold">
-            Loading Enterprise Journey Platform
+            Loading DFSA Platform
           </h2>
-          <p className="text-blue-200 mt-2">
-            Your gateway to business growth in Abu Dhabi
+          <p className="text-gray-200 mt-2">
+            Expert Regulatory Services for the DIFC
           </p>
         </div>
       </div>
@@ -47,11 +50,15 @@ const HomePage: React.FC = () => {
       />
       <main className="flex-grow">
         <HeroSection />
-        <FeaturedProgramSpotlight />
-        <ProofAndTrust />
-        <EnterpriseStages />
-        <Home />
-        <KnowledgeHub graphqlEndpoint={null} />
+        <LicenseCategoriesSection />
+        <AuthorizationJourneySection />
+        <KeyPersonnelSection />
+        <ComplianceServicesSection />
+        <TestimonialsSection />
+        <PricingSection />
+        <FAQSection />
+        <ResourceLibrarySection />
+        {/* <ProofAndTrust /> */}
         <CallToAction />
       </main>
       <Footer isLoggedIn={false} />

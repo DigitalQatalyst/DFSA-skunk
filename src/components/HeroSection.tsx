@@ -1,372 +1,172 @@
-import React, { useEffect, useState } from "react";
-import { Send, ChevronDown, ArrowRight, Building } from "lucide-react";
+import React from "react";
+import { ChevronDown, ArrowRight, Calendar } from "lucide-react";
 import {
   AnimatedText,
   FadeInUpOnScroll,
   StaggeredFadeIn,
+  AnimatedCounter,
 } from "./AnimationUtils";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/UnifiedAuthProvider";
+import { useLocation, useNavigate } from "react-router-dom";
+import { trustMetrics } from "../data/dfsa";
 
 interface HeroSectionProps {
   "data-id"?: string;
 }
 
+/**
+ * DFSA Hero Section
+ * Professional landing section for DFSA Regulatory Services Platform
+ */
 const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
-  const [prompt, setPrompt] = useState("");
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-
-  // Handle sign in
-  const { user, login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleSignIn = () => {
-    login();
-  };
-
-  const scrollToPartner = () => {
+  // Scroll to consultation form
+  const scrollToConsultation = () => {
     if (location.pathname !== "/") {
-      navigate({ pathname: "/", hash: "#partner" });
+      navigate({ pathname: "/", hash: "#consultation" });
       return;
     }
-    if (window.location.hash !== "#partner") {
-      window.location.hash = "#partner";
-    }
-    const el =
-      document.getElementById("cta-partner") ||
-      document.getElementById("contact");
+    const el = document.getElementById("consultation") || document.getElementById("contact");
     if (el && typeof el.scrollIntoView === "function") {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
-  const handleSubmitPrompt = async () => {
-    if (!prompt.trim()) return;
-
-    setIsProcessing(true);
-
-    try {
-      // Check if Voiceflow is loaded and ready with proper type checking
-      if (
-        typeof window !== "undefined" &&
-        window.voiceflow?.chat &&
-        typeof window.voiceflow.chat.interact === "function"
-      ) {
-        console.log("Sending prompt to Voiceflow:", prompt);
-
-        // Send the user's prompt as a text message to Voiceflow
-        window.voiceflow.chat.interact({
-          type: "text",
-          payload: prompt,
-        });
-
-        // Open the chatbot widget after sending the message
-        setTimeout(() => {
-          // Try different methods to open the chat widget with proper type checking
-          if (window.voiceflow?.chat) {
-            if (typeof window.voiceflow.chat.open === "function") {
-              window.voiceflow.chat.open();
-            } else if (typeof window.voiceflow.chat.show === "function") {
-              window.voiceflow.chat.show();
-            } else {
-              // Fallback: try to click the launcher button programmatically
-              const launcherButton = document.querySelector(
-                ".vfrc-launcher"
-              ) as HTMLElement;
-              if (launcherButton) {
-                launcherButton.click();
-              }
-            }
-          }
-
-          setPrompt(""); // Clear the input
-          setIsProcessing(false);
-        }, 300);
-      } else {
-        console.error(
-          "Voiceflow chat not available. Make sure KfBot component is loaded."
-        );
-
-        // Fallback: Wait a bit and try again
-        setTimeout(() => {
-          if (
-            window.voiceflow?.chat &&
-            typeof window.voiceflow.chat.interact === "function"
-          ) {
-            window.voiceflow.chat.interact({
-              type: "text",
-              payload: prompt,
-            });
-
-            // Try to open the chatbot widget
-            setTimeout(() => {
-              if (window.voiceflow?.chat) {
-                if (typeof window.voiceflow.chat.open === "function") {
-                  window.voiceflow.chat.open();
-                } else if (typeof window.voiceflow.chat.show === "function") {
-                  window.voiceflow.chat.show();
-                } else {
-                  // Fallback: try to click the launcher button programmatically
-                  const launcherButton = document.querySelector(
-                    ".vfrc-launcher"
-                  ) as HTMLElement;
-                  if (launcherButton) {
-                    launcherButton.click();
-                  }
-                }
-              }
-            }, 300);
-
-            setPrompt("");
-          } else {
-            alert("Chat service is not ready. Please try again in a moment.");
-          }
-          setIsProcessing(false);
-        }, 1000);
-      }
-    } catch (error) {
-      console.error("Error sending message to Voiceflow:", error);
-      alert("There was an error connecting to the chat. Please try again.");
-      setIsProcessing(false);
+  // Scroll to contact section
+  const scrollToContact = () => {
+    if (location.pathname !== "/") {
+      navigate({ pathname: "/", hash: "#contact" });
+      return;
     }
-  };
-
-  const scrollToMarketplaces = () => {
-    const marketplacesSection = document.getElementById("marketplaces-section");
-    if (marketplacesSection) {
-      marketplacesSection.scrollIntoView({
-        behavior: "smooth",
-      });
-    }
-  };
-
-  // Show suggestion pills with delay after focus
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (isSearchFocused) {
-      timer = setTimeout(() => {
-        setShowSuggestions(true);
-      }, 500);
-    } else {
-      setShowSuggestions(false);
-    }
-    return () => clearTimeout(timer);
-  }, [isSearchFocused]);
-
-  const suggestionPills = [
-    "How do I get funding for my business?",
-    "What services help with business expansion?",
-    "How to connect with business mentors?",
-    "Steps to register a company in Abu Dhabi",
-  ];
-
-  // Handle suggestion pill clicks
-  const handleSuggestionClick = async (suggestion: string) => {
-    setPrompt(suggestion);
-    setIsSearchFocused(true);
-
-    // Auto-submit the suggestion
-    setIsProcessing(true);
-
-    try {
-      // Check if Voiceflow is loaded and ready with proper type checking
-      if (
-        typeof window !== "undefined" &&
-        window.voiceflow?.chat &&
-        typeof window.voiceflow.chat.interact === "function"
-      ) {
-        console.log("Sending suggestion to Voiceflow:", suggestion);
-
-        // Send the suggestion as a text message to Voiceflow
-        window.voiceflow.chat.interact({
-          type: "text",
-          payload: suggestion,
-        });
-
-        // Open the chatbot widget after sending the message
-        setTimeout(() => {
-          // Try different methods to open the chat widget with proper type checking
-          if (window.voiceflow?.chat) {
-            if (typeof window.voiceflow.chat.open === "function") {
-              window.voiceflow.chat.open();
-            } else if (typeof window.voiceflow.chat.show === "function") {
-              window.voiceflow.chat.show();
-            } else {
-              // Fallback: try to click the launcher button programmatically
-              const launcherButton = document.querySelector(
-                ".vfrc-launcher"
-              ) as HTMLElement;
-              if (launcherButton) {
-                launcherButton.click();
-              }
-            }
-          }
-
-          setPrompt(""); // Clear the input
-          setIsProcessing(false);
-        }, 300);
-      } else {
-        console.error("Voiceflow chat not available for suggestion.");
-        setIsProcessing(false);
-        alert("Chat service is not ready. Please try again in a moment.");
-      }
-    } catch (error) {
-      console.error("Error sending suggestion to Voiceflow:", error);
-      setIsProcessing(false);
-      alert("There was an error connecting to the chat. Please try again.");
+    const el = document.getElementById("contact");
+    if (el && typeof el.scrollIntoView === "function") {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
   return (
     <div
-      className="relative w-full bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 overflow-hidden"
+      className="relative w-full bg-gray-900 overflow-hidden"
       style={{
-        backgroundImage:
-          "linear-gradient(rgba(17, 24, 39, 0.7), rgba(17, 24, 39, 0.7)), url('/heroImage.png')",
+        backgroundImage: "url('/heroImage.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
-        height: "100vh",
+        minHeight: "100vh",
       }}
       data-id={dataId}
     >
-      {/* Animated gradient overlay */}
+      {/* Dark overlay for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 via-gray-900/70 to-gray-800/80"></div>
+
+      {/* Animated gradient overlay with DFSA colors */}
       <div
-        className="absolute inset-0 bg-gradient-to-r from-blue-500/40 to-purple-600/40 mix-blend-multiply"
+        className="absolute inset-0 bg-gradient-to-r from-dfsa-gold/10 to-dfsa-teal/10 mix-blend-overlay"
         style={{
           animation: "pulse-gradient 8s ease-in-out infinite alternate",
         }}
       ></div>
 
-      <div className="container mx-auto px-4 h-full flex flex-col justify-center items-center relative z-10">
-        <div className="text-center max-w-4xl mx-auto mb-8">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight overflow-hidden">
+      {/* Geometric pattern overlay */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }}></div>
+      </div>
+
+      <div className="container mx-auto px-4 py-20 md:py-32 h-full flex flex-col justify-center items-center relative z-10">
+        {/* Main Content */}
+        <div className="text-center max-w-5xl mx-auto mb-12">
+          {/* Headline with animated text */}
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-6 leading-tight">
             <AnimatedText
-              text="Your Gateway to Enterprise Growth in Abu Dhabi"
-              gap="1rem"
+              text="Navigate DFSA Authorization with Confidence"
+              gap="0.5rem"
             />
           </h1>
+
+          {/* Subheadline */}
           <FadeInUpOnScroll delay={0.8}>
-            <p className="text-xl text-white/90 mb-8">
-              Start and scale your business with access to funding, services,
-              and partners.
+            <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto font-body">
+              Expert guidance for financial services firms seeking regulatory approval and compliance excellence in the DIFC.
             </p>
+          </FadeInUpOnScroll>
+
+          {/* Trust Metrics - Animated Badges */}
+          <FadeInUpOnScroll delay={1.0}>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mt-12 max-w-4xl mx-auto">
+              {trustMetrics.map((metric, index) => (
+                <div
+                  key={metric.id}
+                  className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20 hover:bg-white/15 transition-all duration-300"
+                  style={{
+                    animationDelay: `${1.2 + index * 0.1}s`,
+                  }}
+                >
+                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">
+                    {metric.id === 'average-timeline' ? (
+                      <span>{metric.value} mo</span>
+                    ) : (
+                      <AnimatedCounter end={metric.value} suffix={metric.id === 'success-rate' ? '%' : '+'} />
+                    )}
+                  </div>
+                  <div className="text-sm md:text-base text-white/80 font-medium">
+                    {metric.label}
+                  </div>
+                </div>
+              ))}
+            </div>
           </FadeInUpOnScroll>
         </div>
 
-        {/* AI Prompt Interface with animation */}
-        <FadeInUpOnScroll delay={1.2} className="w-full max-w-3xl mb-10">
-          <div
-            className={`bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 ${
-              isSearchFocused ? "shadow-xl transform scale-105" : ""
-            }`}
+        {/* Call to Action Buttons */}
+        <StaggeredFadeIn
+          staggerDelay={0.15}
+          className="flex flex-col sm:flex-row gap-4 mt-8"
+        >
+          <button
+            onClick={scrollToConsultation}
+            className="px-8 py-4 bg-white text-primary hover:bg-gray-50 font-bold text-lg rounded-lg shadow-xl
+                       transform transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl
+                       flex items-center justify-center gap-2 group"
           >
-            <div className="p-2 md:p-3">
-              <div className="flex items-center">
-                {/* Input field */}
-                <div className="flex-grow relative">
-                  <input
-                    type="text"
-                    placeholder="Ask how to grow your business in Abu Dhabi..."
-                    className={`w-full py-3 px-4 outline-none text-gray-700 rounded-lg bg-gray-50 transition-all duration-300 ${
-                      isSearchFocused ? "bg-white" : ""
-                    }`}
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    onFocus={() => setIsSearchFocused(true)}
-                    onBlur={() =>
-                      setTimeout(() => setIsSearchFocused(false), 200)
-                    }
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        handleSubmitPrompt();
-                      }
-                    }}
-                  />
-                </div>
-                {/* Submit button */}
-                <button
-                  onClick={handleSubmitPrompt}
-                  disabled={isProcessing || !prompt.trim()}
-                  className={`ml-2 p-3 rounded-lg flex items-center justify-center transition-all ${
-                    isProcessing || !prompt.trim()
-                      ? "bg-gray-200 cursor-not-allowed text-gray-400"
-                      : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
-                  }`}
-                >
-                  <Send
-                    size={20}
-                    className={isProcessing ? "animate-pulse" : ""}
-                  />
-                </button>
-              </div>
-            </div>
+            <span className="relative z-10">Start Your Authorization Journey</span>
+            <ArrowRight
+              size={20}
+              className="relative z-10 group-hover:translate-x-1 transition-transform duration-300"
+            />
+          </button>
 
-            {/* Example prompts with staggered animation */}
-            <div
-              className={`bg-gray-50 px-4 py-3 border-t border-gray-100 transition-all duration-500 ease-in-out ${
-                showSuggestions
-                  ? "opacity-100 max-h-24 mb-4"
-                  : "opacity-0 max-h-0 overflow-hidden"
-              }`}
-            >
-              <p className="text-xs text-gray-500 mb-2">Try asking:</p>
-              <div className="flex flex-wrap gap-2">
-                {suggestionPills.map((pill, index) => (
-                  <button
-                    key={index}
-                    className="text-xs bg-white border border-gray-200 rounded-full px-3 py-1 text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer"
-                    style={{
-                      opacity: showSuggestions ? 1 : 0,
-                      transform: showSuggestions
-                        ? "translateY(0)"
-                        : "translateY(10px)",
-                      transition:
-                        "opacity 0.3s ease-out, transform 0.3s ease-out",
-                      transitionDelay: `${0.1 + index * 0.1}s`,
-                    }}
-                    onClick={() => handleSuggestionClick(pill)}
-                  >
-                    {pill}
-                  </button>
-                ))}
-              </div>
+          <button
+            onClick={scrollToContact}
+            className="px-8 py-4 bg-dfsa-gold hover:bg-dfsa-gold-700 text-white font-bold text-lg rounded-lg shadow-xl
+                       flex items-center justify-center gap-2 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+          >
+            <Calendar size={20} />
+            <span>Schedule Consultation</span>
+          </button>
+        </StaggeredFadeIn>
+
+        {/* Trust Indicators */}
+        <FadeInUpOnScroll delay={1.6}>
+          <div className="mt-12 flex flex-wrap justify-center gap-6 text-white/70 text-sm">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-dfsa-teal rounded-full"></div>
+              <span>Former DFSA Supervisors</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-dfsa-gold rounded-full"></div>
+              <span>95% First-Time Success</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-white rounded-full"></div>
+              <span>Full Compliance Support</span>
             </div>
           </div>
         </FadeInUpOnScroll>
-
-        {/* Call to Action Buttons with animations and onClick handlers */}
-        <StaggeredFadeIn
-          staggerDelay={0.2}
-          className="flex flex-col sm:flex-row gap-4 mt-2"
-        >
-          <button
-            onClick={handleSignIn}
-            className="px-8 py-3 bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white font-bold rounded-lg shadow-lg transform transition-all duration-300 hover:-translate-y-1 hover:shadow-xl text-center flex items-center justify-center overflow-hidden group"
-          >
-            <span className="relative z-10">Start Your Growth Journey</span>
-            <ArrowRight
-              size={18}
-              className="ml-2 relative z-10 group-hover:translate-x-1 transition-transform duration-300"
-            />
-            {/* Ripple effect on hover */}
-            <span className="absolute inset-0 overflow-hidden rounded-lg">
-              <span className="absolute inset-0 bg-white/20 transform scale-0 opacity-0 group-hover:scale-[2.5] group-hover:opacity-100 rounded-full transition-all duration-700 origin-center"></span>
-            </span>
-          </button>
-          <button
-            onClick={scrollToPartner}
-            className="px-8 py-3 bg-white text-blue-700 hover:bg-blue-50 font-bold rounded-lg shadow-lg flex items-center justify-center gap-2 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-          >
-            Become a Partner
-            <Building size={18} />
-          </button>
-        </StaggeredFadeIn>
       </div>
 
-      {/* Scroll indicator with animation */}
+      {/* Scroll indicator */}
       <div
         className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce cursor-pointer"
         onClick={() => {
@@ -376,21 +176,23 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
           });
         }}
       >
-        <ChevronDown size={24} className="text-white" />
-        <span className="sr-only">Scroll down</span>
+        <div className="flex flex-col items-center">
+          <ChevronDown size={28} className="text-white/80" />
+          <span className="text-white/60 text-xs mt-1">Scroll to explore</span>
+        </div>
       </div>
 
-      {/* Add keyframes for gradient animation */}
+      {/* Keyframes for gradient animation */}
       <style jsx>{`
         @keyframes pulse-gradient {
           0% {
-            opacity: 0.4;
+            opacity: 0.3;
           }
           50% {
-            opacity: 0.6;
+            opacity: 0.5;
           }
           100% {
-            opacity: 0.4;
+            opacity: 0.3;
           }
         }
       `}</style>
