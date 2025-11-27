@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/vite.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enterprise Journey</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- Voiceflow Chat Widget -->
+    <script type="text/javascript">
+      (function(d, t) {
+          var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+          v.onload = function() {
+            window.voiceflow && window.voiceflow.chat && window.voiceflow.chat.load && window.voiceflow.chat.load({
+              verify: { projectID: '6849bea9894655c0d600d259' },
+              url: 'https://general-runtime.voiceflow.com',
+              versionID: 'production',
+              voice: { url: 'https://runtime-api.voiceflow.com' }
+            });
+          }
+          v.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs'; v.type = 'text/javascript'; s.parentNode.insertBefore(v, s);
+      })(document, 'script');
+    </script>
+    <script type="module" src="/src/index.tsx"></script>
+  </body>
+</html>

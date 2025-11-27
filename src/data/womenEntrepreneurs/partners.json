@@ -1,0 +1,52 @@
+{
+  "partners": [
+    {
+      "title": "Abu Dhabi Business Women Council",
+      "description": "Empowers women entrepreneurs through the Mubdi'ah program and business training.",
+      "logo": "https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+      "link": "https://adbusinesswomen.ae"
+    },
+    {
+      "title": "Dubai Business Women Council",
+      "description": "Supports women's participation in the private sector through mentorship and networking.",
+      "logo": "https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+      "link": "https://dbwc.ae"
+    },
+    {
+      "title": "NAMA Women Advancement Establishment",
+      "description": "Connects women with global partners and skill-building programs.",
+      "logo": "https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+      "link": "https://namawomen.ae"
+    },
+    {
+      "title": "Female Fusion",
+      "description": "Private network offering workshops and visibility opportunities.",
+      "logo": "https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+      "link": "https://femalefusion.ae"
+    },
+    {
+      "title": "Khalifa Fund for Enterprise Development",
+      "description": "Provides financial support and mentorship for Emirati entrepreneurs.",
+      "logo": "https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+      "link": "https://khalifafund.ae"
+    },
+    {
+      "title": "Sheraa",
+      "description": "Entrepreneurship center supporting innovative startups in Sharjah.",
+      "logo": "https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+      "link": "https://sheraa.ae"
+    },
+    {
+      "title": "Hub71",
+      "description": "Abu Dhabi's global tech ecosystem offering incentives for startups.",
+      "logo": "https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+      "link": "https://hub71.com"
+    },
+    {
+      "title": "Dubai SME",
+      "description": "Supporting small and medium enterprises in Dubai.",
+      "logo": "https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+      "link": "https://sme.ae"
+    }
+  ]
+}

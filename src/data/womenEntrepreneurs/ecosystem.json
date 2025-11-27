@@ -1,0 +1,61 @@
+{
+  "regions": [
+    {
+      "name": "Abu Dhabi",
+      "enablers": 7,
+      "keyPlayers": ["Khalifa Fund", "AD Business Women Council", "Hub71"],
+      "coordinates": [24.4539, 54.3773],
+      "color": "#0030E3"
+    },
+    {
+      "name": "Dubai",
+      "enablers": 6,
+      "keyPlayers": ["DBWC", "Dubai SME", "Female Fusion"],
+      "coordinates": [25.2048, 55.2708],
+      "color": "#00E5D1"
+    },
+    {
+      "name": "Sharjah",
+      "enablers": 5,
+      "keyPlayers": ["NAMA", "Sheraa", "SBWC"],
+      "coordinates": [25.3463, 55.4209],
+      "color": "#954BF9"
+    },
+    {
+      "name": "Ajman",
+      "enablers": 3,
+      "keyPlayers": ["Ajman Chamber", "Ajman Free Zone"],
+      "coordinates": [25.4111, 55.4354],
+      "color": "#99B2FF"
+    },
+    {
+      "name": "Umm Al Quwain",
+      "enablers": 2,
+      "keyPlayers": ["UAQ Chamber of Commerce"],
+      "coordinates": [25.5647, 55.5554],
+      "color": "#99FFF5"
+    },
+    {
+      "name": "Ras Al Khaimah",
+      "enablers": 4,
+      "keyPlayers": ["RAK Chamber", "RAK Economic Zone"],
+      "coordinates": [25.7895, 55.9432],
+      "color": "#C499FF"
+    },
+    {
+      "name": "Fujairah",
+      "enablers": 3,
+      "keyPlayers": ["Fujairah Business Women Council", "Fujairah Free Zone"],
+      "coordinates": [25.1288, 56.3265],
+      "color": "#E8FF63"
+    }
+  ],
+  "categories": [
+    {"name": "Federal", "color": "blue"},
+    {"name": "Local", "color": "teal"},
+    {"name": "Enabler", "color": "purple"},
+    {"name": "Academic", "color": "yellow"},
+    {"name": "Private", "color": "red"},
+    {"name": "Tech", "color": "green"}
+  ]
+}

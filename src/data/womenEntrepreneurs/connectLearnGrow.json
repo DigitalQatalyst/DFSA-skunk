@@ -1,0 +1,235 @@
+{
+  "tabs": [
+    {
+      "id": "communities",
+      "title": "Communities",
+      "items": [
+        {
+          "id": 1,
+          "title": "Female Fusion Network",
+          "description": "Peer learning and networking community for women-led SMEs.",
+          "emirate": "Dubai",
+          "icon": "Users",
+          "link": "#",
+          "womenFocused": true
+        },
+        {
+          "id": 2,
+          "title": "Women Entrepreneurs Abu Dhabi",
+          "description": "Marketplace for local women-owned brands and pop-ups.",
+          "emirate": "Abu Dhabi",
+          "icon": "ShoppingBag",
+          "link": "#",
+          "womenFocused": true
+        },
+        {
+          "id": 3,
+          "title": "Women in Tech UAE",
+          "description": "Support network for women in technology sectors across the Emirates.",
+          "emirate": "Dubai",
+          "icon": "Cpu",
+          "link": "#",
+          "womenFocused": true
+        },
+        {
+          "id": 4,
+          "title": "Creative Hub Sharjah",
+          "description": "Collaborative space for creative entrepreneurs and artists.",
+          "emirate": "Sharjah",
+          "icon": "Palette",
+          "link": "#",
+          "womenFocused": false
+        },
+        {
+          "id": 5,
+          "title": "RAK Business Women Council",
+          "description": "Supporting women entrepreneurs in Ras Al Khaimah through networking events.",
+          "emirate": "Ras Al Khaimah",
+          "icon": "Building",
+          "link": "#",
+          "womenFocused": true
+        },
+        {
+          "id": 6,
+          "title": "Ajman Entrepreneurs Network",
+          "description": "Connecting founders and business owners across industries.",
+          "emirate": "Ajman",
+          "icon": "Network",
+          "link": "#",
+          "womenFocused": false
+        }
+      ]
+    },
+    {
+      "id": "resources",
+      "title": "Resources",
+      "items": [
+        {
+          "id": 1,
+          "title": "Academy for Women Entrepreneurs",
+          "description": "Training and mentorship by startAD.",
+          "emirate": "Abu Dhabi",
+          "icon": "GraduationCap",
+          "link": "#",
+          "womenFocused": true
+        },
+        {
+          "id": 2,
+          "title": "Digital Skills Library",
+          "description": "Free online courses on digital marketing, e-commerce, and business technology.",
+          "emirate": "Dubai",
+          "icon": "BookOpen",
+          "link": "#",
+          "womenFocused": false
+        },
+        {
+          "id": 3,
+          "title": "Entrepreneurship Toolkit",
+          "description": "Business plan templates, financial models, and legal document guides.",
+          "emirate": "Nationwide",
+          "icon": "Briefcase",
+          "link": "#",
+          "womenFocused": false
+        },
+        {
+          "id": 4,
+          "title": "Market Research Database",
+          "description": "Access to UAE market reports and consumer insights.",
+          "emirate": "Abu Dhabi",
+          "icon": "BarChart",
+          "link": "#",
+          "womenFocused": false
+        },
+        {
+          "id": 5,
+          "title": "Women Founders Hub",
+          "description": "Curated resources for female entrepreneurs at every stage.",
+          "emirate": "Dubai",
+          "icon": "Star",
+          "link": "#",
+          "womenFocused": true
+        }
+      ]
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "items": [
+        {
+          "id": 1,
+          "title": "Business Setup Assistance",
+          "description": "Guidance on licensing, permits, and business registration across all emirates.",
+          "emirate": "Nationwide",
+          "icon": "FileText",
+          "link": "#",
+          "womenFocused": false
+        },
+        {
+          "id": 2,
+          "title": "Export Development Program",
+          "description": "Support for women-owned businesses looking to expand internationally.",
+          "emirate": "Dubai",
+          "icon": "Globe",
+          "link": "#",
+          "womenFocused": true
+        },
+        {
+          "id": 3,
+          "title": "One-on-One Mentorship",
+          "description": "Connect with experienced business leaders for personalized guidance.",
+          "emirate": "Abu Dhabi",
+          "icon": "Users",
+          "link": "#",
+          "womenFocused": false
+        },
+        {
+          "id": 4,
+          "title": "Women's Business Financing",
+          "description": "Specialized financing options for female entrepreneurs.",
+          "emirate": "Sharjah",
+          "icon": "DollarSign",
+          "link": "#",
+          "womenFocused": true
+        },
+        {
+          "id": 5,
+          "title": "Innovation Lab Access",
+          "description": "Access to prototyping facilities and innovation spaces.",
+          "emirate": "Dubai",
+          "icon": "Lightbulb",
+          "link": "#",
+          "womenFocused": false
+        },
+        {
+          "id": 6,
+          "title": "Legal Advisory Services",
+          "description": "Specialized legal support for business owners.",
+          "emirate": "Abu Dhabi",
+          "icon": "Scale",
+          "link": "#",
+          "womenFocused": false
+        }
+      ]
+    },
+    {
+      "id": "programs",
+      "title": "Programs",
+      "items": [
+        {
+          "id": 1,
+          "title": "Women Entrepreneurship Accelerator",
+          "description": "Six-month intensive program for high-growth potential startups.",
+          "emirate": "Dubai",
+          "icon": "Rocket",
+          "link": "#",
+          "womenFocused": true
+        },
+        {
+          "id": 2,
+          "title": "Pitch Perfect",
+          "description": "Investor readiness program with pitch training and investor connections.",
+          "emirate": "Abu Dhabi",
+          "icon": "Presentation",
+          "link": "#",
+          "womenFocused": false
+        },
+        {
+          "id": 3,
+          "title": "E-commerce Launchpad",
+          "description": "Specialized program for women entrepreneurs building online businesses.",
+          "emirate": "Sharjah",
+          "icon": "ShoppingCart",
+          "link": "#",
+          "womenFocused": true
+        },
+        {
+          "id": 4,
+          "title": "Sustainability Ventures",
+          "description": "Support for eco-friendly business models and green innovation.",
+          "emirate": "Abu Dhabi",
+          "icon": "Leaf",
+          "link": "#",
+          "womenFocused": false
+        },
+        {
+          "id": 5,
+          "title": "Women in Tech Bootcamp",
+          "description": "Intensive technical training for women entering the tech sector.",
+          "emirate": "Dubai",
+          "icon": "Code",
+          "link": "#",
+          "womenFocused": true
+        },
+        {
+          "id": 6,
+          "title": "Creative Industries Fund",
+          "description": "Grants for entrepreneurs in design, media, and creative sectors.",
+          "emirate": "Fujairah",
+          "icon": "Image",
+          "link": "#",
+          "womenFocused": false
+        }
+      ]
+    }
+  ]
+}

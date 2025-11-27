@@ -1,0 +1,35 @@
+{
+  "regions": [
+    {"name":"Abu Dhabi","count":24,"image":"https://images.unsplash.com/photo-1512632578888-169bbbc64f33?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
+    {"name":"Dubai","count":31,"image":"https://images.unsplash.com/photo-1546412414-e1885e51ceb5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
+    {"name":"Sharjah","count":18,"image":"https://images.unsplash.com/photo-1551966775-a4ddc8df052b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
+    {"name":"Ajman","count":12,"image":"https://images.unsplash.com/photo-1582120031356-35f21bf61055?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
+    {"name":"Umm Al Quwain","count":8,"image":"https://images.unsplash.com/photo-1577717903315-1691ae25ab3f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
+    {"name":"Ras Al Khaimah","count":15,"image":"https://images.unsplash.com/photo-1605540436563-5bca919ae766?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
+    {"name":"Fujairah","count":11,"image":"https://images.unsplash.com/photo-1583422409516-2895a77efded?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"}
+  ],
+  "stories": [
+    {"name":"Fatima Al Mansoori","business":"EcoGrow Farms","sector":"Agritech","region":"Abu Dhabi","summary":"Founded UAE's first urban hydroponics network","image":"https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
+    {"name":"Sara Al Nuaimi","business":"Artistry Co","sector":"Creative","region":"Dubai","summary":"Bringing Emirati art to global stages","image":"https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
+    {"name":"Maryam Al Hashimi","business":"TechWave Solutions","sector":"Tech","region":"Sharjah","summary":"Revolutionizing smart city technologies","image":"https://images.unsplash.com/photo-1573497019236-61f28a57215f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
+    {"name":"Noura Al Kaabi","business":"EcoStyle","sector":"Sustainability","region":"Abu Dhabi","summary":"Creating sustainable fashion from recycled materials","image":"https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
+    {"name":"Aisha Al Zaabi","business":"Desert Bloom","sector":"Sustainability","region":"Fujairah","summary":"Transforming desert areas into sustainable gardens","image":"https://images.unsplash.com/photo-1580894732444-8ecded7900cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
+    {"name":"Layla Al Nasser","business":"Inclusive Education","sector":"Social Impact","region":"Dubai","summary":"Making education accessible for all abilities","image":"https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
+    {"name":"Hessa Al Falasi","business":"Digital Nomads","sector":"Tech","region":"Ras Al Khaimah","summary":"Creating co-working spaces for remote workers","image":"https://images.unsplash.com/photo-1573497019236-61f28a57215f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
+    {"name":"Shamma Al Mazrouei","business":"Heritage Crafts","sector":"Creative","region":"Ajman","summary":"Preserving Emirati crafts through modern designs","image":"https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"}
+  ],
+  "programs": [
+    {"title":"Khalifa Fund Women Entrepreneur Program","organization":"Khalifa Fund","region":"Nationwide","description":"Financial and advisory support for female founders.","link":"https://khalifafund.ae"},
+    {"title":"Dubai Business Women Council","organization":"DBWC","region":"Dubai","description":"Networking and training platform empowering businesswomen.","link":"https://dbwc.ae"},
+    {"title":"Sharjah Women's Economic Empowerment","organization":"SCCI","region":"Sharjah","description":"Initiatives to increase women's participation in business.","link":"https://sharjah.ae"},
+    {"title":"Abu Dhabi Businesswomen Council","organization":"ADBWC","region":"Abu Dhabi","description":"Supporting women entrepreneurs in the capital.","link":"https://abudhabi.ae"},
+    {"title":"Emirates Businesswomen Award","organization":"Dubai Quality Group","region":"Nationwide","description":"Recognizing excellence in women-led businesses.","link":"https://dqg.org"},
+    {"title":"Women-focused Accelerator","organization":"Hub71","region":"Abu Dhabi","description":"Tailored support for women-led tech startups.","link":"https://hub71.com"}
+  ],
+  "stats": [
+    {"label":"Startups Supported","value":"10 000 +"},
+    {"label":"Jobs Created","value":"25 000 +"},
+    {"label":"Funding Raised","value":"$120 M +"},
+    {"label":"Mentorship Hours","value":"45 000 +"}
+  ]
+}
