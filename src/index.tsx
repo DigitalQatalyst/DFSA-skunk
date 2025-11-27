@@ -57,7 +57,9 @@ if (container) {
             <MsalProvider instance={msalInstance}>
               <AuthProvider>
                 <AppRouter />
-                <ReactQueryDevtools initialIsOpen={false} />
+                {/* {process.env.NODE_ENV === 'development' && (
+                  <ReactQueryDevtools initialIsOpen={false} />
+                )} */}
               </AuthProvider>
             </MsalProvider>
           </ApolloProvider>

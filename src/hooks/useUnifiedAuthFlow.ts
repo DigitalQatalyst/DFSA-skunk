@@ -53,6 +53,10 @@ export function useUnifiedAuthFlow(): UnifiedAuthFlowState {
   const accountId = organization?.accountId;
   const isAdmin = role === 'admin';
 
+  // Check if user is explicitly revisiting onboarding via URL parameter
+  const searchParams = new URLSearchParams(location.search);
+  const isRevisiting = searchParams.get('revisit') === 'true';
+
   // Use React Query hook for onboarding status (only for admins)
   const {
     data: onboardingData,
@@ -138,8 +142,14 @@ export function useUnifiedAuthFlow(): UnifiedAuthFlowState {
       console.log('🎯 Onboarding completed:', onboardingState === 'completed');
     }
 
+    // Log if admin is revisiting onboarding
+    if (isAdmin && isRevisiting) {
+      console.log('🔄 [ROUTING] Admin is revisiting onboarding - bypassing completion guard');
+    }
+
     // Rule 2: Admins - if onboarding is completed and user is on onboarding page, redirect to overview
-    if (isAdmin && onboardingState === 'completed' && isOnboardingRoute) {
+    // UNLESS they are explicitly revisiting (via ?revisit=true parameter)
+    if (isAdmin && onboardingState === 'completed' && isOnboardingRoute && !isRevisiting) {
       console.log('✅ [ROUTING] Admin with completed onboarding on onboarding page - redirecting to overview');
       console.log('===================================');
       navigate('/dashboard/overview', { replace: true });

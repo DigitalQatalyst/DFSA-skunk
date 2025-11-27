@@ -119,27 +119,32 @@ export function Header({
     <>
       <header
         className={`flex items-center w-full transition-all duration-300 ${isSticky
-            ? "fixed top-0 left-0 right-0 z-40 shadow-lg backdrop-blur-sm bg-gradient-to-r from-teal-500/95 via-blue-500/95 to-purple-600/95"
-            : "relative bg-gradient-to-r from-teal-500 via-blue-500 to-purple-600"
+            ? "fixed top-0 left-0 right-0 z-40 shadow-lg backdrop-blur-sm"
+            : "relative shadow-sm"
           }`}
+        style={{
+          background: isSticky
+            ? 'linear-gradient(to right, rgba(245, 245, 245, 0.95), rgba(163, 145, 97, 0.95))'
+            : 'linear-gradient(to right, #f5f5f5, #A39161)'
+        }}
         data-id={dataId}
       >
         {/* Logo Section */}
         <Link
           to="/"
-          className={`bg-gradient-to-r from-teal-600 to-teal-500 text-white py-2 px-4 flex items-center transition-all duration-300 ${isSticky ? "h-12" : "h-16"
+          className={`py-2 px-4 flex items-center transition-all duration-300 ${isSticky ? "h-12" : "h-16"
             }`}
         >
           <img
-            src="/mzn_logo.svg"
-            alt="MZN Logo"
+            src="/logo/dfsa-logo.png"
+            alt="DFSA Logo"
             className={`transition-all duration-300 ${isSticky ? "h-8" : "h-10"
               }`}
           />
         </Link>
         {/* Main Navigation */}
         <div
-          className={`flex-1 flex justify-between items-center bg-gradient-to-r from-teal-500 via-blue-500 to-purple-600 text-white px-4 transition-all duration-300 ${isSticky ? "h-12" : "h-16"
+          className={`flex-1 flex justify-between items-center text-gray-800 px-4 transition-all duration-300 ${isSticky ? "h-12" : "h-16"
             }`}
         >
           {/* Left side: tablet sidebar hamburger + nav */}
@@ -148,7 +153,7 @@ export function Header({
               <button
                 type="button"
                 onClick={toggleSidebar}
-                className="mr-2 inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20 lg:hidden"
+                className="mr-2 inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 lg:hidden"
                 aria-label={sidebarOpen ? "Close navigation menu" : "Open navigation menu"}
                 aria-expanded={sidebarOpen ?? false}
               >
@@ -156,15 +161,8 @@ export function Header({
               </button>
             )}
             {/* Left Navigation - Desktop and Tablet */}
-            <div className="hidden md:flex items-center space-x-8">
+            <div className="hidden md:flex items-center space-x-8 ml-4">
               <ExploreDropdown isCompact={isSticky} />
-              <Link
-                to={"/discover-abudhabi"}
-                className={`hover:text-gray-200 transition-colors duration-200 cursor-pointer ${isSticky ? "text-sm" : ""
-                  }`}
-              >
-                Discover AbuDhabi
-              </Link>
             </div>
           </div>
           {/* Right Side - Conditional based on auth state and screen size */}
@@ -179,35 +177,23 @@ export function Header({
                 {/* Desktop CTAs (≥1024px) */}
                 <div className="hidden lg:flex items-center space-x-3">
                   <button
-                    className={`px-4 py-2 text-white border border-white/30 rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20 ${isSticky ? "text-sm px-3 py-1.5" : ""
+                    className={`px-4 py-2 bg-transparent border-2 rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 font-semibold ${isSticky ? "text-sm px-3 py-1.5" : ""
                       }`}
-                    onClick={scrollToPartner}
-                  >
-                    Become a Partner
-                  </button>
-                  <button
-                    className={`px-4 py-2 bg-white text-teal-700 rounded-md hover:bg-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20 font-medium ${isSticky ? "text-sm px-3 py-1.5" : ""
-                      }`}
-                    onClick={toggleEnquiryModal}
-                  >
-                    Make an Enquiry
-                  </button>
-                  <button
-                    className={`px-4 py-2 text-white border border-white/50 rounded-md hover:bg-white hover:text-teal-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20 ${isSticky ? "text-sm px-3 py-1.5" : ""
-                      }`}
+                    style={{ borderColor: '#9b1823', color: '#9b1823' }}
                     onClick={handleSignIn}
                   >
                     Sign Up
                   </button>
                 </div>
-                {/* Tablet Enquiry Button (768px - 1023px) */}
+                {/* Tablet Sign Up Button (768px - 1023px) */}
                 <div className="hidden md:flex lg:hidden items-center">
                   <button
-                    className={`px-3 py-2 bg-white text-teal-700 rounded-md hover:bg-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20 font-medium ${isSticky ? "text-sm px-2 py-1.5" : "text-sm"
+                    className={`px-3 py-2 bg-transparent border-2 rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 font-semibold ${isSticky ? "text-sm px-2 py-1.5" : "text-sm"
                       }`}
-                    onClick={toggleEnquiryModal}
+                    style={{ borderColor: '#9b1823', color: '#9b1823' }}
+                    onClick={handleSignIn}
                   >
-                    Enquiry
+                    Sign Up
                   </button>
                 </div>
               </>

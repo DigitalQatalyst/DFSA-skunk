@@ -15,6 +15,10 @@ export function useOnboardingGate() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Check if user is explicitly revisiting onboarding via URL parameter
+  const searchParams = new URLSearchParams(location.search);
+  const isRevisiting = searchParams.get('revisit') === 'true';
+
   const accountId = organization?.accountId;
 
   useEffect(() => {
@@ -52,7 +56,8 @@ export function useOnboardingGate() {
         '/dashboard/onboarding'
       );
 
-      if (next === 'completed' && onOnboardingRoute) {
+      // Don't redirect if user is explicitly revisiting onboarding
+      if (next === 'completed' && onOnboardingRoute && !isRevisiting) {
         navigate('/dashboard/overview', { replace: true });
         return;
       }

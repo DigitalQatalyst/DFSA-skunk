@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOutIcon, BellIcon, ChevronDownIcon, UserIcon, LayoutDashboard } from 'lucide-react';
+import { LogOutIcon, BellIcon, ChevronDownIcon, UserIcon, LayoutDashboard, ClipboardCheck } from 'lucide-react';
 import { useAuth } from './context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 interface ProfileDropdownProps {
@@ -105,9 +105,19 @@ export function ProfileDropdown({
           <button className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={e => {
             e.preventDefault();
             closeDropdown();
+            navigate('/dashboard/onboarding?revisit=true');
+          }}>
+            <ClipboardCheck size={16} className="mr-3 text-gray-500" />
+            <span>Onboarding</span>
+          </button>
+        </div>
+        <div className="py-1 border-b border-gray-200">
+          <button className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={e => {
+            e.preventDefault();
+            closeDropdown();
             navigate('/dashboard/overview');
           }}>
-            <LayoutDashboard size={16} className="mr-3 text-gray-500" />   
+            <LayoutDashboard size={16} className="mr-3 text-gray-500" />
           <span>Dashboard</span>
           </button>
         </div>

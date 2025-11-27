@@ -13,14 +13,16 @@
       (function(d, t) {
           var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
           v.onload = function() {
-            window.voiceflow && window.voiceflow.chat && window.voiceflow.chat.load && window.voiceflow.chat.load({
-              verify: { projectID: '6849bea9894655c0d600d259' },
+            window.voiceflow.chat.load({
+              verify: { projectID: '69283d1b489631e28656d263' },
               url: 'https://general-runtime.voiceflow.com',
               versionID: 'production',
-              voice: { url: 'https://runtime-api.voiceflow.com' }
+              voice: {
+                url: "https://runtime-api.voiceflow.com"
+              }
             });
           }
-          v.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs'; v.type = 'text/javascript'; s.parentNode.insertBefore(v, s);
+          v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
       })(document, 'script');
     </script>
     <script type="module" src="/src/index.tsx"></script>

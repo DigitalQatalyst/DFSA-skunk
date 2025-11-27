@@ -25,73 +25,20 @@ interface Marketplace {
 
 const marketplaces: Marketplace[] = [
   {
-    id: "non-financial",
-    name: "Business Services Hub",
+    id: "services",
+    name: "Services",
     description:
       "Business registration, legal advisory, tax, compliance, and SME support services",
     icon: BuildingIcon,
     href: "/marketplace/non-financial",
   },
   {
-    id: "finance",
-    name: "Finance Hub",
+    id: "enquiries",
+    name: "Enquiries",
     description:
-      "Funding options, grants, and financial services to help SMEs manage and grow",
-    icon: CreditCardIcon,
-    href: "/marketplace/financial",
-  },
-  {
-    id: "media",
-    name: "Knowledge Hub",
-    description:
-      "News, articles, and updates on Abu Dhabi's business landscape with industry insights",
+      "Submit your enquiries and get assistance with your business needs",
     icon: NewspaperIcon,
-    href: "/marketplace/knowledge-hub",
-  },
-  {
-    id: "community",
-    name: "Business Communities",
-    description:
-      "Industry communities for networking, collaboration, and sharing best practices",
-    icon: UsersIcon,
-    href: "/communities",
-    target: "_blank",
-    rel: "noopener noreferrer",
-  },
-  {
-    id: "course",
-    name: "Learning Academy",
-    description:
-      "Training and educational modules to build entrepreneurship skills and enhance businesses",
-    icon: GraduationCapIcon,
-    href: "/marketplace/courses",
-  },
-  {
-    id: "investment",
-    name: "Investment Marketplace",
-    description:
-      "Access to venture capital, crowdfunding, and grants for SME growth",
-    icon: TrendingUpIcon,
-    // href: "/marketplace/investment",
-    href: "/coming-soon",
-  },
-  {
-    id: "calendar",
-    name: "Calendar Marketplace",
-    description:
-      "Event management, matchmaking, and notifications for upcoming business events",
-    icon: CalendarIcon,
-    // href: "/marketplace/calendar",
-    href: "/marketplace/events",
-  },
-  {
-    id: "opportunity",
-    name: "Opportunity Marketplace",
-    description:
-      "Business opportunities, partnerships, and growth prospects for SMEs",
-    icon: SparklesIcon,
-    // href: "/marketplace/opportunities",
-    href: "/coming-soon",
+    href: "/enquiries",
   },
 ];
 
@@ -189,7 +136,12 @@ export function ExploreDropdown({ isCompact = false }: ExploreDropdownProps) {
     <div className="relative" ref={dropdownRef}>
       <button
         ref={buttonRef}
-        className="flex items-center text-white hover:text-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white/20 rounded-md px-2 py-1"
+        className="flex items-center text-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 rounded-md px-2 py-1 font-semibold"
+        style={{
+          '--hover-color': '#9b1823'
+        } as React.CSSProperties}
+        onMouseEnter={(e) => e.currentTarget.style.color = '#9b1823'}
+        onMouseLeave={(e) => e.currentTarget.style.color = ''}
         onClick={() => setIsOpen((v) => !v)}
         onKeyDown={handleKeyDown}
         aria-expanded={isOpen}
@@ -256,7 +208,7 @@ export function ExploreDropdown({ isCompact = false }: ExploreDropdownProps) {
                   onFocus={() => setFocusedIndex(index)}
                 >
                   <div className="flex-shrink-0 mt-0.5">
-                    <Icon size={20} className="text-teal-600" />
+                    <Icon size={20} style={{ color: '#9b1823' }} />
                   </div>
                   <div className="ml-3 flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-900 truncate">
