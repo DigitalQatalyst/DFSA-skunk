@@ -12,6 +12,7 @@ import {
 import { useAuth } from "../../components/Header";
 import { Forbidden } from "./Forbidden";
 import { logRoleDebug } from "../../services/roleMapper";
+import { isDemoModeEnabled } from "../../utils/demoAuthUtils";
 
 interface RBACRouteProps {
   subject?: Subjects;
@@ -86,6 +87,11 @@ export function RBACRoute({
         </div>
       </div>
     );
+  }
+
+  // Demo mode: bypass all authentication and permission checks
+  if (isDemoModeEnabled()) {
+    return <>{children}</>;
   }
 
   // Auth check

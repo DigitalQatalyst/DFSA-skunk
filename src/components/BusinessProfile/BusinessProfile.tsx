@@ -26,6 +26,7 @@ import {calculateMandatoryCompletion, calculateSectionCompletion,} from "../../s
 
 import {useAuth} from "../Header";
 import {useQuery} from "@tanstack/react-query";
+import { isDemoModeEnabled, getDemoUser } from "../../utils/demoAuthUtils";
 import {
     useSaveCustomerExperienceMutation, useSavePeopleAndGovernanceMutation,
     useSaveProductsMutation,
@@ -98,9 +99,12 @@ export function BusinessProfile({activeSection = "profile"}) {
     // Get user from auth context
     const {user} = useAuth();
 
+    // In demo mode, use the demo user
+    const effectiveUser = isDemoModeEnabled() ? getDemoUser() : user;
+
     // Use React Query to get profile data from cache (set by DashboardLayout)
     const {data: apiProfileData, isLoading: isContextLoading} = useQuery<any>({
-        queryKey: ["profile", "business", user?.id || "unknown"],
+        queryKey: ["profile", "business", effectiveUser?.id || "unknown"],
         queryFn: () => {
             // This should never be called since we're reading from cache
             throw new Error("Profile data should be set by DashboardLayout");

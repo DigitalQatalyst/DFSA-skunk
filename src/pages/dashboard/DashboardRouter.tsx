@@ -29,6 +29,7 @@ import {
   invalidateOnboardingStatus,
   setOnboardingStatusCache,
 } from "../../hooks/useOnboardingStatus";
+import { isDemoModeEnabled } from "../../utils/demoAuthUtils";
 
 // Form imports
 import BookConsultationForEntrepreneurship from "../forms/BookConsultationForEntrepreneurship";
@@ -61,7 +62,7 @@ const DashboardRouter = () => {
     return true;
   });
   const { user } = useAuth();
-  const isLoggedIn = Boolean(user);
+  const isLoggedIn = isDemoModeEnabled() ? true : Boolean(user);
   const location = useLocation();
   const navigate = useNavigate();
   // Use unified auth flow for onboarding state - ProtectedRoute already handles checks and routing

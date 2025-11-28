@@ -9,6 +9,7 @@ import { fetchCombinedProfileData } from "../../services/DataverseService";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "../../lib/queryClient";
 import { useOrganizationInfo } from "../../hooks/useOrganizationInfo";
+import { isDemoModeEnabled, getDemoUser } from "../../utils/demoAuthUtils";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -61,6 +62,23 @@ const DashboardLayoutContent: React.FC<DashboardLayoutProps> = ({
   }, [user?.id, setCompanyName]);
 
   const fetchProfileData = useCallback(async () => {
+    // In demo mode, set mock profile data directly in cache
+    if (isDemoModeEnabled()) {
+      const demoUser = getDemoUser();
+      const mockProfileData = {
+        kf_tradename: "Demo Company",
+        kf_companyname: "Demo Company Ltd",
+        kf_foundername: "Demo Founder",
+        kf_emailaddress: demoUser.email,
+        department: "growth",
+      };
+
+      console.log("🎭 [DEMO MODE] Setting mock profile data in cache");
+      queryClient.setQueryData(["profile", "business", demoUser.id], mockProfileData);
+      setCompanyName("Demo Company");
+      return;
+    }
+
     if (!user || !user.email || !user.id) {
       console.warn(
         "⚠️ [DASHBOARD LAYOUT] User data is not yet available. Skipping profile fetch."
@@ -137,6 +155,12 @@ const DashboardLayoutContent: React.FC<DashboardLayoutProps> = ({
 
   // CALL THE FETCH FUNCTION ONCE USER IS READY
   useEffect(() => {
+    // In demo mode, always call fetchProfileData
+    if (isDemoModeEnabled()) {
+      fetchProfileData();
+      return;
+    }
+
     // Only run if the user is available, we haven't fetched yet, and we're not currently loading
     if (
       user?.id &&
@@ -148,8 +172,12 @@ const DashboardLayoutContent: React.FC<DashboardLayoutProps> = ({
     }
   }, [user?.id, user?.email, fetchProfileData, isProfileLoading]);
 
+  // Only close sidebar on mobile when navigating (not on desktop)
   useEffect(() => {
-    if (isOpen && location.pathname !== prevPathnameRef.current) {
+    // Check if viewport is mobile/tablet (< 1024px)
+    const isMobile = window.innerWidth < 1024;
+
+    if (isMobile && isOpen && location.pathname !== prevPathnameRef.current) {
       setIsOpen(false);
     }
     prevPathnameRef.current = location.pathname;

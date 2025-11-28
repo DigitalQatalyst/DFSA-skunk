@@ -4,6 +4,7 @@ import { AppAbility, defineAbilityFor, Role } from "../config/abilities";
 import { ALLOWED_APP_ROLES, logRoleDebug, mapRoleValueToRole } from "../services/roleMapper";
 import { useAuth } from "../components/Header";
 import { useOrganizationInfo } from "../hooks/useOrganizationInfo";
+import { isDemoModeEnabled } from "../utils/demoAuthUtils";
 
 interface AbilityContextType {
     ability: AppAbility;
@@ -35,6 +36,11 @@ export function AbilityProvider({
 
   // Extract userRole from AuthContext (which extracts from API kf_accessroles field)
   const role = useMemo((): Role | undefined => {
+    // In demo mode, always return admin role
+    if (isDemoModeEnabled()) {
+      return "admin";
+    }
+
     const authRole = (userRoleFromAuth || user?.userRole) as Role | undefined;
     let normalizedRole =
       authRole && ALLOWED_APP_ROLES.includes(authRole)
@@ -63,7 +69,8 @@ export function AbilityProvider({
   // 2. We don't have a role yet AND
   // 3. User is authenticated
   // Once organization loading completes (even if role is missing), stop showing loading
-  const isRoleLoading = Boolean(organizationLoading && !role && user);
+  // In demo mode, never show loading state
+  const isRoleLoading = isDemoModeEnabled() ? false : Boolean(organizationLoading && !role && user);
 
   const contextValue = useMemo<AbilityContextType>(
     () => ({

@@ -5,6 +5,7 @@ import { useOrganizationInfo } from './useOrganizationInfo';
 import { OnboardingState } from '../services/onboardingStatus';
 import { useAbilityContext } from '../context/AbilityContext';
 import { useOnboardingStatus } from './useOnboardingStatus';
+import { isDemoModeEnabled } from '../utils/demoAuthUtils';
 
 /**
  * Unified hook that combines:
@@ -84,6 +85,11 @@ export function useUnifiedAuthFlow(): UnifiedAuthFlowState {
   // 1. Non-admins: Never see onboarding - redirect to overview immediately
   // 2. Admins: Only see onboarding if they don't have a record, otherwise redirect to overview
   useEffect(() => {
+    // Skip all routing logic in demo mode
+    if (isDemoModeEnabled()) {
+      return;
+    }
+
     // Don't redirect while checks are in progress
     if (authLoading || orgLoading || !user) {
       return;
@@ -186,12 +192,14 @@ export function useUnifiedAuthFlow(): UnifiedAuthFlowState {
 
   // Computed states
   const isLoading = useMemo(
-    () => authLoading || orgLoading || isCheckingOnboarding,
+    () => isDemoModeEnabled() ? false : (authLoading || orgLoading || isCheckingOnboarding),
     [authLoading, orgLoading, isCheckingOnboarding]
   );
 
   const isReady = useMemo(
-    () => !isLoading && !!user && !!organization && !orgError,
+    () => isDemoModeEnabled()
+      ? !!user // In demo mode, just check if user exists
+      : (!isLoading && !!user && !!organization && !orgError),
     [isLoading, user, organization, orgError]
   );
 
