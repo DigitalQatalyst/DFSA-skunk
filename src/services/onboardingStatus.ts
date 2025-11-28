@@ -1,7 +1,11 @@
+import { isDemoModeEnabled } from '../utils/demoAuthUtils';
+
 const ONBOARDING_API_BASE =
   'https://kfrealexpressserver.vercel.app/api/v1/onboarding';
 
 export type OnboardingState = 'completed' | 'not_completed';
+
+const DEMO_ONBOARDING_KEY = 'demo_onboarding_status';
 
 async function callOnboardingEndpoint(accountId: string) {
   const url = `${ONBOARDING_API_BASE}/${encodeURIComponent(accountId)}`;
@@ -17,12 +21,45 @@ async function callOnboardingEndpoint(accountId: string) {
   });
 }
 
+/**
+ * Set onboarding status in localStorage for demo mode
+ * @param status - The onboarding status to set
+ */
+export function setDemoOnboardingStatus(status: OnboardingState): void {
+  if (isDemoModeEnabled()) {
+    localStorage.setItem(DEMO_ONBOARDING_KEY, status);
+    console.log('💾 [DEMO MODE] Onboarding status set to:', status);
+  }
+}
+
+/**
+ * Get onboarding status from localStorage for demo mode
+ * @returns The onboarding status or null if not set
+ */
+function getDemoOnboardingStatus(): OnboardingState | null {
+  if (isDemoModeEnabled()) {
+    const status = localStorage.getItem(DEMO_ONBOARDING_KEY) as OnboardingState | null;
+    console.log('💾 [DEMO MODE] Retrieved onboarding status:', status);
+    return status;
+  }
+  return null;
+}
+
 export async function checkOnboardingStatus(
   accountId?: string | null
 ): Promise<OnboardingState> {
   console.log('===== ONBOARDING CHECK START =====');
   console.log('🆔 [ONBOARDING CHECK] Account ID:', accountId || 'MISSING');
-  
+
+  // In demo mode, check localStorage instead of API
+  if (isDemoModeEnabled()) {
+    const demoStatus = getDemoOnboardingStatus();
+    const status = demoStatus || 'not_completed';
+    console.log('🎭 [DEMO MODE] Returning onboarding status:', status);
+    console.log('===================================');
+    return status;
+  }
+
   if (!accountId) {
     console.log('⚠️ [ONBOARDING CHECK] No accountId provided - returning not_completed');
     console.log('===================================');

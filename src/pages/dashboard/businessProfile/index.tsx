@@ -1,11 +1,16 @@
 import { BusinessProfile } from "../../../components/BusinessProfile/BusinessProfile";
 import { useAuth } from "../../../components/Header";
+import { isDemoModeEnabled, getDemoUser } from "../../../utils/demoAuthUtils";
 
 const BusinessProfilePage = () => {
   const { user, isLoading } = useAuth();
 
+  // In demo mode, use the demo user
+  const effectiveUser = isDemoModeEnabled() ? getDemoUser() : user;
+  const effectiveLoading = isDemoModeEnabled() ? false : isLoading;
+
   // Show loading state while authentication is being determined
-  if (isLoading) {
+  if (effectiveLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
@@ -14,7 +19,7 @@ const BusinessProfilePage = () => {
   }
 
   // If no user is authenticated, show an error message
-  if (!user || !user.id) {
+  if (!effectiveUser || !effectiveUser.id) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6">
@@ -55,7 +60,7 @@ const BusinessProfilePage = () => {
   }
 
   // Use the authenticated user's ID as the Azure ID
-  return <BusinessProfile activeSection={"profile"} azureId={user.id} />;
+  return <BusinessProfile activeSection={"profile"} azureId={effectiveUser.id} />;
 };
 
 export default BusinessProfilePage;

@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Check, ChevronRight, ArrowLeft, ArrowRight } from 'lucide-react'
 import { Button } from '../../../../components/Button/Button'
 import { FormData } from './types'
 import { RoleContactStep } from './steps/RoleContactStep'
 import { FirmDetailsStep } from './steps/FirmDetailsStep'
 import { ReviewSubmitStep } from './steps/ReviewSubmitStep'
+import { setDemoOnboardingStatus } from '../../../../services/onboardingStatus'
 
 interface Step {
   id: number
@@ -48,7 +50,13 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ onClose }) => {
   )
 }
 
-export const SteppedForm: React.FC = () => {
+interface SteppedFormProps {
+  onComplete?: () => void;
+  isModal?: boolean;
+}
+
+export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = false }) => {
+  const navigate = useNavigate()
   const [currentStep, setCurrentStep] = useState(1)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [formData, setFormData] = useState<FormData>({
@@ -100,8 +108,17 @@ export const SteppedForm: React.FC = () => {
 
   const handleCloseModal = () => {
     setShowSuccessModal(false)
-    // Navigate to profile or dashboard
-    console.log('Navigating to firm profile...')
+
+    // Set onboarding status to completed in demo mode
+    setDemoOnboardingStatus('completed')
+
+    // Call the onComplete callback to trigger navigation and status update
+    if (onComplete) {
+      onComplete()
+    }
+
+    // Navigate to profile page
+    navigate('/dashboard/profile')
   }
 
   const renderStepContent = () => {
@@ -122,8 +139,8 @@ export const SteppedForm: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6">
-      <div className="max-w-6xl mx-auto">
+    <div className={isModal ? "" : "min-h-screen bg-gray-50 py-12 px-4 sm:px-6"}>
+      <div className={isModal ? "" : "max-w-6xl mx-auto"}>
         <div className="bg-white rounded-lg shadow-sm overflow-hidden p-8">
 
           {/* Top Tab Navigation */}

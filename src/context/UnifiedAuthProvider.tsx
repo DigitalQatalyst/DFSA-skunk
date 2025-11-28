@@ -1,6 +1,7 @@
 import { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { useAuth as useMsalAuthHook } from '../components/Header/context/AuthContext';
 import { syncEntraUser, type DbUser } from '../services/auth/userProvisioningService';
+import { isDemoModeEnabled, getDemoUser } from '../utils/demoAuthUtils';
 
 interface UnifiedUser {
   id: string; // Database UUID from users_local
@@ -42,6 +43,21 @@ export function UnifiedAuthProvider({ children }: { children: ReactNode }) {
 
   // Sync MSAL user to database when authenticated
   useEffect(() => {
+    // Skip user provisioning in demo mode
+    if (isDemoModeEnabled()) {
+      const demoUser = getDemoUser();
+      setDbUser({
+        id: demoUser.id,
+        email: demoUser.email,
+        username: demoUser.username,
+        role: demoUser.role,
+        avatar_url: demoUser.avatar_url,
+        external_id: demoUser.external_id,
+        email_verified: demoUser.email_verified,
+      } as DbUser);
+      return;
+    }
+
     async function provisionUser() {
       if (!msalAuth.user || syncing) return;
 
@@ -79,27 +95,31 @@ export function UnifiedAuthProvider({ children }: { children: ReactNode }) {
   const authSource: 'msal' | null = msalAuth.user ? 'msal' : null;
 
   // Merge MSAL profile with database user data
-  const user: UnifiedUser | null = msalAuth.user && dbUser
-    ? {
-        // Use database UUID as primary ID
-        id: dbUser.id,
-        email: dbUser.email,
-        // Prefer database username, fallback to MSAL name
-        username: dbUser.username || msalAuth.user.name,
-        // Database fields
-        role: dbUser.role,
-        avatar_url: dbUser.avatar_url,
-        external_id: dbUser.external_id,
-        email_verified: dbUser.email_verified,
-        // MSAL fields for compatibility
-        name: msalAuth.user.name,
-        givenName: msalAuth.user.givenName,
-        familyName: msalAuth.user.familyName,
-        picture: msalAuth.user.picture,
-      }
-    : null;
+  // In demo mode, return demo user directly
+  const user: UnifiedUser | null = isDemoModeEnabled()
+    ? getDemoUser() as UnifiedUser
+    : (msalAuth.user && dbUser
+      ? {
+          // Use database UUID as primary ID
+          id: dbUser.id,
+          email: dbUser.email,
+          // Prefer database username, fallback to MSAL name
+          username: dbUser.username || msalAuth.user.name,
+          // Database fields
+          role: dbUser.role,
+          avatar_url: dbUser.avatar_url,
+          external_id: dbUser.external_id,
+          email_verified: dbUser.email_verified,
+          // MSAL fields for compatibility
+          name: msalAuth.user.name,
+          givenName: msalAuth.user.givenName,
+          familyName: msalAuth.user.familyName,
+          picture: msalAuth.user.picture,
+        }
+      : null);
 
-  const isLoading = msalAuth.isLoading || syncing;
+  // In demo mode, never show loading state
+  const isLoading = isDemoModeEnabled() ? false : (msalAuth.isLoading || syncing);
 
   const contextValue: UnifiedAuthContextType = {
     user,

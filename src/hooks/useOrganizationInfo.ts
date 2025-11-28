@@ -6,6 +6,7 @@ import {
   OrganizationInfo,
   OrganizationInfoResponse,
 } from "../types/organization";
+import { isDemoModeEnabled } from "../utils/demoAuthUtils";
 
 interface UseOrganizationInfoReturn {
   organization: OrganizationInfo | null;
@@ -56,12 +57,38 @@ export function useOrganizationInfo(): UseOrganizationInfoReturn {
       console.log(response, "response organization");
       return response;
     },
-    enabled: hasUserIdentity,
+    enabled: hasUserIdentity && !isDemoModeEnabled(),
     staleTime: 60 * 1000, // keep fresh for 1 minute
     gcTime: 5 * 60 * 1000,
     retry: 1,
-    
+
   });
+
+  // In demo mode, return mock organization data to prevent API calls
+  if (isDemoModeEnabled()) {
+    return {
+      organization: {
+        accountId: "demo-account-id",
+        name: "Demo Organization",
+      } as OrganizationInfo,
+      profile: {
+        kf_accessroles: 123950000, // Admin role value
+      },
+      response: {
+        success: true,
+        organization: {
+          accountId: "demo-account-id",
+          name: "Demo Organization",
+        } as OrganizationInfo,
+        profile: {
+          kf_accessroles: 123950000,
+        },
+      } as OrganizationInfoResponse,
+      isLoading: false,
+      error: null,
+      refetch: async () => {},
+    };
+  }
 
   const organization = hasUserIdentity ? data?.organization ?? null : null;
   const profile = hasUserIdentity ? data?.profile ?? null : null;

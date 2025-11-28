@@ -11,6 +11,7 @@ import { CASLAbilityContext } from "../context/AbilityContext";
 import { AppAbility } from "../config/abilities";
 import { Forbidden } from "./RBAC/Forbidden";
 import { ALLOWED_APP_ROLES, logRoleDebug } from "../services/roleMapper";
+import { isDemoModeEnabled } from "../utils/demoAuthUtils";
 
 /**
  * Guards routes behind MSAL auth. If unauthenticated, triggers login and
@@ -128,6 +129,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   // Not authenticated: either auto-login or redirect to home
   useEffect(() => {
+    // Skip auto-login in demo mode
+    if (isDemoModeEnabled()) return;
+
     if (!authLoading && !user && AUTO_LOGIN) {
       // Kick off MSAL redirect sign-in flow
       // MSAL will remember current URL so user returns to the same route
@@ -153,8 +157,8 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <AuthFlowLoader stage={stage} />;
   }
 
-  // Not authenticated
-  if (!user) {
+  // Not authenticated (skip check in demo mode)
+  if (!user && !isDemoModeEnabled()) {
     if (AUTO_LOGIN) return <AuthFlowLoader stage="auth" />;
     return <Navigate to="/" state={{ from: location }} replace />;
   }
@@ -162,19 +166,22 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // Note: The base /dashboard route is handled at the router level (AppRouter + DashboardRouter)
   // so we don't need additional redirect logic here.
 
-  if (!role) {
-    return (
-      <Forbidden message="Access denied. Your account role is not recognized. Please contact support." />
-    );
-  }
+  // Skip role validation in demo mode
+  if (!isDemoModeEnabled()) {
+    if (!role) {
+      return (
+        <Forbidden message="Access denied. Your account role is not recognized. Please contact support." />
+      );
+    }
 
-  if (!isRoleAllowed) {
-    console.warn(
-      `[ProtectedRoute] Unsupported or undefined role encountered: ${role ?? "undefined"}`
-    );
-    return (
-      <Forbidden message="Access denied. Your account role is not recognized. Please contact support." />
-    );
+    if (!isRoleAllowed) {
+      console.warn(
+        `[ProtectedRoute] Unsupported or undefined role encountered: ${role ?? "undefined"}`
+      );
+      return (
+        <Forbidden message="Access denied. Your account role is not recognized. Please contact support." />
+      );
+    }
   }
 
   // Early redirect: Non-admins should NEVER see onboarding route

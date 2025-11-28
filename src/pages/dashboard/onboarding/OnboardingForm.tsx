@@ -14,5 +14,5 @@ export function OnboardingForm({
   // Simply render the DFSA SteppedForm component
   // All form logic is now self-contained in the SteppedForm
 
-  return <SteppedForm />;
+  return <SteppedForm onComplete={onComplete} />;
 }

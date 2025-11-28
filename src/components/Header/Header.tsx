@@ -9,7 +9,7 @@ import { useAuth } from "./context/AuthContext";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
 import EnquiryModal from "../EnquiryModal";
-import { SignupModal } from "./components/SignupModal";
+import { OnboardingModal } from "./components/OnboardingModal";
 
 interface HeaderProps {
   toggleSidebar?: () => void;
@@ -28,7 +28,7 @@ export function Header({
   const [showNotificationCenter, setShowNotificationCenter] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [isEnquiryModalOpen, setIsEnquiryModalOpen] = useState(false);
-  const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
+  const [isOnboardingModalOpen, setIsOnboardingModalOpen] = useState(false);
   const { user, login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -63,21 +63,20 @@ export function Header({
     setShowNotificationCenter(false);
   };
 
-  // Handle sign in - now opens signup modal
+  // Handle sign in - now opens onboarding modal
   const handleSignIn = () => {
-    setIsSignupModalOpen(true);
+    setIsOnboardingModalOpen(true);
   };
 
   const handleSignUp = () => {
-    setIsSignupModalOpen(true);
+    setIsOnboardingModalOpen(true);
   };
 
-  // Handle signup success
-  const handleSignupSuccess = (userData: any) => {
-    console.log("User signed up:", userData);
+  // Handle onboarding completion
+  const handleOnboardingComplete = () => {
+    console.log("Onboarding completed");
     // You can integrate with your auth system here
-    // Don't close the modal immediately - let the success message show
-    // The modal will close when user clicks the action buttons
+    // The modal will be closed by the OnboardingModal component
   };
 
   // Toggle enquiry modal
@@ -220,11 +219,11 @@ export function Header({
         data-id="enquiry-modal"
       />
 
-      {/* Signup Modal */}
-      <SignupModal
-        isOpen={isSignupModalOpen}
-        onClose={() => setIsSignupModalOpen(false)}
-        onSignupSuccess={handleSignupSuccess}
+      {/* Onboarding Modal */}
+      <OnboardingModal
+        isOpen={isOnboardingModalOpen}
+        onClose={() => setIsOnboardingModalOpen(false)}
+        onComplete={handleOnboardingComplete}
       />
 
       {/* Notifications Menu */}

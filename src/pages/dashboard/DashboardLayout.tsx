@@ -148,8 +148,12 @@ const DashboardLayoutContent: React.FC<DashboardLayoutProps> = ({
     }
   }, [user?.id, user?.email, fetchProfileData, isProfileLoading]);
 
+  // Only close sidebar on mobile when navigating (not on desktop)
   useEffect(() => {
-    if (isOpen && location.pathname !== prevPathnameRef.current) {
+    // Check if viewport is mobile/tablet (< 1024px)
+    const isMobile = window.innerWidth < 1024;
+
+    if (isMobile && isOpen && location.pathname !== prevPathnameRef.current) {
       setIsOpen(false);
     }
     prevPathnameRef.current = location.pathname;
