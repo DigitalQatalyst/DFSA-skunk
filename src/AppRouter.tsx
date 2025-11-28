@@ -18,19 +18,7 @@ import MediaDetailPage from "./pages/media/MediaDetailPage";
 import KfBot from "./bot/KfBot";
 import GenericServiceRequestForm from "./pages/forms/GenericServiceRequestForm";
 
-// ... existing imports ...
 
-                {/* Generic Service Request Form */}
-                <Route 
-                  path="/forms/request-service" 
-                  element={
-                    <ProtectedRoute>
-                      <GenericServiceRequestForm />
-                    </ProtectedRoute>
-                  } 
-                />
-
-                {/** Forms routes */}
 import NeedsAssessmentForm from "./pages/forms/NeedsAssessmentForm";
 import RequestForMembership from "./pages/forms/RequestForMembership";
 import RequestForFunding from "./pages/forms/RequestForFunding";
@@ -130,6 +118,15 @@ export function AppRouter() {
                     </ProtectedRoute>
                   }
                 />
+              <Route 
+                  path="/forms/request-service" 
+                  element={
+                    // <ProtectedRoute>
+                      <GenericServiceRequestForm />
+                    //  </ProtectedRoute>
+                  } 
+                />
+
                 <Route
                   path="/women-entrepreneurs"
                   element={<WomenEntrepreneursHub />}

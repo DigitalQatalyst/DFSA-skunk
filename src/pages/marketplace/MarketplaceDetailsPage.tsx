@@ -59,7 +59,7 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
       <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
         <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
         <div className="flex-grow flex items-center justify-center">
-          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-12 h-12 border-4 border-primary border-t-dfsa-gold rounded-full animate-spin"></div>
         </div>
         <Footer isLoggedIn={false} />
       </div>

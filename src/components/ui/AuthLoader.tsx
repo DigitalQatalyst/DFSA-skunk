@@ -25,7 +25,7 @@ export const AuthLoader: React.FC<AuthLoaderProps> = ({
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
       <div className="flex flex-col items-center space-y-4">
-        <Loader2 className={`${sizeClasses[size]} animate-spin text-blue-600`} />
+        <div className={`${sizeClasses[size]} rounded-full border-4 border-primary border-t-dfsa-gold animate-spin`} />
         <p className={`${textSizeClasses[size]} text-gray-600 font-medium`}>
           {message}
         </p>

@@ -241,7 +241,7 @@ export const MarketplaceCard: React.FC<MarketplaceItemProps> = ({
         <div className="flex items-center justify-between pt-4 border-t border-gray-100 gap-3 relative z-10">
              <button
                 onClick={handleViewDetails}
-                className="text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors"
+                className="px-4 py-2 text-sm font-semibold text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition-all"
               >
                 {config.secondaryCTA}
               </button>
