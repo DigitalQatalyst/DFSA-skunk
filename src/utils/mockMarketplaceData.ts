@@ -465,8 +465,7 @@ export const mockFinancialServices = [
     businessStage: "All Stages",
     provider: {
       name: "Abu Dhabi National Insurance Company",
-      logoUrl:
-        "https://www.adnic.ae/wp-content/themes/adnic/assets/images/logo.svg",
+      logoUrl: "/logo/dfsa-logo.png",
       description:
         "Leading insurance provider in the UAE offering comprehensive coverage for businesses.",
     },
@@ -548,7 +547,7 @@ export const mockFinancialServices = [
     businessStage: "Growth",
     provider: {
       name: "Abu Dhabi Islamic Bank",
-      logoUrl: "https://www.adib.ae/en/PublishingImages/ADIB_Logo_2016_En.svg",
+      logoUrl: "/logo/dfsa-logo.png",
       description:
         "Leading Islamic financial services group providing Sharia-compliant solutions for businesses.",
     },
@@ -603,8 +602,7 @@ export const mockFinancialServices = [
     businessStage: "Maturity",
     provider: {
       name: "First Abu Dhabi Bank",
-      logoUrl:
-        "https://www.bankfab.com/-/media/fabgroup/home/images/fab-logo.svg",
+      logoUrl: "/logo/dfsa-logo.png",
       description:
         "The largest bank in the UAE, offering comprehensive financial services for businesses of all sizes.",
     },
@@ -631,7 +629,7 @@ export const mockFinancialServices = [
     businessStage: "Restructuring",
     provider: {
       name: "Abu Dhabi Islamic Bank",
-      logoUrl: "https://www.adib.ae/en/PublishingImages/ADIB_Logo_2016_En.svg",
+      logoUrl: "/logo/dfsa-logo.png",
       description:
         "Leading Islamic financial services group providing Sharia-compliant solutions for businesses.",
     },
@@ -658,8 +656,7 @@ export const mockFinancialServices = [
     businessStage: "Maturity",
     provider: {
       name: "First Abu Dhabi Bank",
-      logoUrl:
-        "https://www.bankfab.com/-/media/fabgroup/home/images/fab-logo.svg",
+      logoUrl: "/logo/dfsa-logo.png",
       description:
         "The largest bank in the UAE, offering comprehensive financial services for businesses of all sizes.",
     },
@@ -686,8 +683,7 @@ export const mockFinancialServices = [
     businessStage: "Growth",
     provider: {
       name: "Abu Dhabi Commercial Bank",
-      logoUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/8/80/ADCB_Logo.svg",
+      logoUrl: "/logo/dfsa-logo.png",
       description:
         "One of the largest banks in the UAE, offering a wide range of financial services for businesses.",
     },
@@ -714,8 +710,7 @@ export const mockFinancialServices = [
     businessStage: "All Stages",
     provider: {
       name: "First Abu Dhabi Bank",
-      logoUrl:
-        "https://www.bankfab.com/-/media/fabgroup/home/images/fab-logo.svg",
+      logoUrl: "/logo/dfsa-logo.png",
       description:
         "The largest bank in the UAE, offering comprehensive financial services for businesses of all sizes.",
     },

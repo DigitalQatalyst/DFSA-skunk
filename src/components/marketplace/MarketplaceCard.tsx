@@ -193,13 +193,9 @@ export const MarketplaceCard: React.FC<MarketplaceItemProps> = ({
           <div className={`h-12 w-12 rounded-lg bg-gradient-to-br ${gradient} p-0.5 flex-shrink-0 mr-4 shadow-sm group-hover:scale-105 transition-transform duration-300`}>
              <div className="h-full w-full bg-white rounded-[7px] flex items-center justify-center overflow-hidden">
                 <img
-                    src={item.provider.logoUrl}
+                    src="/logo/dfsa-logo.png"
                     alt={`${item.provider.name} logo`}
                     className="h-8 w-8 object-contain"
-                    onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "/mzn_logo.png";
-                    }}
                 />
              </div>
           </div>
