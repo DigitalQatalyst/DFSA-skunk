@@ -5,6 +5,7 @@ import {
   getFallbackItemDetails,
   getFallbackItems,
 } from "../utils/fallbackData";
+import { mockServicesData } from "../data/mockServicesData";
 
 // Normalize eligibility display to the first non-empty segment before a semicolon
 const normalizeEligibility = (val: any): string | undefined => {
@@ -87,7 +88,7 @@ export function useProductDetails({
       return url; // fallback: hope it's valid as-is
     };
     const logoFromCustomFields = cf.logoUrl;
-    
+
     const resolvedLogo =
       toAbsolute(logoFromCustomFields) ||
       toAbsolute(logoFromCFArray) ||
@@ -118,52 +119,52 @@ export function useProductDetails({
       details: Array.isArray(cf.KeyHighlights)
         ? cf.KeyHighlights
         : typeof cf.KeyHighlights === "string" && cf.KeyHighlights.trim() !== ""
-        ? [cf.KeyHighlights]
-        : Array.isArray(cf.Steps)
-        ? cf.Steps
-        : typeof cf.Steps === "string" && cf.Steps.trim() !== ""
-        ? [cf.Steps]
-        : typeof cf.TermsOfService === "string" && cf.TermsOfService.trim() !== ""
-        ? [cf.TermsOfService]
-        : [],
+          ? [cf.KeyHighlights]
+          : Array.isArray(cf.Steps)
+            ? cf.Steps
+            : typeof cf.Steps === "string" && cf.Steps.trim() !== ""
+              ? [cf.Steps]
+              : typeof cf.TermsOfService === "string" && cf.TermsOfService.trim() !== ""
+                ? [cf.TermsOfService]
+                : [],
       // Expose learning outcomes - prefer course-specific fields when available
       learningOutcomes: Array.isArray(cf.learningOutcomes)
         ? cf.learningOutcomes
         : Array.isArray(cf.KeyHighlights)
-        ? cf.KeyHighlights
-        : typeof cf.KeyHighlights === "string" && cf.KeyHighlights.trim() !== ""
-        ? [cf.KeyHighlights]
-        : [],
+          ? cf.KeyHighlights
+          : typeof cf.KeyHighlights === "string" && cf.KeyHighlights.trim() !== ""
+            ? [cf.KeyHighlights]
+            : [],
       requiredDocuments: Array.isArray(cf.RequiredDocuments)
         ? cf.RequiredDocuments
-            .map((d: any) => {
-              if (typeof d === "string") return normalizeDocumentName(d);
-              const raw = d?.name || d?.source || "";
-              return normalizeDocumentName(raw);
-            })
-            .filter((s: string) => !!s)
+          .map((d: any) => {
+            if (typeof d === "string") return normalizeDocumentName(d);
+            const raw = d?.name || d?.source || "";
+            return normalizeDocumentName(raw);
+          })
+          .filter((s: string) => !!s)
         : [],
       // Normalize application process steps from CustomFields.Steps
       applicationProcess: Array.isArray(cf.Steps)
         ? cf.Steps
-            .map((s: any) => {
-              if (typeof s === "string") {
-                return { title: s, description: "" };
-              }
-              if (s && typeof s === "object") {
-                const title =
-                  typeof s.title === "string" && s.title.trim() !== ""
-                    ? s.title.trim()
-                    : typeof s.name === "string" && s.name.trim() !== ""
+          .map((s: any) => {
+            if (typeof s === "string") {
+              return { title: s, description: "" };
+            }
+            if (s && typeof s === "object") {
+              const title =
+                typeof s.title === "string" && s.title.trim() !== ""
+                  ? s.title.trim()
+                  : typeof s.name === "string" && s.name.trim() !== ""
                     ? s.name.trim()
                     : "";
-                const description =
-                  typeof s.description === "string" ? s.description : "";
-                return { title, description };
-              }
-              return { title: "", description: "" };
-            })
-            .filter((x: any) => x.title !== "")
+              const description =
+                typeof s.description === "string" ? s.description : "";
+              return { title, description };
+            }
+            return { title: "", description: "" };
+          })
+          .filter((x: any) => x.title !== "")
         : undefined,
       // Prefer new fields for terms when available
       keyTerms:
@@ -176,8 +177,8 @@ export function useProductDetails({
       additionalTerms: Array.isArray(cf.AdditionalTermsOfService)
         ? cf.AdditionalTermsOfService
         : cf.AdditionalTermsOfService
-        ? [cf.AdditionalTermsOfService]
-        : undefined,
+          ? [cf.AdditionalTermsOfService]
+          : undefined,
       tags: [cf.Industry, cf.CustomerType, cf.BusinessStage, cf.serviceCategory].filter(Boolean),
       // Course-specific fields from GET_PRODUCTS customFields
       learningObjectives: cf.learningObjectives || [],
@@ -212,6 +213,42 @@ export function useProductDetails({
 
   useEffect(() => {
     if (!itemId) return;
+
+    if (marketplaceType === 'non-financial') {
+      const mockItem = mockServicesData.find(s => s.id === itemId);
+      if (mockItem) {
+        setItem({
+          id: mockItem.id,
+          title: mockItem.name,
+          description: mockItem.details.longDescription || mockItem.description,
+          provider: {
+            name: "DFSA",
+            logoUrl: "/mzn_logo.png",
+          },
+          tags: mockItem.customFields.tags,
+          ...mockItem.customFields,
+          details: mockItem.details.benefits || [], // Using benefits as details/highlights
+          keyHighlights: mockItem.details.benefits || [],
+          requiredDocuments: mockItem.details.requirements || [],
+          applicationProcess: mockItem.details.processSteps || [],
+          eligibility: "N/A", // Mock data doesn't have explicit eligibility
+          eligibilityCriteria: [],
+          formUrl: "#",
+        });
+        setRelatedItems(mockServicesData.filter(s => s.id !== itemId).slice(0, 3).map(s => ({
+          id: s.id,
+          title: s.name,
+          description: s.description,
+          provider: {
+            name: "DFSA",
+            logoUrl: "/mzn_logo.png",
+          },
+          tags: s.customFields.tags
+        })));
+        return;
+      }
+    }
+
     const product = (productData as any)?.product;
 
     // Use product data for all marketplace types including courses
@@ -245,7 +282,7 @@ export function useProductDetails({
       for (const key of Object.keys(fallbackForItem)) {
         // Never override provider with fallback data
         if (key === 'provider') continue;
-        
+
         const val = merged[key];
         const shouldUseFallback =
           val === undefined ||
@@ -271,15 +308,15 @@ export function useProductDetails({
       const rs = product?.customFields?.RelatedServices;
       const relatedFromGql = Array.isArray(rs)
         ? rs.map((x: any) => ({
-            id: x.id,
-            title: x.name,
-            description: x.description || "",
-            provider: {
-              name: merged.provider?.name,
-              logoUrl: merged.provider?.logoUrl || "/mzn_logo.png",
-            },
-            tags: [],
-          }))
+          id: x.id,
+          title: x.name,
+          description: x.description || "",
+          provider: {
+            name: merged.provider?.name,
+            logoUrl: merged.provider?.logoUrl || "/mzn_logo.png",
+          },
+          tags: [],
+        }))
         : [];
       limitedRelated = relatedFromGql.slice(0, 3);
     }

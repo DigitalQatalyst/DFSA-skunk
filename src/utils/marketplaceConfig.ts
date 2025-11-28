@@ -754,21 +754,21 @@ export const marketplaceConfig: Record<string, MarketplaceConfig> = {
     itemName: 'Business Service',
     itemNamePlural: 'Business Services',
     attributes: [{
+      key: 'serviceCategory',
+      label: 'Category',
+      icon: React.createElement(Building, { size: 18, className: "mr-2" })
+    }, {
+      key: 'entityType',
+      label: 'Entity Type',
+      icon: React.createElement(Users, { size: 18, className: "mr-2" })
+    }, {
+      key: 'processingTime',
+      label: 'Processing Time',
+      icon: React.createElement(Clock, { size: 18, className: "mr-2" })
+    }, {
       key: 'serviceType',
       label: 'Service Type',
       icon: React.createElement(Award, { size: 18, className: "mr-2" })
-    }, {
-      key: 'deliveryMode',
-      label: 'Service Mode',
-      icon: React.createElement(Users, { size: 18, className: "mr-2" })
-    }, {
-      key: 'duration',
-      label: 'Duration',
-      icon: React.createElement(Clock, { size: 18, className: "mr-2" })
-    }, {
-      key: 'price',
-      label: 'Cost',
-      icon: React.createElement(DollarSign, { size: 18, className: "mr-2" })
     }],
     detailSections: ['description', 'deliveryDetails', 'provider', 'related'],
     tabs: [{
@@ -778,23 +778,29 @@ export const marketplaceConfig: Record<string, MarketplaceConfig> = {
       iconBgColor: 'bg-blue-50',
       iconColor: 'text-blue-600'
     }, {
-      id: 'eligibility_terms',
-      label: 'Eligibility & Terms',
+      id: 'requirements',
+      label: 'Requirements',
       icon: CheckCircle,
       iconBgColor: 'bg-green-50',
-      iconColor: 'text-green-600'
+      iconColor: 'text-green-600',
+      renderContent: (item: any) => React.createElement('ul', { className: 'list-disc pl-5 space-y-2' },
+        (item.requiredDocuments || []).map((req: string, i: number) => React.createElement('li', { key: i, className: 'text-gray-700' }, req))
+      )
     }, {
-      id: 'application_process',
-      label: 'Application Process',
+      id: 'process',
+      label: 'Process Steps',
       icon: ClipboardList,
       iconBgColor: 'bg-orange-50',
-      iconColor: 'text-orange-600'
-    }, {
-      id: 'required_documents',
-      label: 'Required Documents',
-      icon: FileText,
-      iconBgColor: 'bg-amber-50',
-      iconColor: 'text-amber-600'
+      iconColor: 'text-orange-600',
+      renderContent: (item: any) => React.createElement('div', { className: 'space-y-4' },
+        (item.applicationProcess || []).map((step: any, i: number) => React.createElement('div', { key: i, className: 'flex' }, [
+          React.createElement('div', { className: 'flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold mr-4' }, i + 1),
+          React.createElement('div', {}, [
+            React.createElement('h4', { className: 'font-semibold text-gray-900' }, step.title),
+            React.createElement('p', { className: 'text-gray-600 text-sm' }, step.description)
+          ])
+        ]))
+      )
     }, {
       id: 'provider',
       label: 'About Provider',
@@ -804,49 +810,58 @@ export const marketplaceConfig: Record<string, MarketplaceConfig> = {
     }],
     summarySticky: true,
     filterCategories: [{
-      id: 'category',
+      id: 'serviceCategory',
       title: 'Service Category',
       options: [{
-        id: 'consultancy',
-        name: 'Consultancy'
+        id: 'Licensing',
+        name: 'Licensing'
       }, {
-        id: 'technology',
-        name: 'Technology'
+        id: 'Compliance',
+        name: 'Compliance'
       }, {
-        id: 'research',
-        name: 'Research'
-      }, {
-        id: 'export',
-        name: 'Export'
+        id: 'Market',
+        name: 'Market'
       }]
     }, {
       id: 'serviceType',
       title: 'Service Type',
       options: [{
-        id: 'advisory',
-        name: 'Advisory'
+        id: 'New Application',
+        name: 'New Application'
       }, {
-        id: 'implementation',
-        name: 'Implementation'
+        id: 'Amendment',
+        name: 'Amendment'
       }, {
-        id: 'information',
-        name: 'Information'
+        id: 'Renewal',
+        name: 'Renewal'
       }, {
-        id: 'program',
-        name: 'Program'
+        id: 'Enquiries',
+        name: 'Enquiries'
       }]
     }, {
-      id: 'deliveryMode',
-      title: 'Delivery Mode',
+      id: 'entityType',
+      title: 'Entity Type',
       options: [{
-        id: 'online',
-        name: 'Online'
+        id: 'Authorised Firms',
+        name: 'Authorised Firms'
       }, {
-        id: 'inperson',
-        name: 'In-person'
+        id: 'Authorised Market Institutions',
+        name: 'Authorised Market Institutions'
       }, {
-        id: 'hybrid',
-        name: 'Hybrid'
+        id: 'Investment Funds',
+        name: 'Investment Funds'
+      }, {
+        id: 'Securities & Crypto',
+        name: 'Securities & Crypto'
+      }, {
+        id: 'Fintech & Innovation',
+        name: 'Fintech & Innovation'
+      }, {
+        id: 'DNFBPs',
+        name: 'DNFBPs'
+      }, {
+        id: 'Professional Advisors',
+        name: 'Professional Advisors'
       }]
     }],
     // Data mapping functions
@@ -854,7 +869,7 @@ export const marketplaceConfig: Record<string, MarketplaceConfig> = {
       return data.map((item: any) => ({
         ...item,
         // Transform any fields if needed
-        tags: item.tags || [item.category, item.serviceType, item.deliveryMode].filter(Boolean)
+        tags: item.tags || [item.serviceCategory, item.serviceType, item.entityType].filter(Boolean)
       }));
     },
     mapDetailResponse: data => {
@@ -866,17 +881,17 @@ export const marketplaceConfig: Record<string, MarketplaceConfig> = {
     },
     mapFilterResponse: data => {
       return [{
-        id: 'category',
+        id: 'serviceCategory',
         title: 'Service Category',
-        options: data.categories || []
+        options: data.serviceCategories || []
       }, {
         id: 'serviceType',
         title: 'Service Type',
         options: data.serviceTypes || []
       }, {
-        id: 'deliveryMode',
-        title: 'Delivery Mode',
-        options: data.deliveryModes || []
+        id: 'entityType',
+        title: 'Entity Type',
+        options: data.entityTypes || []
       }];
     },
     // Mock data for fallback and schema reference
@@ -944,7 +959,7 @@ export const marketplaceConfig: Record<string, MarketplaceConfig> = {
       }, {
         id: 'toolkits',
         name: 'Toolkits & Templates'
-      },       {
+      }, {
         id: 'guides',
         name: 'Guides'
       }, {

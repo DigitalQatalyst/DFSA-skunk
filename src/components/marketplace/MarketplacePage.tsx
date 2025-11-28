@@ -36,6 +36,7 @@ import { GET_PRODUCTS, GET_FACETS, GET_ALL_EVENTS } from "../../services/marketp
 import { fetchMarketplaceFilters } from "../../services/marketplace";
 import { isSupabaseConfigured, getSupabase } from "../../lib/supabase/defaultClient";
 import { getSupabaseKnowledgeHub } from "../../lib/supabase";
+import { mockServicesData } from "../../data/mockServicesData";
 
 // Shared mapping + options
 import {
@@ -1018,8 +1019,8 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
         }
 
         // Handle Products (Financial, Non-Financial, and Courses)
-        if (productData) {
-          let filteredServices = productData.products.items;
+        if (productData || marketplaceType === 'non-financial') {
+          let filteredServices = productData?.products?.items || [];
 
           if (marketplaceType === "financial") {
             filteredServices = productData.products.items.filter(
@@ -1032,10 +1033,9 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
               filteredServices = productData.products.items;
             }
           } else if (marketplaceType === "non-financial") {
-            filteredServices = productData.products.items.filter(
-              (product) =>
-                product.facetValues.some((fv) => fv.id === "2")
-            );
+            // Use mock data for non-financial services
+            // We don't filter from productData here, we'll handle it in the mapping step
+            filteredServices = []; 
           } else if (marketplaceType === "courses") {
             console.log("=== COURSES FILTERING DEBUG ===");
             console.log("All products before filtering:", productData.products.items.length);
@@ -1057,7 +1057,7 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
           const fallbackLogos = ["/mzn_logo.png"];
 
           // Map product data to match expected MarketplaceItem structure
-          const mappedItems = filteredServices.map((product) => {
+          let mappedItems = filteredServices.map((product) => {
             const randomFallbackLogo =
               fallbackLogos[Math.floor(Math.random() * fallbackLogos.length)];
 
@@ -1145,6 +1145,27 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
               ...product.customFields,
             };
           });
+
+          // Override mappedItems for non-financial using mockServicesData
+          if (marketplaceType === "non-financial") {
+             // @ts-ignore
+             mappedItems = mockServicesData.map((service) => ({
+                id: service.id,
+                title: service.name,
+                slug: service.slug,
+                description: service.description,
+                facetValues: [], // Mock data doesn't have facetValues structure, filtering might need adjustment
+                tags: service.customFields.tags,
+                provider: {
+                    name: "DFSA",
+                    logoUrl: "/mzn_logo.png",
+                    description: "Dubai Financial Services Authority"
+                },
+                formUrl: "#",
+                ...service.customFields,
+                details: service.details
+             }));
+          }
 
           // Apply filters and search query
           const filtered = mappedItems.filter((product: any) => {

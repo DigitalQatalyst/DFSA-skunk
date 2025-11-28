@@ -16,7 +16,21 @@ import {DiscoverAbuDhabi} from "./pages/discoverAbuDhabi";
 import NotFound from "./pages/NotFound";
 import MediaDetailPage from "./pages/media/MediaDetailPage";
 import KfBot from "./bot/KfBot";
-// Forms
+import GenericServiceRequestForm from "./pages/forms/GenericServiceRequestForm";
+
+// ... existing imports ...
+
+                {/* Generic Service Request Form */}
+                <Route 
+                  path="/forms/request-service" 
+                  element={
+                    <ProtectedRoute>
+                      <GenericServiceRequestForm />
+                    </ProtectedRoute>
+                  } 
+                />
+
+                {/** Forms routes */}
 import NeedsAssessmentForm from "./pages/forms/NeedsAssessmentForm";
 import RequestForMembership from "./pages/forms/RequestForMembership";
 import RequestForFunding from "./pages/forms/RequestForFunding";
@@ -323,11 +337,10 @@ export function AppRouter() {
                 />
 
                 //Analytics Dashboard
-                <Route path="/" element={<EJPEnterpriseOperationsInsightDashboard />} />
         <Route path="/enterprise-operations-insight" element={<EJPEnterpriseOperationsInsightDashboard />} />
         {/* Service Delivery & Efficiency page - Secondary route */}
         <Route path="/service-delivery-overview" element={<EJPOperationsDashboard />} />
-        <Route path="*" element={<EJPEnterpriseOperationsInsightDashboard />} />
+
                 {/* Test Pages */}
                 <Route
                   path="/test/document-selector"
