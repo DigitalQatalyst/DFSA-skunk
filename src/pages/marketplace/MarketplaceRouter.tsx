@@ -77,15 +77,14 @@ const promoCardDefinitions: Record<string, PromoCard> = {
 
 // Promo cards for each marketplace type
 const marketplacePromoCards: Record<MarketplaceType, PromoCard[]> = {
-  courses: [promoCardDefinitions.finance, promoCardDefinitions.advisory],
+  courses: [promoCardDefinitions.advisory],
   financial: [
-    promoCardDefinitions.courses,
     promoCardDefinitions.events,
     promoCardDefinitions.advisory,
   ],
-  events: [promoCardDefinitions.courses, promoCardDefinitions.finance],
-  "non-financial": [promoCardDefinitions.courses, promoCardDefinitions.finance],
-  "knowledge-hub": [promoCardDefinitions.courses, promoCardDefinitions.finance],
+  events: [],
+  "non-financial": [],
+  "knowledge-hub": [],
 };
 
 export const MarketplaceRouter: React.FC = () => {

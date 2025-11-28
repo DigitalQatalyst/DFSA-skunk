@@ -727,11 +727,11 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
           // Choose facet codes based on marketplace type
           let facetCodes: string[] = [];
           if (marketplaceType === 'financial') {
-            facetCodes = ['service-category', 'service-type', 'service-level', 'sector', 'provided-by'];
+            facetCodes = ['service-category', 'service-type', 'entity-type', 'provided-by'];
           } else if (marketplaceType === 'non-financial') {
-            facetCodes = ['service-type', 'service-level', 'sector', 'provided-by'];
+            facetCodes = ['service-category', 'service-type', 'entity-type', 'provided-by'];
           } else if (marketplaceType === 'courses') {
-            facetCodes = ['service-category', 'business-stage', 'provided-by', 'pricing-model'];
+            facetCodes = ['service-category', 'delivery-mode', 'duration', 'business-stage', 'provided-by'];
           } else if (marketplaceType === 'events') {
             // Events: strictly use backend facets only
             facetCodes = ['time-range', 'event-type', 'delivery-mode', 'cost-type', 'duration-band', 'language', 'capability', 'business-stage', 'industry', 'organizer'];

@@ -28,7 +28,7 @@ const HomePage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="fixed inset-0 bg-gradient-to-r from-blue-900 to-indigo-900 flex items-center justify-center z-50">
+      <div className="fixed inset-0 bg-gradient-to-r from-primary-900 to-dfsa-gold flex items-center justify-center z-50">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <h2 className="text-white text-xl font-bold">
