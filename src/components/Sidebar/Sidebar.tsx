@@ -328,13 +328,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* 2. Main Sidebar Container - FIXED VERSION */}
       <div
         className={`
-      fixed inset-y-0 left-0 z-50 w-64 
-      border-r border-gray-200 bg-gray-50
-      transform transition-transform duration-300 ease-in-out 
+      fixed inset-y-0 left-0 z-50 w-64
+      bg-gray-50 border-r border-gray-200 transform transition-transform duration-300 ease-in-out
       overflow-y-auto
-      
+
       ${isOpen ? "translate-x-0" : "-translate-x-full"}
-      
+
       lg:static lg:translate-x-0 lg:w-60 lg:z-auto
     `}
         data-id={dataId}
@@ -404,9 +403,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
               shouldDisable
                 ? "text-gray-400 cursor-not-allowed opacity-60"
                 : isActive
-                ? "bg-blue-700 text-white"
+                ? ""
                 : "text-gray-700 hover:bg-gray-200 cursor-pointer"
             }`;
+
+            const getItemStyle = () => {
+              if (isActive) {
+                return { backgroundColor: '#9b18232a', color: '#9b1823' };
+              }
+              return {};
+            };
+
+            const activeStyle = getItemStyle();
 
             const content = (
               <>
@@ -429,6 +437,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <div key={item.id} className="relative" ref={formsDropdownRef}>
                   <div
                     className={`${baseClasses} cursor-pointer`}
+                    style={activeStyle}
                     onClick={() => setFormsDropdownOpen(!formsDropdownOpen)}
                   >
                     <span className="w-8 flex items-center justify-center flex-shrink-0">
@@ -548,6 +557,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <div
                     key={item.id}
                     className={baseClasses}
+                    style={activeStyle}
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -566,18 +576,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   target="_blank"
                   rel="noopener noreferrer"
                   className={baseClasses}
+                  style={activeStyle}
                 >
                   {content}
                 </a>
               ) : (
-                <Link key={item.id} to={item.href} className={baseClasses}>
+                <Link key={item.id} to={item.href} className={baseClasses} style={activeStyle}>
                   {content}
                 </Link>
               );
             }
 
             return (
-              <div key={item.id} className={baseClasses}>
+              <div key={item.id} className={baseClasses} style={activeStyle}>
                 {content}
               </div>
             );

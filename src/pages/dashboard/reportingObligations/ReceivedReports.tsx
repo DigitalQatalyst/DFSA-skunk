@@ -21,7 +21,8 @@ export function ReceivedReports({ reports }) {
         <Can I="read" a="user-reporting">
           <Link
             to="/dashboard/reporting-obligations/received"
-            className="text-sm text-blue-600 hover:text-blue-800 font-bold whitespace-nowrap flex items-center"
+            className="text-sm font-bold whitespace-nowrap flex items-center"
+            style={{ color: '#9b1823' }}
           >
             View All
             <ChevronRightIcon size={14} className="ml-1" />
@@ -38,11 +39,13 @@ export function ReceivedReports({ reports }) {
             {reports.map((report) => (
               <div
                 key={report.id}
-                className="flex items-center justify-between p-3 bg-white rounded-xl border border-gray-200 hover:border-blue-200 transition-colors"
+                className="flex items-center justify-between p-3 bg-white rounded-xl border border-gray-200 transition-colors"
+                onMouseEnter={(e) => e.currentTarget.style.borderColor = '#9b18232a'}
+                onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
               >
                 <div className="flex items-start space-x-3">
-                  <div className="p-2 bg-blue-50 rounded-lg">
-                    <FileTextIcon size={18} className="text-blue-600" />
+                  <div className="p-2 rounded-lg" style={{ backgroundColor: '#9b18232a' }}>
+                    <FileTextIcon size={18} style={{ color: '#9b1823' }} />
                   </div>
                   <div>
                     <div className="text-sm font-medium text-gray-800 line-clamp-1 mb-1">
@@ -59,7 +62,8 @@ export function ReceivedReports({ reports }) {
                 <div className="flex items-center space-x-1">
                   <Can I="read" a="user-reporting">
                     <button
-                      className="p-2 text-blue-600 hover:text-blue-800 rounded-full hover:bg-gray-100"
+                      className="p-2 rounded-full hover:bg-gray-100"
+                      style={{ color: '#9b1823' }}
                       onClick={() => console.log("Download report", report.id)}
                       title="Download"
                     >
@@ -68,7 +72,8 @@ export function ReceivedReports({ reports }) {
                   </Can>
                   <Can I="update" a="user-reporting">
                     <button
-                      className="p-2 text-blue-600 hover:text-blue-800 rounded-full hover:bg-gray-100"
+                      className="p-2 rounded-full hover:bg-gray-100"
+                      style={{ color: '#9b1823' }}
                       onClick={() => console.log("Archive report", report.id)}
                       title="Archive"
                     >
@@ -77,7 +82,8 @@ export function ReceivedReports({ reports }) {
                   </Can>
                   <Can I="read" a="user-reporting">
                     <button
-                      className="p-2 text-blue-600 hover:text-blue-800 rounded-full hover:bg-gray-100"
+                      className="p-2 rounded-full hover:bg-gray-100"
+                      style={{ color: '#9b1823' }}
                       onClick={() => console.log("View report", report.id)}
                       title="View"
                     >

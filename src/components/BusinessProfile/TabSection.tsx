@@ -657,13 +657,14 @@ export function TabSection({
                       className={`h-full rounded-full ${
                         groupCompletion === 100
                           ? "bg-green-500"
-                          : groupCompletion >= 70
-                          ? "bg-blue-500"
                           : groupCompletion >= 30
                           ? "bg-yellow-500"
                           : "bg-red-500"
                       }`}
-                      style={{ width: `${groupCompletion}%` }}
+                      style={{
+                        width: `${groupCompletion}%`,
+                        backgroundColor: groupCompletion >= 70 && groupCompletion < 100 ? '#9b1823' : undefined
+                      }}
                       aria-valuenow={groupCompletion}
                       aria-valuemin={0}
                       aria-valuemax={100}
@@ -681,7 +682,16 @@ export function TabSection({
                 {!isEditing && isExpanded && (
                   <Can I="update" a="user-profile">
                     <button
-                      className="mr-3 px-3 py-1 text-xs font-medium text-blue-600 hover:text-blue-800 rounded-full hover:bg-blue-50 min-h-[32px]"
+                      className="mr-3 px-3 py-1 text-xs font-medium rounded-full min-h-[32px]"
+                      style={{ color: '#9b1823' }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#7a1319';
+                        e.currentTarget.style.backgroundColor = '#9b18232a';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '#9b1823';
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                      }}
                       onClick={(e) => toggleEditMode(groupIndex, e)}
                       aria-label={`Edit ${group.groupName} section`}
                     >
@@ -886,7 +896,8 @@ export function TabSection({
                                                       return (
                                                         <span
                                                           key={selectedValue}
-                                                          className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700"
+                                                          className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+                                                          style={{ backgroundColor: '#9b18232a', color: '#9b1823' }}
                                                         >
                                                           {option?.label ||
                                                             selectedValue}
@@ -955,7 +966,11 @@ export function TabSection({
                                                           newValue
                                                         );
                                                       }}
-                                                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                                      className="w-4 h-4 border-gray-300 rounded"
+                                                      style={{
+                                                        accentColor: '#9b1823',
+                                                        color: '#9b1823'
+                                                      }}
                                                     />
                                                     <span className="text-sm text-gray-700">
                                                       {option.label}
@@ -1194,7 +1209,10 @@ export function TabSection({
                       Cancel
                     </button>
                     <button
-                      className="px-3 py-2 text-sm font-medium text-white rounded bg-blue-600 hover:bg-blue-700 flex items-center justify-center min-h-[44px] disabled:opacity-70 disabled:cursor-not-allowed"
+                      className="px-3 py-2 text-sm font-medium text-white rounded flex items-center justify-center min-h-[44px] disabled:opacity-70 disabled:cursor-not-allowed"
+                      style={{ backgroundColor: '#9b1823' }}
+                      onMouseEnter={(e) => !e.currentTarget.disabled && (e.currentTarget.style.backgroundColor = '#7a1319')}
+                      onMouseLeave={(e) => !e.currentTarget.disabled && (e.currentTarget.style.backgroundColor = '#9b1823')}
                       onClick={handleSaveChanges}
                       aria-label="Save changes"
                       disabled={savingGroupIndex === groupIndex}

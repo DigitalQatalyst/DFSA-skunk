@@ -20,8 +20,8 @@ export function SummaryHighlights({ data }) {
           {/* Total Reports */}
           <div className="bg-gray-50 rounded-xl p-4">
             <div className="flex items-center mb-3">
-              <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-                <FileTextIcon size={20} className="text-blue-600" />
+              <div className="w-10 h-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: '#9b18232a' }}>
+                <FileTextIcon size={20} style={{ color: '#9b1823' }} />
               </div>
               <span className="text-sm font-medium text-gray-700">
                 Total Reports
@@ -77,7 +77,7 @@ export function SummaryHighlights({ data }) {
               Compliance Rate
             </h3>
             <div className="flex items-center">
-              <span className="text-2xl font-bold text-blue-600">
+              <span className="text-2xl font-bold" style={{ color: '#9b1823' }}>
                 {data.complianceRate}%
               </span>
               <span className="text-sm text-gray-500 ml-2">/ 100%</span>
@@ -85,19 +85,20 @@ export function SummaryHighlights({ data }) {
           </div>
           <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
             <div
-              className="h-full bg-blue-600 rounded-full transition-all duration-300 ease-in-out"
+              className="h-full rounded-full transition-all duration-300 ease-in-out"
               style={{
                 width: `${data.complianceRate}%`,
+                backgroundColor: '#9b1823'
               }}
             ></div>
           </div>
           <div className="mt-4 flex items-center justify-between">
             <div className="flex items-center">
-              <div className="w-3 h-3 bg-blue-600 rounded-full mr-2"></div>
+              <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: '#9b1823' }}></div>
               <span className="text-xs text-gray-600">Current Rate</span>
             </div>
             <div className="flex items-center">
-              <div className="w-3 h-3 border border-dashed border-blue-600 rounded-full mr-2"></div>
+              <div className="w-3 h-3 border border-dashed rounded-full mr-2" style={{ borderColor: '#9b1823' }}></div>
               <span className="text-xs text-gray-600">Target (100%)</span>
             </div>
           </div>

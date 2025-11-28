@@ -30,7 +30,7 @@ export function UpcomingObligations({ obligations }) {
       case "upcoming":
       default:
         return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#9b18232a', color: '#9b1823' }}>
             <CalendarIcon size={12} className="mr-1" />
             Upcoming
           </span>
@@ -56,7 +56,10 @@ export function UpcomingObligations({ obligations }) {
         return (
           <Can I="create" a="user-reporting">
             <button
-              className="px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-colors flex items-center"
+              className="px-3 py-1.5 text-white text-xs font-medium rounded-lg transition-colors flex items-center"
+              style={{ backgroundColor: '#9b1823' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#7a1319'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#9b1823'}
               onClick={() => console.log("Prepare report", obligation.id)}
             >
               Prepare
@@ -69,7 +72,10 @@ export function UpcomingObligations({ obligations }) {
         return (
           <Can I="read" a="user-reporting">
             <button
-              className="px-3 py-1.5 text-blue-600 hover:bg-blue-50 text-xs font-medium rounded-lg transition-colors flex items-center"
+              className="px-3 py-1.5 text-xs font-medium rounded-lg transition-colors flex items-center"
+              style={{ color: '#9b1823' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#9b18232a'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
               onClick={() => console.log("View report", obligation.id)}
             >
               View
@@ -91,7 +97,8 @@ export function UpcomingObligations({ obligations }) {
         <Can I="read" a="user-reporting">
           <Link
             to="/dashboard/reporting-obligations/obligations"
-            className="text-sm text-blue-600 hover:text-blue-800 font-bold whitespace-nowrap flex items-center"
+            className="text-sm font-bold whitespace-nowrap flex items-center"
+            style={{ color: '#9b1823' }}
           >
             View All
             <ChevronRightIcon size={14} className="ml-1" />
@@ -108,7 +115,9 @@ export function UpcomingObligations({ obligations }) {
             {obligations.map((obligation) => (
               <div
                 key={obligation.id}
-                className="p-3 bg-white rounded-xl border border-gray-200 hover:border-blue-200 transition-colors"
+                className="p-3 bg-white rounded-xl border border-gray-200 transition-colors"
+                onMouseEnter={(e) => e.currentTarget.style.borderColor = '#9b18232a'}
+                onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
               >
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="text-sm font-medium text-gray-900 line-clamp-1 flex-1 mr-3">

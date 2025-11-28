@@ -68,7 +68,8 @@ export function SubmittedReports({ reports }) {
         <Can I="read" a="user-reporting">
           <Link
             to="/dashboard/reporting-obligations/submitted"
-            className="text-sm text-blue-600 hover:text-blue-800 font-bold whitespace-nowrap flex items-center"
+            className="text-sm font-bold whitespace-nowrap flex items-center"
+            style={{ color: '#9b1823' }}
           >
             View All
             <ChevronRightIcon size={14} className="ml-1" />
@@ -147,7 +148,8 @@ export function SubmittedReports({ reports }) {
                         <td className="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
                           <Can I="read" a="user-reporting">
                             <button
-                              className="text-blue-600 hover:text-blue-800 mr-3"
+                              className="mr-3"
+                              style={{ color: '#9b1823' }}
                               onClick={() =>
                                 console.log("View report", report.id)
                               }
@@ -157,7 +159,7 @@ export function SubmittedReports({ reports }) {
                           </Can>
                           <Can I="read" a="user-reporting">
                             <button
-                              className="text-blue-600 hover:text-blue-800"
+                              style={{ color: '#9b1823' }}
                               onClick={() =>
                                 console.log("Download report", report.id)
                               }
@@ -215,7 +217,10 @@ export function SubmittedReports({ reports }) {
                       <div className="flex justify-end space-x-2 mt-3">
                         <Can I="read" a="user-reporting">
                           <button
-                            className="px-3 py-1.5 text-xs text-blue-600 bg-white border border-blue-200 rounded-lg hover:bg-blue-50 font-bold"
+                            className="px-3 py-1.5 text-xs bg-white border rounded-lg font-bold"
+                            style={{ color: '#9b1823', borderColor: '#9b18232a' }}
+                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#9b18232a'}
+                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
                             onClick={(e) => {
                               e.stopPropagation();
                               console.log("View report", report.id);
@@ -227,7 +232,10 @@ export function SubmittedReports({ reports }) {
                         </Can>
                         <Can I="read" a="user-reporting">
                           <button
-                            className="px-3 py-1.5 text-xs text-blue-600 bg-white border border-blue-200 rounded-lg hover:bg-blue-50 font-bold"
+                            className="px-3 py-1.5 text-xs bg-white border rounded-lg font-bold"
+                            style={{ color: '#9b1823', borderColor: '#9b18232a' }}
+                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#9b18232a'}
+                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
                             onClick={(e) => {
                               e.stopPropagation();
                               console.log("Download report", report.id);
@@ -269,9 +277,10 @@ export function SubmittedReports({ reports }) {
                       onClick={() => setCurrentPage(i + 1)}
                       className={`px-3 py-1 rounded-md ${
                         currentPage === i + 1
-                          ? "bg-blue-100 text-blue-600"
+                          ? ""
                           : "text-gray-500 hover:bg-gray-100"
                       }`}
+                      style={currentPage === i + 1 ? { backgroundColor: '#9b18232a', color: '#9b1823' } : {}}
                     >
                       {i + 1}
                     </button>

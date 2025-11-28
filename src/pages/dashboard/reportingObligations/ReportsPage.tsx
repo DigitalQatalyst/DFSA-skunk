@@ -53,7 +53,10 @@ export function ReportsPage({
     <div className="bg-white rounded-2xl shadow-sm p-6 mb-6 col-span-12">
       <div className="flex flex-col space-y-4">
         <button
-          className="md:hidden p-2 text-gray-400 hover:text-blue-600 rounded-full hover:bg-gray-100 self-end"
+          className="md:hidden p-2 text-gray-400 rounded-full hover:bg-gray-100 self-end"
+          style={{ color: showFilters ? '#9b1823' : undefined }}
+          onMouseEnter={(e) => e.currentTarget.style.color = '#9b1823'}
+          onMouseLeave={(e) => !showFilters && (e.currentTarget.style.color = '')}
           onClick={() => setShowFilters(!showFilters)}
         >
           <FilterIcon size={16} />
@@ -64,7 +67,19 @@ export function ReportsPage({
             <div className="relative lg:w-auto">
               <select
                 id="reportType"
-                className="w-full lg:w-auto appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2.5 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm min-w-[200px]"
+                className="w-full lg:w-auto appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2.5 pr-8 text-sm focus:outline-none focus:ring-2 shadow-sm min-w-[200px]"
+                style={{
+                  '--tw-ring-color': '#9b1823',
+                  '--tw-border-color': '#9b1823'
+                } as React.CSSProperties}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = '#9b1823';
+                  e.currentTarget.style.boxShadow = '0 0 0 2px rgba(155, 24, 35, 0.165)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = '#d1d5db';
+                  e.currentTarget.style.boxShadow = '';
+                }}
                 value={reportTypeFilter}
                 onChange={(e) => setReportTypeFilter(e.target.value)}
               >
@@ -108,7 +123,7 @@ export function ReportsPage({
         <div className="min-h-screen">
           <div className="bg-white rounded-2xl shadow-sm p-6 flex items-center justify-center h-screen">
             <div className="text-center">
-              <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <div className="w-12 h-12 border-4 border-t-transparent rounded-full animate-spin mx-auto mb-4" style={{ borderColor: '#9b1823', borderTopColor: 'transparent' }}></div>
               <p className="text-gray-600">Loading reports data...</p>
             </div>
           </div>
@@ -135,7 +150,10 @@ export function ReportsPage({
               <p className="text-gray-600 mb-4">{error}</p>
               <button
                 onClick={() => window.location.reload()}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 text-white rounded-md transition-colors"
+                style={{ backgroundColor: '#9b1823' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#7a1319'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#9b1823'}
               >
                 Retry
               </button>

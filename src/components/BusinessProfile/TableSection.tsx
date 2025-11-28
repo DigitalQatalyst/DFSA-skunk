@@ -99,7 +99,16 @@ export function TableSection({ title, columns, data }) {
         <h3 className="font-medium text-gray-700">{title}</h3>
         <Can I="create" a="user-profile">
           <button
-            className="px-3 py-2 text-xs font-medium text-blue-600 hover:text-blue-800 rounded-full hover:bg-blue-50 flex items-center min-h-[44px]"
+            className="px-3 py-2 text-xs font-medium rounded-full flex items-center min-h-[44px]"
+            style={{ color: '#9b1823' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#7a1319';
+              e.currentTarget.style.backgroundColor = '#9b18232a';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#9b1823';
+              e.currentTarget.style.backgroundColor = 'transparent';
+            }}
             onClick={handleAddRow}
           >
             <PlusIcon size={14} className="mr-1" />
@@ -109,7 +118,7 @@ export function TableSection({ title, columns, data }) {
       </div>
       {/* Add New Form */}
       {showForm && (
-        <div className="p-4 bg-blue-50 border-b border-blue-200">
+        <div className="p-4 border-b" style={{ backgroundColor: '#9b18232a', borderColor: '#9b18232a' }}>
           <div className="grid grid-cols-1 gap-4">
             {columns.map(
               (column) =>
@@ -143,7 +152,10 @@ export function TableSection({ title, columns, data }) {
               </button>
 
               <button
-                className="px-3 py-2 text-sm font-medium text-white rounded bg-blue-600 hover:bg-blue-700 flex items-center justify-center min-h-[44px]"
+                className="px-3 py-2 text-sm font-medium text-white rounded flex items-center justify-center min-h-[44px]"
+                style={{ backgroundColor: '#9b1823' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#7a1319'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#9b1823'}
                 onClick={handleSaveNewRow}
               >
                 <SaveIcon size={16} className="mr-1" />
@@ -199,7 +211,10 @@ export function TableSection({ title, columns, data }) {
                         <XIcon size={16} />
                       </button>
                       <button
-                        className="text-blue-600 hover:text-blue-800 p-2"
+                        className="p-2"
+                        style={{ color: '#9b1823' }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = '#7a1319'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = '#9b1823'}
                         onClick={handleSaveEditedRow}
                       >
                         <SaveIcon size={16} />
@@ -237,7 +252,9 @@ export function TableSection({ title, columns, data }) {
                     <td className="px-4 py-3 text-sm text-right">
                       <Can I="update" a="user-profile">
                         <button
-                          className="text-gray-500 hover:text-blue-600 mr-2 p-2"
+                          className="text-gray-500 mr-2 p-2"
+                          onMouseEnter={(e) => e.currentTarget.style.color = '#9b1823'}
+                          onMouseLeave={(e) => e.currentTarget.style.color = '#6b7280'}
                           onClick={() => handleEditRow(row)}
                           disabled
                         >
@@ -292,7 +309,10 @@ export function TableSection({ title, columns, data }) {
                     <XIcon size={16} />
                   </button>
                   <button
-                    className="p-2 text-white bg-blue-600 hover:bg-blue-700 rounded"
+                    className="p-2 text-white rounded"
+                    style={{ backgroundColor: '#9b1823' }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#7a1319'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#9b1823'}
                     onClick={handleSaveEditedRow}
                   >
                     <SaveIcon size={16} />
@@ -376,7 +396,9 @@ export function TableSection({ title, columns, data }) {
                 )}
                 <div className="mt-3 flex justify-end space-x-2">
                   <button
-                    className="p-2 text-gray-500 hover:text-blue-600 min-h-[44px] min-w-[44px]"
+                    className="p-2 text-gray-500 min-h-[44px] min-w-[44px]"
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#9b1823'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#6b7280'}
                     onClick={() => handleEditRow(row)}
                   >
                     <PencilIcon size={16} />
@@ -456,9 +478,10 @@ export function TableSection({ title, columns, data }) {
                     onClick={() => setCurrentPage(i + 1)}
                     className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium min-h-[44px] min-w-[44px] ${
                       currentPage === i + 1
-                        ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
+                        ? "z-10"
                         : "text-gray-500 hover:bg-gray-50"
                     }`}
+                    style={currentPage === i + 1 ? { backgroundColor: '#9b18232a', borderColor: '#9b1823', color: '#9b1823' } : {}}
                   >
                     {i + 1}
                   </button>

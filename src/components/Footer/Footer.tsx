@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ExternalLink, ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
 interface FooterProps {
   "data-id"?: string;
   isLoggedIn?: boolean;
@@ -11,17 +11,17 @@ interface AccordionSectionProps {
 function AccordionSection({ title, children }: AccordionSectionProps) {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="border-b border-blue-500 last:border-b-0">
+    <div className="border-b border-gray-300 last:border-b-0">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full py-4 flex items-center justify-between text-left"
         aria-expanded={isOpen}
       >
-        <h3 className="font-semibold text-base text-white">{title}</h3>
+        <h3 className="font-semibold text-base text-gray-800">{title}</h3>
         {isOpen ? (
-          <ChevronUp size={20} className="text-blue-100" />
+          <ChevronUp size={20} className="text-gray-600" />
         ) : (
-          <ChevronDown size={20} className="text-blue-100" />
+          <ChevronDown size={20} className="text-gray-600" />
         )}
       </button>
       {isOpen && <div className="pb-4">{children}</div>}
@@ -41,11 +41,11 @@ export function Footer({ "data-id": dataId, isLoggedIn = false }: FooterProps) {
     return (
       <footer
         data-id={dataId}
-        className="bg-gray-50 border-t border-gray-100 w-full h-14"
+        className="bg-gray-50 border-t border-gray-100 w-full"
       >
-        <div className=" px-4 sm:px-6 h-full flex items-center justify-between">
+        <div className="px-4 sm:px-6 py-3 flex items-center justify-between">
           <div className="flex items-center space-x-3 text-xs text-gray-500">
-            <span>© 2025 Enterprise Journey</span>
+            <span>© 2025 DFSA refers to the Dubai Financial Services Authority, a body established under Dubai law as the independent regulator of financial services and related activities for the DIFC.</span>
             <span className="hidden sm:inline">v2.1.0</span>
           </div>
           {/* <a href="/dashboard/support" className="text-xs text-gray-500 hover:text-gray-700 transition-colors">
@@ -188,21 +188,27 @@ export function Footer({ "data-id": dataId, isLoggedIn = false }: FooterProps) {
 
   // Full Website Footer (Pre-login)
   return (
-    <footer data-id={dataId} className="bg-blue-600 text-white w-full">
+    <footer
+      data-id={dataId}
+      className="text-white w-full"
+      style={{
+        background: 'linear-gradient(to right, #A39161 0%, #A39161 20%, white 100%)'
+      }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         {/* Mobile Layout */}
         <div className="block lg:hidden">
           {/* Logo */}
           <div className="mb-6">
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
-              ENTERPRISE
-              <br />
-              JOURNEY
-            </h2>
+            <img
+              src="/logo/dfsa-logo.png"
+              alt="DFSA Logo"
+              className="h-12"
+            />
           </div>
           {/* Newsletter - Mobile Full Width */}
           <div className="mb-8">
-            <p className="text-blue-100 text-sm mb-4 leading-relaxed">
+            <p className="text-gray-700 text-sm mb-4 leading-relaxed">
               Stay updated with the latest business insights, opportunities, and
               services from Enterprise Journey.
             </p>
@@ -244,7 +250,7 @@ export function Footer({ "data-id": dataId, isLoggedIn = false }: FooterProps) {
               </div>
               <button
                 type="submit"
-                className="w-full bg-white text-blue-600 px-4 py-3 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gray-800 text-white px-4 py-3 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Subscribe to newsletter"
                 disabled={!email.trim() || !isValid || isSubmitting}
               >
@@ -254,36 +260,68 @@ export function Footer({ "data-id": dataId, isLoggedIn = false }: FooterProps) {
           </div>
           {/* Accordion Sections */}
           <div className="mb-8">
+            <AccordionSection title="Quick Links">
+              <ul className="space-y-3">
+                <li>
+                  <a
+                    href="/coming-soon"
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm block"
+                  >
+                    Explore services
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/coming-soon"
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm block"
+                  >
+                    Resources
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/coming-soon"
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm block"
+                  >
+                    FAQs
+                  </a>
+                </li>
+              </ul>
+            </AccordionSection>
             <AccordionSection title="Get to Know Us">
               <ul className="space-y-3">
                 <li>
                   <a
                     href="/coming-soon"
-                    className="text-blue-100 hover:text-white transition-colors text-sm block"
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm block"
                   >
-                    About Enterprise Journey
+                    About DFSA
                   </a>
                 </li>
                 <li>
                   <a
                     href="/coming-soon"
-                    className="text-blue-100 hover:text-white transition-colors text-sm block"
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm block"
                   >
-                    Help Centre
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/discover-abudhabi"
-                    className="text-blue-100 hover:text-white transition-colors text-sm block"
-                  >
-                    Discover Abu Dhabi
+                    Updates
                   </a>
                 </li>
                 <li>
                   <a
                     href="/coming-soon"
-                    className="text-blue-100 hover:text-white transition-colors text-sm block"
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm block"
+                  >
+                    Contact us
+                  </a>
+                </li>
+              </ul>
+            </AccordionSection>
+            <AccordionSection title="Legal">
+              <ul className="space-y-3">
+                <li>
+                  <a
+                    href="/coming-soon"
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm block"
                   >
                     Privacy Policy
                   </a>
@@ -291,93 +329,28 @@ export function Footer({ "data-id": dataId, isLoggedIn = false }: FooterProps) {
                 <li>
                   <a
                     href="/coming-soon"
-                    className="text-blue-100 hover:text-white transition-colors text-sm block"
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm block"
                   >
                     Terms of Service
                   </a>
                 </li>
-              </ul>
-            </AccordionSection>
-            <AccordionSection title="For You">
-              <ul className="space-y-3">
-                <li>
-                  <a
-                    href="/marketplace/financial"
-                    className="text-blue-100 hover:text-white transition-colors text-sm block"
-                  >
-                    Financial Services
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/marketplace/non-financial"
-                    className="text-blue-100 hover:text-white transition-colors text-sm block"
-                  >
-                    Business Services Hub
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://ujs.qxk.mybluehost.me/website_e550b4e3/"
-                    className="text-blue-100 hover:text-white transition-colors text-sm block"
-                  >
-                    Business Communities
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/marketplace/knowledge-hub"
-                    className="text-blue-100 hover:text-white transition-colors text-sm block"
-                  >
-                    Knowledge Hub
-                  </a>
-                </li>
-              </ul>
-            </AccordionSection>
-            <AccordionSection title="Find Us">
-              <ul className="space-y-3">
                 <li>
                   <a
                     href="/coming-soon"
-                    className="text-blue-100 hover:text-white transition-colors text-sm flex items-center gap-2"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm block"
                   >
-                    LinkedIn
-                    <ExternalLink size={14} />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/coming-soon"
-                    className="text-blue-100 hover:text-white transition-colors text-sm flex items-center gap-2"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Facebook
-                    <ExternalLink size={14} />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/coming-soon"
-                    className="text-blue-100 hover:text-white transition-colors text-sm flex items-center gap-2"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    YouTube
-                    <ExternalLink size={14} />
+                    Regulatory Framework
                   </a>
                 </li>
               </ul>
             </AccordionSection>
           </div>
           {/* Copyright - Mobile */}
-          <div className="border-t border-blue-500 pt-6 text-center">
-            <p className="text-blue-100 text-xs">
-              2025 Enterprise Journey. All rights reserved.
+          <div className="border-t border-gray-300 pt-6 text-center">
+            <p className="text-gray-600 text-xs">
+              © 2025 DFSA refers to the Dubai Financial Services Authority, a body established under Dubai law as the independent regulator of financial services and related activities for the DIFC.
             </p>
-            <p className="text-blue-100 text-xs mt-1">v2.1.0</p>
+            <p className="text-gray-600 text-xs mt-1">v2.1.0</p>
           </div>
         </div>
         {/* Desktop Layout */}
@@ -387,14 +360,14 @@ export function Footer({ "data-id": dataId, isLoggedIn = false }: FooterProps) {
             {/* Logo and Newsletter Section */}
             <div>
               <div className="mb-6">
-                <h2 className="text-2xl font-bold tracking-tight">
-                  ENTERPRISE
-                  <br />
-                  JOURNEY
-                </h2>
+                <img
+                  src="/logo/dfsa-logo.png"
+                  alt="DFSA Logo"
+                  className="h-14"
+                />
               </div>
               <div className="mb-6">
-                <p className="text-blue-100 text-sm mb-4 leading-relaxed">
+                <p className="text-gray-700 text-sm mb-4 leading-relaxed">
                   Stay updated with the latest business insights, opportunities,
                   and services from Enterprise Journey.
                 </p>
@@ -418,7 +391,7 @@ export function Footer({ "data-id": dataId, isLoggedIn = false }: FooterProps) {
                     />
                     <button
                       type="submit"
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       aria-label="Subscribe to newsletter"
                       disabled={!email.trim() || !isValid || isSubmitting}
                       title={isSubmitting ? "Subscribing..." : "Subscribe"}
@@ -474,38 +447,74 @@ export function Footer({ "data-id": dataId, isLoggedIn = false }: FooterProps) {
                 </form>
               </div>
             </div>
-            {/* Get to Know Us */}
+            {/* Quick Links */}
             <div>
-              <h3 className="font-semibold text-lg mb-6">Get to Know Us</h3>
+              <h3 className="font-semibold text-lg mb-6 text-gray-800">Quick Links</h3>
               <ul className="space-y-4">
                 <li>
                   <a
                     href="/coming-soon"
-                    className="text-blue-100 hover:text-white transition-colors text-sm"
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm"
                   >
-                    About Enterprise Journey
+                    Explore services
                   </a>
                 </li>
                 <li>
                   <a
                     href="/coming-soon"
-                    className="text-blue-100 hover:text-white transition-colors text-sm"
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm"
                   >
-                    Help Centre
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/discover-abudhabi"
-                    className="text-blue-100 hover:text-white transition-colors text-sm"
-                  >
-                    Discover Abu Dhabi
+                    Resources
                   </a>
                 </li>
                 <li>
                   <a
                     href="/coming-soon"
-                    className="text-blue-100 hover:text-white transition-colors text-sm"
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm"
+                  >
+                    FAQs
+                  </a>
+                </li>
+              </ul>
+            </div>
+            {/* Get to Know Us */}
+            <div>
+              <h3 className="font-semibold text-lg mb-6 text-gray-800">Get to Know Us</h3>
+              <ul className="space-y-4">
+                <li>
+                  <a
+                    href="/coming-soon"
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm"
+                  >
+                    About DFSA
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/coming-soon"
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm"
+                  >
+                    Updates
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/coming-soon"
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm"
+                  >
+                    Contact us
+                  </a>
+                </li>
+              </ul>
+            </div>
+            {/* Legal */}
+            <div>
+              <h3 className="font-semibold text-lg mb-6 text-gray-800">Legal</h3>
+              <ul className="space-y-4">
+                <li>
+                  <a
+                    href="/coming-soon"
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm"
                   >
                     Privacy Policy
                   </a>
@@ -513,97 +522,28 @@ export function Footer({ "data-id": dataId, isLoggedIn = false }: FooterProps) {
                 <li>
                   <a
                     href="/coming-soon"
-                    className="text-blue-100 hover:text-white transition-colors text-sm"
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm"
                   >
                     Terms of Service
                   </a>
                 </li>
-              </ul>
-            </div>
-            {/* For You */}
-            <div>
-              <h3 className="font-semibold text-lg mb-6">For You</h3>
-              <ul className="space-y-4">
-                <li>
-                  <a
-                    href="/marketplace/financial"
-                    className="text-blue-100 hover:text-white transition-colors text-sm"
-                  >
-                    Financial Services
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/marketplace/non-financial"
-                    className="text-blue-100 hover:text-white transition-colors text-sm"
-                  >
-                    Business Services Hub
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://ujs.qxk.mybluehost.me/website_e550b4e3/"
-                    className="text-blue-100 hover:text-white transition-colors text-sm"
-                  >
-                    Business Communities
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/marketplace/knowledge-hub"
-                    className="text-blue-100 hover:text-white transition-colors text-sm"
-                  >
-                    Knowledge Hub
-                  </a>
-                </li>
-              </ul>
-            </div>
-            {/* Find Us */}
-            <div>
-              <h3 className="font-semibold text-lg mb-6">Find Us</h3>
-              <ul className="space-y-4">
                 <li>
                   <a
                     href="/coming-soon"
-                    className="text-blue-100 hover:text-white transition-colors text-sm flex items-center gap-2"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-gray-900 transition-colors text-sm"
                   >
-                    LinkedIn
-                    <ExternalLink size={14} />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/coming-soon"
-                    className="text-blue-100 hover:text-white transition-colors text-sm flex items-center gap-2"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Facebook
-                    <ExternalLink size={14} />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/coming-soon"
-                    className="text-blue-100 hover:text-white transition-colors text-sm flex items-center gap-2"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    YouTube
-                    <ExternalLink size={14} />
+                    Regulatory Framework
                   </a>
                 </li>
               </ul>
             </div>
           </div>
           {/* Copyright - Desktop */}
-          <div className="border-t border-blue-500 pt-6 flex items-center justify-between">
-            <p className="text-blue-100 text-sm">
-              © 2025 Enterprise Journey. All rights reserved.
+          <div className="border-t border-gray-300 pt-6 flex items-center justify-between">
+            <p className="text-gray-600 text-sm">
+              © 2025 DFSA refers to the Dubai Financial Services Authority, a body established under Dubai law as the independent regulator of financial services and related activities for the DIFC.
             </p>
-            <p className="text-blue-100 text-sm">v2.1.0</p>
+            <p className="text-gray-600 text-sm">v2.1.0</p>
           </div>
         </div>
       </div>

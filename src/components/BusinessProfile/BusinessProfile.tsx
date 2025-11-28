@@ -576,16 +576,16 @@ export function BusinessProfile({activeSection = "profile"}) {
     if (isLoading) {
         return (
             <div
-                className="flex justify-center items-center h-full min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+                className="flex justify-center items-center h-full min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100" style={{ background: 'linear-gradient(to bottom right, rgba(155, 24, 35, 0.05), white, rgba(155, 24, 35, 0.02))' }}>
                 <div className="flex flex-col items-center space-y-6 p-8">
                     {/* Animated Logo/Icon Container */}
                     <div className="relative">
                         {/* Outer rotating ring */}
                         <div
-                            className="absolute inset-0 rounded-full border-4 border-blue-200 border-t-blue-600 animate-spin w-20 h-20"></div>
+                            className="absolute inset-0 rounded-full border-4 border-t-transparent animate-spin w-20 h-20" style={{ borderColor: '#9b18232a', borderTopColor: 'transparent', borderRightColor: '#9b1823' }}></div>
                         {/* Inner pulsing circle */}
                         <div
-                            className="absolute inset-0 m-2 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 animate-pulse w-16 h-16 flex items-center justify-center">
+                            className="absolute inset-0 m-2 rounded-full animate-pulse w-16 h-16 flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, #9b1823, #7a1319)' }}>
                             <svg
                                 className="w-8 h-8 text-white"
                                 fill="none"
@@ -649,7 +649,7 @@ export function BusinessProfile({activeSection = "profile"}) {
 
             {isLoading ? (
                 <div className="flex justify-center items-center h-64">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderColor: '#9b1823' }}></div>
                 </div>
             ) : (
                 <div
@@ -680,15 +680,18 @@ export function BusinessProfile({activeSection = "profile"}) {
                                     <div
                                         className={`w-20 h-20 sm:w-24 sm:h-24 rounded-lg border-2 border-dashed flex items-center justify-center cursor-pointer ${
                                             isUploadingLogo
-                                                ? "border-blue-400 bg-blue-50"
-                                                : "border-gray-300 hover:border-blue-400 hover:bg-gray-50"
+                                                ? "border-gray-300 hover:bg-gray-50"
+                                                : "border-gray-300 hover:bg-gray-50"
                                         }`}
+                                        style={isUploadingLogo ? { borderColor: '#9b1823', backgroundColor: '#9b18232a' } : {}}
+                                        onMouseEnter={(e) => !isUploadingLogo && (e.currentTarget.style.borderColor = '#9b1823')}
+                                        onMouseLeave={(e) => !isUploadingLogo && (e.currentTarget.style.borderColor = '#d1d5db')}
                                         onClick={() => setIsUploadingLogo(true)}
                                     >
                                         {isUploadingLogo ? (
                                             <div className="flex flex-col items-center">
-                                                <UploadIcon size={16} className="text-blue-500 mb-1"/>
-                                                <span className="text-xs text-blue-500">Upload</span>
+                                                <UploadIcon size={16} className="mb-1" style={{ color: '#9b1823' }}/>
+                                                <span className="text-xs" style={{ color: '#9b1823' }}>Upload</span>
                                                 <input
                                                     type="file"
                                                     className="absolute inset-0 opacity-0 cursor-pointer"
@@ -763,13 +766,14 @@ export function BusinessProfile({activeSection = "profile"}) {
                                                         className={`h-full rounded-full transition-all duration-300 ${
                                                             overallMandatoryCompletion === 100
                                                                 ? "bg-green-500"
-                                                                : overallMandatoryCompletion >= 70
-                                                                    ? "bg-blue-500"
-                                                                    : overallMandatoryCompletion >= 30
-                                                                        ? "bg-yellow-500"
-                                                                        : "bg-red-500"
+                                                                : overallMandatoryCompletion >= 30
+                                                                    ? "bg-yellow-500"
+                                                                    : "bg-red-500"
                                                         }`}
-                                                        style={{width: `${overallMandatoryCompletion}%`}}
+                                                        style={{
+                                                            width: `${overallMandatoryCompletion}%`,
+                                                            backgroundColor: overallMandatoryCompletion >= 70 && overallMandatoryCompletion < 100 ? '#9b1823' : undefined
+                                                        }}
                                                     ></div>
                                                 </div>
                                                 <span className="text-sm font-medium text-gray-700 ml-2 flex-shrink-0">
@@ -802,9 +806,10 @@ export function BusinessProfile({activeSection = "profile"}) {
                                                 key={section.id}
                                                 className={`w-full text-left px-3 py-3 text-sm flex items-center justify-between min-w-0 ${
                                                     activeTabIndex === index
-                                                        ? "bg-blue-50 text-blue-600"
+                                                        ? ""
                                                         : "text-gray-700 hover:bg-gray-100"
                                                 }`}
+                                                style={activeTabIndex === index ? { backgroundColor: '#9b18232a', color: '#9b1823' } : {}}
                                                 onClick={() => {
                                                     setActiveTabIndex(index);
                                                     setShowTabsMenu(false);
@@ -868,9 +873,10 @@ export function BusinessProfile({activeSection = "profile"}) {
                                                     key={section.id}
                                                     className={`px-3 md:px-4 py-2 text-xs md:text-sm font-medium whitespace-nowrap flex items-center rounded-lg transition-all duration-200 ${
                                                         activeTabIndex === index
-                                                            ? "bg-white text-blue-600 shadow-sm border border-blue-200"
+                                                            ? "bg-white shadow-sm border"
                                                             : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                                                     }`}
+                                                    style={activeTabIndex === index ? { color: '#9b1823', borderColor: '#9b18232a' } : {}}
                                                     onClick={() => setActiveTabIndex(index)}
                                                     role="tab"
                                                     aria-selected={activeTabIndex === index}
@@ -953,9 +959,10 @@ export function BusinessProfile({activeSection = "profile"}) {
                                                                     key={section.id}
                                                                     className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between ${
                                                                         activeTabIndex === actualIndex
-                                                                            ? "bg-blue-50 text-blue-600"
+                                                                            ? ""
                                                                             : "text-gray-700 hover:bg-gray-100"
                                                                     }`}
+                                                                    style={activeTabIndex === actualIndex ? { backgroundColor: '#9b18232a', color: '#9b1823' } : {}}
                                                                     onClick={() => {
                                                                         setActiveTabIndex(actualIndex);
                                                                         setShowTabsMenu(false);

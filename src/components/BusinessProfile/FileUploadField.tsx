@@ -108,12 +108,15 @@ export const FileUploadField: React.FC<FileUploadFieldProps> = ({
                 isInvalid ? "border-red-300 bg-red-50" : "border-gray-300 bg-gray-50"
             }`}>
                 <div className="flex items-center flex-1 min-w-0">
-                    <FileIcon size={16} className="text-blue-600 mr-2 flex-shrink-0" />
+                    <FileIcon size={16} className="mr-2 flex-shrink-0" style={{ color: '#9b1823' }} />
                     <a
                         onClick={handleViewDocument}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-blue-600 hover:text-blue-800 underline truncate cursor-pointer"
+                        className="text-sm underline truncate cursor-pointer"
+                        style={{ color: '#9b1823' }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = '#7a1319'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = '#9b1823'}
                     >
                         {fileName || "View Document"}
                     </a>
@@ -133,9 +136,9 @@ export const FileUploadField: React.FC<FileUploadFieldProps> = ({
     // If currently uploading
     if (isUploading) {
         return (
-            <div className="w-full border border-blue-300 bg-blue-50 rounded px-3 py-2 min-h-[44px] flex items-center">
-                <Loader2 size={16} className="animate-spin text-blue-600 mr-2" />
-                <span className="text-sm text-blue-600">Uploading {fileName}...</span>
+            <div className="w-full border rounded px-3 py-2 min-h-[44px] flex items-center" style={{ borderColor: '#9b1823', backgroundColor: '#9b18232a' }}>
+                <Loader2 size={16} className="animate-spin mr-2" style={{ color: '#9b1823' }} />
+                <span className="text-sm" style={{ color: '#9b1823' }}>Uploading {fileName}...</span>
             </div>
         );
     }
@@ -147,8 +150,10 @@ export const FileUploadField: React.FC<FileUploadFieldProps> = ({
                 className={`w-full border-2 border-dashed rounded px-3 py-2 min-h-[44px] flex items-center justify-center cursor-pointer transition-colors ${
                     isInvalid
                         ? "border-red-300 bg-red-50 hover:border-red-400"
-                        : "border-gray-300 bg-white hover:border-blue-400 hover:bg-blue-50"
+                        : "border-gray-300 bg-white"
                 }`}
+                onMouseEnter={(e) => !isInvalid && (e.currentTarget.style.borderColor = '#9b1823', e.currentTarget.style.backgroundColor = '#9b18232a')}
+                onMouseLeave={(e) => !isInvalid && (e.currentTarget.style.borderColor = '#d1d5db', e.currentTarget.style.backgroundColor = 'white')}
             >
                 <UploadIcon size={16} className="text-gray-400 mr-2" />
                 <span className="text-sm text-gray-600">

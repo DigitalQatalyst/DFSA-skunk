@@ -21,7 +21,7 @@ export function DocumentSection({ title, documents }) {
       case "pdf":
         return <FileTextIcon size={16} className="text-red-500" />;
       case "image":
-        return <ImageIcon size={16} className="text-blue-500" />;
+        return <ImageIcon size={16} style={{ color: '#9b1823' }} />;
       case "spreadsheet":
         return <FileSpreadsheetIcon size={16} className="text-green-500" />;
       case "presentation":
@@ -160,8 +160,9 @@ export function DocumentSection({ title, documents }) {
       {/* Upload area */}
       <div
         className={`p-4 sm:p-6 border-b border-gray-200 ${
-          isDragging ? "bg-blue-50" : "bg-white"
+          isDragging ? "" : "bg-white"
         }`}
+        style={isDragging ? { backgroundColor: '#9b18232a' } : {}}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -169,17 +170,21 @@ export function DocumentSection({ title, documents }) {
         <div
           className={`border-2 border-dashed rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center cursor-pointer min-h-[120px] ${
             isDragging
-              ? "border-blue-400 bg-blue-50"
-              : "border-gray-300 hover:border-blue-400"
+              ? ""
+              : "border-gray-300"
           }`}
+          style={isDragging ? { borderColor: '#9b1823', backgroundColor: '#9b18232a' } : {}}
+          onMouseEnter={(e) => !isDragging && (e.currentTarget.style.borderColor = '#9b1823')}
+          onMouseLeave={(e) => !isDragging && (e.currentTarget.style.borderColor = '#d1d5db')}
           onClick={() => fileInputRef.current.click()}
         >
           <UploadIcon
             size={24}
-            className={isDragging ? "text-blue-500" : "text-gray-400"}
+            className={isDragging ? "" : "text-gray-400"}
+            style={isDragging ? { color: '#9b1823' } : {}}
           />
           <p className="mt-2 text-sm text-gray-600 text-center">
-            <span className="font-medium text-blue-600">Click to upload</span>{" "}
+            <span className="font-medium" style={{ color: '#9b1823' }}>Click to upload</span>{" "}
             or drag and drop
           </p>
           <p className="text-xs text-gray-500 mt-1 text-center">
@@ -216,9 +221,10 @@ export function DocumentSection({ title, documents }) {
                 <div className="mt-2">
                   <div className="w-full bg-gray-200 rounded-full h-1.5">
                     <div
-                      className="bg-blue-500 h-1.5 rounded-full"
+                      className="h-1.5 rounded-full"
                       style={{
                         width: `${file.progress}%`,
+                        backgroundColor: '#9b1823'
                       }}
                     ></div>
                   </div>
@@ -287,7 +293,7 @@ export function DocumentSection({ title, documents }) {
                   </span>
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
-                  <button className="text-gray-500 hover:text-blue-600 mr-3 p-2">
+                  <button className="text-gray-500 mr-3 p-2" style={{ color: '#6b7280' }} onMouseEnter={(e) => e.currentTarget.style.color = '#9b1823'} onMouseLeave={(e) => e.currentTarget.style.color = '#6b7280'}>
                     <DownloadIcon size={16} />
                   </button>
                   <button
@@ -347,7 +353,7 @@ export function DocumentSection({ title, documents }) {
                 </div>
               </div>
               <div className="flex justify-end space-x-2">
-                <button className="p-2 text-gray-500 hover:text-blue-600 min-h-[44px] min-w-[44px]">
+                <button className="p-2 text-gray-500 min-h-[44px] min-w-[44px]" onMouseEnter={(e) => e.currentTarget.style.color = '#9b1823'} onMouseLeave={(e) => e.currentTarget.style.color = '#6b7280'}>
                   <DownloadIcon size={16} />
                 </button>
                 <button
