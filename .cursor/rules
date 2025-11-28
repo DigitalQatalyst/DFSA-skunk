@@ -1,0 +1,54 @@
+# Cursor AI Configuration
+
+This project uses a centralized AI configuration system located in the `.ai/` directory.
+
+## Main Configuration
+
+**Read and follow all guidelines in `.ai/agents.md`**
+
+This file contains:
+- Project overview and principles
+- Coding standards and architecture guidelines
+- Framework-specific rules
+- Project conventions
+
+## Key Documentation
+
+### Core Rules
+- `.ai/agents.md` - Root specification (start here)
+- `.ai/guide.md` - How to use the AI config system
+
+### Framework Rules
+- `.ai/rules/coding-style.md` - General coding standards
+- `.ai/rules/architecture.md` - System architecture patterns
+- `.ai/rules/typescript.md` - TypeScript conventions
+- `.ai/rules/nextjs-patterns.md` - Next.js best practices
+- `.ai/rules/tailwind.md` - Tailwind CSS guidelines
+- `.ai/rules/testing.md` - Testing standards
+- `.ai/rules/security.md` - Security requirements
+
+### Project Conventions
+- `.ai/project/component-library.md` - Component patterns
+- `.ai/project/api-patterns.md` - API design patterns
+- `.ai/project/state-management.md` - State management approach
+- `.ai/project/folder-structure.md` - Project organization
+
+### Helpful Prompts
+- `.ai/prompts/refactor.prompt.md` - Code refactoring templates
+- `.ai/prompts/review.prompt.md` - Code review templates
+- `.ai/prompts/test-generator.prompt.md` - Test generation templates
+- `.ai/prompts/doc-writer.prompt.md` - Documentation templates
+
+## When Coding
+
+1. Check `.ai/agents.md` for project principles
+2. Follow framework-specific rules in `.ai/rules/`
+3. Use project conventions from `.ai/project/`
+4. Reference prompt templates when needed
+
+## Benefits
+
+- Consistent code across the project
+- Clear guidelines for all AI assistants
+- Easy to maintain and update
+- Portable configuration system

@@ -7,7 +7,8 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 migrations
-.cursor
+.cursor/*
+!.cursor/rules
 docs
 node_modules
 api-knowledgehub-server
@@ -43,3 +44,9 @@ supabase_migrations
 !CONTRIBUTING.md
 !LICENSE.md
 !CHANGELOG.md
+# Allow AI configuration files
+!.ai/**/*.md
+!.cursor/**/*.md
+!.claude/**/*.md
+!.codex/**/*.md
+!.github/copilot-instructions.md
