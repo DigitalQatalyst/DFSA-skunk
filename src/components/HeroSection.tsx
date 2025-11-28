@@ -49,7 +49,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
     <div
       className="relative w-full bg-gray-900 overflow-hidden"
       style={{
-        backgroundImage: "url('/heroImage.png')",
+        backgroundImage: "url('/dfsa_hero.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         minHeight: "100vh",

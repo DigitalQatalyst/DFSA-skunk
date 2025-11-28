@@ -106,7 +106,7 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
         {/* Hero Section */}
         <div className="bg-gradient-to-r from-primary-dark to-primary text-white py-16 relative overflow-hidden">
           <img
-            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+            src="/dfsa_hero.png"
             alt="Service Background"
             className="absolute inset-0 w-full h-full object-cover opacity-10 mix-blend-overlay"
           />
