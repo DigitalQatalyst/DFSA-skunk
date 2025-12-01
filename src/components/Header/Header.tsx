@@ -123,8 +123,8 @@ export function Header({
           }`}
         style={{
           background: isSticky
-            ? 'linear-gradient(to right, rgba(245, 245, 245, 0.95), rgba(163, 145, 97, 0.95))'
-            : 'linear-gradient(to right, #f5f5f5, #A39161)'
+            ? 'linear-gradient(to right, rgba(184, 41, 51, 0.95), rgba(184, 41, 51, 0.85) 60%, rgba(163, 145, 67, 0.95))'
+            : 'linear-gradient(to right, #b82933, #b82933 60%, #a39143)'
         }}
         data-id={dataId}
       >
@@ -135,7 +135,7 @@ export function Header({
             }`}
         >
           <img
-            src="/logo/dfsa-logo.png"
+            src="/logo/dfsa-logo-white.png"
             alt="DFSA Logo"
             className={`transition-all duration-300 ${isSticky ? "h-8" : "h-10"
               }`}
@@ -162,6 +162,13 @@ export function Header({
             {/* Left Navigation - Desktop and Tablet */}
             <div className="hidden md:flex items-center space-x-8 ml-4">
               <ExploreDropdown isCompact={isSticky} />
+              <button
+                className="transition-colors duration-200 font-medium hover:opacity-80"
+                style={{ color: '#ffffff' }}
+                onClick={() => console.log('Explore DIFCA clicked')}
+              >
+                Explore DIFCA
+              </button>
             </div>
           </div>
           {/* Right Side - Conditional based on auth state and screen size */}
@@ -176,9 +183,9 @@ export function Header({
                 {/* Desktop CTAs (≥1024px) */}
                 <div className="hidden lg:flex items-center space-x-3">
                   <button
-                    className={`px-4 py-2 bg-transparent border-2 rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 font-semibold ${isSticky ? "text-sm px-3 py-1.5" : ""
+                    className={`px-4 py-2 bg-transparent rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 font-semibold ${isSticky ? "text-sm px-3 py-1.5" : ""
                       }`}
-                    style={{ borderColor: '#9b1823', color: '#9b1823' }}
+                    style={{ color: '#ffffff' }}
                     onClick={handleSignIn}
                   >
                     Sign Up
@@ -187,9 +194,9 @@ export function Header({
                 {/* Tablet Sign Up Button (768px - 1023px) */}
                 <div className="hidden md:flex lg:hidden items-center">
                   <button
-                    className={`px-3 py-2 bg-transparent border-2 rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 font-semibold ${isSticky ? "text-sm px-2 py-1.5" : "text-sm"
+                    className={`px-3 py-2 bg-transparent rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 font-semibold ${isSticky ? "text-sm px-2 py-1.5" : "text-sm"
                       }`}
-                    style={{ borderColor: '#9b1823', color: '#9b1823' }}
+                    style={{ color: '#ffffff' }}
                     onClick={handleSignIn}
                   >
                     Sign Up

@@ -37,9 +37,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Primary - Red/Burgundy (DFSA Platform)
+        // Primary - Red/Burgundy (Pantone 1805 Coated)
         primary: {
-          DEFAULT: "#9b1823",
+          DEFAULT: "#b82933",
           dark: "#7a1219",
           light: "#c5505c",
           50: '#fef2f2',
@@ -49,9 +49,9 @@ module.exports = {
           800: '#621015',
           900: '#4a0c10',
         },
-        // DFSA Secondary - Gold
+        // DFSA Secondary - Gold 
         'dfsa-gold': {
-          DEFAULT: '#A39161',
+          DEFAULT: '#a39143',
           50: '#f9f7f1',
           100: '#f3efe3',
           500: '#b5a273',
@@ -83,11 +83,18 @@ module.exports = {
         },
       },
       fontFamily: {
-        display: ['Crimson Pro', 'Georgia', 'serif'],
-        heading: ['Inter', 'DM Sans', 'system-ui', 'sans-serif'],
-        body: ['Inter', 'system-ui', 'sans-serif'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        serif: ['Crimson Pro', 'Georgia', 'serif'],
+        // Primary font: Trajan Pro (for headings and display)
+        primary: ['Trajan Pro', 'serif'],
+        display: ['Trajan Pro', 'serif'],
+        heading: ['Trajan Pro', 'serif'],
+
+        // Secondary font: Helvetica Neue Lt (for body text)
+        secondary: ['Helvetica Neue Lt', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+        body: ['Helvetica Neue Lt', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+        sans: ['Helvetica Neue Lt', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+
+        // Keep serif for backward compatibility if needed
+        serif: ['Trajan Pro', 'serif'],
       },
       zIndex: {
         400: 400,

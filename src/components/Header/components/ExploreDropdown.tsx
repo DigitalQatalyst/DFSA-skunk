@@ -136,12 +136,10 @@ export function ExploreDropdown({ isCompact = false }: ExploreDropdownProps) {
     <div className="relative" ref={dropdownRef}>
       <button
         ref={buttonRef}
-        className="flex items-center text-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 rounded-md px-2 py-1 font-semibold"
+        className="flex items-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20 rounded-md px-3 py-1.5 font-semibold hover:bg-white/10"
         style={{
-          '--hover-color': '#9b1823'
-        } as React.CSSProperties}
-        onMouseEnter={(e) => e.currentTarget.style.color = '#9b1823'}
-        onMouseLeave={(e) => e.currentTarget.style.color = ''}
+          color: '#ffffff'
+        }}
         onClick={() => setIsOpen((v) => !v)}
         onKeyDown={handleKeyDown}
         aria-expanded={isOpen}
@@ -208,7 +206,7 @@ export function ExploreDropdown({ isCompact = false }: ExploreDropdownProps) {
                   onFocus={() => setFocusedIndex(index)}
                 >
                   <div className="flex-shrink-0 mt-0.5">
-                    <Icon size={20} style={{ color: '#9b1823' }} />
+                    <Icon size={20} style={{ color: '#b82933' }} />
                   </div>
                   <div className="ml-3 flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-900 truncate">
