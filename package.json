@@ -17,7 +17,8 @@
         "analyze:depcheck": "depcheck --json > .depcheck.json || exit 0",
         "analyze:tsprune": "ts-prune -p tsconfig.json > .tsprune.txt || exit 0",
         "analyze:madge": "madge --extensions ts,tsx,js,jsx --orphans --warning --ts-config tsconfig.json src > .madge-orphans.txt || exit 0",
-        "analyze": "npm run analyze:knip && npm run analyze:depcheck && npm run analyze:tsprune && npm run analyze:madge"
+        "analyze": "npm run analyze:knip && npm run analyze:depcheck && npm run analyze:tsprune && npm run analyze:madge",
+        "validate:profile": "ts-node --esm ./scripts/validateProfileConfig.ts"
     },
     "dependencies": {
         "@apollo/client": "^4.0.7",
