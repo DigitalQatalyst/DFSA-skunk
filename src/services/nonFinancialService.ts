@@ -19,17 +19,24 @@ export interface NonFinancialService {
 }
 
 export async function fetchNonFinancialServices() {
+  console.log('[NonFinancial] Fetching services...')
   const supabase = getNonFinancialSupabase()
   const { data, error } = await supabase
     .from('non_financial_services')
     .select('*')
     .order('name')
   
-  if (error) throw error
+  if (error) {
+    console.error('[NonFinancial] Error fetching services:', error)
+    throw error
+  }
+  
+  console.log(`[NonFinancial] Successfully fetched ${data?.length || 0} services`)
   return data as NonFinancialService[]
 }
 
 export async function fetchNonFinancialServiceBySlug(slug: string) {
+  console.log(`[NonFinancial] Fetching service by slug: ${slug}`)
   const supabase = getNonFinancialSupabase()
   const { data, error } = await supabase
     .from('non_financial_services')
@@ -37,6 +44,11 @@ export async function fetchNonFinancialServiceBySlug(slug: string) {
     .eq('slug', slug)
     .single()
   
-  if (error) throw error
+  if (error) {
+    console.error(`[NonFinancial] Error fetching service ${slug}:`, error)
+    throw error
+  }
+  
+  console.log(`[NonFinancial] Successfully fetched service: ${data?.name}`)
   return data as NonFinancialService
 }

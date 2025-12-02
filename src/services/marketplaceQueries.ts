@@ -25,9 +25,9 @@ const GET_PRODUCTS = gql`
             EmpowermentandLeadership
             Industry
             BusinessStage
-            processingTime
-            registrationValidity
-            cost
+            ProcessingTime
+            RegistrationValidity
+            Cost
             Steps
             KeyTermsOfService
             RequiredDocuments
@@ -82,9 +82,9 @@ const GET_PRODUCT = gql`
         formUrl
         Industry
         BusinessStage
-        processingTime
-        registrationValidity
-        cost
+        ProcessingTime
+        RegistrationValidity
+        Cost
         Steps
         KeyTermsOfService
         RequiredDocuments
@@ -128,7 +128,7 @@ const GET_COURSE = gql`
     rating
     reviewCount
     startDate
-    cost
+    Cost
     keyHighlights
     duration
     logoUrl
@@ -152,7 +152,7 @@ const GET_ALL_COURSES = gql`
         partner
         rating
         reviewCount
-        cost
+        Cost
         duration
         logoUrl
         businessStage
