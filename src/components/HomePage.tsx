@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import HeroSection from './HeroSection';
+import DFSADecisionAuthoritySection from './DFSADecisionAuthoritySection';
 import LicenseCategoriesSection from './LicenseCategoriesSection';
 import AuthorizationJourneySection from './AuthorizationJourneySection';
 import KeyPersonnelSection from './KeyPersonnelSection';
 import ComplianceServicesSection from './ComplianceServicesSection';
-import TestimonialsSection from './TestimonialsSection';
-import PricingSection from './PricingSection';
 import FAQSection from './FAQSection';
 import ResourceLibrarySection from './ResourceLibrarySection';
 import ProofAndTrust from './ProofAndTrust';
@@ -50,12 +49,11 @@ const HomePage: React.FC = () => {
       />
       <main className="flex-grow">
         <HeroSection />
+        <DFSADecisionAuthoritySection />
         <LicenseCategoriesSection />
         <AuthorizationJourneySection />
         <KeyPersonnelSection />
         <ComplianceServicesSection />
-        <TestimonialsSection />
-        <PricingSection />
         <FAQSection />
         <ResourceLibrarySection />
         {/* <ProofAndTrust /> */}

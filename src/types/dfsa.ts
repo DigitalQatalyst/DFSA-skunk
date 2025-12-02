@@ -15,6 +15,19 @@ export interface TrustMetric {
   icon?: string;
 }
 
+/**
+ * DFSA Fact Metrics (Compliant replacement for Trust Metrics)
+ * Educational regulatory information, no outcome predictions
+ */
+export interface DFSAFactMetric {
+  id: string;
+  value: number;
+  label: string;
+  description: string;
+  icon: string;
+  ruleReference?: string;
+}
+
 // ============================================================================
 // LICENSE CATEGORIES
 // ============================================================================

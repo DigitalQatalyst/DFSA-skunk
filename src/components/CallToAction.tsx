@@ -67,10 +67,10 @@ const CallToAction: React.FC = () => {
           <FadeInUpOnScroll>
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-4">
-                Ready to Start Your DFSA Authorization Journey?
+                Request Information on DFSA Authorisation Requirements
               </h2>
               <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto">
-                Schedule a free consultation with our regulatory experts to discuss your licensing requirements and timeline.
+                Submit your details to receive information about documentation requirements and application procedures for your intended financial services activities.
               </p>
             </div>
           </FadeInUpOnScroll>
@@ -124,15 +124,11 @@ const CallToAction: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-2 text-white/80 text-sm">
                     <CheckCircle2 size={16} className="text-dfsa-teal" />
-                    <span>95% First-Time Authorization Success</span>
+                    <span>Information Based on DFSA Rulebook Requirements</span>
                   </div>
                   <div className="flex items-center gap-2 text-white/80 text-sm">
                     <CheckCircle2 size={16} className="text-dfsa-teal" />
-                    <span>Free Initial Consultation</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-white/80 text-sm">
-                    <CheckCircle2 size={16} className="text-dfsa-teal" />
-                    <span>Response Within 24 Hours</span>
+                    <span>All Applications Subject to DFSA Review</span>
                   </div>
                 </div>
               </div>
@@ -149,7 +145,7 @@ const CallToAction: React.FC = () => {
                       </div>
                       <div>
                         <h3 className="text-xl font-heading font-bold text-gray-900">
-                          Schedule Your Consultation
+                          Request Application Information
                         </h3>
                         <p className="text-sm text-gray-600">All fields are required</p>
                       </div>
@@ -227,7 +223,7 @@ const CallToAction: React.FC = () => {
                           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                           rows={4}
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary focus:outline-none transition-colors resize-none"
-                          placeholder="Tell us about your business and licensing goals..."
+                          placeholder="Describe your proposed financial services activities and regulatory questions..."
                         />
                       </div>
 
@@ -237,7 +233,7 @@ const CallToAction: React.FC = () => {
                                    transition-all duration-300 hover:shadow-xl flex items-center justify-center gap-2 group"
                       >
                         <Calendar size={20} />
-                        <span>Schedule Free Consultation</span>
+                        <span>Submit Information Request</span>
                         <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                       </button>
 
@@ -255,7 +251,7 @@ const CallToAction: React.FC = () => {
                       Thank You!
                     </h3>
                     <p className="text-gray-600 mb-6">
-                      We've received your consultation request. Our team will contact you within 24 hours.
+                      We've received your information request. Our team will respond with relevant information about DFSA requirements.
                     </p>
                     <p className="text-sm text-gray-500">
                       Check your email for confirmation details.
@@ -266,16 +262,14 @@ const CallToAction: React.FC = () => {
             </FadeInUpOnScroll>
           </div>
 
-          {/* Bottom Trust Bar */}
+          {/* Disclaimer */}
           <FadeInUpOnScroll delay={0.6}>
             <div className="mt-12 text-center">
-              <p className="text-white/80 text-sm mb-4">Trusted by 50+ Financial Firms in the DIFC</p>
-              <div className="flex flex-wrap justify-center gap-6 text-xs text-white/60">
-                <span>🔒 Confidential Consultation</span>
-                <span>⚡ 24-Hour Response Time</span>
-                <span>✓ No Obligation</span>
-                <span>📞 Direct Access to Experts</span>
-              </div>
+              <p className="text-white/80 text-sm max-w-3xl mx-auto leading-relaxed">
+                This platform provides documentation preparation and procedural guidance for DFSA authorisation applications.
+                We do not provide legal advice, investment advice, or predict application outcomes.
+                The DFSA makes all decisions regarding authorisation in accordance with applicable law and regulations.
+              </p>
             </div>
           </FadeInUpOnScroll>
         </div>

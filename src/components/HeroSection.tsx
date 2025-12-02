@@ -7,7 +7,7 @@ import {
   AnimatedCounter,
 } from "./AnimationUtils";
 import { useLocation, useNavigate } from "react-router-dom";
-import { trustMetrics } from "../data/dfsa";
+import { dfsaFactMetrics } from "../data/dfsa/dfsaFactMetrics";
 
 interface HeroSectionProps {
   "data-id"?: string;
@@ -80,7 +80,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
           {/* Headline with animated text */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-6 leading-tight">
             <AnimatedText
-              text="Navigate DFSA Authorization with Confidence"
+              text="DFSA Authorisation Application Support"
               gap="0.5rem"
             />
           </h1>
@@ -88,14 +88,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
           {/* Subheadline */}
           <FadeInUpOnScroll delay={0.8}>
             <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto font-body">
-              Expert guidance for financial services firms seeking regulatory approval and compliance excellence in the DIFC.
+              Structured documentation preparation services for financial services firms pursuing authorisation in the Dubai International Financial Centre.
             </p>
           </FadeInUpOnScroll>
 
-          {/* Trust Metrics - Animated Badges */}
+          {/* DFSA Regulatory Information Metrics */}
           <FadeInUpOnScroll delay={1.0}>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mt-12 max-w-4xl mx-auto">
-              {trustMetrics.map((metric, index) => (
+              {dfsaFactMetrics.map((metric, index) => (
                 <div
                   key={metric.id}
                   className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20 hover:bg-white/15 transition-all duration-300"
@@ -104,11 +104,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
                   }}
                 >
                   <div className="text-3xl md:text-4xl font-bold text-white mb-2">
-                    {metric.id === 'average-timeline' ? (
-                      <span>{metric.value} mo</span>
-                    ) : (
-                      <AnimatedCounter end={metric.value} suffix={metric.id === 'success-rate' ? '%' : '+'} />
-                    )}
+                    <AnimatedCounter end={metric.value} suffix="+" />
                   </div>
                   <div className="text-sm md:text-base text-white/80 font-medium">
                     {metric.label}
@@ -130,7 +126,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
                        transform transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl
                        flex items-center justify-center gap-2 group"
           >
-            <span className="relative z-10">Start Your Authorization Journey</span>
+            <span className="relative z-10">Submit Information Request</span>
             <ArrowRight
               size={20}
               className="relative z-10 group-hover:translate-x-1 transition-transform duration-300"
@@ -143,7 +139,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
                        flex items-center justify-center gap-2 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
           >
             <Calendar size={20} />
-            <span>Schedule Consultation</span>
+            <span>Request Application Information</span>
           </button>
         </StaggeredFadeIn>
 
@@ -156,11 +152,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-dfsa-gold rounded-full"></div>
-              <span>95% First-Time Success</span>
+              <span>Documentation Preparation Services</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-white rounded-full"></div>
-              <span>Full Compliance Support</span>
+              <span>DFSA Determines All Authorisation Outcomes</span>
             </div>
           </div>
         </FadeInUpOnScroll>

@@ -10,6 +10,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
 import EnquiryModal from "../EnquiryModal";
 import { OnboardingModal } from "./components/OnboardingModal";
+import { SignInModal } from "./components/SignInModal";
+import { SignupModal } from "./components/SignupModal";
 
 interface HeaderProps {
   toggleSidebar?: () => void;
@@ -29,6 +31,8 @@ export function Header({
   const [isSticky, setIsSticky] = useState(false);
   const [isEnquiryModalOpen, setIsEnquiryModalOpen] = useState(false);
   const [isOnboardingModalOpen, setIsOnboardingModalOpen] = useState(false);
+  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
+  const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const { user, login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -63,13 +67,13 @@ export function Header({
     setShowNotificationCenter(false);
   };
 
-  // Handle sign in - now opens onboarding modal
+  // Handle sign in - now opens dedicated sign in modal
   const handleSignIn = () => {
-    setIsOnboardingModalOpen(true);
+    setIsSignInModalOpen(true);
   };
 
   const handleSignUp = () => {
-    setIsOnboardingModalOpen(true);
+    setIsSignupModalOpen(true);
   };
 
   // Handle onboarding completion
@@ -226,11 +230,37 @@ export function Header({
         data-id="enquiry-modal"
       />
 
-      {/* Onboarding Modal */}
+      {/* Onboarding Modal - still used on /onboarding page */}
       <OnboardingModal
         isOpen={isOnboardingModalOpen}
         onClose={() => setIsOnboardingModalOpen(false)}
         onComplete={handleOnboardingComplete}
+      />
+
+      {/* Sign In Modal */}
+      <SignInModal
+        isOpen={isSignInModalOpen}
+        onClose={() => setIsSignInModalOpen(false)}
+        onSignInSuccess={() => {
+          console.log('Sign in successful');
+        }}
+        onSwitchToSignUp={() => {
+          setIsSignInModalOpen(false);
+          setIsSignupModalOpen(true);
+        }}
+      />
+
+      {/* Sign Up Modal */}
+      <SignupModal
+        isOpen={isSignupModalOpen}
+        onClose={() => setIsSignupModalOpen(false)}
+        onSignupSuccess={(data) => {
+          console.log('Signup successful:', data);
+        }}
+        onSwitchToSignIn={() => {
+          setIsSignupModalOpen(false);
+          setIsSignInModalOpen(true);
+        }}
       />
 
       {/* Notifications Menu */}
