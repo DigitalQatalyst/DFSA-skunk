@@ -5,7 +5,7 @@ import {
   getFallbackItemDetails,
   getFallbackItems,
 } from "../utils/fallbackData";
-import { mockServicesData } from "../data/mockServicesData";
+import { fetchNonFinancialServiceBySlug } from "../services/nonFinancialService";
 
 // Normalize eligibility display to the first non-empty segment before a semicolon
 const normalizeEligibility = (val: any): string | undefined => {
@@ -215,38 +215,41 @@ export function useProductDetails({
     if (!itemId) return;
 
     if (marketplaceType === 'non-financial') {
-      const mockItem = mockServicesData.find(s => s.id === itemId);
-      if (mockItem) {
-        setItem({
-          id: mockItem.id,
-          title: mockItem.name,
-          description: mockItem.details.longDescription || mockItem.description,
-          provider: {
-            name: "DFSA",
-            logoUrl: "/mzn_logo.png",
-          },
-          tags: mockItem.customFields.tags,
-          ...mockItem.customFields,
-          details: mockItem.details.benefits || [], // Using benefits as details/highlights
-          keyHighlights: mockItem.details.benefits || [],
-          requiredDocuments: mockItem.details.requirements || [],
-          applicationProcess: mockItem.details.processSteps || [],
-          eligibility: "N/A", // Mock data doesn't have explicit eligibility
-          eligibilityCriteria: [],
-          formUrl: "#",
-        });
-        setRelatedItems(mockServicesData.filter(s => s.id !== itemId).slice(0, 3).map(s => ({
-          id: s.id,
-          title: s.name,
-          description: s.description,
-          provider: {
-            name: "DFSA",
-            logoUrl: "/mzn_logo.png",
-          },
-          tags: s.customFields.tags
-        })));
-        return;
-      }
+      // Fetch from Supabase
+      fetchNonFinancialServiceBySlug(itemId).then(service => {
+        if (service) {
+          setItem({
+            id: service.id,
+            title: service.name,
+            description: service.description,
+            provider: {
+              name: "DFSA",
+              logoUrl: "/mzn_logo.png",
+            },
+            tags: service.tags,
+            serviceType: service.service_type,
+            serviceCategory: service.service_category,
+            entityType: service.entity_type,
+            processingTime: service.processing_time,
+            category: service.service_category,
+            details: {
+              longDescription: service.long_description,
+              benefits: service.benefits,
+              requirements: service.requirements,
+              processSteps: service.process_steps
+            },
+            keyHighlights: service.benefits || [],
+            requiredDocuments: service.requirements || [],
+            applicationProcess: service.process_steps || [],
+            eligibility: "N/A",
+            eligibilityCriteria: [],
+            formUrl: "#",
+          });
+        }
+      }).catch(err => {
+        console.error('Error fetching non-financial service:', err);
+      });
+      return;
     }
 
     const product = (productData as any)?.product;

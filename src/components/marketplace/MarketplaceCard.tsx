@@ -45,7 +45,7 @@ export const MarketplaceCard: React.FC<MarketplaceItemProps> = ({
 
   // Generate route based on marketplace type
   const getItemRoute = () => {
-    return `${config.route}/${item.id}`;
+    return `${config.route}/${item.slug || item.id}`;
   };
 
   const handleViewDetails = (e: React.MouseEvent) => {

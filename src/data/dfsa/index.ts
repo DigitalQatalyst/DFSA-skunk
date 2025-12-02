@@ -3,9 +3,6 @@
  * All data structures for the DFSA Regulatory Services Platform
  */
 
-// Trust Metrics
-export * from './trustMetrics';
-
 // License Categories
 export * from './licenseCategories';
 
@@ -33,7 +30,6 @@ export * from './resources';
 /**
  * Quick access exports for commonly used data
  */
-import { trustMetrics } from './trustMetrics';
 import { licenseCategories } from './licenseCategories';
 import { authorizationSteps } from './authorizationSteps';
 import { keyPersonnel } from './keyPersonnel';
@@ -44,7 +40,6 @@ import { faqs } from './faq';
 import { resources } from './resources';
 
 export const dfsaData = {
-  trustMetrics,
   licenseCategories,
   authorizationSteps,
   keyPersonnel,

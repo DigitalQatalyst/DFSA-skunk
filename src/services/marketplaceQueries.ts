@@ -25,9 +25,9 @@ const GET_PRODUCTS = gql`
             EmpowermentandLeadership
             Industry
             BusinessStage
-            ProcessingTime
-            RegistrationValidity
-            Cost
+            processingTime
+            registrationValidity
+            cost
             Steps
             KeyTermsOfService
             RequiredDocuments
@@ -36,24 +36,6 @@ const GET_PRODUCTS = gql`
               name
               slug
             }
-            learningObjectives
-            learningOutcomes
-            skillsGained
-            audience
-            duration
-            courseTimeline
-            resources
-            documentLink
-            uponCompletion
-            rating
-            reviewCount
-            languages
-            pricingModel
-            serviceCategory
-            resourceType
-            notes
-            isFeatured
-            isOnline
           }
         }
       }
@@ -100,9 +82,9 @@ const GET_PRODUCT = gql`
         formUrl
         Industry
         BusinessStage
-        ProcessingTime
-        RegistrationValidity
-        Cost
+        processingTime
+        registrationValidity
+        cost
         Steps
         KeyTermsOfService
         RequiredDocuments
@@ -233,4 +215,4 @@ const GET_ALL_EVENTS = gql`
   }
 `;
 
-export { GET_PRODUCTS, GET_FACETS, GET_PRODUCT, GET_ALL_COURSES, GET_ALL_EVENTS, GET_COURSE, GET_PARTNER, BOOKMARK_SERVICE };
+export { GET_PRODUCTS, GET_FACETS, GET_PRODUCT, GET_ALL_COURSES, GET_ALL_EVENTS, GET_COURSE, BOOKMARK_SERVICE };
