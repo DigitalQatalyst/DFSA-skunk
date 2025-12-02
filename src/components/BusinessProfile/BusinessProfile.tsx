@@ -863,13 +863,13 @@ export function BusinessProfile({activeSection = "profile"}) {
                                             >
                                                 <span className="truncate flex-1">{section.title}</span>
                                                 <div className="flex items-center ml-2 flex-shrink-0">
-                                                    {section.mandatoryCompletion.percentage === 100 ? (
+                                                    {section.completion > 0 && section.mandatoryCompletion.percentage === 100 ? (
                                                         <span
                                                             className="flex items-center text-xs px-1.5 py-0.5 rounded-full bg-green-100 text-green-700">
                               <CheckCircleIcon size={12} className="mr-1"/>
                                                             {section.completion}%
                             </span>
-                                                    ) : section.mandatoryCompletion.percentage > 0 ? (
+                                                    ) : section.completion > 0 && section.mandatoryCompletion.percentage > 0 ? (
                                                         <span
                                                             className="flex items-center text-xs px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700">
                               <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1"></span>
@@ -933,7 +933,7 @@ export function BusinessProfile({activeSection = "profile"}) {
                             {section.title}
                           </span>
                                                     <div className="flex items-center ml-1 md:ml-2 flex-shrink-0">
-                                                        {section.mandatoryCompletion.percentage === 100 ? (
+                                                        {section.completion > 0 && section.mandatoryCompletion.percentage === 100 ? (
                                                             <span
                                                                 className="flex items-center text-xs px-1.5 py-0.5 rounded-full bg-green-100 text-green-700">
                                 <CheckCircleIcon
@@ -944,7 +944,7 @@ export function BusinessProfile({activeSection = "profile"}) {
                                   {section.completion}%
                                 </span>
                               </span>
-                                                        ) : section.mandatoryCompletion.percentage > 0 ? (
+                                                        ) : section.completion > 0 && section.mandatoryCompletion.percentage > 0 ? (
                                                             <span
                                                                 className="flex items-center text-xs px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700">
                                 <span className="w-2 h-2 rounded-full bg-amber-500 mr-0.5 md:mr-1"></span>
@@ -1026,7 +1026,8 @@ export function BusinessProfile({activeSection = "profile"}) {
                                                                 >
                                                                     <span>{section.title}</span>
                                                                     <div className="flex items-center">
-                                                                        {section.mandatoryCompletion.percentage ===
+                                                                        {section.completion > 0 &&
+                                                                        section.mandatoryCompletion.percentage ===
                                                                         100 ? (
                                                                             <span
                                                                                 className="flex items-center text-xs px-1.5 py-0.5 rounded-full bg-green-100 text-green-700">
@@ -1036,7 +1037,8 @@ export function BusinessProfile({activeSection = "profile"}) {
                                         />
                                                                                 {section.completion}%
                                       </span>
-                                                                        ) : section.mandatoryCompletion.percentage >
+                                                                        ) : section.completion > 0 &&
+                                                                        section.mandatoryCompletion.percentage >
                                                                         0 ? (
                                                                             <span
                                                                                 className="flex items-center text-xs px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700">
