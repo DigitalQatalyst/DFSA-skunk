@@ -1,0 +1,1830 @@
+{
+  "companyStages": [
+    {
+      "id": "startup",
+      "label": "Startup",
+      "color": "bg-purple-500"
+    },
+    {
+      "id": "growth",
+      "label": "Growth",
+      "color": "bg-blue-500"
+    },
+    {
+      "id": "mature",
+      "label": "Mature",
+      "color": "bg-green-500"
+    },
+    {
+      "id": "enterprise",
+      "label": "Enterprise",
+      "color": "bg-gray-700"
+    }
+  ],
+  "tabs": [
+    {
+      "id": "companyInfo",
+      "title": "Company Info",
+      "groups": [
+        {
+          "id": "legalIdentity",
+          "groupName": "Legal Identity",
+          "fields": [
+            {
+              "id": "companyInfo.legalName",
+              "label": "Legal name",
+              "fieldName": "legalName",
+              "fieldType": "Text",
+              "mandatory": true,
+              "helperText": "As per incorporation."
+            },
+            {
+              "id": "companyInfo.tradingName",
+              "label": "Trading/brand name",
+              "fieldName": "tradingName",
+              "fieldType": "Text",
+              "mandatory": false
+            },
+            {
+              "id": "companyInfo.registrationNumber",
+              "label": "Registration number",
+              "fieldName": "registrationNumber",
+              "fieldType": "Text",
+              "mandatory": true
+            },
+            {
+              "id": "companyInfo.legalForm",
+              "label": "Legal form",
+              "fieldName": "legalForm",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "LLC",
+                  "value": "LLC"
+                },
+                {
+                  "label": "PJSC",
+                  "value": "PJSC"
+                },
+                {
+                  "label": "Branch",
+                  "value": "Branch"
+                },
+                {
+                  "label": "Partnership",
+                  "value": "Partnership"
+                },
+                {
+                  "label": "Sole Proprietorship",
+                  "value": "SoleProprietorship"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ]
+            },
+            {
+              "id": "companyInfo.incorporationDate",
+              "label": "Date of incorporation",
+              "fieldName": "incorporationDate",
+              "fieldType": "Date",
+              "mandatory": true
+            },
+            {
+              "id": "companyInfo.countryOfIncorporation",
+              "label": "Country of incorporation",
+              "fieldName": "countryOfIncorporation",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ]
+            },
+            {
+              "id": "companyInfo.registrationAuthority",
+              "label": "Registration authority",
+              "fieldName": "registrationAuthority",
+              "fieldType": "Text",
+              "mandatory": true
+            },
+            {
+              "id": "companyInfo.taxId",
+              "label": "Tax identification number",
+              "fieldName": "taxId",
+              "fieldType": "Text",
+              "mandatory": false
+            },
+            {
+              "id": "companyInfo.legalStatus",
+              "label": "Legal status",
+              "fieldName": "legalStatus",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "Active",
+                  "value": "Active"
+                },
+                {
+                  "label": "Good standing",
+                  "value": "GoodStanding"
+                },
+                {
+                  "label": "Under liquidation",
+                  "value": "UnderLiquidation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "registeredAddress",
+          "groupName": "Registered address",
+          "fields": [
+            {
+              "id": "companyInfo.registeredAddressLine1",
+              "label": "Registered address line 1",
+              "fieldName": "registeredAddressLine1",
+              "fieldType": "Text",
+              "mandatory": true
+            },
+            {
+              "id": "companyInfo.registeredAddressLine2",
+              "label": "Registered address line 2",
+              "fieldName": "registeredAddressLine2",
+              "fieldType": "Text",
+              "mandatory": false
+            },
+            {
+              "id": "companyInfo.registeredCity",
+              "label": "Registered city",
+              "fieldName": "registeredCity",
+              "fieldType": "Text",
+              "mandatory": true
+            },
+            {
+              "id": "companyInfo.registeredState",
+              "label": "Registered state / province",
+              "fieldName": "registeredState",
+              "fieldType": "Text",
+              "mandatory": false
+            },
+            {
+              "id": "companyInfo.registeredPostalCode",
+              "label": "Registered postal code",
+              "fieldName": "registeredPostalCode",
+              "fieldType": "Text",
+              "mandatory": false
+            },
+            {
+              "id": "companyInfo.registeredCountry",
+              "label": "Registered country",
+              "fieldName": "registeredCountry",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "principalAddress",
+          "groupName": "Principal address",
+          "fields": [
+            {
+              "id": "companyInfo.principalSameAsRegistered",
+              "label": "Principal address same as registered?",
+              "fieldName": "principalSameAsRegistered",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ]
+            },
+            {
+              "id": "companyInfo.principalAddressLine1",
+              "label": "Principal address line 1",
+              "fieldName": "principalAddressLine1",
+              "fieldType": "Text",
+              "mandatory": false
+            },
+            {
+              "id": "companyInfo.principalAddressLine2",
+              "label": "Principal address line 2",
+              "fieldName": "principalAddressLine2",
+              "fieldType": "Text",
+              "mandatory": false
+            },
+            {
+              "id": "companyInfo.principalCity",
+              "label": "Principal city",
+              "fieldName": "principalCity",
+              "fieldType": "Text",
+              "mandatory": false
+            },
+            {
+              "id": "companyInfo.principalState",
+              "label": "Principal state / province",
+              "fieldName": "principalState",
+              "fieldType": "Text",
+              "mandatory": false
+            },
+            {
+              "id": "companyInfo.principalPostalCode",
+              "label": "Principal postal code",
+              "fieldName": "principalPostalCode",
+              "fieldType": "Text",
+              "mandatory": false
+            },
+            {
+              "id": "companyInfo.principalCountry",
+              "label": "Principal country",
+              "fieldName": "principalCountry",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "contacts",
+          "groupName": "Contact details",
+          "fields": [
+            {
+              "id": "companyInfo.mainContactEmail",
+              "label": "Main contact email",
+              "fieldName": "mainContactEmail",
+              "fieldType": "Text",
+              "mandatory": true,
+              "helperText": "Used for notices."
+            },
+            {
+              "id": "companyInfo.mainPhone",
+              "label": "Main phone number",
+              "fieldName": "mainPhone",
+              "fieldType": "Text",
+              "mandatory": false
+            },
+            {
+              "id": "companyInfo.supportEmail",
+              "label": "Support / customer email",
+              "fieldName": "supportEmail",
+              "fieldType": "Text",
+              "mandatory": false
+            },
+            {
+              "id": "companyInfo.website",
+              "label": "Website",
+              "fieldName": "website",
+              "fieldType": "URL",
+              "mandatory": false
+            }
+          ]
+        },
+        {
+          "id": "existingLicenses",
+          "groupName": "Existing licenses",
+          "fields": [
+            {
+              "id": "companyInfo.hasOtherLicenses",
+              "label": "Other financial licenses?",
+              "fieldName": "hasOtherLicenses",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ]
+            },
+            {
+              "id": "companyInfo.regulatorName",
+              "label": "Regulator name(s)",
+              "fieldName": "regulatorName",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "helperText": "One per line with jurisdiction/type/number/status."
+            },
+            {
+              "id": "companyInfo.jurisdiction",
+              "label": "Jurisdictions (license)",
+              "fieldName": "jurisdiction",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ]
+            },
+            {
+              "id": "companyInfo.licenseStatus",
+              "label": "License status",
+              "fieldName": "licenseStatus",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Active",
+                  "value": "Active"
+                },
+                {
+                  "label": "Suspended",
+                  "value": "Suspended"
+                },
+                {
+                  "label": "Revoked",
+                  "value": "Revoked"
+                },
+                {
+                  "label": "Expired",
+                  "value": "Expired"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ownership",
+      "title": "Ownership",
+      "groups": [
+        {
+          "id": "shareholderSummary",
+          "groupName": "Shareholder summary",
+          "fields": [
+            {
+              "id": "ownership.ownershipType",
+              "label": "Ownership type",
+              "fieldName": "ownershipType",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "Privately held",
+                  "value": "Private"
+                },
+                {
+                  "label": "Publicly listed",
+                  "value": "Public"
+                },
+                {
+                  "label": "Government-owned",
+                  "value": "Government"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ]
+            },
+            {
+              "id": "ownership.totalShareholders",
+              "label": "Number of shareholders",
+              "fieldName": "totalShareholders",
+              "fieldType": "Whole Number",
+              "mandatory": false,
+              "readOnly": true,
+              "helperText": "Auto-calculated where available."
+            }
+          ]
+        },
+        {
+          "id": "shareholders",
+          "groupName": "Shareholders",
+          "fields": [
+            {
+              "id": "ownership.shareholderName",
+              "label": "Shareholder name",
+              "fieldName": "shareholderName",
+              "fieldType": "Text",
+              "mandatory": true,
+              "helperText": "Use new lines for multiple."
+            },
+            {
+              "id": "ownership.shareholderType",
+              "label": "Shareholder type",
+              "fieldName": "shareholderType",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "Individual",
+                  "value": "Individual"
+                },
+                {
+                  "label": "Corporate",
+                  "value": "Corporate"
+                }
+              ]
+            },
+            {
+              "id": "ownership.shareholderCountry",
+              "label": "Country of residence/incorporation",
+              "fieldName": "shareholderCountry",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ]
+            },
+            {
+              "id": "ownership.ownershipPercent",
+              "label": "Ownership (%)",
+              "fieldName": "ownershipPercent",
+              "fieldType": "Decimal",
+              "mandatory": true,
+              "helperText": "0-100%"
+            },
+            {
+              "id": "ownership.votingRightsPercent",
+              "label": "Voting rights (%)",
+              "fieldName": "votingRightsPercent",
+              "fieldType": "Decimal",
+              "mandatory": true,
+              "helperText": "0-100%"
+            },
+            {
+              "id": "ownership.pepStatus",
+              "label": "PEP status",
+              "fieldName": "pepStatus",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Not a PEP",
+                  "value": "NotPEP"
+                },
+                {
+                  "label": "PEP",
+                  "value": "PEP"
+                },
+                {
+                  "label": "Related to a PEP",
+                  "value": "RelatedToPEP"
+                }
+              ]
+            },
+            {
+              "id": "ownership.natureOfControl",
+              "label": "Nature of control",
+              "fieldName": "natureOfControl",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            },
+            {
+              "id": "ownership.sourceOfWealth",
+              "label": "Source of wealth",
+              "fieldName": "sourceOfWealth",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            },
+            {
+              "id": "ownership.supportingDocuments",
+              "label": "Supporting documents",
+              "fieldName": "supportingDocuments",
+              "fieldType": "File Upload",
+              "mandatory": false
+            }
+          ]
+        },
+        {
+          "id": "uboDeclaration",
+          "groupName": "UBO declaration",
+          "fields": [
+            {
+              "id": "ownership.hasUBOs",
+              "label": "Does the entity have UBOs?",
+              "fieldName": "hasUBOs",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ]
+            },
+            {
+              "id": "ownership.uboList",
+              "label": "UBO list",
+              "fieldName": "uboList",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "helperText": "Name, country, %; one per line."
+            },
+            {
+              "id": "ownership.uboEvidence",
+              "label": "UBO evidence",
+              "fieldName": "uboEvidence",
+              "fieldType": "File Upload",
+              "mandatory": false
+            }
+          ]
+        },
+        {
+          "id": "groupStructure",
+          "groupName": "Group structure",
+          "fields": [
+            {
+              "id": "ownership.groupStructureDescription",
+              "label": "Group structure description",
+              "fieldName": "groupStructureDescription",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            },
+            {
+              "id": "ownership.groupStructureChart",
+              "label": "Group structure chart",
+              "fieldName": "groupStructureChart",
+              "fieldType": "File Upload",
+              "mandatory": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "management",
+      "title": "Management",
+      "groups": [
+        {
+          "id": "board",
+          "groupName": "Board of Directors",
+          "fields": [
+            {
+              "id": "management.directorName",
+              "label": "Director full name",
+              "fieldName": "directorName",
+              "fieldType": "Text",
+              "mandatory": true
+            },
+            {
+              "id": "management.directorRole",
+              "label": "Role",
+              "fieldName": "directorRole",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "Executive",
+                  "value": "Executive"
+                },
+                {
+                  "label": "Non-Executive",
+                  "value": "NonExecutive"
+                },
+                {
+                  "label": "Independent",
+                  "value": "Independent"
+                }
+              ]
+            },
+            {
+              "id": "management.directorCountryOfResidence",
+              "label": "Country of residence",
+              "fieldName": "directorCountryOfResidence",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ]
+            },
+            {
+              "id": "management.directorAppointmentDate",
+              "label": "Date of appointment",
+              "fieldName": "directorAppointmentDate",
+              "fieldType": "Date",
+              "mandatory": false
+            },
+            {
+              "id": "management.directorExperienceSummary",
+              "label": "Experience summary",
+              "fieldName": "directorExperienceSummary",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            },
+            {
+              "id": "management.directorCvFile",
+              "label": "Fit & proper declaration / CV",
+              "fieldName": "directorCvFile",
+              "fieldType": "File Upload",
+              "mandatory": false
+            }
+          ]
+        },
+        {
+          "id": "seniorManagement",
+          "groupName": "Senior management",
+          "fields": [
+            {
+              "id": "management.managerRoster",
+              "label": "Key roles (CEO, CFO, COO, CRO, CCO, MLRO, Deputy MLRO, Head of Risk, Head of Internal Audit)",
+              "fieldName": "managerRoster",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            },
+            {
+              "id": "management.managerCvFile",
+              "label": "Senior management CVs / fit & proper evidence",
+              "fieldName": "managerCvFile",
+              "fieldType": "File Upload",
+              "mandatory": false
+            }
+          ]
+        },
+        {
+          "id": "governanceStructure",
+          "groupName": "Governance structure",
+          "fields": [
+            {
+              "id": "management.governanceFrameworkDescription",
+              "label": "Governance framework description",
+              "fieldName": "governanceFrameworkDescription",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            },
+            {
+              "id": "management.boardCommittees",
+              "label": "Board committees",
+              "fieldName": "boardCommittees",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            },
+            {
+              "id": "management.boardCharterFile",
+              "label": "Governance charter / Board charter",
+              "fieldName": "boardCharterFile",
+              "fieldType": "File Upload",
+              "mandatory": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "businessProfile",
+      "title": "Business Profile",
+      "groups": [
+        {
+          "id": "businessOverview",
+          "groupName": "Business overview",
+          "fields": [
+            {
+              "id": "businessProfile.businessDescription",
+              "label": "Business description",
+              "fieldName": "businessDescription",
+              "fieldType": "Multiline Text",
+              "mandatory": true
+            },
+            {
+              "id": "businessProfile.purposeOfFirm",
+              "label": "Purpose of the firm",
+              "fieldName": "purposeOfFirm",
+              "fieldType": "Text",
+              "mandatory": true
+            },
+            {
+              "id": "businessProfile.businessModelNarrative",
+              "label": "Business model narrative",
+              "fieldName": "businessModelNarrative",
+              "fieldType": "Multiline Text",
+              "mandatory": true
+            }
+          ]
+        },
+        {
+          "id": "regulatedActivities",
+          "groupName": "Regulated activities",
+          "fields": [
+            {
+              "id": "businessProfile.financialActivitiesOffered",
+              "label": "Financial activities offered",
+              "fieldName": "financialActivitiesOffered",
+              "fieldType": "multiselect",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "Banking services",
+                  "value": "Banking"
+                },
+                {
+                  "label": "Fund management",
+                  "value": "FundManagement"
+                },
+                {
+                  "label": "Advisory/arranging",
+                  "value": "AdvisoryArranging"
+                },
+                {
+                  "label": "Insurance",
+                  "value": "Insurance"
+                },
+                {
+                  "label": "Brokerage/trading",
+                  "value": "BrokerageTrading"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ]
+            },
+            {
+              "id": "businessProfile.paymentServices",
+              "label": "Payment services",
+              "fieldName": "paymentServices",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Money remittance",
+                  "value": "Remittance"
+                },
+                {
+                  "label": "Card issuing",
+                  "value": "CardIssuing"
+                },
+                {
+                  "label": "Acquiring",
+                  "value": "Acquiring"
+                },
+                {
+                  "label": "Wallets",
+                  "value": "Wallets"
+                },
+                {
+                  "label": "Open banking / AISP/PISP",
+                  "value": "OpenBanking"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ]
+            },
+            {
+              "id": "businessProfile.investmentServices",
+              "label": "Investment services",
+              "fieldName": "investmentServices",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Portfolio management",
+                  "value": "PortfolioManagement"
+                },
+                {
+                  "label": "Investment advice",
+                  "value": "InvestmentAdvice"
+                },
+                {
+                  "label": "Arranging deals",
+                  "value": "ArrangingDeals"
+                },
+                {
+                  "label": "Custody",
+                  "value": "Custody"
+                },
+                {
+                  "label": "Research",
+                  "value": "Research"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ]
+            },
+            {
+              "id": "businessProfile.lendingActivities",
+              "label": "Lending activities",
+              "fieldName": "lendingActivities",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Corporate lending",
+                  "value": "CorporateLending"
+                },
+                {
+                  "label": "Retail lending",
+                  "value": "RetailLending"
+                },
+                {
+                  "label": "SME lending",
+                  "value": "SMELending"
+                },
+                {
+                  "label": "Invoice / trade finance",
+                  "value": "TradeFinance"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "productsServices",
+          "groupName": "Products & services",
+          "fields": [
+            {
+              "id": "businessProfile.productName",
+              "label": "Product/service name(s)",
+              "fieldName": "productName",
+              "fieldType": "Text",
+              "mandatory": true
+            },
+            {
+              "id": "businessProfile.productDescription",
+              "label": "Product/service description",
+              "fieldName": "productDescription",
+              "fieldType": "Multiline Text",
+              "mandatory": true
+            },
+            {
+              "id": "businessProfile.deliveryChannel",
+              "label": "Delivery channels",
+              "fieldName": "deliveryChannel",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Web",
+                  "value": "Web"
+                },
+                {
+                  "label": "Mobile",
+                  "value": "Mobile"
+                },
+                {
+                  "label": "Branch",
+                  "value": "Branch"
+                },
+                {
+                  "label": "Agents/Brokers",
+                  "value": "Agents"
+                },
+                {
+                  "label": "API",
+                  "value": "API"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ]
+            },
+            {
+              "id": "businessProfile.customerSegment",
+              "label": "Customer segments",
+              "fieldName": "customerSegment",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Retail",
+                  "value": "Retail"
+                },
+                {
+                  "label": "SME",
+                  "value": "SME"
+                },
+                {
+                  "label": "Corporate",
+                  "value": "Corporate"
+                },
+                {
+                  "label": "Institutional",
+                  "value": "Institutional"
+                },
+                {
+                  "label": "Government",
+                  "value": "Government"
+                }
+              ]
+            },
+            {
+              "id": "businessProfile.jurisdictionOffered",
+              "label": "Jurisdictions offered",
+              "fieldName": "jurisdictionOffered",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "targetCustomers",
+          "groupName": "Target customers",
+          "fields": [
+            {
+              "id": "businessProfile.retailClients",
+              "label": "Retail clients?",
+              "fieldName": "retailClients",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ]
+            },
+            {
+              "id": "businessProfile.professionalClients",
+              "label": "Professional clients?",
+              "fieldName": "professionalClients",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ]
+            },
+            {
+              "id": "businessProfile.corporateClients",
+              "label": "Corporate clients?",
+              "fieldName": "corporateClients",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ]
+            },
+            {
+              "id": "businessProfile.highRiskClients",
+              "label": "High risk clients?",
+              "fieldName": "highRiskClients",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ]
+            },
+            {
+              "id": "businessProfile.highRiskClientsDetails",
+              "label": "High risk client details",
+              "fieldName": "highRiskClientsDetails",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            }
+          ]
+        },
+        {
+          "id": "jurisdictions",
+          "groupName": "Jurisdictions",
+          "fields": [
+            {
+              "id": "businessProfile.operatingJurisdictions",
+              "label": "Operating jurisdictions",
+              "fieldName": "operatingJurisdictions",
+              "fieldType": "multiselect",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ]
+            },
+            {
+              "id": "businessProfile.crossBorderServices",
+              "label": "Cross-border services?",
+              "fieldName": "crossBorderServices",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "financials",
+      "title": "Financials",
+      "groups": [
+        {
+          "id": "capital",
+          "groupName": "Capital",
+          "fields": [
+            {
+              "id": "financials.paidUpCapital",
+              "label": "Paid-up capital",
+              "fieldName": "paidUpCapital",
+              "fieldType": "Decimal",
+              "mandatory": true
+            },
+            {
+              "id": "financials.reportingCurrency",
+              "label": "Currency",
+              "fieldName": "reportingCurrency",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "AED",
+                  "value": "AED"
+                },
+                {
+                  "label": "USD",
+                  "value": "USD"
+                },
+                {
+                  "label": "EUR",
+                  "value": "EUR"
+                },
+                {
+                  "label": "GBP",
+                  "value": "GBP"
+                },
+                {
+                  "label": "SAR",
+                  "value": "SAR"
+                }
+              ]
+            },
+            {
+              "id": "financials.sourceOfFunds",
+              "label": "Source of funds",
+              "fieldName": "sourceOfFunds",
+              "fieldType": "Multiline Text",
+              "mandatory": true
+            },
+            {
+              "id": "financials.capitalProofUpload",
+              "label": "Capital proof upload",
+              "fieldName": "capitalProofUpload",
+              "fieldType": "File Upload",
+              "mandatory": false
+            }
+          ]
+        },
+        {
+          "id": "financialProjections",
+          "groupName": "Financial projections",
+          "fields": [
+            {
+              "id": "financials.revenueProjections3Years",
+              "label": "Revenue projections (3 years)",
+              "fieldName": "revenueProjections3Years",
+              "fieldType": "Multiline Text",
+              "mandatory": true
+            },
+            {
+              "id": "financials.expenseProjections3Years",
+              "label": "Expense projections (3 years)",
+              "fieldName": "expenseProjections3Years",
+              "fieldType": "Multiline Text",
+              "mandatory": true
+            },
+            {
+              "id": "financials.capitalAdequacyAssessment",
+              "label": "Capital adequacy assessment",
+              "fieldName": "capitalAdequacyAssessment",
+              "fieldType": "Multiline Text",
+              "mandatory": true
+            }
+          ]
+        },
+        {
+          "id": "financialStatements",
+          "groupName": "Financial statements",
+          "fields": [
+            {
+              "id": "financials.auditedStatementsUpload",
+              "label": "Audited statements upload",
+              "fieldName": "auditedStatementsUpload",
+              "fieldType": "File Upload",
+              "mandatory": false
+            },
+            {
+              "id": "financials.auditReportUpload",
+              "label": "Audit report upload",
+              "fieldName": "auditReportUpload",
+              "fieldType": "File Upload",
+              "mandatory": false
+            },
+            {
+              "id": "financials.unauditedInterimUpload",
+              "label": "Unaudited interim upload",
+              "fieldName": "unauditedInterimUpload",
+              "fieldType": "File Upload",
+              "mandatory": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compliance",
+      "title": "Compliance",
+      "groups": [
+        {
+          "id": "complianceFramework",
+          "groupName": "Compliance framework",
+          "fields": [
+            {
+              "id": "compliance.complianceFrameworkDescription",
+              "label": "Compliance framework description",
+              "fieldName": "complianceFrameworkDescription",
+              "fieldType": "Multiline Text",
+              "mandatory": true
+            },
+            {
+              "id": "compliance.complianceOfficerName",
+              "label": "Compliance officer name",
+              "fieldName": "complianceOfficerName",
+              "fieldType": "Text",
+              "mandatory": true
+            },
+            {
+              "id": "compliance.complianceOfficerDocuments",
+              "label": "Compliance officer documents",
+              "fieldName": "complianceOfficerDocuments",
+              "fieldType": "File Upload",
+              "mandatory": false
+            },
+            {
+              "id": "compliance.compliancePolicy",
+              "label": "Compliance policy upload",
+              "fieldName": "compliancePolicy",
+              "fieldType": "File Upload",
+              "mandatory": false
+            }
+          ]
+        },
+        {
+          "id": "amlCtf",
+          "groupName": "AML / CTF",
+          "fields": [
+            {
+              "id": "compliance.hasAMLPolicy",
+              "label": "Has AML policy?",
+              "fieldName": "hasAMLPolicy",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ]
+            },
+            {
+              "id": "compliance.amlPolicyUpload",
+              "label": "AML policy upload",
+              "fieldName": "amlPolicyUpload",
+              "fieldType": "File Upload",
+              "mandatory": false
+            },
+            {
+              "id": "compliance.mlroName",
+              "label": "MLRO name",
+              "fieldName": "mlroName",
+              "fieldType": "Text",
+              "mandatory": false
+            },
+            {
+              "id": "compliance.amlTrainingProgram",
+              "label": "AML training program",
+              "fieldName": "amlTrainingProgram",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            }
+          ]
+        },
+        {
+          "id": "riskManagement",
+          "groupName": "Risk management",
+          "fields": [
+            {
+              "id": "compliance.enterpriseRiskManagementFramework",
+              "label": "Enterprise risk management framework",
+              "fieldName": "enterpriseRiskManagementFramework",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            },
+            {
+              "id": "compliance.riskAppetiteFile",
+              "label": "Risk appetite statement",
+              "fieldName": "riskAppetiteFile",
+              "fieldType": "File Upload",
+              "mandatory": false
+            },
+            {
+              "id": "compliance.riskControlsDescription",
+              "label": "Risk controls description",
+              "fieldName": "riskControlsDescription",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            }
+          ]
+        },
+        {
+          "id": "conflictsOfInterest",
+          "groupName": "Conflicts of interest",
+          "fields": [
+            {
+              "id": "compliance.conflictsPolicyUpload",
+              "label": "Conflicts of interest policy",
+              "fieldName": "conflictsPolicyUpload",
+              "fieldType": "File Upload",
+              "mandatory": false
+            },
+            {
+              "id": "compliance.conflictManagementProcess",
+              "label": "Conflict management process",
+              "fieldName": "conflictManagementProcess",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "operations",
+      "title": "Operations",
+      "groups": [
+        {
+          "id": "hrStaffing",
+          "groupName": "HR & staffing",
+          "fields": [
+            {
+              "id": "operations.totalEmployees",
+              "label": "Total employees",
+              "fieldName": "totalEmployees",
+              "fieldType": "Whole Number",
+              "mandatory": false
+            },
+            {
+              "id": "operations.employeesInJurisdiction",
+              "label": "Employees in this jurisdiction",
+              "fieldName": "employeesInJurisdiction",
+              "fieldType": "Whole Number",
+              "mandatory": false
+            },
+            {
+              "id": "operations.keyRolesMapped",
+              "label": "Key roles mapped",
+              "fieldName": "keyRolesMapped",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            }
+          ]
+        },
+        {
+          "id": "processes",
+          "groupName": "Processes",
+          "fields": [
+            {
+              "id": "operations.operationalWorkflowDescription",
+              "label": "Operational workflow description",
+              "fieldName": "operationalWorkflowDescription",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            },
+            {
+              "id": "operations.qualityAssuranceProcesses",
+              "label": "Quality assurance processes",
+              "fieldName": "qualityAssuranceProcesses",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            }
+          ]
+        },
+        {
+          "id": "itSystems",
+          "groupName": "IT & systems",
+          "fields": [
+            {
+              "id": "operations.coreSystemsList",
+              "label": "Core systems list",
+              "fieldName": "coreSystemsList",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            },
+            {
+              "id": "operations.cybersecurityFrameworkUpload",
+              "label": "Cybersecurity framework upload",
+              "fieldName": "cybersecurityFrameworkUpload",
+              "fieldType": "File Upload",
+              "mandatory": false
+            },
+            {
+              "id": "operations.dataProtectionPolicyUpload",
+              "label": "Data protection policy upload",
+              "fieldName": "dataProtectionPolicyUpload",
+              "fieldType": "File Upload",
+              "mandatory": false
+            },
+            {
+              "id": "operations.cloudServiceProviders",
+              "label": "Cloud service providers",
+              "fieldName": "cloudServiceProviders",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            }
+          ]
+        },
+        {
+          "id": "businessContinuity",
+          "groupName": "Business continuity",
+          "fields": [
+            {
+              "id": "operations.bcpDescription",
+              "label": "BCP description",
+              "fieldName": "bcpDescription",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            },
+            {
+              "id": "operations.drPlanUpload",
+              "label": "Disaster recovery plan upload",
+              "fieldName": "drPlanUpload",
+              "fieldType": "File Upload",
+              "mandatory": false
+            },
+            {
+              "id": "operations.bcpTestingEvidence",
+              "label": "BCP testing evidence",
+              "fieldName": "bcpTestingEvidence",
+              "fieldType": "File Upload",
+              "mandatory": false
+            }
+          ]
+        },
+        {
+          "id": "outsourcing",
+          "groupName": "Outsourcing",
+          "fields": [
+            {
+              "id": "operations.outsourcingArrangements",
+              "label": "Outsourcing arrangements",
+              "fieldName": "outsourcingArrangements",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            },
+            {
+              "id": "operations.outsourcingPolicyUpload",
+              "label": "Outsourcing policy upload",
+              "fieldName": "outsourcingPolicyUpload",
+              "fieldType": "File Upload",
+              "mandatory": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "customer",
+      "title": "Customer",
+      "groups": [
+        {
+          "id": "complaintsHandling",
+          "groupName": "Complaints handling",
+          "fields": [
+            {
+              "id": "customer.complaintsProcessDescription",
+              "label": "Complaints process description",
+              "fieldName": "complaintsProcessDescription",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            },
+            {
+              "id": "customer.complaintsPolicyUpload",
+              "label": "Complaints policy upload",
+              "fieldName": "complaintsPolicyUpload",
+              "fieldType": "File Upload",
+              "mandatory": false
+            },
+            {
+              "id": "customer.responseSLAs",
+              "label": "Response SLAs",
+              "fieldName": "responseSLAs",
+              "fieldType": "Text",
+              "mandatory": false
+            }
+          ]
+        },
+        {
+          "id": "customerRights",
+          "groupName": "Customer rights & disclosures",
+          "fields": [
+            {
+              "id": "customer.disclosureFrameworkUpload",
+              "label": "Disclosure framework upload",
+              "fieldName": "disclosureFrameworkUpload",
+              "fieldType": "File Upload",
+              "mandatory": false
+            },
+            {
+              "id": "customer.termsAndConditionsUpload",
+              "label": "Terms and conditions upload",
+              "fieldName": "termsAndConditionsUpload",
+              "fieldType": "File Upload",
+              "mandatory": false
+            },
+            {
+              "id": "customer.customerCommunicationChannels",
+              "label": "Customer communication channels",
+              "fieldName": "customerCommunicationChannels",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Email",
+                  "value": "Email"
+                },
+                {
+                  "label": "Phone",
+                  "value": "Phone"
+                },
+                {
+                  "label": "Online portal",
+                  "value": "OnlinePortal"
+                },
+                {
+                  "label": "Branch",
+                  "value": "Branch"
+                },
+                {
+                  "label": "Chat",
+                  "value": "Chat"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "clientAssets",
+          "groupName": "Client assets",
+          "fields": [
+            {
+              "id": "customer.handlesClientAssets",
+              "label": "Handles client assets?",
+              "fieldName": "holdsClientAssets",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ]
+            },
+            {
+              "id": "customer.usesSegregatedAccounts",
+              "label": "Segregated accounts in place?",
+              "fieldName": "usesSegregatedAccounts",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ]
+            },
+            {
+              "id": "customer.segregationProcess",
+              "label": "Segregation process (if applicable)",
+              "fieldName": "segregationProcess",
+              "fieldType": "Multiline Text",
+              "mandatory": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "declarations",
+      "title": "Declarations",
+      "groups": [
+        {
+          "id": "fitAndProper",
+          "groupName": "Fit & proper",
+          "fields": [
+            {
+              "id": "declarations.infoAccurateConfirmed",
+              "label": "I confirm the information is accurate",
+              "fieldName": "infoAccurateConfirmed",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ]
+            },
+            {
+              "id": "declarations.confirmFitAndProper",
+              "label": "I confirm fit & proper requirements are met",
+              "fieldName": "confirmFitAndProper",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "finalSignatory",
+          "groupName": "Final signatory",
+          "fields": [
+            {
+              "id": "declarations.authorisedSignatoryName",
+              "label": "Authorised signatory name",
+              "fieldName": "authorisedSignatoryName",
+              "fieldType": "Text",
+              "mandatory": true
+            },
+            {
+              "id": "declarations.authorisedSignatoryPosition",
+              "label": "Position",
+              "fieldName": "authorisedSignatoryPosition",
+              "fieldType": "Text",
+              "mandatory": true
+            },
+            {
+              "id": "declarations.authorisedSignatoryDate",
+              "label": "Date signed",
+              "fieldName": "authorisedSignatoryDate",
+              "fieldType": "Date",
+              "mandatory": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

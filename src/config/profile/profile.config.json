@@ -1,0 +1,2960 @@
+{
+  "companyStages": [
+    {
+      "id": "startup",
+      "label": "Startup",
+      "color": "bg-purple-500"
+    },
+    {
+      "id": "growth",
+      "label": "Growth",
+      "color": "bg-blue-500"
+    },
+    {
+      "id": "mature",
+      "label": "Mature",
+      "color": "bg-green-500"
+    },
+    {
+      "id": "enterprise",
+      "label": "Enterprise",
+      "color": "bg-gray-700"
+    }
+  ],
+  "tabs": [
+    {
+      "id": "companyInfo",
+      "title": "Company Info",
+      "groups": [
+        {
+          "groupName": "Legal Identity",
+          "fields": [
+            {
+              "id": "companyInfo.legalName",
+              "label": "Legal name",
+              "fieldName": "legalName",
+              "fieldType": "Text",
+              "mandatory": true,
+              "helperText": "Enter the registered legal name as per incorporation documents.",
+              "placeholder": "Example: ABC Financial Services LLC",
+              "stringKey": "profile.companyInfo.legalName.label",
+              "helperKey": "profile.companyInfo.legalName.helper",
+              "placeholderKey": "profile.companyInfo.legalName.placeholder"
+            },
+            {
+              "id": "companyInfo.tradingName",
+              "label": "Trading name",
+              "fieldName": "tradingName",
+              "fieldType": "Text",
+              "mandatory": false,
+              "helperText": "If different from legal name, provide the trading/brand name.",
+              "placeholder": "Example: ABC Pay",
+              "stringKey": "profile.companyInfo.tradingName.label",
+              "helperKey": "profile.companyInfo.tradingName.helper",
+              "placeholderKey": "profile.companyInfo.tradingName.placeholder"
+            },
+            {
+              "id": "companyInfo.registrationNumber",
+              "label": "Registration number",
+              "fieldName": "registrationNumber",
+              "fieldType": "Text",
+              "mandatory": true,
+              "placeholder": "License / CR number",
+              "stringKey": "profile.companyInfo.registrationNumber.label",
+              "placeholderKey": "profile.companyInfo.registrationNumber.placeholder"
+            },
+            {
+              "id": "companyInfo.incorporationDate",
+              "label": "Date of incorporation",
+              "fieldName": "incorporationDate",
+              "fieldType": "Date",
+              "mandatory": true,
+              "stringKey": "profile.companyInfo.incorporationDate.label"
+            },
+            {
+              "id": "companyInfo.countryOfIncorporation",
+              "label": "Country of incorporation",
+              "fieldName": "countryOfIncorporation",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ],
+              "stringKey": "profile.companyInfo.countryOfIncorporation.label"
+            },
+            {
+              "id": "companyInfo.legalForm",
+              "label": "Legal form",
+              "fieldName": "legalForm",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "LLC",
+                  "value": "LLC"
+                },
+                {
+                  "label": "PJSC",
+                  "value": "PJSC"
+                },
+                {
+                  "label": "Branch",
+                  "value": "Branch"
+                },
+                {
+                  "label": "Partnership",
+                  "value": "Partnership"
+                },
+                {
+                  "label": "Sole Proprietorship",
+                  "value": "SoleProprietorship"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ],
+              "stringKey": "profile.companyInfo.legalForm.label"
+            },
+            {
+              "id": "companyInfo.registrationAuthority",
+              "label": "Registration authority",
+              "fieldName": "registrationAuthority",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "ADGM",
+                  "value": "ADGM"
+                },
+                {
+                  "label": "DIFC",
+                  "value": "DIFC"
+                },
+                {
+                  "label": "Onshore UAE",
+                  "value": "ONSHORE_UAE"
+                },
+                {
+                  "label": "Free Zone",
+                  "value": "FREEZONE"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ],
+              "stringKey": "profile.companyInfo.registrationAuthority.label"
+            },
+            {
+              "id": "companyInfo.taxId",
+              "label": "Tax ID / TRN",
+              "fieldName": "taxId",
+              "fieldType": "Text",
+              "mandatory": false,
+              "placeholder": "Optional if not applicable",
+              "stringKey": "profile.companyInfo.taxId.label",
+              "placeholderKey": "profile.companyInfo.taxId.placeholder"
+            },
+            {
+              "id": "companyInfo.legalStatus",
+              "label": "Legal status",
+              "fieldName": "legalStatus",
+              "fieldType": "Text",
+              "mandatory": false,
+              "readOnly": true,
+              "helperText": "Populated from registry if available.",
+              "stringKey": "profile.companyInfo.legalStatus.label",
+              "helperKey": "profile.companyInfo.legalStatus.helper"
+            }
+          ],
+          "stringKey": "profile.companyInfo.legalIdentity.title"
+        },
+        {
+          "groupName": "Addresses & Contacts",
+          "fields": [
+            {
+              "id": "companyInfo.registeredAddressLine1",
+              "label": "Registered address line 1",
+              "fieldName": "registeredAddressLine1",
+              "fieldType": "Text",
+              "mandatory": true,
+              "stringKey": "profile.companyInfo.registeredAddressLine1.label"
+            },
+            {
+              "id": "companyInfo.registeredAddressLine2",
+              "label": "Registered address line 2",
+              "fieldName": "registeredAddressLine2",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.companyInfo.registeredAddressLine2.label"
+            },
+            {
+              "id": "companyInfo.registeredCity",
+              "label": "Registered city",
+              "fieldName": "registeredCity",
+              "fieldType": "Text",
+              "mandatory": true,
+              "stringKey": "profile.companyInfo.registeredCity.label"
+            },
+            {
+              "id": "companyInfo.registeredState",
+              "label": "Registered state/region",
+              "fieldName": "registeredState",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.companyInfo.registeredState.label"
+            },
+            {
+              "id": "companyInfo.registeredPostalCode",
+              "label": "Registered postal code",
+              "fieldName": "registeredPostalCode",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.companyInfo.registeredPostalCode.label"
+            },
+            {
+              "id": "companyInfo.registeredCountry",
+              "label": "Registered country",
+              "fieldName": "registeredCountry",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ],
+              "stringKey": "profile.companyInfo.registeredCountry.label"
+            },
+            {
+              "id": "companyInfo.principalSameAsRegistered",
+              "label": "Principal address same as registered?",
+              "fieldName": "principalSameAsRegistered",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.companyInfo.principalSameAsRegistered.label"
+            },
+            {
+              "id": "companyInfo.principalAddressLine1",
+              "label": "Principal address line 1",
+              "fieldName": "principalAddressLine1",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.companyInfo.principalAddressLine1.label"
+            },
+            {
+              "id": "companyInfo.principalAddressLine2",
+              "label": "Principal address line 2",
+              "fieldName": "principalAddressLine2",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.companyInfo.principalAddressLine2.label"
+            },
+            {
+              "id": "companyInfo.principalCity",
+              "label": "Principal city",
+              "fieldName": "principalCity",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.companyInfo.principalCity.label"
+            },
+            {
+              "id": "companyInfo.principalState",
+              "label": "Principal state/region",
+              "fieldName": "principalState",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.companyInfo.principalState.label"
+            },
+            {
+              "id": "companyInfo.principalPostalCode",
+              "label": "Principal postal code",
+              "fieldName": "principalPostalCode",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.companyInfo.principalPostalCode.label"
+            },
+            {
+              "id": "companyInfo.principalCountry",
+              "label": "Principal country",
+              "fieldName": "principalCountry",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ],
+              "stringKey": "profile.companyInfo.principalCountry.label"
+            },
+            {
+              "id": "companyInfo.mainContactEmail",
+              "label": "Main contact email",
+              "fieldName": "mainContactEmail",
+              "fieldType": "Text",
+              "mandatory": true,
+              "placeholder": "contact@example.com",
+              "stringKey": "profile.companyInfo.mainContactEmail.label",
+              "placeholderKey": "profile.companyInfo.mainContactEmail.placeholder"
+            },
+            {
+              "id": "companyInfo.supportEmail",
+              "label": "Support email",
+              "fieldName": "supportEmail",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.companyInfo.supportEmail.label"
+            },
+            {
+              "id": "companyInfo.mainPhone",
+              "label": "Main phone",
+              "fieldName": "mainPhone",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.companyInfo.mainPhone.label"
+            },
+            {
+              "id": "companyInfo.website",
+              "label": "Website",
+              "fieldName": "website",
+              "fieldType": "URL",
+              "mandatory": false,
+              "stringKey": "profile.companyInfo.website.label"
+            }
+          ],
+          "stringKey": "profile.companyInfo.addressesContacts.title"
+        },
+        {
+          "groupName": "Existing Licenses",
+          "fields": [
+            {
+              "id": "companyInfo.hasOtherLicenses",
+              "label": "Other regulatory licenses held?",
+              "fieldName": "hasOtherLicenses",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.companyInfo.hasOtherLicenses.label"
+            },
+            {
+              "id": "companyInfo.regulatorName",
+              "label": "Regulator name",
+              "fieldName": "regulatorName",
+              "fieldType": "Text",
+              "mandatory": false,
+              "helperText": "If multiple licenses, list one per line or provide latest.",
+              "stringKey": "profile.companyInfo.regulatorName.label",
+              "helperKey": "profile.companyInfo.licenses.helper"
+            },
+            {
+              "id": "companyInfo.jurisdiction",
+              "label": "Jurisdiction",
+              "fieldName": "jurisdiction",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ],
+              "stringKey": "profile.companyInfo.jurisdiction.label"
+            },
+            {
+              "id": "companyInfo.licenseType",
+              "label": "License type",
+              "fieldName": "licenseType",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.companyInfo.licenseType.label"
+            },
+            {
+              "id": "companyInfo.licenseNumber",
+              "label": "License number",
+              "fieldName": "licenseNumber",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.companyInfo.licenseNumber.label"
+            },
+            {
+              "id": "companyInfo.licenseStatus",
+              "label": "License status",
+              "fieldName": "licenseStatus",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Active",
+                  "value": "Active"
+                },
+                {
+                  "label": "Suspended",
+                  "value": "Suspended"
+                },
+                {
+                  "label": "Revoked",
+                  "value": "Revoked"
+                },
+                {
+                  "label": "Expired",
+                  "value": "Expired"
+                }
+              ],
+              "stringKey": "profile.companyInfo.licenseStatus.label"
+            },
+            {
+              "id": "companyInfo.effectiveFrom",
+              "label": "Effective from",
+              "fieldName": "effectiveFrom",
+              "fieldType": "Date",
+              "mandatory": false,
+              "stringKey": "profile.companyInfo.effectiveFrom.label"
+            },
+            {
+              "id": "companyInfo.effectiveTo",
+              "label": "Effective to",
+              "fieldName": "effectiveTo",
+              "fieldType": "Date",
+              "mandatory": false,
+              "stringKey": "profile.companyInfo.effectiveTo.label"
+            }
+          ],
+          "stringKey": "profile.companyInfo.existingLicenses.title"
+        }
+      ]
+    },
+    {
+      "id": "ownership",
+      "title": "Ownership",
+      "groups": [
+        {
+          "groupName": "Shareholding Structure",
+          "fields": [
+            {
+              "id": "ownership.ownershipType",
+              "label": "Ownership type",
+              "fieldName": "ownershipType",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "Private",
+                  "value": "Private"
+                },
+                {
+                  "label": "Public",
+                  "value": "Public"
+                },
+                {
+                  "label": "Government",
+                  "value": "Government"
+                },
+                {
+                  "label": "Non-Profit",
+                  "value": "NonProfit"
+                }
+              ],
+              "stringKey": "profile.ownership.ownershipType.label"
+            },
+            {
+              "id": "ownership.totalShareholders",
+              "label": "Total shareholders",
+              "fieldName": "totalShareholders",
+              "fieldType": "Text",
+              "mandatory": false,
+              "readOnly": true,
+              "helperText": "Calculated from entries.",
+              "stringKey": "profile.ownership.totalShareholders.label",
+              "helperKey": "profile.ownership.totalShareholders.helper"
+            },
+            {
+              "id": "ownership.ubosConfirmed",
+              "label": "UBOs confirmed?",
+              "fieldName": "ubosConfirmed",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.ownership.ubosConfirmed.label"
+            },
+            {
+              "id": "ownership.shareholderType",
+              "label": "Shareholder type",
+              "fieldName": "shareholderType",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "Individual",
+                  "value": "Individual"
+                },
+                {
+                  "label": "Corporate",
+                  "value": "Corporate"
+                }
+              ],
+              "stringKey": "profile.ownership.shareholderType.label"
+            },
+            {
+              "id": "ownership.shareholderName",
+              "label": "Shareholder name",
+              "fieldName": "shareholderName",
+              "fieldType": "Text",
+              "mandatory": true,
+              "stringKey": "profile.ownership.shareholderName.label"
+            },
+            {
+              "id": "ownership.shareholderCountry",
+              "label": "Shareholder country",
+              "fieldName": "shareholderCountry",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ],
+              "stringKey": "profile.ownership.shareholderCountry.label"
+            },
+            {
+              "id": "ownership.ownershipPercent",
+              "label": "Ownership %",
+              "fieldName": "ownershipPercent",
+              "fieldType": "Decimal",
+              "mandatory": true,
+              "placeholder": "e.g., 25",
+              "stringKey": "profile.ownership.ownershipPercent.label",
+              "placeholderKey": "profile.ownership.ownershipPercent.placeholder"
+            },
+            {
+              "id": "ownership.votingRightsPercent",
+              "label": "Voting rights %",
+              "fieldName": "votingRightsPercent",
+              "fieldType": "Decimal",
+              "mandatory": false,
+              "stringKey": "profile.ownership.votingRightsPercent.label"
+            },
+            {
+              "id": "ownership.isUBO",
+              "label": "Is UBO?",
+              "fieldName": "isUBO",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.ownership.isUBO.label"
+            },
+            {
+              "id": "ownership.pepStatus",
+              "label": "PEP status",
+              "fieldName": "pepStatus",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Not PEP",
+                  "value": "NotPEP"
+                },
+                {
+                  "label": "PEP",
+                  "value": "PEP"
+                },
+                {
+                  "label": "Related to PEP",
+                  "value": "RelatedToPEP"
+                }
+              ],
+              "stringKey": "profile.ownership.pepStatus.label"
+            },
+            {
+              "id": "ownership.sourceOfWealth",
+              "label": "Source of wealth (for >=10% owners)",
+              "fieldName": "sourceOfWealth",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "helperText": "Provide brief narrative on source of wealth.",
+              "stringKey": "profile.ownership.sourceOfWealth.label",
+              "helperKey": "profile.ownership.sourceOfWealth.helper"
+            }
+          ],
+          "stringKey": "profile.ownership.shareholding.title"
+        },
+        {
+          "groupName": "Group Structure",
+          "fields": [
+            {
+              "id": "ownership.partOfGroup",
+              "label": "Part of a group?",
+              "fieldName": "partOfGroup",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.ownership.partOfGroup.label"
+            },
+            {
+              "id": "ownership.parentName",
+              "label": "Parent name",
+              "fieldName": "parentName",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.ownership.parentName.label"
+            },
+            {
+              "id": "ownership.parentCountry",
+              "label": "Parent country",
+              "fieldName": "parentCountry",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ],
+              "stringKey": "profile.ownership.parentCountry.label"
+            },
+            {
+              "id": "ownership.controlDescription",
+              "label": "Control / ownership description",
+              "fieldName": "controlDescription",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "stringKey": "profile.ownership.controlDescription.label"
+            },
+            {
+              "id": "ownership.groupStructureDocument",
+              "label": "Group structure document",
+              "fieldName": "groupStructureDocument",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "stringKey": "profile.ownership.groupStructureDocument.label"
+            }
+          ],
+          "stringKey": "profile.ownership.groupStructure.title"
+        }
+      ]
+    },
+    {
+      "id": "management",
+      "title": "Management",
+      "groups": [
+        {
+          "groupName": "Board",
+          "fields": [
+            {
+              "id": "management.directorName",
+              "label": "Director name",
+              "fieldName": "directorName",
+              "fieldType": "Text",
+              "mandatory": true,
+              "stringKey": "profile.management.directorName.label"
+            },
+            {
+              "id": "management.directorRole",
+              "label": "Director role",
+              "fieldName": "directorRole",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "Executive",
+                  "value": "Executive"
+                },
+                {
+                  "label": "Non-Executive",
+                  "value": "NonExecutive"
+                },
+                {
+                  "label": "Independent",
+                  "value": "Independent"
+                }
+              ],
+              "stringKey": "profile.management.directorRole.label"
+            },
+            {
+              "id": "management.directorTitle",
+              "label": "Director title",
+              "fieldName": "directorTitle",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.management.directorTitle.label"
+            },
+            {
+              "id": "management.directorNationality",
+              "label": "Director nationality",
+              "fieldName": "directorNationality",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ],
+              "stringKey": "profile.management.directorNationality.label"
+            },
+            {
+              "id": "management.directorCountryOfResidence",
+              "label": "Country of residence",
+              "fieldName": "directorCountryOfResidence",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ],
+              "stringKey": "profile.management.directorCountryOfResidence.label"
+            },
+            {
+              "id": "management.directorExperienceYears",
+              "label": "Years of experience",
+              "fieldName": "directorExperienceYears",
+              "fieldType": "Whole Number",
+              "mandatory": false,
+              "stringKey": "profile.management.directorExperienceYears.label"
+            },
+            {
+              "id": "management.directorExperienceSummary",
+              "label": "Experience summary",
+              "fieldName": "directorExperienceSummary",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "stringKey": "profile.management.directorExperienceSummary.label"
+            },
+            {
+              "id": "management.directorIntegrityFlag",
+              "label": "Integrity flag",
+              "fieldName": "directorIntegrityFlag",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Pass",
+                  "value": "Pass"
+                },
+                {
+                  "label": "Under Review",
+                  "value": "UnderReview"
+                },
+                {
+                  "label": "Issue",
+                  "value": "Issue"
+                }
+              ],
+              "stringKey": "profile.management.directorIntegrityFlag.label"
+            },
+            {
+              "id": "management.directorCompetenceFlag",
+              "label": "Competence flag",
+              "fieldName": "directorCompetenceFlag",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Pass",
+                  "value": "Pass"
+                },
+                {
+                  "label": "Under Review",
+                  "value": "UnderReview"
+                },
+                {
+                  "label": "Issue",
+                  "value": "Issue"
+                }
+              ],
+              "stringKey": "profile.management.directorCompetenceFlag.label"
+            },
+            {
+              "id": "management.directorFinancialSoundnessFlag",
+              "label": "Financial soundness flag",
+              "fieldName": "directorFinancialSoundnessFlag",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Pass",
+                  "value": "Pass"
+                },
+                {
+                  "label": "Under Review",
+                  "value": "UnderReview"
+                },
+                {
+                  "label": "Issue",
+                  "value": "Issue"
+                }
+              ],
+              "stringKey": "profile.management.directorFinancialSoundnessFlag.label"
+            },
+            {
+              "id": "management.directorCvFile",
+              "label": "Director CV",
+              "fieldName": "directorCvFile",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "stringKey": "profile.management.directorCvFile.label"
+            }
+          ],
+          "stringKey": "profile.management.board.title"
+        },
+        {
+          "groupName": "Senior Management",
+          "fields": [
+            {
+              "id": "management.managerName",
+              "label": "Manager name",
+              "fieldName": "managerName",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.management.managerName.label"
+            },
+            {
+              "id": "management.managerPosition",
+              "label": "Position",
+              "fieldName": "managerPosition",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.management.managerPosition.label"
+            },
+            {
+              "id": "management.managerIsKeyFunction",
+              "label": "Key function holder?",
+              "fieldName": "managerIsKeyFunction",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.management.managerIsKeyFunction.label"
+            },
+            {
+              "id": "management.managerReportsTo",
+              "label": "Reports to",
+              "fieldName": "managerReportsTo",
+              "fieldType": "Text",
+              "mandatory": false,
+              "helperText": "If applicable, reference supervising role.",
+              "stringKey": "profile.management.managerReportsTo.label",
+              "helperKey": "profile.management.managerReportsTo.helper"
+            },
+            {
+              "id": "management.managerLocationCountry",
+              "label": "Location country",
+              "fieldName": "managerLocationCountry",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ],
+              "stringKey": "profile.management.managerLocationCountry.label"
+            },
+            {
+              "id": "management.managerEmploymentType",
+              "label": "Employment type",
+              "fieldName": "managerEmploymentType",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Full-time",
+                  "value": "FullTime"
+                },
+                {
+                  "label": "Part-time",
+                  "value": "PartTime"
+                },
+                {
+                  "label": "Outsourced",
+                  "value": "Outsourced"
+                }
+              ],
+              "stringKey": "profile.management.managerEmploymentType.label"
+            },
+            {
+              "id": "management.managerResponsibilities",
+              "label": "Responsibilities",
+              "fieldName": "managerResponsibilities",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "stringKey": "profile.management.managerResponsibilities.label"
+            },
+            {
+              "id": "management.managerIntegrityFlag",
+              "label": "Integrity flag",
+              "fieldName": "managerIntegrityFlag",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Pass",
+                  "value": "Pass"
+                },
+                {
+                  "label": "Under Review",
+                  "value": "UnderReview"
+                },
+                {
+                  "label": "Issue",
+                  "value": "Issue"
+                }
+              ],
+              "stringKey": "profile.management.managerIntegrityFlag.label"
+            },
+            {
+              "id": "management.managerCompetenceFlag",
+              "label": "Competence flag",
+              "fieldName": "managerCompetenceFlag",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Pass",
+                  "value": "Pass"
+                },
+                {
+                  "label": "Under Review",
+                  "value": "UnderReview"
+                },
+                {
+                  "label": "Issue",
+                  "value": "Issue"
+                }
+              ],
+              "stringKey": "profile.management.managerCompetenceFlag.label"
+            },
+            {
+              "id": "management.managerFinancialSoundnessFlag",
+              "label": "Financial soundness flag",
+              "fieldName": "managerFinancialSoundnessFlag",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Pass",
+                  "value": "Pass"
+                },
+                {
+                  "label": "Under Review",
+                  "value": "UnderReview"
+                },
+                {
+                  "label": "Issue",
+                  "value": "Issue"
+                }
+              ],
+              "stringKey": "profile.management.managerFinancialSoundnessFlag.label"
+            },
+            {
+              "id": "management.managerCvFile",
+              "label": "Manager CV",
+              "fieldName": "managerCvFile",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "stringKey": "profile.management.managerCvFile.label"
+            }
+          ],
+          "stringKey": "profile.management.seniorManagement.title"
+        },
+        {
+          "groupName": "Governance Framework",
+          "fields": [
+            {
+              "id": "management.boardCharterFile",
+              "label": "Board charter",
+              "fieldName": "boardCharterFile",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "stringKey": "profile.management.boardCharterFile.label"
+            },
+            {
+              "id": "management.boardCommittees",
+              "label": "Board committees",
+              "fieldName": "boardCommittees",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Audit",
+                  "value": "Audit"
+                },
+                {
+                  "label": "Risk",
+                  "value": "Risk"
+                },
+                {
+                  "label": "Compliance",
+                  "value": "Compliance"
+                },
+                {
+                  "label": "Remuneration",
+                  "value": "Remuneration"
+                },
+                {
+                  "label": "Nomination",
+                  "value": "Nomination"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ],
+              "stringKey": "profile.management.boardCommittees.label"
+            },
+            {
+              "id": "management.conflictOfInterestPolicy",
+              "label": "Conflict of interest policy",
+              "fieldName": "conflictOfInterestPolicy",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.management.conflictOfInterestPolicy.label"
+            },
+            {
+              "id": "management.internalAuditModel",
+              "label": "Internal audit model",
+              "fieldName": "internalAuditModel",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "In-House",
+                  "value": "InHouse"
+                },
+                {
+                  "label": "Outsourced",
+                  "value": "Outsourced"
+                },
+                {
+                  "label": "Not Established",
+                  "value": "NotEstablished"
+                }
+              ],
+              "stringKey": "profile.management.internalAuditModel.label"
+            }
+          ],
+          "stringKey": "profile.management.governanceFramework.title"
+        }
+      ]
+    },
+    {
+      "id": "businessProfile",
+      "title": "Business Profile",
+      "groups": [
+        {
+          "groupName": "Business Overview",
+          "fields": [
+            {
+              "id": "businessProfile.businessDescription",
+              "label": "Business description",
+              "fieldName": "businessDescription",
+              "fieldType": "Multiline Text",
+              "mandatory": true,
+              "placeholder": "Briefly describe the regulated business model and value proposition.",
+              "stringKey": "profile.businessProfile.businessDescription.label",
+              "placeholderKey": "profile.businessProfile.businessDescription.placeholder"
+            },
+            {
+              "id": "businessProfile.primaryServices",
+              "label": "Primary services",
+              "fieldName": "primaryServices",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Payments",
+                  "value": "Payments"
+                },
+                {
+                  "label": "Lending",
+                  "value": "Lending"
+                },
+                {
+                  "label": "Wealth/Investments",
+                  "value": "Wealth"
+                },
+                {
+                  "label": "Insurance",
+                  "value": "Insurance"
+                },
+                {
+                  "label": "Advisory",
+                  "value": "Advisory"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ],
+              "stringKey": "profile.businessProfile.primaryServices.label"
+            },
+            {
+              "id": "businessProfile.targetCustomers",
+              "label": "Target customers",
+              "fieldName": "targetCustomers",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Retail",
+                  "value": "Retail"
+                },
+                {
+                  "label": "SME",
+                  "value": "SME"
+                },
+                {
+                  "label": "Corporate",
+                  "value": "Corporate"
+                },
+                {
+                  "label": "Institutional",
+                  "value": "Institutional"
+                },
+                {
+                  "label": "Government",
+                  "value": "Government"
+                }
+              ],
+              "stringKey": "profile.businessProfile.targetCustomers.label"
+            },
+            {
+              "id": "businessProfile.deliveryChannels",
+              "label": "Delivery channels",
+              "fieldName": "deliveryChannels",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Web",
+                  "value": "Web"
+                },
+                {
+                  "label": "Mobile",
+                  "value": "Mobile"
+                },
+                {
+                  "label": "Branches",
+                  "value": "Branches"
+                },
+                {
+                  "label": "Agents",
+                  "value": "Agents"
+                },
+                {
+                  "label": "Brokers",
+                  "value": "Brokers"
+                },
+                {
+                  "label": "API",
+                  "value": "API"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ],
+              "stringKey": "profile.businessProfile.deliveryChannels.label"
+            },
+            {
+              "id": "businessProfile.operatingJurisdictions",
+              "label": "Operating jurisdictions",
+              "fieldName": "operatingJurisdictions",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ],
+              "stringKey": "profile.businessProfile.operatingJurisdictions.label"
+            },
+            {
+              "id": "businessProfile.plannedMarkets",
+              "label": "Planned markets",
+              "fieldName": "plannedMarkets",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ],
+              "stringKey": "profile.businessProfile.plannedMarkets.label"
+            }
+          ],
+          "stringKey": "profile.businessProfile.overview.title"
+        },
+        {
+          "groupName": "Products & Activities",
+          "fields": [
+            {
+              "id": "businessProfile.productName",
+              "label": "Product name",
+              "fieldName": "productName",
+              "fieldType": "Text",
+              "mandatory": true,
+              "stringKey": "profile.businessProfile.productName.label"
+            },
+            {
+              "id": "businessProfile.productCategory",
+              "label": "Product category",
+              "fieldName": "productCategory",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Payments",
+                  "value": "Payments"
+                },
+                {
+                  "label": "Lending",
+                  "value": "Lending"
+                },
+                {
+                  "label": "Investments/Wealth",
+                  "value": "Investments"
+                },
+                {
+                  "label": "Insurance",
+                  "value": "Insurance"
+                },
+                {
+                  "label": "Advisory",
+                  "value": "Advisory"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ],
+              "stringKey": "profile.businessProfile.productCategory.label"
+            },
+            {
+              "id": "businessProfile.productActivities",
+              "label": "Regulated activities",
+              "fieldName": "productActivities",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Advising",
+                  "value": "Advising"
+                },
+                {
+                  "label": "Arranging",
+                  "value": "Arranging"
+                },
+                {
+                  "label": "Dealing",
+                  "value": "Dealing"
+                },
+                {
+                  "label": "Managing",
+                  "value": "Managing"
+                },
+                {
+                  "label": "Safekeeping",
+                  "value": "Safekeeping"
+                },
+                {
+                  "label": "Payment Services",
+                  "value": "PaymentServices"
+                },
+                {
+                  "label": "Crowdfunding",
+                  "value": "Crowdfunding"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ],
+              "stringKey": "profile.businessProfile.productActivities.label"
+            },
+            {
+              "id": "businessProfile.productStatus",
+              "label": "Product status",
+              "fieldName": "productStatus",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Planned",
+                  "value": "Planned"
+                },
+                {
+                  "label": "Live",
+                  "value": "Live"
+                },
+                {
+                  "label": "Suspended",
+                  "value": "Suspended"
+                },
+                {
+                  "label": "Discontinued",
+                  "value": "Discontinued"
+                }
+              ],
+              "stringKey": "profile.businessProfile.productStatus.label"
+            },
+            {
+              "id": "businessProfile.productHighRisk",
+              "label": "High-risk flag",
+              "fieldName": "productHighRisk",
+              "fieldType": "Text",
+              "mandatory": false,
+              "readOnly": true,
+              "helperText": "System-derived indicator (read-only).",
+              "stringKey": "profile.businessProfile.productHighRisk.label",
+              "helperKey": "profile.businessProfile.productHighRisk.helper"
+            }
+          ],
+          "stringKey": "profile.businessProfile.products.title"
+        }
+      ]
+    },
+    {
+      "id": "financials",
+      "title": "Financials",
+      "groups": [
+        {
+          "groupName": "Capital",
+          "fields": [
+            {
+              "id": "financials.reportingCurrency",
+              "label": "Reporting currency",
+              "fieldName": "reportingCurrency",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "AED",
+                  "value": "AED"
+                },
+                {
+                  "label": "USD",
+                  "value": "USD"
+                },
+                {
+                  "label": "EUR",
+                  "value": "EUR"
+                },
+                {
+                  "label": "GBP",
+                  "value": "GBP"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ],
+              "stringKey": "profile.financials.reportingCurrency.label"
+            },
+            {
+              "id": "financials.paidUpCapital",
+              "label": "Paid-up capital",
+              "fieldName": "paidUpCapital",
+              "fieldType": "Decimal",
+              "mandatory": false,
+              "stringKey": "profile.financials.paidUpCapital.label"
+            },
+            {
+              "id": "financials.regulatoryMinCapital",
+              "label": "Regulatory minimum capital",
+              "fieldName": "regulatoryMinCapital",
+              "fieldType": "Text",
+              "mandatory": false,
+              "readOnly": true,
+              "stringKey": "profile.financials.regulatoryMinCapital.label"
+            },
+            {
+              "id": "financials.capitalFundingSources",
+              "label": "Capital funding sources",
+              "fieldName": "capitalFundingSources",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Shareholder Equity",
+                  "value": "ShareholderEquity"
+                },
+                {
+                  "label": "Parent Support",
+                  "value": "ParentSupport"
+                },
+                {
+                  "label": "Debt",
+                  "value": "Debt"
+                },
+                {
+                  "label": "Retained Earnings",
+                  "value": "RetainedEarnings"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ],
+              "stringKey": "profile.financials.capitalFundingSources.label"
+            },
+            {
+              "id": "financials.lastFinancialYearEnd",
+              "label": "Last financial year end",
+              "fieldName": "lastFinancialYearEnd",
+              "fieldType": "Date",
+              "mandatory": false,
+              "stringKey": "profile.financials.lastFinancialYearEnd.label"
+            },
+            {
+              "id": "financials.hasAuditedFinancials",
+              "label": "Audited financials available?",
+              "fieldName": "hasAuditedFinancials",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.financials.hasAuditedFinancials.label"
+            },
+            {
+              "id": "financials.auditedFinancialsFile",
+              "label": "Audited financials (file)",
+              "fieldName": "auditedFinancialsFile",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "stringKey": "profile.financials.auditedFinancialsFile.label"
+            }
+          ],
+          "stringKey": "profile.financials.capital.title"
+        },
+        {
+          "groupName": "Projections",
+          "fields": [
+            {
+              "id": "financials.projectionPeriodYears",
+              "label": "Projection period (years)",
+              "fieldName": "projectionPeriodYears",
+              "fieldType": "Whole Number",
+              "mandatory": false,
+              "stringKey": "profile.financials.projectionPeriodYears.label"
+            },
+            {
+              "id": "financials.breakEvenYear",
+              "label": "Break-even year",
+              "fieldName": "breakEvenYear",
+              "fieldType": "Whole Number",
+              "mandatory": false,
+              "stringKey": "profile.financials.breakEvenYear.label"
+            },
+            {
+              "id": "financials.projectionsFile",
+              "label": "Projections (file)",
+              "fieldName": "projectionsFile",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "stringKey": "profile.financials.projectionsFile.label"
+            },
+            {
+              "id": "financials.projectionAssumptionsSummary",
+              "label": "Key projection assumptions",
+              "fieldName": "projectionAssumptionsSummary",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "stringKey": "profile.financials.projectionAssumptionsSummary.label"
+            }
+          ],
+          "stringKey": "profile.financials.projections.title"
+        }
+      ]
+    },
+    {
+      "id": "compliance",
+      "title": "Compliance",
+      "groups": [
+        {
+          "groupName": "Compliance & AML",
+          "fields": [
+            {
+              "id": "compliance.complianceOfficerAppointed",
+              "label": "Compliance Officer appointed?",
+              "fieldName": "complianceOfficerAppointed",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.compliance.complianceOfficerAppointed.label"
+            },
+            {
+              "id": "compliance.complianceOfficerName",
+              "label": "Compliance Officer name",
+              "fieldName": "complianceOfficerName",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.compliance.complianceOfficerName.label"
+            },
+            {
+              "id": "compliance.mlroAppointed",
+              "label": "MLRO appointed?",
+              "fieldName": "mlroAppointed",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.compliance.mlroAppointed.label"
+            },
+            {
+              "id": "compliance.mlroName",
+              "label": "MLRO name",
+              "fieldName": "mlroName",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.compliance.mlroName.label"
+            },
+            {
+              "id": "compliance.amlPolicyFile",
+              "label": "AML/CFT policy",
+              "fieldName": "amlPolicyFile",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "stringKey": "profile.compliance.amlPolicyFile.label"
+            },
+            {
+              "id": "compliance.sanctionsTool",
+              "label": "Sanctions screening tool",
+              "fieldName": "sanctionsTool",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.compliance.sanctionsTool.label"
+            },
+            {
+              "id": "compliance.monitoringTool",
+              "label": "Transaction monitoring tool",
+              "fieldName": "monitoringTool",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.compliance.monitoringTool.label"
+            },
+            {
+              "id": "compliance.complianceReportingFrequency",
+              "label": "Compliance reporting frequency",
+              "fieldName": "complianceReportingFrequency",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Monthly",
+                  "value": "Monthly"
+                },
+                {
+                  "label": "Quarterly",
+                  "value": "Quarterly"
+                },
+                {
+                  "label": "Annually",
+                  "value": "Annually"
+                },
+                {
+                  "label": "Ad-hoc",
+                  "value": "AdHoc"
+                }
+              ],
+              "stringKey": "profile.compliance.complianceReportingFrequency.label"
+            }
+          ],
+          "stringKey": "profile.compliance.complianceAml.title"
+        },
+        {
+          "groupName": "Risk Framework",
+          "fields": [
+            {
+              "id": "compliance.riskFrameworkName",
+              "label": "Risk framework name",
+              "fieldName": "riskFrameworkName",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.compliance.riskFrameworkName.label"
+            },
+            {
+              "id": "compliance.riskTypesCovered",
+              "label": "Risk types covered",
+              "fieldName": "riskTypesCovered",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Credit",
+                  "value": "Credit"
+                },
+                {
+                  "label": "Market",
+                  "value": "Market"
+                },
+                {
+                  "label": "Liquidity",
+                  "value": "Liquidity"
+                },
+                {
+                  "label": "Operational",
+                  "value": "Operational"
+                },
+                {
+                  "label": "Technology",
+                  "value": "Technology"
+                },
+                {
+                  "label": "AML/CFT",
+                  "value": "AMLCFT"
+                },
+                {
+                  "label": "Insurance",
+                  "value": "Insurance"
+                },
+                {
+                  "label": "Conduct",
+                  "value": "Conduct"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ],
+              "stringKey": "profile.compliance.riskTypesCovered.label"
+            },
+            {
+              "id": "compliance.croAppointed",
+              "label": "CRO appointed?",
+              "fieldName": "croAppointed",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.compliance.croAppointed.label"
+            },
+            {
+              "id": "compliance.croName",
+              "label": "CRO name",
+              "fieldName": "croName",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.compliance.croName.label"
+            },
+            {
+              "id": "compliance.riskAppetiteFile",
+              "label": "Risk appetite / RAS",
+              "fieldName": "riskAppetiteFile",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "stringKey": "profile.compliance.riskAppetiteFile.label"
+            }
+          ],
+          "stringKey": "profile.compliance.riskFramework.title"
+        },
+        {
+          "groupName": "Internal Controls",
+          "fields": [
+            {
+              "id": "compliance.internalAuditModelCompliance",
+              "label": "Internal audit model",
+              "fieldName": "internalAuditModelCompliance",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "In-House",
+                  "value": "InHouse"
+                },
+                {
+                  "label": "Outsourced",
+                  "value": "Outsourced"
+                },
+                {
+                  "label": "Not Established",
+                  "value": "NotEstablished"
+                }
+              ],
+              "stringKey": "profile.compliance.internalAuditModelCompliance.label"
+            },
+            {
+              "id": "compliance.internalAuditProviderName",
+              "label": "Internal audit provider",
+              "fieldName": "internalAuditProviderName",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.compliance.internalAuditProviderName.label"
+            },
+            {
+              "id": "compliance.keyControlThemes",
+              "label": "Key control themes",
+              "fieldName": "keyControlThemes",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Segregation of Duties",
+                  "value": "SegregationOfDuties"
+                },
+                {
+                  "label": "Maker-Checker",
+                  "value": "MakerChecker"
+                },
+                {
+                  "label": "Access Reviews",
+                  "value": "AccessReviews"
+                },
+                {
+                  "label": "Reconciliations",
+                  "value": "Reconciliations"
+                },
+                {
+                  "label": "Change Management",
+                  "value": "ChangeManagement"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ],
+              "stringKey": "profile.compliance.keyControlThemes.label"
+            },
+            {
+              "id": "compliance.internalControlsManualFile",
+              "label": "Internal controls manual",
+              "fieldName": "internalControlsManualFile",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "stringKey": "profile.compliance.internalControlsManualFile.label"
+            }
+          ],
+          "stringKey": "profile.compliance.internalControls.title"
+        }
+      ]
+    },
+    {
+      "id": "operations",
+      "title": "Operations",
+      "groups": [
+        {
+          "groupName": "Organisation & Staffing",
+          "fields": [
+            {
+              "id": "operations.totalEmployees",
+              "label": "Total employees",
+              "fieldName": "totalEmployees",
+              "fieldType": "Whole Number",
+              "mandatory": false,
+              "stringKey": "profile.operations.totalEmployees.label"
+            },
+            {
+              "id": "operations.employeesInJurisdiction",
+              "label": "Employees in jurisdiction",
+              "fieldName": "employeesInJurisdiction",
+              "fieldType": "Whole Number",
+              "mandatory": false,
+              "stringKey": "profile.operations.employeesInJurisdiction.label"
+            },
+            {
+              "id": "operations.keyFunctionsStaffed",
+              "label": "Key functions staffed",
+              "fieldName": "keyFunctionsStaffed",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Risk",
+                  "value": "Risk"
+                },
+                {
+                  "label": "Compliance",
+                  "value": "Compliance"
+                },
+                {
+                  "label": "Internal Audit",
+                  "value": "InternalAudit"
+                },
+                {
+                  "label": "IT",
+                  "value": "IT"
+                },
+                {
+                  "label": "Operations",
+                  "value": "Operations"
+                },
+                {
+                  "label": "Customer Support",
+                  "value": "CustomerSupport"
+                },
+                {
+                  "label": "Sales",
+                  "value": "Sales"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ],
+              "stringKey": "profile.operations.keyFunctionsStaffed.label"
+            },
+            {
+              "id": "operations.orgChartFile",
+              "label": "Org chart",
+              "fieldName": "orgChartFile",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "stringKey": "profile.operations.orgChartFile.label"
+            }
+          ],
+          "stringKey": "profile.operations.orgStaff.title"
+        },
+        {
+          "groupName": "Systems & Technology",
+          "fields": [
+            {
+              "id": "operations.coreSystemName",
+              "label": "Core system name",
+              "fieldName": "coreSystemName",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.operations.coreSystemName.label"
+            },
+            {
+              "id": "operations.coreSystemVendor",
+              "label": "Core system vendor",
+              "fieldName": "coreSystemVendor",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.operations.coreSystemVendor.label"
+            },
+            {
+              "id": "operations.hostingModel",
+              "label": "Hosting model",
+              "fieldName": "hostingModel",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "On-Premise",
+                  "value": "OnPremise"
+                },
+                {
+                  "label": "Private Cloud",
+                  "value": "PrivateCloud"
+                },
+                {
+                  "label": "Public Cloud",
+                  "value": "PublicCloud"
+                },
+                {
+                  "label": "Hybrid",
+                  "value": "Hybrid"
+                }
+              ],
+              "stringKey": "profile.operations.hostingModel.label"
+            },
+            {
+              "id": "operations.primaryCloudProviders",
+              "label": "Primary cloud providers",
+              "fieldName": "primaryCloudProviders",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "AWS",
+                  "value": "AWS"
+                },
+                {
+                  "label": "Azure",
+                  "value": "Azure"
+                },
+                {
+                  "label": "GCP",
+                  "value": "GCP"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ],
+              "stringKey": "profile.operations.primaryCloudProviders.label"
+            },
+            {
+              "id": "operations.dataResidencyCountries",
+              "label": "Data residency countries",
+              "fieldName": "dataResidencyCountries",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ],
+              "stringKey": "profile.operations.dataResidencyCountries.label"
+            },
+            {
+              "id": "operations.encryptionAtRest",
+              "label": "Encryption at rest",
+              "fieldName": "encryptionAtRest",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.operations.encryptionAtRest.label"
+            },
+            {
+              "id": "operations.encryptionInTransit",
+              "label": "Encryption in transit",
+              "fieldName": "encryptionInTransit",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.operations.encryptionInTransit.label"
+            },
+            {
+              "id": "operations.securityCertifications",
+              "label": "Security certifications",
+              "fieldName": "securityCertifications",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "ISO 27001",
+                  "value": "ISO27001"
+                },
+                {
+                  "label": "PCI DSS",
+                  "value": "PCIDSS"
+                },
+                {
+                  "label": "None",
+                  "value": "None"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ],
+              "stringKey": "profile.operations.securityCertifications.label"
+            },
+            {
+              "id": "operations.infoSecPolicyFile",
+              "label": "Information security policy",
+              "fieldName": "infoSecPolicyFile",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "stringKey": "profile.operations.infoSecPolicyFile.label"
+            }
+          ],
+          "stringKey": "profile.operations.systemsTech.title"
+        },
+        {
+          "groupName": "BCP & Outsourcing",
+          "fields": [
+            {
+              "id": "operations.bcpInPlace",
+              "label": "BCP in place?",
+              "fieldName": "bcpInPlace",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.operations.bcpInPlace.label"
+            },
+            {
+              "id": "operations.lastBcpTestDate",
+              "label": "Last BCP test date",
+              "fieldName": "lastBcpTestDate",
+              "fieldType": "Date",
+              "mandatory": false,
+              "stringKey": "profile.operations.lastBcpTestDate.label"
+            },
+            {
+              "id": "operations.maxDowntimeHours",
+              "label": "Maximum acceptable downtime (hours)",
+              "fieldName": "maxDowntimeHours",
+              "fieldType": "Whole Number",
+              "mandatory": false,
+              "stringKey": "profile.operations.maxDowntimeHours.label"
+            },
+            {
+              "id": "operations.drSiteLocation",
+              "label": "DR site location",
+              "fieldName": "drSiteLocation",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.operations.drSiteLocation.label"
+            },
+            {
+              "id": "operations.outsourcedFunction",
+              "label": "Outsourced function",
+              "fieldName": "outsourcedFunction",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.operations.outsourcedFunction.label"
+            },
+            {
+              "id": "operations.outsourcedProvider",
+              "label": "Outsourced provider",
+              "fieldName": "outsourcedProvider",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.operations.outsourcedProvider.label"
+            },
+            {
+              "id": "operations.outsourcedCountry",
+              "label": "Outsourced country",
+              "fieldName": "outsourcedCountry",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "United Arab Emirates",
+                  "value": "UAE"
+                },
+                {
+                  "label": "Saudi Arabia",
+                  "value": "KSA"
+                },
+                {
+                  "label": "Qatar",
+                  "value": "QAT"
+                },
+                {
+                  "label": "United Kingdom",
+                  "value": "UK"
+                },
+                {
+                  "label": "United States",
+                  "value": "USA"
+                },
+                {
+                  "label": "Other",
+                  "value": "OTHER"
+                }
+              ],
+              "stringKey": "profile.operations.outsourcedCountry.label"
+            },
+            {
+              "id": "operations.outsourcingMaterial",
+              "label": "Material outsourcing?",
+              "fieldName": "outsourcingMaterial",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.operations.outsourcingMaterial.label"
+            },
+            {
+              "id": "operations.outsourcingContractSigned",
+              "label": "Contract signed?",
+              "fieldName": "outsourcingContractSigned",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.operations.outsourcingContractSigned.label"
+            },
+            {
+              "id": "operations.outsourcingSlaFile",
+              "label": "Outsourcing contract / SLA",
+              "fieldName": "outsourcingSlaFile",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "stringKey": "profile.operations.outsourcingSlaFile.label"
+            }
+          ],
+          "stringKey": "profile.operations.bcpOutsourcing.title"
+        }
+      ]
+    },
+    {
+      "id": "customer",
+      "title": "Customer",
+      "groups": [
+        {
+          "groupName": "Client Asset Protection",
+          "fields": [
+            {
+              "id": "customer.holdsClientAssets",
+              "label": "Holds client assets?",
+              "fieldName": "holdsClientAssets",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.customer.holdsClientAssets.label"
+            },
+            {
+              "id": "customer.usesSegregatedAccounts",
+              "label": "Uses segregated accounts?",
+              "fieldName": "usesSegregatedAccounts",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.customer.usesSegregatedAccounts.label"
+            },
+            {
+              "id": "customer.custodianNames",
+              "label": "Custodian(s)",
+              "fieldName": "custodianNames",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "stringKey": "profile.customer.custodianNames.label"
+            },
+            {
+              "id": "customer.protectionSchemeMember",
+              "label": "Member of protection scheme?",
+              "fieldName": "protectionSchemeMember",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.customer.protectionSchemeMember.label"
+            },
+            {
+              "id": "customer.protectionSchemeName",
+              "label": "Protection scheme name",
+              "fieldName": "protectionSchemeName",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.customer.protectionSchemeName.label"
+            },
+            {
+              "id": "customer.safeguardingPolicyFile",
+              "label": "Safeguarding policy",
+              "fieldName": "safeguardingPolicyFile",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "stringKey": "profile.customer.safeguardingPolicyFile.label"
+            }
+          ],
+          "stringKey": "profile.customer.assetProtection.title"
+        },
+        {
+          "groupName": "Customer Treatment",
+          "fields": [
+            {
+              "id": "customer.customerTypes",
+              "label": "Customer types",
+              "fieldName": "customerTypes",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Individuals",
+                  "value": "Individuals"
+                },
+                {
+                  "label": "SMEs",
+                  "value": "SMEs"
+                },
+                {
+                  "label": "Corporates",
+                  "value": "Corporates"
+                },
+                {
+                  "label": "Institutional",
+                  "value": "Institutional"
+                },
+                {
+                  "label": "Government",
+                  "value": "Government"
+                }
+              ],
+              "stringKey": "profile.customer.customerTypes.label"
+            },
+            {
+              "id": "customer.usesSuitabilityAssessments",
+              "label": "Suitability/appropriateness assessments?",
+              "fieldName": "usesSuitabilityAssessments",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.customer.usesSuitabilityAssessments.label"
+            },
+            {
+              "id": "customer.customerDisclosureDocs",
+              "label": "Customer disclosure documents",
+              "fieldName": "customerDisclosureDocs",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Terms and Conditions",
+                  "value": "TermsAndConditions"
+                },
+                {
+                  "label": "Fee Schedule",
+                  "value": "FeeSchedule"
+                },
+                {
+                  "label": "Risk Disclosure",
+                  "value": "RiskDisclosure"
+                },
+                {
+                  "label": "Key Facts Statement",
+                  "value": "KeyFactsStatement"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ],
+              "stringKey": "profile.customer.customerDisclosureDocs.label"
+            },
+            {
+              "id": "customer.termsFile",
+              "label": "Terms & conditions (file)",
+              "fieldName": "termsFile",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "stringKey": "profile.customer.termsFile.label"
+            },
+            {
+              "id": "customer.feeScheduleFile",
+              "label": "Fee schedule (file)",
+              "fieldName": "feeScheduleFile",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "stringKey": "profile.customer.feeScheduleFile.label"
+            }
+          ],
+          "stringKey": "profile.customer.treatment.title"
+        },
+        {
+          "groupName": "Complaints & Disputes",
+          "fields": [
+            {
+              "id": "customer.complaintsPolicyInPlace",
+              "label": "Complaints policy in place?",
+              "fieldName": "complaintsPolicyInPlace",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.customer.complaintsPolicyInPlace.label"
+            },
+            {
+              "id": "customer.complaintsChannels",
+              "label": "Complaints channels",
+              "fieldName": "complaintsChannels",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Email",
+                  "value": "Email"
+                },
+                {
+                  "label": "Phone",
+                  "value": "Phone"
+                },
+                {
+                  "label": "Online Portal",
+                  "value": "OnlinePortal"
+                },
+                {
+                  "label": "Branch",
+                  "value": "Branch"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ],
+              "stringKey": "profile.customer.complaintsChannels.label"
+            },
+            {
+              "id": "customer.targetResolutionDays",
+              "label": "Target resolution (days)",
+              "fieldName": "targetResolutionDays",
+              "fieldType": "Whole Number",
+              "mandatory": false,
+              "stringKey": "profile.customer.targetResolutionDays.label"
+            },
+            {
+              "id": "customer.externalDisputeSchemeMember",
+              "label": "Member of external dispute scheme?",
+              "fieldName": "externalDisputeSchemeMember",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.customer.externalDisputeSchemeMember.label"
+            },
+            {
+              "id": "customer.externalDisputeSchemeName",
+              "label": "External dispute scheme name",
+              "fieldName": "externalDisputeSchemeName",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.customer.externalDisputeSchemeName.label"
+            }
+          ],
+          "stringKey": "profile.customer.complaints.title"
+        },
+        {
+          "groupName": "Data Protection & Privacy",
+          "fields": [
+            {
+              "id": "customer.dataProtectionLaws",
+              "label": "Data protection laws applied",
+              "fieldName": "dataProtectionLaws",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "GDPR",
+                  "value": "GDPR"
+                },
+                {
+                  "label": "Local Law",
+                  "value": "LocalLaw"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ],
+              "stringKey": "profile.customer.dataProtectionLaws.label"
+            },
+            {
+              "id": "customer.dpoAppointed",
+              "label": "DPO appointed?",
+              "fieldName": "dpoAppointed",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.customer.dpoAppointed.label"
+            },
+            {
+              "id": "customer.dpoName",
+              "label": "DPO name",
+              "fieldName": "dpoName",
+              "fieldType": "Text",
+              "mandatory": false,
+              "stringKey": "profile.customer.dpoName.label"
+            },
+            {
+              "id": "customer.privacyPolicyUrl",
+              "label": "Privacy policy URL",
+              "fieldName": "privacyPolicyUrl",
+              "fieldType": "URL",
+              "mandatory": false,
+              "stringKey": "profile.customer.privacyPolicyUrl.label"
+            },
+            {
+              "id": "customer.dataProtectionPolicyFile",
+              "label": "Data protection policy",
+              "fieldName": "dataProtectionPolicyFile",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "stringKey": "profile.customer.dataProtectionPolicyFile.label"
+            }
+          ],
+          "stringKey": "profile.customer.dataProtection.title"
+        }
+      ]
+    },
+    {
+      "id": "declarations",
+      "title": "Declarations",
+      "groups": [
+        {
+          "groupName": "Regulatory History",
+          "fields": [
+            {
+              "id": "declarations.hasLicenseIssues",
+              "label": "Any license issues?",
+              "fieldName": "hasLicenseIssues",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.declarations.hasLicenseIssues.label"
+            },
+            {
+              "id": "declarations.licenseIssuesDetails",
+              "label": "License issues details",
+              "fieldName": "licenseIssuesDetails",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "stringKey": "profile.declarations.licenseIssuesDetails.label"
+            },
+            {
+              "id": "declarations.hasRegulatorySanctions",
+              "label": "Any regulatory sanctions?",
+              "fieldName": "hasRegulatorySanctions",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.declarations.hasRegulatorySanctions.label"
+            },
+            {
+              "id": "declarations.regulatorySanctionsDetails",
+              "label": "Regulatory sanctions details",
+              "fieldName": "regulatorySanctionsDetails",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "stringKey": "profile.declarations.regulatorySanctionsDetails.label"
+            },
+            {
+              "id": "declarations.hasMaterialLitigation",
+              "label": "Any material litigation?",
+              "fieldName": "hasMaterialLitigation",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.declarations.hasMaterialLitigation.label"
+            },
+            {
+              "id": "declarations.materialLitigationDetails",
+              "label": "Material litigation details",
+              "fieldName": "materialLitigationDetails",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "stringKey": "profile.declarations.materialLitigationDetails.label"
+            }
+          ],
+          "stringKey": "profile.declarations.regulatoryHistory.title"
+        },
+        {
+          "groupName": "Final Declaration",
+          "fields": [
+            {
+              "id": "declarations.infoAccurateConfirmed",
+              "label": "I confirm the information is accurate",
+              "fieldName": "infoAccurateConfirmed",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.declarations.infoAccurateConfirmed.label"
+            },
+            {
+              "id": "declarations.undertakingToComply",
+              "label": "I undertake to comply with regulatory requirements",
+              "fieldName": "undertakingToComply",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "yes"
+                },
+                {
+                  "label": "No",
+                  "value": "no"
+                }
+              ],
+              "stringKey": "profile.declarations.undertakingToComply.label"
+            },
+            {
+              "id": "declarations.authorisedSignatoryName",
+              "label": "Authorised signatory name",
+              "fieldName": "authorisedSignatoryName",
+              "fieldType": "Text",
+              "mandatory": true,
+              "stringKey": "profile.declarations.authorisedSignatoryName.label"
+            },
+            {
+              "id": "declarations.authorisedSignatoryPosition",
+              "label": "Authorised signatory position",
+              "fieldName": "authorisedSignatoryPosition",
+              "fieldType": "Text",
+              "mandatory": true,
+              "stringKey": "profile.declarations.authorisedSignatoryPosition.label"
+            },
+            {
+              "id": "declarations.authorisedSignatoryDate",
+              "label": "Date of signing",
+              "fieldName": "authorisedSignatoryDate",
+              "fieldType": "Date",
+              "mandatory": true,
+              "stringKey": "profile.declarations.authorisedSignatoryDate.label"
+            }
+          ],
+          "stringKey": "profile.declarations.finalDeclaration.title"
+        }
+      ]
+    }
+  ]
+}

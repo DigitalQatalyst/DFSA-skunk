@@ -1,0 +1,7 @@
+{
+  "id": "applicationTransaction",
+  "name": "Application Transaction (Form 4)",
+  "description": "Waivers & Modifications, Application Fees, Fit & Proper Declarations, Electronic Signature & Submission.",
+  "questionCount": 0,
+  "forms": ["Form 4"]
+}
