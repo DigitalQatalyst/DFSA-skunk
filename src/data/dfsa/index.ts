@@ -3,8 +3,8 @@
  * All data structures for the DFSA Regulatory Services Platform
  */
 
-// Trust Metrics
-export * from './trustMetrics';
+// DFSA Fact Metrics (replacing Trust Metrics for DFSA compliance)
+export * from './dfsaFactMetrics';
 
 // License Categories
 export * from './licenseCategories';
@@ -33,7 +33,7 @@ export * from './resources';
 /**
  * Quick access exports for commonly used data
  */
-import { trustMetrics } from './trustMetrics';
+import { dfsaFactMetrics } from './dfsaFactMetrics';
 import { licenseCategories } from './licenseCategories';
 import { authorizationSteps } from './authorizationSteps';
 import { keyPersonnel } from './keyPersonnel';
@@ -44,7 +44,7 @@ import { faqs } from './faq';
 import { resources } from './resources';
 
 export const dfsaData = {
-  trustMetrics,
+  dfsaFactMetrics,
   licenseCategories,
   authorizationSteps,
   keyPersonnel,
