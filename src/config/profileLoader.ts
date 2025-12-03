@@ -10,6 +10,10 @@ type ProfileStrings = Record<string, string>;
 const profileConfigJson = (await import("./profile/profile.config.json")).default;
 const profileStringsJson = (await import("./profile/profile.strings.json")).default;
 const profileMappingJson = (await import("./profile/profile.mapping.json")).default;
+const profileDomainsJson = (await import("./profile/domains.config.json")).default;
+const profilePhasesJson = (await import("./profile/phases.config.json")).default;
+const tabDomainMapJson = (await import("./profile/tabDomainMap.json")).default;
+const applicationStageJson = (await import("./profile/applicationStage.config.json")).default;
 
 type ValidationResult<T> = {
   value: T;
@@ -18,6 +22,35 @@ type ValidationResult<T> = {
 
 type MappingShape = {
   apiFieldMapping: Record<string, string>;
+};
+type DomainConfig = {
+  code: string;
+  name: string;
+  shortName: string;
+  phaseId: string;
+  sequence: number;
+  questionCount: number;
+  forms?: string[];
+  description?: string;
+};
+type PhaseConfig = {
+  id: string;
+  name: string;
+  description: string;
+  sequence: number;
+  domains: string[];
+};
+type TabDomainMapEntry = {
+  tabId: string;
+  domains: string[];
+  finalStage?: string;
+};
+type ApplicationStageConfig = {
+  id: string;
+  name: string;
+  description?: string;
+  forms?: string[];
+  questionCount?: number;
 };
 
 const allowedFieldTypes: FieldConfig["fieldType"][] = [
@@ -111,9 +144,155 @@ function validateMapping(raw: MappingShape): ValidationResult<MappingShape> {
   return { value: raw, warnings };
 }
 
+function validatePhases(raw: PhaseConfig[]): ValidationResult<PhaseConfig[]> {
+  const warnings: string[] = [];
+  const seen = new Set<string>();
+  const seenSeq = new Set<number>();
+  raw.forEach((phase) => {
+    if (!phase.id) warnings.push("Phase missing id");
+    if (seen.has(phase.id)) warnings.push(`Duplicate phase id ${phase.id}`);
+    seen.add(phase.id);
+    if (!phase.name) warnings.push(`Phase ${phase.id || "unknown"} missing name`);
+    if (phase.sequence === undefined || phase.sequence === null) {
+      warnings.push(`Phase ${phase.id} missing sequence`);
+    } else if (seenSeq.has(phase.sequence)) {
+      warnings.push(`Duplicate phase sequence ${phase.sequence}`);
+    }
+    seenSeq.add(phase.sequence);
+  });
+  return { value: raw, warnings };
+}
+
+function validateDomains(
+  raw: DomainConfig[],
+  phases: PhaseConfig[]
+): ValidationResult<DomainConfig[]> {
+  const warnings: string[] = [];
+  const phaseIds = new Set(phases.map((p) => p.id));
+  const seenCodes = new Set<string>();
+  const seenSeq = new Set<number>();
+  raw.forEach((domain) => {
+    if (!domain.code) warnings.push("Domain missing code");
+    if (seenCodes.has(domain.code)) {
+      warnings.push(`Duplicate domain code ${domain.code}`);
+    }
+    seenCodes.add(domain.code);
+    if (!domain.name) warnings.push(`Domain ${domain.code} missing name`);
+    if (!domain.phaseId || !phaseIds.has(domain.phaseId)) {
+      warnings.push(
+        `Domain ${domain.code} references unknown phase ${domain.phaseId}`
+      );
+    }
+    if (domain.sequence === undefined || domain.sequence === null) {
+      warnings.push(`Domain ${domain.code} missing sequence`);
+    } else if (seenSeq.has(domain.sequence)) {
+      warnings.push(`Duplicate domain sequence ${domain.sequence}`);
+    }
+    seenSeq.add(domain.sequence);
+    if (domain.questionCount === undefined || domain.questionCount < 0) {
+      warnings.push(`Domain ${domain.code} has invalid questionCount`);
+    }
+  });
+  const totalQuestions = raw.reduce((sum, d) => sum + (d.questionCount || 0), 0);
+  if (totalQuestions !== 463) {
+    warnings.push(`Domain question totals should sum to 463; found ${totalQuestions}`);
+  }
+  return { value: raw, warnings };
+}
+
+function validatePhaseDomainCoverage(
+  domains: DomainConfig[],
+  phases: PhaseConfig[]
+): string[] {
+  const warnings: string[] = [];
+  const domainCodes = new Set(domains.map((d) => d.code));
+  const mappedDomains = new Set<string>();
+  phases.forEach((phase) => {
+    phase.domains?.forEach((code) => {
+      if (!domainCodes.has(code)) {
+        warnings.push(`Phase ${phase.id} references unknown domain ${code}`);
+      }
+      mappedDomains.add(code);
+    });
+  });
+  domains.forEach((domain) => {
+    if (!mappedDomains.has(domain.code)) {
+      warnings.push(`Domain ${domain.code} is not assigned to any phase`);
+    }
+  });
+  return warnings;
+}
+
+function validateApplicationStage(
+  raw: ApplicationStageConfig
+): ValidationResult<ApplicationStageConfig> {
+  const warnings: string[] = [];
+  if (!raw || typeof raw !== "object") {
+    warnings.push("Application stage config missing or invalid");
+    return {
+      value: { id: "applicationTransaction", name: "Application Transaction" },
+      warnings,
+    };
+  }
+  if (!raw.id) warnings.push("Application stage missing id");
+  if (!raw.name) warnings.push("Application stage missing name");
+  return { value: raw, warnings };
+}
+
+function validateTabDomainMap(
+  raw: TabDomainMapEntry[],
+  domains: DomainConfig[],
+  tabs: ProfileConfig["tabs"],
+  applicationStage: ApplicationStageConfig
+): ValidationResult<TabDomainMapEntry[]> {
+  const warnings: string[] = [];
+  const domainCodes = new Set(domains.map((d) => d.code));
+  const tabIds = new Set(tabs.map((t) => t.id));
+  const seenTabs = new Set<string>();
+  raw.forEach((entry) => {
+    if (!entry.tabId) warnings.push("Tab-domain map entry missing tabId");
+    if (entry.tabId && !tabIds.has(entry.tabId)) {
+      warnings.push(`Tab-domain map references unknown tab ${entry.tabId}`);
+    }
+    if (entry.tabId && seenTabs.has(entry.tabId)) {
+      warnings.push(`Duplicate tab-domain mapping for tab ${entry.tabId}`);
+    }
+    seenTabs.add(entry.tabId);
+    entry.domains?.forEach((code) => {
+      if (!domainCodes.has(code)) {
+        warnings.push(`Tab ${entry.tabId} references unknown domain ${code}`);
+      }
+    });
+    if (entry.finalStage && entry.finalStage !== applicationStage.id) {
+      warnings.push(
+        `Tab ${entry.tabId} references unknown final stage ${entry.finalStage}`
+      );
+    }
+  });
+  return { value: raw, warnings };
+}
+
 const validatedConfig = validateConfig(profileConfigJson as ProfileConfig);
 const validatedStrings = validateStrings(profileStringsJson as ProfileStrings);
 const validatedMapping = validateMapping(profileMappingJson as MappingShape);
+const validatedPhases = validatePhases(profilePhasesJson as PhaseConfig[]);
+const validatedDomains = validateDomains(
+  profileDomainsJson as DomainConfig[],
+  validatedPhases.value
+);
+const validatedApplicationStage = validateApplicationStage(
+  applicationStageJson as ApplicationStageConfig
+);
+const validatedTabDomainMap = validateTabDomainMap(
+  tabDomainMapJson as TabDomainMapEntry[],
+  validatedDomains.value,
+  validatedConfig.value.tabs,
+  validatedApplicationStage.value
+);
+const phaseDomainWarnings = validatePhaseDomainCoverage(
+  validatedDomains.value,
+  validatedPhases.value
+);
 
 const reverseMapping: Record<string, string> = Object.entries(
   validatedMapping.value.apiFieldMapping
@@ -138,11 +317,32 @@ export function getReverseProfileMapping(): Record<string, string> {
   return reverseMapping;
 }
 
+export function getProfileDomains(): DomainConfig[] {
+  return validatedDomains.value;
+}
+
+export function getProfilePhases(): PhaseConfig[] {
+  return validatedPhases.value;
+}
+
+export function getTabDomainMapping(): TabDomainMapEntry[] {
+  return validatedTabDomainMap.value;
+}
+
+export function getApplicationStageMeta(): ApplicationStageConfig {
+  return validatedApplicationStage.value;
+}
+
 export function getProfileConfigWarnings(): string[] {
   return [
     ...validatedConfig.warnings,
     ...validatedStrings.warnings,
     ...validatedMapping.warnings,
+    ...validatedPhases.warnings,
+    ...validatedDomains.warnings,
+    ...phaseDomainWarnings,
+    ...validatedTabDomainMap.warnings,
+    ...validatedApplicationStage.warnings,
   ];
 }
 

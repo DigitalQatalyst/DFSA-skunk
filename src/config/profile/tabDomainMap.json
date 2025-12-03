@@ -1,0 +1,39 @@
+[
+  {
+    "tabId": "companyInfo",
+    "domains": ["1.0"]
+  },
+  {
+    "tabId": "ownership",
+    "domains": ["14.0"]
+  },
+  {
+    "tabId": "management",
+    "domains": ["7.0", "14.0"]
+  },
+  {
+    "tabId": "businessProfile",
+    "domains": ["2.0", "3.0", "13.0"]
+  },
+  {
+    "tabId": "financials",
+    "domains": ["9.0"]
+  },
+  {
+    "tabId": "compliance",
+    "domains": ["11.0"]
+  },
+  {
+    "tabId": "operations",
+    "domains": ["5.0", "8.0", "12.0", "10.0"]
+  },
+  {
+    "tabId": "customer",
+    "domains": ["6.0"]
+  },
+  {
+    "tabId": "declarations",
+    "domains": [],
+    "finalStage": "applicationTransaction"
+  }
+]
