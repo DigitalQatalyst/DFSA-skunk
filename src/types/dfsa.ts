@@ -277,3 +277,82 @@ export type AuthorizationStage =
   | 'operational';
 
 export type CompliancePackageTier = 'starter' | 'professional' | 'enterprise' | 'itl';
+
+// ============================================================================
+// DFSA ENQUIRY SIGN-UP TYPES
+// ============================================================================
+
+/**
+ * DFSA Activity Types for Authorisation Enquiry
+ * Maps to SU-6 field in the sign-up form
+ */
+export type DFSAActivityType =
+  | 'FINANCIAL_SERVICES'
+  | 'DNFBP'
+  | 'REGISTERED_AUDITOR'
+  | 'CRYPTO_TOKEN'
+  | 'CRYPTO_TOKEN_RECOGNITION';
+
+/**
+ * DFSA Entity Types for incorporation
+ * Maps to SU-7 field in the sign-up form
+ */
+export type DFSAEntityType =
+  | 'DIFC_INCORPORATION'
+  | 'OTHER_JURISDICTION'
+  | 'OTHER';
+
+/**
+ * DFSA Teams for triage routing based on activity type
+ */
+export type DFSATeam =
+  | 'AUTHORISATION_TEAM'
+  | 'DNFBP_REGISTRATION_TEAM'
+  | 'AUDIT_REGISTRATION_TEAM'
+  | 'CRYPTO_INNOVATION_TEAM';
+
+/**
+ * Contact Information section (SU-1 through SU-5)
+ */
+export interface DFSAContactInfo {
+  companyName: string;           // SU-1: 2-200 chars
+  contactName: string;            // SU-2: 2-100 chars
+  email: string;                  // SU-3: valid email
+  phone: string;                  // SU-4: E.164 format
+  suggestedDate: string | null;   // SU-5: ISO date, future only
+}
+
+/**
+ * Complete DFSA Enquiry Sign-Up Form Data
+ * Aligns with technical specification v1.0
+ */
+export interface DFSAEnquirySignUpFormData {
+  contactInfo: DFSAContactInfo;
+  activityType: DFSAActivityType;        // SU-6
+  entityType: DFSAEntityType;            // SU-7
+  entityTypeOther: string | null;        // SU-7 conditional
+  currentlyRegulated: boolean | null;    // SU-8 conditional
+  difcaConsent: boolean;                 // SU-9
+}
+
+/**
+ * DFSA Enquiry Submission Response
+ * Includes reference number and team assignment
+ */
+export interface DFSAEnquirySignUpSubmission {
+  referenceNumber: string;               // ENQ-YYYY-NNNNN
+  submittedAt: string;                   // ISO datetime
+  formData: DFSAEnquirySignUpFormData;
+  assignedTeam: DFSATeam;
+}
+
+/**
+ * API Response for DFSA Enquiry Submission
+ */
+export interface DFSAEnquiryResponse {
+  success: boolean;
+  referenceNumber?: string;
+  assignedTeam?: DFSATeam;
+  message: string;
+  data?: any;
+}

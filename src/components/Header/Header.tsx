@@ -12,6 +12,7 @@ import EnquiryModal from "../EnquiryModal";
 import { OnboardingModal } from "./components/OnboardingModal";
 import { SignInModal } from "./components/SignInModal";
 import { SignupModal } from "./components/SignupModal";
+import { DFSAEnquirySignupModal } from "./components/DFSAEnquirySignupModal";
 
 interface HeaderProps {
   toggleSidebar?: () => void;
@@ -33,6 +34,7 @@ export function Header({
   const [isOnboardingModalOpen, setIsOnboardingModalOpen] = useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
+  const [isDFSAEnquiryModalOpen, setIsDFSAEnquiryModalOpen] = useState(false);
   const { user, login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -73,7 +75,8 @@ export function Header({
   };
 
   const handleSignUp = () => {
-    setIsSignupModalOpen(true);
+    // Always show DFSA Enquiry modal for Sign Up
+    setIsDFSAEnquiryModalOpen(true);
   };
 
   // Handle onboarding completion
@@ -187,10 +190,10 @@ export function Header({
                 {/* Desktop CTAs (≥1024px) */}
                 <div className="hidden lg:flex items-center space-x-3">
                   <button
-                    className={`px-4 py-2 bg-transparent rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 font-semibold ${isSticky ? "text-sm px-3 py-1.5" : ""
+                    className={`px-4 py-2 bg-transparent border-2 border-white rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 font-semibold ${isSticky ? "text-sm px-3 py-1.5" : ""
                       }`}
                     style={{ color: '#ffffff' }}
-                    onClick={handleSignIn}
+                    onClick={handleSignUp}
                   >
                     Sign Up
                   </button>
@@ -198,10 +201,10 @@ export function Header({
                 {/* Tablet Sign Up Button (768px - 1023px) */}
                 <div className="hidden md:flex lg:hidden items-center">
                   <button
-                    className={`px-3 py-2 bg-transparent rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 font-semibold ${isSticky ? "text-sm px-2 py-1.5" : "text-sm"
+                    className={`px-3 py-2 bg-transparent border-2 border-white rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 font-semibold ${isSticky ? "text-sm px-2 py-1.5" : "text-sm"
                       }`}
                     style={{ color: '#ffffff' }}
-                    onClick={handleSignIn}
+                    onClick={handleSignUp}
                   >
                     Sign Up
                   </button>
@@ -260,6 +263,16 @@ export function Header({
         onSwitchToSignIn={() => {
           setIsSignupModalOpen(false);
           setIsSignInModalOpen(true);
+        }}
+      />
+
+      {/* DFSA Enquiry Sign-Up Modal */}
+      <DFSAEnquirySignupModal
+        isOpen={isDFSAEnquiryModalOpen}
+        onClose={() => setIsDFSAEnquiryModalOpen(false)}
+        onSuccess={(referenceNumber) => {
+          console.log('DFSA Enquiry submitted:', referenceNumber);
+          // Optional: Navigate to dashboard or confirmation page
         }}
       />
 
