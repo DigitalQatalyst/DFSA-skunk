@@ -1,55 +1,9 @@
-/* Trajan Pro Family - Primary Font */
-@font-face {
-  font-family: 'Trajan Pro';
-  src: url('/fonts/trajan-pro/TrajanPro-Regular.woff2') format('woff2'),
-       url('/fonts/trajan-pro/TrajanPro-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+:root {
+  /* Fallback font stacks to avoid network/font decode errors */
+  --font-primary: 'Georgia', 'Times New Roman', serif;
+  --font-secondary: 'Helvetica Neue', Arial, sans-serif;
 }
 
-@font-face {
-  font-family: 'Trajan Pro';
-  src: url('/fonts/trajan-pro/TrajanPro-Bold.woff2') format('woff2'),
-       url('/fonts/trajan-pro/TrajanPro-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Helvetica Neue Lt Family - Secondary Font */
-@font-face {
-  font-family: 'Helvetica Neue Lt';
-  src: url('/fonts/helvetica-neue-lt/HelveticaNeueLt-Regular.woff2') format('woff2'),
-       url('/fonts/helvetica-neue-lt/HelveticaNeueLt-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Helvetica Neue Lt';
-  src: url('/fonts/helvetica-neue-lt/HelveticaNeueLt-Medium.woff2') format('woff2'),
-       url('/fonts/helvetica-neue-lt/HelveticaNeueLt-Medium.woff') format('woff');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Helvetica Neue Lt';
-  src: url('/fonts/helvetica-neue-lt/HelveticaNeueLt-Bold.woff2') format('woff2'),
-       url('/fonts/helvetica-neue-lt/HelveticaNeueLt-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Helvetica Neue Lt';
-  src: url('/fonts/helvetica-neue-lt/HelveticaNeueLt-Italic.woff2') format('woff2'),
-       url('/fonts/helvetica-neue-lt/HelveticaNeueLt-Italic.woff') format('woff');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
+body {
+  font-family: var(--font-secondary);
 }

@@ -1,0 +1,132 @@
+[
+  {
+    "code": "1.0",
+    "name": "Develop Vision and Strategy",
+    "shortName": "Vision & Strategy",
+    "phaseId": "foundation",
+    "sequence": 1,
+    "questionCount": 11,
+    "forms": ["3-1 Business Plan", "2-12 Banking"],
+    "description": "Establishes the firm's strategic direction, business model, and market positioning."
+  },
+  {
+    "code": "14.0",
+    "name": "Develop and Manage Corporate Governance",
+    "shortName": "Corporate Governance",
+    "phaseId": "foundation",
+    "sequence": 2,
+    "questionCount": 49,
+    "forms": ["3-5 Governance", "2-1 Fund Mgmt", "2-3 Islamic", "2-4 A&A", "2-10 Money Services"],
+    "description": "Defines board structure, committees, oversight mechanisms, and decision-making processes."
+  },
+  {
+    "code": "7.0",
+    "name": "Develop and Manage Human Capital",
+    "shortName": "Human Capital",
+    "phaseId": "foundation",
+    "sequence": 3,
+    "questionCount": 37,
+    "forms": ["3-1 Business Plan", "3-5 Governance", "3-4 Risk Mgmt", "2-2 Rep Office", "2-3 Islamic", "2-5 Ins Intermed", "2-10 Money Services", "2-13 Retail"],
+    "description": "Covers staffing structure, recruitment, training, remuneration, and key personnel."
+  },
+  {
+    "code": "2.0",
+    "name": "Develop and Manage Products and Services",
+    "shortName": "Products & Services",
+    "phaseId": "build",
+    "sequence": 4,
+    "questionCount": 52,
+    "forms": ["2-1 Fund Mgmt", "2-3 Islamic", "2-4 A&A", "2-5 Ins Intermed", "2-7 Sales Trading", "2-11 Insurance", "2-13 Retail"],
+    "description": "Defines products/services offered, design, development, approval processes, and regulated activities."
+  },
+  {
+    "code": "3.0",
+    "name": "Market and Sell Products and Services",
+    "shortName": "Market & Sell",
+    "phaseId": "build",
+    "sequence": 5,
+    "questionCount": 28,
+    "forms": ["3-2 Clients", "2-2 Rep Office", "2-4 A&A", "2-5 Ins Intermed"],
+    "description": "Covers client acquisition strategy, target markets, client types, and marketing approach."
+  },
+  {
+    "code": "5.0",
+    "name": "Deliver Services",
+    "shortName": "Deliver Services",
+    "phaseId": "operations",
+    "sequence": 6,
+    "questionCount": 40,
+    "forms": ["3-2 Clients", "2-1 Fund Mgmt", "2-4 A&A", "2-7 Sales Trading", "2-10 Money Services", "2-12 Banking"],
+    "description": "Defines how services will be delivered, including processes, platforms, and operational workflows."
+  },
+  {
+    "code": "6.0",
+    "name": "Manage Customer Service",
+    "shortName": "Customer Service",
+    "phaseId": "operations",
+    "sequence": 7,
+    "questionCount": 9,
+    "forms": ["3-2 Clients", "2-13 Retail Endorsement"],
+    "description": "Defines ongoing client relationship management, complaints handling, and service standards."
+  },
+  {
+    "code": "11.0",
+    "name": "Manage Enterprise Risk, Compliance, Remediation, and Resiliency",
+    "shortName": "Risk & Compliance",
+    "phaseId": "controls",
+    "sequence": 8,
+    "questionCount": 165,
+    "forms": ["All profile forms"],
+    "description": "Outlines risk management framework, compliance systems, AML/CTF controls, and regulatory adherence."
+  },
+  {
+    "code": "9.0",
+    "name": "Manage Financial Resources",
+    "shortName": "Financial Resources",
+    "phaseId": "controls",
+    "sequence": 9,
+    "questionCount": 22,
+    "forms": ["3-1 Business Plan", "2-7 Sales Trading", "2-11 Insurance", "2-12 Banking", "2-13 Retail"],
+    "description": "Defines financial projections, capital adequacy, and resource management."
+  },
+  {
+    "code": "8.0",
+    "name": "Manage Information Technology",
+    "shortName": "Information Technology",
+    "phaseId": "infrastructure",
+    "sequence": 10,
+    "questionCount": 16,
+    "forms": ["2-7 Sales Trading", "2-10 Money Services"],
+    "description": "Defines technology systems, platforms, and IT infrastructure."
+  },
+  {
+    "code": "12.0",
+    "name": "Manage External Relationships",
+    "shortName": "External Relationships",
+    "phaseId": "infrastructure",
+    "sequence": 11,
+    "questionCount": 28,
+    "forms": ["3-1 Business Plan", "2-1 Fund Mgmt", "2-2 Rep Office", "2-4 A&A", "2-5 Ins Intermed", "2-10 Money Services", "2-11 Insurance"],
+    "description": "Defines outsourcing arrangements, partner relationships, and external service providers."
+  },
+  {
+    "code": "13.0",
+    "name": "Develop and Manage Business Capabilities",
+    "shortName": "Business Capabilities",
+    "phaseId": "infrastructure",
+    "sequence": 12,
+    "questionCount": 4,
+    "forms": ["3-1 Business Plan", "2-2 Rep Office"],
+    "description": "Captures additional business capabilities beyond regulated activities, including unregulated activity coverage."
+  },
+  {
+    "code": "10.0",
+    "name": "Acquire, Construct, and Manage Assets",
+    "shortName": "Assets",
+    "phaseId": "infrastructure",
+    "sequence": 13,
+    "questionCount": 2,
+    "forms": ["2-2 Rep Office"],
+    "description": "Defines physical premises and infrastructure requirements."
+  }
+]

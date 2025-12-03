@@ -17,11 +17,15 @@ import {
     XIcon,
 } from "lucide-react";
 import {
-    API_FIELD_MAPPING,
     checkMandatoryFieldsCompletion,
     getCompanyStageById,
-    profileConfig,
+    type ProfileConfig,
 } from "../../utils/config";
+import {
+    formatProfileString,
+    getProfileConfig,
+    getProfileMapping,
+} from "../../config/profileLoader";
 import {calculateMandatoryCompletion, calculateSectionCompletion,} from "../../services/DataverseService";
 
 import {useAuth} from "../Header";
@@ -49,10 +53,11 @@ type ProfileData = {
 const mapApiProfileToSectionData = (
     apiProfile: Record<string, any>,
     apiFieldMapping: Record<string, string>,
-    sectionId: string
+    sectionId: string,
+    config: ProfileConfig
 ) => {
     // Find the configuration for the current section
-    const sectionConfig = profileConfig.tabs.find((c) => c.id === sectionId);
+    const sectionConfig = config.tabs.find((c) => c.id === sectionId);
     if (!sectionConfig) return {fields: {}};
 
     const sectionFields: Record<string, any> = {};
@@ -99,8 +104,26 @@ export function BusinessProfile({activeSection = "profile"}) {
     // Get user from auth context
     const {user} = useAuth();
 
+    // Config, mapping, and strings loaded from JSON-backed loader
+    const profileConfig = useMemo(() => getProfileConfig(), []);
+    const apiFieldMapping = useMemo(() => getProfileMapping(), []);
+
     // In demo mode, use the demo user
     const effectiveUser = isDemoModeEnabled() ? getDemoUser() : user;
+
+    const mapToApiPayload = useCallback(
+        (data: Record<string, unknown>) => {
+            return Object.entries(data).reduce<Record<string, unknown>>(
+                (acc, [key, value]) => {
+                    const apiKey = apiFieldMapping[key] || key;
+                    acc[apiKey] = value;
+                    return acc;
+                },
+                {}
+            );
+        },
+        [apiFieldMapping]
+    );
 
     // Use React Query to get profile data from cache (set by DashboardLayout)
     const {data: apiProfileData, isLoading: isContextLoading} = useQuery<any>({
@@ -133,8 +156,9 @@ export function BusinessProfile({activeSection = "profile"}) {
             for (const section of profileConfig.tabs) {
                 mappedSections[section.id] = mapApiProfileToSectionData(
                     apiProfile,
-                    API_FIELD_MAPPING,
-                    section.id
+                    apiFieldMapping,
+                    section.id,
+                    profileConfig
                 );
             }
 
@@ -182,7 +206,7 @@ export function BusinessProfile({activeSection = "profile"}) {
             // 5. Update the state used by your button
             setMissingMandatoryFields(mandatoryFieldsCheck.missing);
         }
-    }, [apiProfileData, isContextLoading]);
+    }, [apiProfileData, apiFieldMapping, isContextLoading, profileConfig]);
 
     // Handle saving group changes from TabSection
     const handleSaveGroupChanges = useCallback(
@@ -218,6 +242,7 @@ export function BusinessProfile({activeSection = "profile"}) {
                 }
             });
             const dataToSend = normalizedData;
+            const apiPayload = mapToApiPayload(normalizedData);
 
             if (!profileData) {
                 setSavingGroupIndex(null);
@@ -258,7 +283,11 @@ export function BusinessProfile({activeSection = "profile"}) {
                 if (!accountId) {
                     console.error("No account ID found!");
                     toast.error(
-                        "Failed to save changes. Account information is missing."
+                        formatProfileString(
+                            "toast.saveError",
+                            undefined,
+                            "Failed to save changes. Account information is missing."
+                        )
                     );
                     setSavingGroupIndex(null);
                     return;
@@ -273,7 +302,7 @@ export function BusinessProfile({activeSection = "profile"}) {
                     console.log("💾 Saving Vision & Strategy to API...");
 
                     const visionStrategyPayload = {
-                        ...dataToSend,
+                        ...apiPayload,
                         alignmentScore: Math.round(mandatoryCompletion), // Use mandatory completion as alignment
                         dataCompleteness: Math.round(sectionCompletion), // Use overall completion
                     };
@@ -288,32 +317,32 @@ export function BusinessProfile({activeSection = "profile"}) {
                 } else if (currentSection.id === "products") {
                     await saveProductsMutation.mutateAsync({
                         accountId,
-                        sectionData: dataToSend,
+                        sectionData: apiPayload,
                     });
                 }  else if (currentSection.id === "Sales") {
                     await saveSalesAndMarketingMutation.mutateAsync({
                         accountId,
-                        sectionData: dataToSend,
+                        sectionData: apiPayload,
                     });
                 } else if (currentSection.id === "customer") {
                     await saveCustomerExperienceMutation.mutateAsync({
                         accountId,
-                        sectionData: dataToSend,
+                        sectionData: apiPayload,
                     });
                 } else if (currentSection.id === "supply") {
                     await saveSupplyAndLogisticsMutation.mutateAsync({
                         accountId,
-                        sectionData: dataToSend,
+                        sectionData: apiPayload,
                     });
                 } else if (currentSection.id === "service") {
                     await saveServiceRequestsMutation.mutateAsync({
                         accountId,
-                        sectionData: dataToSend,
+                        sectionData: apiPayload,
                     });
                 } else if (currentSection.id === "people") {
                     await savePeopleAndGovernanceMutation.mutateAsync({
                         accountId,
-                        sectionData: dataToSend,
+                        sectionData: apiPayload,
                     });
                 }
 
@@ -339,12 +368,16 @@ export function BusinessProfile({activeSection = "profile"}) {
         }
 
                 // Show success toast
-                toast.success("Changes saved successfully");
+                toast.success(formatProfileString("toast.saveSuccess", undefined, "Changes saved successfully"));
             } catch (error) {
                 // Handle API error
                 console.error("Failed to save data via API:", error);
                 toast.error(
-                    "Failed to save changes. Please try again. If the issue persists, contact support."
+                    formatProfileString(
+                        "toast.saveError",
+                        undefined,
+                        "Failed to save changes. Please try again. If the issue persists, contact support."
+                    )
                 );
                 setSavingGroupIndex(null);
                 return;
@@ -391,6 +424,12 @@ export function BusinessProfile({activeSection = "profile"}) {
             mandatoryCompletions,
             saveVisionStrategyMutation,
             saveProductsMutation,
+            saveSalesAndMarketingMutation,
+            saveCustomerExperienceMutation,
+            saveSupplyAndLogisticsMutation,
+            saveServiceRequestsMutation,
+            savePeopleAndGovernanceMutation,
+            mapToApiPayload,
         ]
     );
     const [visibleTabIds, setVisibleTabIds] = useState<string[]>([]);
@@ -619,9 +658,9 @@ export function BusinessProfile({activeSection = "profile"}) {
                     <div className="mb-4">
                         <Breadcrumbs
                             items={[
-                                {label: "Home", href: "/dashboard"},
-                                {label: "Dashboard", href: "/dashboard"},
-                                {label: "Profile", current: true},
+                                {label: formatProfileString("breadcrumb.home", undefined, "Home"), href: "/dashboard"},
+                                {label: formatProfileString("breadcrumb.dashboard", undefined, "Dashboard"), href: "/dashboard"},
+                                {label: formatProfileString("breadcrumb.profile", undefined, "Profile"), current: true},
                             ]}
                         />
                     </div>
@@ -641,9 +680,9 @@ export function BusinessProfile({activeSection = "profile"}) {
                         </button>
                         <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 truncate">
                             {activeSection === "overview"
-                                ? "Business Overview"
+                                ? formatProfileString("pageTitle.overview", undefined, "Business Overview")
                                 : activeSection === "profile"
-                                    ? "Company Profile"
+                                    ? formatProfileString("pageTitle.profile", undefined, "Company Profile")
                                     : activeSection.charAt(0).toUpperCase() +
                                     activeSection.slice(1)}
                         </h1>
@@ -753,8 +792,11 @@ export function BusinessProfile({activeSection = "profile"}) {
                                                         className="mr-2 flex-shrink-0"
                                                     />
                                                     <span className="whitespace-nowrap">
-                            {missingMandatoryFields.length} missing mandatory
-                            fields
+                            {formatProfileString(
+                                "missingMandatory.label",
+                                { count: missingMandatoryFields.length },
+                                `${missingMandatoryFields.length} missing mandatory fields`
+                            )}
                           </span>
                                                 </button>
                                             )}
@@ -762,7 +804,7 @@ export function BusinessProfile({activeSection = "profile"}) {
                                             {/* Completion Bar Section */}
                                             <div className="flex items-center min-w-0">
                         <span className="text-sm text-gray-600 mr-3 whitespace-nowrap">
-                          Completion:
+                          {formatProfileString("completion.label", undefined, "Completion")}:
                         </span>
                                                 <div
                                                     className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
@@ -821,13 +863,13 @@ export function BusinessProfile({activeSection = "profile"}) {
                                             >
                                                 <span className="truncate flex-1">{section.title}</span>
                                                 <div className="flex items-center ml-2 flex-shrink-0">
-                                                    {section.mandatoryCompletion.percentage === 100 ? (
+                                                    {section.completion > 0 && section.mandatoryCompletion.percentage === 100 ? (
                                                         <span
                                                             className="flex items-center text-xs px-1.5 py-0.5 rounded-full bg-green-100 text-green-700">
                               <CheckCircleIcon size={12} className="mr-1"/>
                                                             {section.completion}%
                             </span>
-                                                    ) : section.mandatoryCompletion.percentage > 0 ? (
+                                                    ) : section.completion > 0 && section.mandatoryCompletion.percentage > 0 ? (
                                                         <span
                                                             className="flex items-center text-xs px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700">
                               <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1"></span>
@@ -891,7 +933,7 @@ export function BusinessProfile({activeSection = "profile"}) {
                             {section.title}
                           </span>
                                                     <div className="flex items-center ml-1 md:ml-2 flex-shrink-0">
-                                                        {section.mandatoryCompletion.percentage === 100 ? (
+                                                        {section.completion > 0 && section.mandatoryCompletion.percentage === 100 ? (
                                                             <span
                                                                 className="flex items-center text-xs px-1.5 py-0.5 rounded-full bg-green-100 text-green-700">
                                 <CheckCircleIcon
@@ -902,7 +944,7 @@ export function BusinessProfile({activeSection = "profile"}) {
                                   {section.completion}%
                                 </span>
                               </span>
-                                                        ) : section.mandatoryCompletion.percentage > 0 ? (
+                                                        ) : section.completion > 0 && section.mandatoryCompletion.percentage > 0 ? (
                                                             <span
                                                                 className="flex items-center text-xs px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700">
                                 <span className="w-2 h-2 rounded-full bg-amber-500 mr-0.5 md:mr-1"></span>
@@ -984,7 +1026,8 @@ export function BusinessProfile({activeSection = "profile"}) {
                                                                 >
                                                                     <span>{section.title}</span>
                                                                     <div className="flex items-center">
-                                                                        {section.mandatoryCompletion.percentage ===
+                                                                        {section.completion > 0 &&
+                                                                        section.mandatoryCompletion.percentage ===
                                                                         100 ? (
                                                                             <span
                                                                                 className="flex items-center text-xs px-1.5 py-0.5 rounded-full bg-green-100 text-green-700">
@@ -994,7 +1037,8 @@ export function BusinessProfile({activeSection = "profile"}) {
                                         />
                                                                                 {section.completion}%
                                       </span>
-                                                                        ) : section.mandatoryCompletion.percentage >
+                                                                        ) : section.completion > 0 &&
+                                                                        section.mandatoryCompletion.percentage >
                                                                         0 ? (
                                                                             <span
                                                                                 className="flex items-center text-xs px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700">
@@ -1105,19 +1149,35 @@ export function BusinessProfile({activeSection = "profile"}) {
                                                     />
                                                 </div>
                                                 <h3 className="text-base sm:text-lg font-medium text-gray-700 mb-2">
-                                                    No {section.title} Data
+                                                    {formatProfileString(
+                                                        "emptySection.title",
+                                                        { sectionTitle: section.title },
+                                                        `No ${section.title} Data`
+                                                    )}
                                                 </h3>
                                                 <p className="text-sm text-gray-500 max-w-md break-words text-center">
-                                                    This section doesn't have any data yet. Use the Edit
-                                                    Section button in each group to add information.
+                                                    {formatProfileString(
+                                                        "emptySection.body",
+                                                        { sectionTitle: section.title },
+                                                        "This section doesn't have any data yet. Use the Edit Section button in each group to add information."
+                                                    )}
                                                 </p>
                                                 {profileData?.companyStage && (
                                                     <div
                                                         className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-md max-w-md w-full">
                                                         <p className="text-sm text-amber-700 break-words">
-                                                            <span className="font-medium">Note:</span> Some
-                                                            fields in this section are mandatory for your
-                                                            company's {companyStage?.label} stage.
+                                                            <span className="font-medium">
+                                                                {formatProfileString(
+                                                                    "emptySection.notePrefix",
+                                                                    undefined,
+                                                                    "Note:"
+                                                                )}
+                                                            </span>{" "}
+                                                            {formatProfileString(
+                                                                "emptySection.noteBody",
+                                                                { stage: companyStage?.label || "" },
+                                                                `Some fields in this section are mandatory for your company's ${companyStage?.label} stage.`
+                                                            )}
                                                         </p>
                                                     </div>
                                                 )}
