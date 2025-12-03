@@ -1,13 +1,22 @@
-import React from "react";
-import { ChevronDown, ArrowRight, Calendar } from "lucide-react";
+import React, { useState } from "react";
+import { ChevronDown, ArrowRight, Calendar, Send } from "lucide-react";
 import {
   AnimatedText,
   FadeInUpOnScroll,
   StaggeredFadeIn,
-  AnimatedCounter,
 } from "./AnimationUtils";
 import { useLocation, useNavigate } from "react-router-dom";
-import { dfsaFactMetrics } from "../data/dfsa/dfsaFactMetrics";
+
+declare global {
+  interface Window {
+    voiceflow?: {
+      chat?: {
+        open?: () => void;
+        interact?: (payload: { type: string; payload: string }) => void;
+      };
+    };
+  }
+}
 
 interface HeroSectionProps {
   "data-id"?: string;
@@ -20,6 +29,19 @@ interface HeroSectionProps {
 const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleQuestionClick = (question: string) => {
+    setIsExpanded(false);
+    setTimeout(() => {
+      if (window.voiceflow?.chat?.open) {
+        window.voiceflow.chat.open();
+      }
+      if (window.voiceflow?.chat?.interact) {
+        window.voiceflow.chat.interact({ type: 'text', payload: question });
+      }
+    }, 100);
+  };
 
   // Scroll to consultation form
   const scrollToConsultation = () => {
@@ -27,7 +49,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
       navigate({ pathname: "/", hash: "#consultation" });
       return;
     }
-    const el = document.getElementById("consultation") || document.getElementById("contact");
+    const el =
+      document.getElementById("consultation") ||
+      document.getElementById("contact");
     if (el && typeof el.scrollIntoView === "function") {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
@@ -69,9 +93,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
 
       {/* Geometric pattern overlay */}
       <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}></div>
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          }}
+        ></div>
       </div>
 
       <div className="container mx-auto px-4 py-20 md:py-32 h-full flex flex-col justify-center items-center relative z-10">
@@ -88,29 +115,59 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
           {/* Subheadline */}
           <FadeInUpOnScroll delay={0.8}>
             <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto font-body">
-              Structured documentation preparation services for financial services firms pursuing authorisation in the Dubai International Financial Centre.
+              Structured documentation preparation services for financial
+              services firms pursuing authorisation in the Dubai International
+              Financial Centre.
             </p>
           </FadeInUpOnScroll>
 
-          {/* DFSA Regulatory Information Metrics */}
+          {/* Search Bar Section */}
           <FadeInUpOnScroll delay={1.0}>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mt-12 max-w-4xl mx-auto">
-              {dfsaFactMetrics.map((metric, index) => (
-                <div
-                  key={metric.id}
-                  className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20 hover:bg-white/15 transition-all duration-300"
-                  style={{
-                    animationDelay: `${1.2 + index * 0.1}s`,
-                  }}
-                >
-                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">
-                    <AnimatedCounter end={metric.value} suffix="+" />
-                  </div>
-                  <div className="text-sm md:text-base text-white/80 font-medium">
-                    {metric.label}
-                  </div>
+            <div className="w-full max-w-3xl mx-auto mt-8 mb-12">
+              {/* Search Input */}
+              <div className={`relative bg-white rounded-lg shadow-xl transition-all duration-300 ${isExpanded ? 'pb-3' : ''}`}>
+                <div className="p-2 flex items-center">
+                  <input
+                    type="text"
+                    placeholder="Ask how to grow your business in Abu Dhabi..."
+                    className="flex-grow px-4 py-3 text-gray-700 outline-none text-lg bg-transparent"
+                    onFocus={() => setIsExpanded(true)}
+                  />
+                  <button className="bg-gray-200 p-3 rounded-md hover:bg-gray-300 transition-colors">
+                    <Send className="text-gray-600" size={20} />
+                  </button>
                 </div>
-              ))}
+
+                {/* Expanded Questions Section */}
+                {isExpanded && (
+                  <div className="px-4 pb-1 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        "What documents do I need to apply for a license?",
+                        "Where can I find the AML requirements?",
+                        "What is MLRO?",
+                        "Do I need DFSA authorization to operate a fund?",
+                      ].map((text) => (
+                        <button
+                          key={text}
+                          onClick={() => handleQuestionClick(text)}
+                          className="px-3 py-1.5 text-gray-700 hover:bg-gray-100 rounded-full transition-colors text-xs border border-gray-200"
+                        >
+                          {text}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Click outside to collapse */}
+              {isExpanded && (
+                <div 
+                  className="fixed inset-0 z-[-1]" 
+                  onClick={() => setIsExpanded(false)}
+                />
+              )}
             </div>
           </FadeInUpOnScroll>
         </div>
