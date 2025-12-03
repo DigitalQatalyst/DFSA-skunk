@@ -10,6 +10,9 @@ type ProfileStrings = Record<string, string>;
 const profileConfigJson = (await import("./profile/profile.config.json")).default;
 const profileStringsJson = (await import("./profile/profile.strings.json")).default;
 const profileMappingJson = (await import("./profile/profile.mapping.json")).default;
+const profileV2ConfigJson = (await import("./profile/profile.v2.config.json")).default;
+const profileV2StringsJson = (await import("./profile/profile.v2.strings.json")).default;
+const profileV2MappingJson = (await import("./profile/profile.v2.mapping.json")).default;
 const profileDomainsJson = (await import("./profile/domains.config.json")).default;
 const profilePhasesJson = (await import("./profile/phases.config.json")).default;
 const tabDomainMapJson = (await import("./profile/tabDomainMap.json")).default;
@@ -52,6 +55,8 @@ type ApplicationStageConfig = {
   forms?: string[];
   questionCount?: number;
 };
+
+type ProfileVersion = "v1" | "v2";
 
 const allowedFieldTypes: FieldConfig["fieldType"][] = [
   "Text",
@@ -272,9 +277,18 @@ function validateTabDomainMap(
   return { value: raw, warnings };
 }
 
-const validatedConfig = validateConfig(profileConfigJson as ProfileConfig);
-const validatedStrings = validateStrings(profileStringsJson as ProfileStrings);
-const validatedMapping = validateMapping(profileMappingJson as MappingShape);
+const validatedConfigs: Record<ProfileVersion, ValidationResult<ProfileConfig>> = {
+  v1: validateConfig(profileConfigJson as ProfileConfig),
+  v2: validateConfig(profileV2ConfigJson as ProfileConfig),
+};
+const validatedStrings: Record<ProfileVersion, ValidationResult<ProfileStrings>> = {
+  v1: validateStrings(profileStringsJson as ProfileStrings),
+  v2: validateStrings(profileV2StringsJson as ProfileStrings),
+};
+const validatedMappings: Record<ProfileVersion, ValidationResult<MappingShape>> = {
+  v1: validateMapping(profileMappingJson as MappingShape),
+  v2: validateMapping(profileV2MappingJson as MappingShape),
+};
 const validatedPhases = validatePhases(profilePhasesJson as PhaseConfig[]);
 const validatedDomains = validateDomains(
   profileDomainsJson as DomainConfig[],
@@ -286,7 +300,7 @@ const validatedApplicationStage = validateApplicationStage(
 const validatedTabDomainMap = validateTabDomainMap(
   tabDomainMapJson as TabDomainMapEntry[],
   validatedDomains.value,
-  validatedConfig.value.tabs,
+  validatedConfigs.v2.value.tabs,
   validatedApplicationStage.value
 );
 const phaseDomainWarnings = validatePhaseDomainCoverage(
@@ -294,27 +308,35 @@ const phaseDomainWarnings = validatePhaseDomainCoverage(
   validatedPhases.value
 );
 
-const reverseMapping: Record<string, string> = Object.entries(
-  validatedMapping.value.apiFieldMapping
-).reduce<Record<string, string>>((acc, [ui, api]) => {
-  acc[api] = ui;
-  return acc;
-}, {});
+const reverseMappings: Record<ProfileVersion, Record<string, string>> = {
+  v1: Object.entries(validatedMappings.v1.value.apiFieldMapping).reduce<
+    Record<string, string>
+  >((acc, [ui, api]) => {
+    acc[api] = ui;
+    return acc;
+  }, {}),
+  v2: Object.entries(validatedMappings.v2.value.apiFieldMapping).reduce<
+    Record<string, string>
+  >((acc, [ui, api]) => {
+    acc[api] = ui;
+    return acc;
+  }, {}),
+};
 
-export function getProfileConfig(): ProfileConfig {
-  return validatedConfig.value;
+export function getProfileConfig(version: ProfileVersion = "v2"): ProfileConfig {
+  return validatedConfigs[version].value;
 }
 
-export function getProfileStrings(): ProfileStrings {
-  return validatedStrings.value;
+export function getProfileMapping(
+  version: ProfileVersion = "v2"
+): Record<string, string> {
+  return validatedMappings[version].value.apiFieldMapping;
 }
 
-export function getProfileMapping(): Record<string, string> {
-  return validatedMapping.value.apiFieldMapping;
-}
-
-export function getReverseProfileMapping(): Record<string, string> {
-  return reverseMapping;
+export function getReverseProfileMapping(
+  version: ProfileVersion = "v2"
+): Record<string, string> {
+  return reverseMappings[version];
 }
 
 export function getProfileDomains(): DomainConfig[] {
@@ -334,10 +356,16 @@ export function getApplicationStageMeta(): ApplicationStageConfig {
 }
 
 export function getProfileConfigWarnings(): string[] {
+  const versionWarnings = [
+    ...validatedConfigs.v1.warnings,
+    ...validatedConfigs.v2.warnings,
+    ...validatedStrings.v1.warnings,
+    ...validatedStrings.v2.warnings,
+    ...validatedMappings.v1.warnings,
+    ...validatedMappings.v2.warnings,
+  ];
   return [
-    ...validatedConfig.warnings,
-    ...validatedStrings.warnings,
-    ...validatedMapping.warnings,
+    ...versionWarnings,
     ...validatedPhases.warnings,
     ...validatedDomains.warnings,
     ...phaseDomainWarnings,
@@ -347,7 +375,7 @@ export function getProfileConfigWarnings(): string[] {
 }
 
 export function getProfileString(key: string, fallback?: string): string {
-  return validatedStrings.value[key] ?? fallback ?? key;
+  return getProfileStringByVersion(key, "v2", fallback);
 }
 
 export function formatProfileString(
@@ -360,4 +388,17 @@ export function formatProfileString(
   return Object.entries(params).reduce((acc, [k, v]) => {
     return acc.replace(new RegExp(`{${k}}`, "g"), String(v));
   }, template);
+}
+
+function getProfileStringByVersion(
+  key: string,
+  version: ProfileVersion,
+  fallback?: string
+): string {
+  const primary = validatedStrings[version]?.value?.[key];
+  if (primary !== undefined) return primary;
+  const secondaryVersion: ProfileVersion = version === "v2" ? "v1" : "v2";
+  const secondary = validatedStrings[secondaryVersion]?.value?.[key];
+  if (secondary !== undefined) return secondary;
+  return fallback ?? key;
 }

@@ -268,6 +268,15 @@ try {
   const profileMapping = loadJson<MappingShape>(
     "src/config/profile/profile.mapping.json"
   );
+  const profileConfigV2 = loadJson<ProfileConfig>(
+    "src/config/profile/profile.v2.config.json"
+  );
+  const profileStringsV2 = loadJson<ProfileStrings>(
+    "src/config/profile/profile.v2.strings.json"
+  );
+  const profileMappingV2 = loadJson<MappingShape>(
+    "src/config/profile/profile.v2.mapping.json"
+  );
   const profilePhases = loadJson<PhaseConfig[]>(
     "src/config/profile/phases.config.json"
   );
@@ -283,17 +292,21 @@ try {
 
   const warnings: string[] = [];
   const stageIds = validateStages(profileConfig.companyStages, warnings);
+  const stageIdsV2 = validateStages(profileConfigV2.companyStages, warnings);
   const phaseIds = validatePhases(profilePhases, warnings);
   const domainCodes = validateDomains(profileDomains, phaseIds, warnings);
   validatePhaseDomainCoverage(profileDomains, profilePhases, warnings);
   validateApplicationStage(applicationStage, warnings);
   validateFields(profileConfig.tabs, stageIds, warnings);
+  validateFields(profileConfigV2.tabs, stageIdsV2, warnings);
   validateStrings(profileStrings, warnings);
+  validateStrings(profileStringsV2, warnings);
   validateMapping(profileMapping, warnings);
+  validateMapping(profileMappingV2, warnings);
   validateTabDomainMap(
     tabDomainMap,
     domainCodes,
-    new Set(profileConfig.tabs.map((t) => t.id)),
+    new Set(profileConfigV2.tabs.map((t) => t.id)),
     applicationStage?.id,
     warnings
   );
