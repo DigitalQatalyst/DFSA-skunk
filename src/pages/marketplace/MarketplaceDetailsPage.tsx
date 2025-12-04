@@ -66,7 +66,7 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
     );
   }
 
-  if (!item || error) {
+  if (error || !item) {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
         <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
