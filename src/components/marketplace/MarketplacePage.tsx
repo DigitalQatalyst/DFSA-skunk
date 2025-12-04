@@ -318,7 +318,7 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
 
   // Responsive columns (used by non-KH views); KH uses fixed perPage from URL
   const [columns, setColumns] = useState<number>(1);
-  const DEFAULT_PER_PAGE = 12;
+  const DEFAULT_PER_PAGE = 9;
   const urlPerPage = parseInt(
     queryParams.get("perPage") || String(DEFAULT_PER_PAGE),
     10
@@ -724,8 +724,16 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
 
   // KH page derived from URL; filters/search change will update URL and re-fetch
 
-  // For knowledge-hub we show one page at a time; others untouched.
-  const paginatedItems = filteredItems;
+  // For knowledge-hub we show one page at a time; others use client-side pagination
+  const paginatedItems =
+    marketplaceType === "knowledge-hub"
+      ? filteredItems
+      : filteredItems.slice((currentPage - 1) * perPage, currentPage * perPage);
+
+  const totalPages =
+    marketplaceType === "knowledge-hub"
+      ? 1
+      : Math.ceil(filteredItems.length / perPage);
 
   // Navigate KH pages (update URL page param only)
   const goToKHPage = useCallback(
@@ -758,6 +766,64 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
           const initialFilters: Record<string, string[]> = {};
           filterOptions.forEach((fc) => {
             initialFilters[fc.id] = [];
+          });
+          setFilters(initialFilters);
+          return;
+        }
+
+        if (marketplaceType === "non-financial") {
+          // Generate filters directly from Supabase data
+          const services = await fetchNonFinancialServices();
+
+          const serviceTypes = [...new Set(services.map((s) => s.service_type))]
+            .filter(Boolean)
+            .sort();
+          const serviceCategories = [
+            ...new Set(services.map((s) => s.service_category)),
+          ]
+            .filter(Boolean)
+            .sort();
+          const entityTypes = [...new Set(services.map((s) => s.entity_type))]
+            .filter(Boolean)
+            .sort();
+
+          const filterOptions: FilterConfig[] = [
+            {
+              id: "service-type",
+              title: "Service Type",
+              options: serviceTypes.map((type) => ({
+                id: type.toLowerCase().replace(/\s+/g, "-"),
+                name: type,
+              })),
+            },
+            {
+              id: "service-category",
+              title: "Service Category",
+              options: serviceCategories.map((category) => ({
+                id: category.toLowerCase().replace(/\s+/g, "-"),
+                name: category,
+              })),
+            },
+            {
+              id: "entity-type",
+              title: "Entity Type",
+              options: entityTypes.map((entity) => ({
+                id: entity.toLowerCase().replace(/\s+/g, "-"),
+                name: entity,
+              })),
+            },
+            {
+              id: "provided-by",
+              title: "Provided By",
+              options: [{ id: "dfsa", name: "DFSA" }],
+            },
+          ];
+
+          setFilterConfig(filterOptions);
+
+          const initialFilters: Record<string, string[]> = {};
+          filterOptions.forEach((config) => {
+            initialFilters[config.id] = [];
           });
           setFilters(initialFilters);
           return;
@@ -880,7 +946,6 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
         } else if (
           marketplaceType === "events" ||
           marketplaceType === "financial" ||
-          marketplaceType === "non-financial" ||
           marketplaceType === "courses"
         ) {
           // These marketplaces require backend facets - no fallback
@@ -896,11 +961,10 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
       } catch (err) {
         console.error("Error fetching filter options:", err);
 
-        // For events, financial, non-financial, and courses, do NOT use fallback - show error instead
+        // For events, financial, and courses, do NOT use fallback - show error instead
         if (
           marketplaceType === "events" ||
           marketplaceType === "financial" ||
-          marketplaceType === "non-financial" ||
           marketplaceType === "courses"
         ) {
           console.error(
@@ -1114,7 +1178,26 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
               title: service.name,
               slug: service.slug,
               description: service.description,
-              facetValues: [],
+              facetValues: [
+                {
+                  code: service.service_type.toLowerCase().replace(/\s+/g, "-"),
+                  name: service.service_type,
+                  facet: { code: "service-type" },
+                },
+                {
+                  code: service.service_category
+                    .toLowerCase()
+                    .replace(/\s+/g, "-"),
+                  name: service.service_category,
+                  facet: { code: "service-category" },
+                },
+                {
+                  code: service.entity_type.toLowerCase().replace(/\s+/g, "-"),
+                  name: service.entity_type,
+                  facet: { code: "entity-type" },
+                },
+                { code: "dfsa", name: "DFSA", facet: { code: "provided-by" } },
+              ],
               tags: service.tags,
               provider: {
                 name: "DFSA",
@@ -1286,10 +1369,14 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
             const matchesAllFacets = Object.keys(filters).every((facetCode) => {
               const selectedValues = filters[facetCode] || [];
               if (!selectedValues.length) return true;
+
               return selectedValues.some(
                 (selectedValue) =>
                   product.facetValues.some(
-                    (facetValue: any) => facetValue.code === selectedValue
+                    (facetValue: any) =>
+                      facetValue.code === selectedValue &&
+                      (!facetValue.facet?.code ||
+                        facetValue.facet.code === facetCode)
                   ) ||
                   (facetCode === "pricing-model" &&
                     selectedValue === "one-time-fee" &&
@@ -1356,6 +1443,13 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
     filterConfig,
     loadKHInitial,
   ]);
+
+  // Reset to page 1 when filters or search changes (non-KH only)
+  useEffect(() => {
+    if (marketplaceType !== "knowledge-hub") {
+      setCurrentPage(1);
+    }
+  }, [filters, debouncedSearch, marketplaceType]);
 
   // Immediately hydrate compare from navigation state when arriving from details page
   useEffect(() => {
@@ -1962,7 +2056,7 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
 
           {/* Filter sidebar - desktop - always visible */}
           <div className="hidden xl:block xl:w-1/4">
-            <div className="bg-white rounded-lg shadow sticky top-24 max-h-[calc(100vh-7rem)] flex flex-col">
+            <div className="bg-white rounded-lg shadow sticky top-24 max-h-[calc(100vh-7rem)] flex flex-col overflow-hidden">
               <div className="flex justify-between items-center p-4 border-b border-gray-200 flex-shrink-0">
                 <h2 className="text-lg font-semibold">Filters</h2>
                 {(Object.values(filters).some((f) => f.length > 0) ||
@@ -1975,7 +2069,7 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
                   </button>
                 )}
               </div>
-              <div className="p-4 overflow-y-auto scrollbar-hide">
+              <div className="p-4 overflow-y-auto flex-1">
                 {marketplaceType === "knowledge-hub" ? (
                   <div className="space-y-2">
                     {filteredKnowledgeHubConfig.map((category) => {
@@ -2101,7 +2195,7 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
                   totalCount={undefined}
                   showingCount={undefined}
                 />
-                {marketplaceType === "knowledge-hub" && (
+                {marketplaceType === "knowledge-hub" ? (
                   <div className="flex items-center justify-center gap-3 mt-8">
                     <button
                       onClick={() => goToKHPage(currentPage - 1)}
@@ -2140,6 +2234,40 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
                       Next
                     </button>
                   </div>
+                ) : (
+                  totalPages > 1 && (
+                    <div className="flex items-center justify-center gap-3 mt-8">
+                      <button
+                        onClick={() =>
+                          setCurrentPage((p) => Math.max(1, p - 1))
+                        }
+                        disabled={currentPage <= 1}
+                        className={`px-3 py-2 rounded-md border ${
+                          currentPage <= 1
+                            ? "text-gray-400 bg-gray-100 cursor-not-allowed"
+                            : "text-gray-700 bg-white hover:bg-gray-50"
+                        }`}
+                      >
+                        Previous
+                      </button>
+                      <span className="text-sm text-gray-600">
+                        Page {currentPage} of {totalPages}
+                      </span>
+                      <button
+                        onClick={() =>
+                          setCurrentPage((p) => Math.min(totalPages, p + 1))
+                        }
+                        disabled={currentPage >= totalPages}
+                        className={`px-3 py-2 rounded-md border ${
+                          currentPage >= totalPages
+                            ? "text-gray-400 bg-gray-100 cursor-not-allowed"
+                            : "text-gray-700 bg-white hover:bg-gray-50"
+                        }`}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  )
                 )}
               </div>
             )}
