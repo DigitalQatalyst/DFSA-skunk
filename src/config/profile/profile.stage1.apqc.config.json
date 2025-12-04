@@ -1,0 +1,3210 @@
+{
+  "companyStages": [
+    {
+      "id": "startup",
+      "label": "Startup",
+      "color": "bg-purple-500"
+    },
+    {
+      "id": "growth",
+      "label": "Growth",
+      "color": "bg-blue-500"
+    },
+    {
+      "id": "mature",
+      "label": "Mature",
+      "color": "bg-green-500"
+    },
+    {
+      "id": "enterprise",
+      "label": "Enterprise",
+      "color": "bg-gray-700"
+    }
+  ],
+  "tabs": [
+    {
+      "id": "d14_governance",
+      "title": "Governance",
+      "apqcDomainId": "14.0",
+      "apqcDomainName": "Develop and Manage Corporate Governance",
+      "groups": [
+        {
+          "id": "system_and_instructions",
+          "groupName": "System & Instructions",
+          "fields": [
+            {
+              "id": "stage1.Q1",
+              "label": "Time Tracker",
+              "fieldName": "q1",
+              "fieldType": "Text",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q1",
+                "section": "1. Introduction",
+                "apqcDomain": "N/A",
+                "helpTextRaw": "System tracking - hidden when published"
+              },
+              "readOnly": true
+            },
+            {
+              "id": "stage1.Q2",
+              "label": "Firm Details",
+              "fieldName": "q2",
+              "fieldType": "Text",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q2",
+                "section": "1. Introduction",
+                "apqcDomain": "N/A",
+                "helpTextRaw": "Pre-populated from system"
+              },
+              "readOnly": true
+            },
+            {
+              "id": "stage1.Q3",
+              "label": "Instructions",
+              "fieldName": "q3",
+              "fieldType": "Text",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q3",
+                "section": "1. Introduction",
+                "apqcDomain": "N/A",
+                "helpTextRaw": "Links to Notes and flow chart"
+              },
+              "readOnly": true
+            }
+          ]
+        },
+        {
+          "id": "legal_status_and_structure",
+          "groupName": "Legal Status & Structure",
+          "fields": [
+            {
+              "id": "stage1.Q12",
+              "label": "Will the applicant be applying for Operating a Representative Office?",
+              "fieldName": "q12",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q12",
+                "section": "3-1. Rep Office",
+                "apqcDomain": "14.0",
+                "helpTextRaw": "Sets Rep_Office_Selection.A1",
+                "triggers": "If Yes \u2192 Trigger Form 2-2",
+                "triggersForms": [
+                  "2-2 Representative Office"
+                ]
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q13",
+              "label": "Please select the legal status of the applicant",
+              "fieldName": "q13",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q13",
+                "section": "3-2. Legal Status",
+                "apqcDomain": "14.0",
+                "helpTextRaw": "Key branching question",
+                "triggers": "Determines Q14-Q38 visibility"
+              },
+              "options": [
+                {
+                  "label": "Entity formed in the DIFC",
+                  "value": "Entity formed in the DIFC"
+                },
+                {
+                  "label": "Non-DIFC entity (branch)",
+                  "value": "Non-DIFC entity (branch)"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q14",
+              "label": "Please select the general structure of the applicant",
+              "fieldName": "q14",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [
+                "If Other \u2192 Show text field"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q14",
+                "section": "3-2. Legal Status",
+                "apqcDomain": "14.0"
+              },
+              "options": [
+                {
+                  "label": "Private limited company",
+                  "value": "Private limited company"
+                },
+                {
+                  "label": "Public limited company",
+                  "value": "Public limited company"
+                },
+                {
+                  "label": "Partnership",
+                  "value": "Partnership"
+                },
+                {
+                  "label": "Limited liability partnership",
+                  "value": "Limited liability partnership"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q15",
+              "label": "DIFC entities. Is the applicant a 'Start Up' entity?",
+              "fieldName": "q15",
+              "fieldType": "select",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q15",
+                "section": "3-2. Legal Status",
+                "apqcDomain": "14.0",
+                "helpTextRaw": "Link to Start Up definition",
+                "triggers": "If Yes \u2192 Show Q16 and Q92"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q13",
+                "equals": "DIFC entity"
+              },
+              "mandatoryWhen": {
+                "field": "q13",
+                "equals": "DIFC"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q16",
+              "label": "Risk categories confirmation",
+              "fieldName": "q16",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "validationRules": [
+                "All 4 must be checked (MIN_4)"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q16",
+                "section": "3-2. Legal Status",
+                "apqcDomain": "11.0"
+              },
+              "options": [
+                {
+                  "label": "Financial Risk",
+                  "value": "Financial Risk"
+                },
+                {
+                  "label": "Governance Risk",
+                  "value": "Governance Risk"
+                },
+                {
+                  "label": "Business/Operational Risk",
+                  "value": "Business/Operational Risk"
+                },
+                {
+                  "label": "Compliance Risk",
+                  "value": "Compliance Risk"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q15",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q15",
+                "equals": "Yes"
+              },
+              "defaultValue": "None"
+            }
+          ]
+        },
+        {
+          "id": "registered___head_office_and_group",
+          "groupName": "Registered / Head Office & Group",
+          "fields": [
+            {
+              "id": "stage1.Q17",
+              "label": "Company and contact details",
+              "fieldName": "q17",
+              "fieldType": "Table",
+              "mandatory": true,
+              "validationRules": [
+                "EMAIL_FMT",
+                "PHONE_FMT",
+                "URL_FMT",
+                "MAX_CHAR_200"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q17",
+                "section": "3-3. General Information",
+                "apqcDomain": "14.0",
+                "maxLength": "200"
+              },
+              "options": [
+                {
+                  "label": "Name|Trading name|Contact|Email|Phone|Website|Address fields",
+                  "value": "Name|Trading name|Contact|Email|Phone|Website|Address fields"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q18",
+              "label": "Head office information",
+              "fieldName": "q18",
+              "fieldType": "Table",
+              "mandatory": false,
+              "validationRules": [
+                "DATE_FMT",
+                "EMAIL_FMT",
+                "PHONE_FMT",
+                "URL_FMT",
+                "MAX_CHAR_200"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q18",
+                "section": "3-4. Head Office",
+                "apqcDomain": "14.0",
+                "maxLength": "200"
+              },
+              "options": [
+                {
+                  "label": "Full name|Trading name|Formation dates|Place|Legal status|Address|Contact",
+                  "value": "Full name|Trading name|Formation dates|Place|Legal status|Address|Contact"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "mandatoryWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q19",
+              "label": "Country",
+              "fieldName": "q19",
+              "fieldType": "select",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q19",
+                "section": "3-4. Head Office",
+                "apqcDomain": "14.0"
+              },
+              "options": [
+                {
+                  "label": "ISO Country List (249)",
+                  "value": "ISO Country List (249)"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "mandatoryWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "defaultValue": "Please select one..."
+            },
+            {
+              "id": "stage1.Q20",
+              "label": "Staff numbers for Head office and Whole Group",
+              "fieldName": "q20",
+              "fieldType": "Table",
+              "mandatory": false,
+              "validationRules": [
+                "One selection per row"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q20",
+                "section": "3-5. Head Office & Group",
+                "apqcDomain": "14.0",
+                "helpTextRaw": "2 rows: Head office and Whole Group"
+              },
+              "options": [
+                {
+                  "label": "Fewer than 10",
+                  "value": "Fewer than 10"
+                },
+                {
+                  "label": "10-25",
+                  "value": "10-25"
+                },
+                {
+                  "label": "26-50",
+                  "value": "26-50"
+                },
+                {
+                  "label": "51-100",
+                  "value": "51-100"
+                },
+                {
+                  "label": "101-500",
+                  "value": "101-500"
+                },
+                {
+                  "label": "More than 500",
+                  "value": "More than 500"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "mandatoryWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q21",
+              "label": "Please upload an organisational chart for the head office",
+              "fieldName": "q21",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "validationRules": [
+                "FILE_TYPE",
+                "FILE_SIZE_10MB",
+                "MAX_FILES_3"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q21",
+                "section": "3-5. Head Office & Group",
+                "apqcDomain": "14.0"
+              },
+              "options": [
+                {
+                  "label": "PDF|DOC|DOCX|JPG|PNG",
+                  "value": "PDF|DOC|DOCX|JPG|PNG"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "mandatoryWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              }
+            }
+          ]
+        },
+        {
+          "id": "shareholders",
+          "groupName": "Shareholders",
+          "fields": [
+            {
+              "id": "stage1.Q78",
+              "label": "Shareholders table",
+              "fieldName": "q78",
+              "fieldType": "Table",
+              "mandatory": true,
+              "validationRules": [
+                "PCT_SUM_100",
+                "MAX_ROWS_15",
+                "MIN_1_ROW"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q78",
+                "section": "4-1. Shareholders",
+                "apqcDomain": "14.0",
+                "helpTextRaw": "15 rows max; Corporate/Individual is radio per row"
+              },
+              "options": [
+                {
+                  "label": "Name",
+                  "value": "Name"
+                },
+                {
+                  "label": "Percentage",
+                  "value": "Percentage"
+                },
+                {
+                  "label": "Corporate/Individual",
+                  "value": "Corporate/Individual"
+                },
+                {
+                  "label": "AI flag",
+                  "value": "AI flag"
+                },
+                {
+                  "label": "UBO flag",
+                  "value": "UBO flag"
+                }
+              ]
+            },
+            {
+              "id": "stage1.Q79",
+              "label": "Total shareholding percentage",
+              "fieldName": "q79",
+              "fieldType": "Whole Number",
+              "mandatory": false,
+              "validationRules": [
+                "Must equal 100%"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q79",
+                "section": "4-1. Shareholders",
+                "apqcDomain": "14.0",
+                "helpTextRaw": "Auto-calculated from Q78",
+                "triggers": "Validation error if \u2260100%"
+              },
+              "readOnly": true
+            }
+          ]
+        },
+        {
+          "id": "ownership_structure",
+          "groupName": "Ownership Structure",
+          "fields": [
+            {
+              "id": "stage1.Q80",
+              "label": "Upload ownership structure organigram",
+              "fieldName": "q80",
+              "fieldType": "File Upload",
+              "mandatory": true,
+              "validationRules": [
+                "FILE_TYPE_PDF",
+                "FILE_SIZE_10MB",
+                "MAX_FILES_1"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q80",
+                "section": "4-2. Ownership Structure",
+                "apqcDomain": "14.0"
+              },
+              "options": [
+                {
+                  "label": "PDF",
+                  "value": "PDF"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "beneficial_owners",
+          "groupName": "Beneficial Owners",
+          "fields": [
+            {
+              "id": "stage1.Q81",
+              "label": "Beneficial owners table",
+              "fieldName": "q81",
+              "fieldType": "Table",
+              "mandatory": true,
+              "validationRules": [
+                "PCT_SUM_100",
+                "DATE_FMT",
+                "MAX_ROWS_30",
+                "MIN_1_ROW"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q81",
+                "section": "4-3. Beneficial Owners",
+                "apqcDomain": "14.0",
+                "helpTextRaw": "30 rows max; Nationality is dropdown"
+              },
+              "options": [
+                {
+                  "label": "Name",
+                  "value": "Name"
+                },
+                {
+                  "label": "Percentage",
+                  "value": "Percentage"
+                },
+                {
+                  "label": "DOB",
+                  "value": "DOB"
+                },
+                {
+                  "label": "Nationality",
+                  "value": "Nationality"
+                },
+                {
+                  "label": "Passport",
+                  "value": "Passport"
+                }
+              ]
+            },
+            {
+              "id": "stage1.Q82",
+              "label": "Total beneficial ownership percentage",
+              "fieldName": "q82",
+              "fieldType": "Whole Number",
+              "mandatory": false,
+              "validationRules": [
+                "Must equal 100%"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q82",
+                "section": "4-3. Beneficial Owners",
+                "apqcDomain": "14.0",
+                "helpTextRaw": "Auto-calculated from Q81",
+                "triggers": "Validation error if \u2260100%"
+              },
+              "readOnly": true
+            }
+          ]
+        },
+        {
+          "id": "controllers_and_conflicts",
+          "groupName": "Controllers & Conflicts",
+          "fields": [
+            {
+              "id": "stage1.Q84",
+              "label": "Is a Controller also a Controller of another DIFC Authorised Person?",
+              "fieldName": "q84",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q84",
+                "section": "4-4. Controllers",
+                "apqcDomain": "14.0",
+                "triggers": "If Yes \u2192 Show Q85"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q85",
+              "label": "Please provide Controller details (DFSA ref and name)",
+              "fieldName": "q85",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "validationRules": [
+                "MAX_CHAR_2000"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q85",
+                "section": "4-4. Controllers",
+                "apqcDomain": "14.0",
+                "helpTextRaw": "6 rows",
+                "maxLength": "2000"
+              },
+              "visibleWhen": {
+                "field": "q84",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q84",
+                "equals": "Yes"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q86",
+              "label": "Would Authorisation give rise to material conflict of interest?",
+              "fieldName": "q86",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q86",
+                "section": "4-4. Controllers",
+                "apqcDomain": "14.0",
+                "triggers": "Always show Q87"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q87",
+              "label": "Conflict of interest explanation",
+              "fieldName": "q87",
+              "fieldType": "Multiline Text",
+              "mandatory": true,
+              "validationRules": [
+                "MAX_CHAR_4000"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q87",
+                "section": "4-4. Controllers",
+                "apqcDomain": "14.0",
+                "helpTextRaw": "10 rows",
+                "maxLength": "4000"
+              },
+              "defaultValue": "None"
+            }
+          ]
+        },
+        {
+          "id": "close_links",
+          "groupName": "Close Links",
+          "fields": [
+            {
+              "id": "stage1.Q88",
+              "label": "Does applicant have close links to UAE entities?",
+              "fieldName": "q88",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q88",
+                "section": "4-5. Close Links",
+                "apqcDomain": "14.0",
+                "triggers": "If Yes \u2192 Show Q89-Q90"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q89",
+              "label": "Close links entity details",
+              "fieldName": "q89",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "validationRules": [
+                "MAX_CHAR_4000"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q89",
+                "section": "4-5. Close Links",
+                "apqcDomain": "14.0",
+                "helpTextRaw": "10 rows",
+                "maxLength": "4000"
+              },
+              "visibleWhen": {
+                "field": "q88",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q88",
+                "equals": "Yes"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q90",
+              "label": "Will close links remain operational after Authorisation?",
+              "fieldName": "q90",
+              "fieldType": "select",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q90",
+                "section": "4-5. Close Links",
+                "apqcDomain": "14.0",
+                "triggers": "If Yes \u2192 Show Q91"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q88",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q88",
+                "equals": "Yes"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q91",
+              "label": "Ongoing close links details",
+              "fieldName": "q91",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "validationRules": [
+                "MAX_CHAR_2000"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q91",
+                "section": "4-5. Close Links",
+                "apqcDomain": "14.0",
+                "helpTextRaw": "6 rows",
+                "maxLength": "2000"
+              },
+              "visibleWhen": {
+                "field": "q90",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q90",
+                "equals": "Yes"
+              },
+              "defaultValue": "None"
+            }
+          ]
+        },
+        {
+          "id": "initial_capital_(start-ups)",
+          "groupName": "Initial Capital (Start-ups)",
+          "fields": [
+            {
+              "id": "stage1.Q92",
+              "label": "Start-up capital source documentation",
+              "fieldName": "q92",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "validationRules": [
+                "FILE_TYPE",
+                "FILE_SIZE_10MB",
+                "MAX_FILES_6"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q92",
+                "section": "4-6. Initial Capital",
+                "apqcDomain": "9.0",
+                "helpTextRaw": "Net worth declarations and audited statements"
+              },
+              "options": [
+                {
+                  "label": "PDF|DOC|DOCX|XLS|XLSX",
+                  "value": "PDF|DOC|DOCX|XLS|XLSX"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q15",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q15",
+                "equals": "Yes"
+              }
+            }
+          ]
+        },
+        {
+          "id": "ownership_comments",
+          "groupName": "Ownership Comments",
+          "fields": [
+            {
+              "id": "stage1.Q93",
+              "label": "Additional comments on this section?",
+              "fieldName": "q93",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q93",
+                "section": "4-7. Comments",
+                "apqcDomain": "14.0",
+                "triggers": "If Yes \u2192 Show Q94"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q94",
+              "label": "Please provide section comments",
+              "fieldName": "q94",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "validationRules": [
+                "MAX_CHAR_4000"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q94",
+                "section": "4-7. Comments",
+                "apqcDomain": "14.0",
+                "helpTextRaw": "10 rows",
+                "maxLength": "4000"
+              },
+              "visibleWhen": {
+                "field": "q93",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q93",
+                "equals": "Yes"
+              },
+              "defaultValue": "None"
+            }
+          ]
+        },
+        {
+          "id": "licence_endorsements",
+          "groupName": "Licence Endorsements",
+          "fields": [
+            {
+              "id": "stage1.Q112",
+              "label": "Do you want to add a Licence Endorsement?",
+              "fieldName": "q112",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q112",
+                "section": "5-3. Endorsements",
+                "apqcDomain": "14.0",
+                "triggers": "If Yes \u2192 Show Q114"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q114",
+              "label": "Select Licence Endorsement(s)",
+              "fieldName": "q114",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "validationRules": [
+                "MIN_1"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q114",
+                "section": "5-3. Endorsements",
+                "apqcDomain": "14.0",
+                "triggers": "Triggers endorsement forms (2-3 Islamic; 2-13 Retail)",
+                "triggersFormsBySelection": {
+                  "Islamic": [
+                    "2-3 Islamic Endorsement"
+                  ],
+                  "Retail": [
+                    "2-13 Retail Endorsement"
+                  ],
+                  "Holding or Controlling Client Assets": [],
+                  "Holding Insurance Monies": [],
+                  "Long Term Insurance": [],
+                  "Fund Platform - Incorporated Cell Company": []
+                }
+              },
+              "options": [
+                {
+                  "label": "Islamic",
+                  "value": "Islamic"
+                },
+                {
+                  "label": "Retail",
+                  "value": "Retail"
+                },
+                {
+                  "label": "Holding or Controlling Client Assets",
+                  "value": "Holding or Controlling Client Assets"
+                },
+                {
+                  "label": "Holding Insurance Monies",
+                  "value": "Holding Insurance Monies"
+                },
+                {
+                  "label": "Long Term Insurance",
+                  "value": "Long Term Insurance"
+                },
+                {
+                  "label": "Fund Platform - Incorporated Cell Company",
+                  "value": "Fund Platform - Incorporated Cell Company"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q112",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q112",
+                "equals": "Yes"
+              },
+              "defaultValue": "None"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d11_risk_compliance",
+      "title": "Risk & Compliance",
+      "apqcDomainId": "11.0",
+      "apqcDomainName": "Manage Enterprise Risk, Compliance, Remediation, and Resiliency",
+      "groups": [
+        {
+          "id": "instructions_and_acknowledgement",
+          "groupName": "Instructions & Acknowledgement",
+          "fields": [
+            {
+              "id": "stage1.Q7",
+              "label": "I confirm that I have carefully read and understood the above instructions",
+              "fieldName": "q7",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [
+                "Must be Yes to proceed"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q7",
+                "section": "1-1. Introduction",
+                "apqcDomain": "11.0",
+                "triggers": "If No \u2192 Show Q8 (Stop)"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q8",
+              "label": "Please contact the DFSA. Do not continue with this form.",
+              "fieldName": "q8",
+              "fieldType": "Text",
+              "mandatory": false,
+              "validationRules": [
+                "Blocks form progression"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q8",
+                "section": "1-1. Introduction",
+                "apqcDomain": "11.0",
+                "helpTextRaw": "Error message in red"
+              },
+              "visibleWhen": {
+                "field": "q7",
+                "equals": "No"
+              },
+              "readOnly": true
+            }
+          ]
+        },
+        {
+          "id": "difca_disclosure",
+          "groupName": "DIFCA Disclosure",
+          "fields": [
+            {
+              "id": "stage1.Q9",
+              "label": "Consent for DFSA to provide information to DIFCA",
+              "fieldName": "q9",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q9",
+                "section": "2. Disclosure",
+                "apqcDomain": "11.0"
+              },
+              "options": [
+                {
+                  "label": "I consent",
+                  "value": "I consent"
+                },
+                {
+                  "label": "I do not consent",
+                  "value": "I do not consent"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q10",
+              "label": "Information to be disclosed to DIFCA",
+              "fieldName": "q10",
+              "fieldType": "Text",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q10",
+                "section": "2. Disclosure",
+                "apqcDomain": "11.0",
+                "helpTextRaw": "Lists 3 disclosure items"
+              },
+              "readOnly": true
+            }
+          ]
+        },
+        {
+          "id": "regulatory_status_and_mou",
+          "groupName": "Regulatory Status & MoU",
+          "fields": [
+            {
+              "id": "stage1.Q28",
+              "label": "Is the applicant from a jurisdiction with DFSA bilateral MoU?",
+              "fieldName": "q28",
+              "fieldType": "select",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q28",
+                "section": "3-9. Regulatory Info",
+                "apqcDomain": "11.0",
+                "helpTextRaw": "Link to bilateral MoU list",
+                "triggers": "If Yes \u2192 Show Q29-Q30"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "mandatoryWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q29",
+              "label": "Please select the regulator",
+              "fieldName": "q29",
+              "fieldType": "select",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q29",
+                "section": "3-9. Regulatory Info",
+                "apqcDomain": "11.0"
+              },
+              "options": [
+                {
+                  "label": "DFSA Bilateral MoU Regulators",
+                  "value": "DFSA Bilateral MoU Regulators"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q28",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q28",
+                "equals": "Yes"
+              },
+              "defaultValue": "Please select one..."
+            },
+            {
+              "id": "stage1.Q30",
+              "label": "Is the applicant regulated by the above regulator?",
+              "fieldName": "q30",
+              "fieldType": "select",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q30",
+                "section": "3-9. Regulatory Info",
+                "apqcDomain": "11.0"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q28",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q28",
+                "equals": "Yes"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q31",
+              "label": "Please provide details of whom regulates the applicant",
+              "fieldName": "q31",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "validationRules": [
+                "MAX_CHAR_2000"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q31",
+                "section": "3-9. Regulatory Info",
+                "apqcDomain": "11.0",
+                "helpTextRaw": "6 rows",
+                "maxLength": "2000"
+              },
+              "visibleWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "mandatoryWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q32",
+              "label": "Regulator contact for Letter of Good Standing",
+              "fieldName": "q32",
+              "fieldType": "Table",
+              "mandatory": false,
+              "validationRules": [
+                "EMAIL_FMT",
+                "PHONE_FMT"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q32",
+                "section": "3-9. Regulatory Info",
+                "apqcDomain": "11.0",
+                "maxLength": "100"
+              },
+              "options": [
+                {
+                  "label": "Regulator name|Contact name|Phone|Email",
+                  "value": "Regulator name|Contact name|Phone|Email"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "mandatoryWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q33",
+              "label": "Please provide regulatory documents",
+              "fieldName": "q33",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "validationRules": [
+                "FILE_TYPE",
+                "FILE_SIZE_10MB",
+                "MAX_FILES_4",
+                "MIN_1"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q33",
+                "section": "3-9. Regulatory Info",
+                "apqcDomain": "11.0",
+                "helpTextRaw": "Certificate of Inc|Licence|Home regulator approval"
+              },
+              "options": [
+                {
+                  "label": "PDF|DOC|DOCX",
+                  "value": "PDF|DOC|DOCX"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "mandatoryWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              }
+            }
+          ]
+        },
+        {
+          "id": "external_audit",
+          "groupName": "External Audit",
+          "fields": [
+            {
+              "id": "stage1.Q35",
+              "label": "Non-DIFC companies - will you be using a DFSA Registered Auditor?",
+              "fieldName": "q35",
+              "fieldType": "select",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q35",
+                "section": "3-10. External Audit",
+                "apqcDomain": "11.0",
+                "triggers": "If Yes \u2192 Q36; If No \u2192 Q37-Q38"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "mandatoryWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q36",
+              "label": "Please select the Auditor from the list",
+              "fieldName": "q36",
+              "fieldType": "select",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q36",
+                "section": "3-10. External Audit",
+                "apqcDomain": "11.0"
+              },
+              "options": [
+                {
+                  "label": "DFSA Registered Auditors",
+                  "value": "DFSA Registered Auditors"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q35",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q35",
+                "equals": "Yes"
+              },
+              "defaultValue": "Please select one..."
+            },
+            {
+              "id": "stage1.Q37",
+              "label": "Please provide the name of the proposed Audit Principal",
+              "fieldName": "q37",
+              "fieldType": "Text",
+              "mandatory": false,
+              "validationRules": [
+                "MAX_CHAR_100"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q37",
+                "section": "3-10. External Audit",
+                "apqcDomain": "11.0",
+                "maxLength": "100"
+              },
+              "visibleWhen": {
+                "field": "q35",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q35",
+                "equals": "Yes"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q38",
+              "label": "Auditor details (non-DFSA registered)",
+              "fieldName": "q38",
+              "fieldType": "Table",
+              "mandatory": false,
+              "validationRules": [
+                "EMAIL_FMT",
+                "PHONE_FMT"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q38",
+                "section": "3-10. External Audit",
+                "apqcDomain": "11.0",
+                "maxLength": "100"
+              },
+              "options": [
+                {
+                  "label": "Auditor name|Contact|Phone|Email",
+                  "value": "Auditor name|Contact|Phone|Email"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q35",
+                "equals": "No"
+              },
+              "mandatoryWhen": {
+                "field": "q35",
+                "equals": "No"
+              },
+              "defaultValue": "None"
+            }
+          ]
+        },
+        {
+          "id": "cyber_framework_and_comments",
+          "groupName": "Cyber Framework & Comments",
+          "fields": [
+            {
+              "id": "stage1.Q72",
+              "label": "Has applicant developed written cyber risk management framework?",
+              "fieldName": "q72",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q72",
+                "section": "3-22. Cyber Security",
+                "apqcDomain": "11.0",
+                "helpTextRaw": "Includes third party risks"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q73",
+              "label": "Security policy status",
+              "fieldName": "q73",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q73",
+                "section": "3-23. Security Policy",
+                "apqcDomain": "11.0",
+                "helpTextRaw": "Progressive maturity levels"
+              },
+              "options": [
+                {
+                  "label": "Under development",
+                  "value": "Under development"
+                },
+                {
+                  "label": "Developed",
+                  "value": "Developed"
+                },
+                {
+                  "label": "Developed and approved",
+                  "value": "Developed and approved"
+                },
+                {
+                  "label": "Developed approved and communicated",
+                  "value": "Developed approved and communicated"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q74",
+              "label": "Have cyber risks been formally identified and assessed?",
+              "fieldName": "q74",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q74",
+                "section": "3-24. Cyber Risks",
+                "apqcDomain": "11.0",
+                "helpTextRaw": "Includes third party risks"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q75",
+              "label": "Has applicant implemented cyber incident response plan?",
+              "fieldName": "q75",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q75",
+                "section": "3-25. Incident Response",
+                "apqcDomain": "11.0"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q76",
+              "label": "Do you have additional comments on this section?",
+              "fieldName": "q76",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q76",
+                "section": "3-25. Comments",
+                "apqcDomain": "11.0",
+                "triggers": "If Yes \u2192 Show Q77"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q77",
+              "label": "Please provide comments with question number reference",
+              "fieldName": "q77",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "validationRules": [
+                "MAX_CHAR_4000"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q77",
+                "section": "3-25. Comments",
+                "apqcDomain": "11.0",
+                "helpTextRaw": "10 rows",
+                "maxLength": "4000"
+              },
+              "visibleWhen": {
+                "field": "q76",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q76",
+                "equals": "Yes"
+              },
+              "defaultValue": "None"
+            }
+          ]
+        },
+        {
+          "id": "restrictions",
+          "groupName": "Restrictions",
+          "fields": [
+            {
+              "id": "stage1.Q104",
+              "label": "Do you want to add a restriction?",
+              "fieldName": "q104",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q104",
+                "section": "5-2. Restrictions",
+                "apqcDomain": "11.0",
+                "triggers": "If Yes \u2192 Show Q105-Q107"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q105",
+              "label": "Restriction type",
+              "fieldName": "q105",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "validationRules": [
+                "MIN_1"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q105",
+                "section": "5-2. Restrictions",
+                "apqcDomain": "11.0",
+                "triggers": "Standard \u2192 Q106; Non-standard \u2192 Q107"
+              },
+              "options": [
+                {
+                  "label": "Standard",
+                  "value": "Standard"
+                },
+                {
+                  "label": "Non-standard",
+                  "value": "Non-standard"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q104",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q104",
+                "equals": "Yes"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q106",
+              "label": "Select standard restrictions",
+              "fieldName": "q106",
+              "fieldType": "Lookup",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q106",
+                "section": "5-2. Restrictions",
+                "apqcDomain": "11.0",
+                "helpTextRaw": "Multi-select searchable"
+              },
+              "options": [
+                {
+                  "label": "Standard Restrictions List",
+                  "value": "Standard Restrictions List"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q105",
+                "contains": "Standard"
+              },
+              "mandatoryWhen": {
+                "field": "q105",
+                "equals": "Standard"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q107",
+              "label": "Non-standard restriction text",
+              "fieldName": "q107",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "validationRules": [
+                "MAX_CHAR_2000"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q107",
+                "section": "5-2. Restrictions",
+                "apqcDomain": "11.0",
+                "helpTextRaw": "6 rows",
+                "maxLength": "2000"
+              },
+              "visibleWhen": {
+                "field": "q105",
+                "contains": "Non-standard"
+              },
+              "mandatoryWhen": {
+                "field": "q105",
+                "equals": "Non-standard"
+              },
+              "defaultValue": "None"
+            }
+          ]
+        },
+        {
+          "id": "conditions",
+          "groupName": "Conditions",
+          "fields": [
+            {
+              "id": "stage1.Q108",
+              "label": "Do you want to add a condition?",
+              "fieldName": "q108",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q108",
+                "section": "5-3. Conditions",
+                "apqcDomain": "11.0",
+                "triggers": "If Yes \u2192 Show Q109-Q111"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q109",
+              "label": "Condition type",
+              "fieldName": "q109",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "validationRules": [
+                "MIN_1"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q109",
+                "section": "5-3. Conditions",
+                "apqcDomain": "11.0",
+                "triggers": "Standard \u2192 Q110; Non-standard \u2192 Q111"
+              },
+              "options": [
+                {
+                  "label": "Standard",
+                  "value": "Standard"
+                },
+                {
+                  "label": "Non-standard",
+                  "value": "Non-standard"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q108",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q108",
+                "equals": "Yes"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q110",
+              "label": "Select standard conditions",
+              "fieldName": "q110",
+              "fieldType": "Lookup",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q110",
+                "section": "5-3. Conditions",
+                "apqcDomain": "11.0",
+                "helpTextRaw": "Multi-select searchable"
+              },
+              "options": [
+                {
+                  "label": "Standard Conditions List",
+                  "value": "Standard Conditions List"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q109",
+                "contains": "Standard"
+              },
+              "mandatoryWhen": {
+                "field": "q109",
+                "equals": "Standard"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q111",
+              "label": "Non-standard condition text",
+              "fieldName": "q111",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "validationRules": [
+                "MAX_CHAR_2000"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q111",
+                "section": "5-3. Conditions",
+                "apqcDomain": "11.0",
+                "helpTextRaw": "6 rows",
+                "maxLength": "2000"
+              },
+              "visibleWhen": {
+                "field": "q109",
+                "contains": "Non-standard"
+              },
+              "mandatoryWhen": {
+                "field": "q109",
+                "equals": "Non-standard"
+              },
+              "defaultValue": "None"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d8_it_channels",
+      "title": "IT & Channels",
+      "apqcDomainId": "8.0",
+      "apqcDomainName": "Manage Information Technology",
+      "groups": [
+        {
+          "id": "it_reliance_and_complexity",
+          "groupName": "IT Reliance & Complexity",
+          "fields": [
+            {
+              "id": "stage1.Q63",
+              "label": "IT reliance level for Financial Services",
+              "fieldName": "q63",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q63",
+                "section": "3-13. IT Systems",
+                "apqcDomain": "8.0",
+                "triggers": "Risk scoring: Low=1 Med=2 High=3"
+              },
+              "options": [
+                {
+                  "label": "Little to no reliance",
+                  "value": "Little to no reliance"
+                },
+                {
+                  "label": "Somewhat reliant",
+                  "value": "Somewhat reliant"
+                },
+                {
+                  "label": "Completely reliant",
+                  "value": "Completely reliant"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q64",
+              "label": "IT environment complexity",
+              "fieldName": "q64",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q64",
+                "section": "3-14. IT Environment",
+                "apqcDomain": "8.0",
+                "triggers": "Risk scoring: Low=1 Med=2 High=3"
+              },
+              "options": [
+                {
+                  "label": "Well-established/simple",
+                  "value": "Well-established/simple"
+                },
+                {
+                  "label": "Complex in size/sophistication",
+                  "value": "Complex in size/sophistication"
+                },
+                {
+                  "label": "Complex technologies",
+                  "value": "Complex technologies"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q65",
+              "label": "Volume of internal applications",
+              "fieldName": "q65",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q65",
+                "section": "3-15. Applications",
+                "apqcDomain": "8.0",
+                "triggers": "Risk scoring: Low=1 Med=2 High=3"
+              },
+              "options": [
+                {
+                  "label": "No applications",
+                  "value": "No applications"
+                },
+                {
+                  "label": "1-5 applications",
+                  "value": "1-5 applications"
+                },
+                {
+                  "label": "More than 5 applications",
+                  "value": "More than 5 applications"
+                }
+              ],
+              "defaultValue": "None"
+            }
+          ]
+        },
+        {
+          "id": "third_parties_and_cloud",
+          "groupName": "Third Parties & Cloud",
+          "fields": [
+            {
+              "id": "stage1.Q66",
+              "label": "Third-party service providers usage",
+              "fieldName": "q66",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q66",
+                "section": "3-16. Third Party Providers",
+                "apqcDomain": "8.0",
+                "triggers": "Risk scoring: Low=1 Med=2 High=3"
+              },
+              "options": [
+                {
+                  "label": "Not used",
+                  "value": "Not used"
+                },
+                {
+                  "label": "One provider",
+                  "value": "One provider"
+                },
+                {
+                  "label": "Multiple providers",
+                  "value": "Multiple providers"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q67",
+              "label": "Cloud computing services usage",
+              "fieldName": "q67",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q67",
+                "section": "3-17. Cloud Computing",
+                "apqcDomain": "8.0",
+                "triggers": "Risk scoring: Low=1 Med=2 High=3"
+              },
+              "options": [
+                {
+                  "label": "Not used (on-premise only)",
+                  "value": "Not used (on-premise only)"
+                },
+                {
+                  "label": "Private/hybrid cloud",
+                  "value": "Private/hybrid cloud"
+                },
+                {
+                  "label": "Public cloud/hybrid",
+                  "value": "Public cloud/hybrid"
+                }
+              ],
+              "defaultValue": "None"
+            }
+          ]
+        },
+        {
+          "id": "delivery_channels_and_online_presence",
+          "groupName": "Delivery Channels & Online Presence",
+          "fields": [
+            {
+              "id": "stage1.Q68",
+              "label": "Electronic delivery channels usage",
+              "fieldName": "q68",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q68",
+                "section": "3-18. Electronic Delivery",
+                "apqcDomain": "8.0",
+                "triggers": "Risk scoring: Low=1 Med=2 High=3"
+              },
+              "options": [
+                {
+                  "label": "Not used",
+                  "value": "Not used"
+                },
+                {
+                  "label": "Limited variety",
+                  "value": "Limited variety"
+                },
+                {
+                  "label": "Multiple channels",
+                  "value": "Multiple channels"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q69",
+              "label": "Proposed online presence",
+              "fieldName": "q69",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q69",
+                "section": "3-19. Online Presence",
+                "apqcDomain": "8.0",
+                "triggers": "Risk scoring: Low=1 Med=2 High=3"
+              },
+              "options": [
+                {
+                  "label": "No web/social media",
+                  "value": "No web/social media"
+                },
+                {
+                  "label": "Informational website",
+                  "value": "Informational website"
+                },
+                {
+                  "label": "Internet applications for clients",
+                  "value": "Internet applications for clients"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q70",
+              "label": "Proposed mobile use",
+              "fieldName": "q70",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q70",
+                "section": "3-20. Mobile Use",
+                "apqcDomain": "8.0",
+                "triggers": "Risk scoring: Low=1 Med=2 High=3"
+              },
+              "options": [
+                {
+                  "label": "No mobile",
+                  "value": "No mobile"
+                },
+                {
+                  "label": "SMS/browser only",
+                  "value": "SMS/browser only"
+                },
+                {
+                  "label": "Mobile banking apps",
+                  "value": "Mobile banking apps"
+                }
+              ],
+              "defaultValue": "None"
+            }
+          ]
+        },
+        {
+          "id": "it_development_roadmap",
+          "groupName": "IT Development Roadmap",
+          "fields": [
+            {
+              "id": "stage1.Q71",
+              "label": "Expected IT developments in first year",
+              "fieldName": "q71",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q71",
+                "section": "3-21. IT Development",
+                "apqcDomain": "8.0",
+                "triggers": "Risk scoring: Low=1 Med=2 High=3"
+              },
+              "options": [
+                {
+                  "label": "Stable (no changes)",
+                  "value": "Stable (no changes)"
+                },
+                {
+                  "label": "Infrequent/minimal changes",
+                  "value": "Infrequent/minimal changes"
+                },
+                {
+                  "label": "Significant development",
+                  "value": "Significant development"
+                }
+              ],
+              "defaultValue": "None"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d1_strategy_permissions",
+      "title": "Strategy & Permissions",
+      "apqcDomainId": "1.0",
+      "apqcDomainName": "Develop Vision and Strategy",
+      "groups": [
+        {
+          "id": "business_sectors_and_sub-sectors",
+          "groupName": "Business Sectors & Sub-sectors",
+          "fields": [
+            {
+              "id": "stage1.Q22",
+              "label": "What general financial services sectors is the head office engaged in?",
+              "fieldName": "q22",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "validationRules": [
+                "MIN_1"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q22",
+                "section": "3-6. Business Sectors",
+                "apqcDomain": "1.0",
+                "helpTextRaw": "14 options plus Other"
+              },
+              "options": [
+                {
+                  "label": "Banking",
+                  "value": "Banking"
+                },
+                {
+                  "label": "Insurance",
+                  "value": "Insurance"
+                },
+                {
+                  "label": "Wealth management",
+                  "value": "Wealth management"
+                },
+                {
+                  "label": "Advisory and arranging",
+                  "value": "Advisory and arranging"
+                },
+                {
+                  "label": "Brokerage",
+                  "value": "Brokerage"
+                },
+                {
+                  "label": "FinTech",
+                  "value": "FinTech"
+                },
+                {
+                  "label": "Credit Rating Agency",
+                  "value": "Credit Rating Agency"
+                },
+                {
+                  "label": "Virtual currency",
+                  "value": "Virtual currency"
+                },
+                {
+                  "label": "Crowdfunding",
+                  "value": "Crowdfunding"
+                },
+                {
+                  "label": "Money Services",
+                  "value": "Money Services"
+                },
+                {
+                  "label": "RegTech",
+                  "value": "RegTech"
+                },
+                {
+                  "label": "Technology Provider",
+                  "value": "Technology Provider"
+                },
+                {
+                  "label": "Exchange",
+                  "value": "Exchange"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "mandatoryWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q23",
+              "label": "Which sub-sector best describes the applicant's business?",
+              "fieldName": "q23",
+              "fieldType": "multiselect",
+              "mandatory": false,
+              "validationRules": [
+                "MIN_1"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q23",
+                "section": "3-6. Business Sectors",
+                "apqcDomain": "1.0"
+              },
+              "options": [
+                {
+                  "label": "35+ sub-sector options",
+                  "value": "35+ sub-sector options"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "mandatoryWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "defaultValue": "None"
+            }
+          ]
+        },
+        {
+          "id": "business_overview",
+          "groupName": "Business Overview",
+          "fields": [
+            {
+              "id": "stage1.Q24",
+              "label": "Please provide an overview of business conducted by the head office",
+              "fieldName": "q24",
+              "fieldType": "Multiline Text",
+              "mandatory": false,
+              "validationRules": [
+                "MAX_CHAR_4000"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q24",
+                "section": "3-6. Business Sectors",
+                "apqcDomain": "1.0",
+                "helpTextRaw": "10 rows",
+                "maxLength": "4000"
+              },
+              "visibleWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "mandatoryWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "defaultValue": "None"
+            }
+          ]
+        },
+        {
+          "id": "global_activity",
+          "groupName": "Global Activity",
+          "fields": [
+            {
+              "id": "stage1.Q27",
+              "label": "Global activity matrix by region",
+              "fieldName": "q27",
+              "fieldType": "Table",
+              "mandatory": false,
+              "validationRules": [
+                "One selection per row"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q27",
+                "section": "3-8. Global Activity",
+                "apqcDomain": "1.0"
+              },
+              "options": [
+                {
+                  "label": "9 regions x 5 status options",
+                  "value": "9 regions x 5 status options"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "mandatoryWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "defaultValue": "None"
+            }
+          ]
+        },
+        {
+          "id": "legal_advice_on_permissions",
+          "groupName": "Legal Advice on Permissions",
+          "fields": [
+            {
+              "id": "stage1.Q95",
+              "label": "Has applicant received legal advice on permissions?",
+              "fieldName": "q95",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q95",
+                "section": "5. Permissions",
+                "apqcDomain": "1.0",
+                "triggers": "If Yes \u2192 Show Q96-Q97"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q96",
+              "label": "Legal advice details",
+              "fieldName": "q96",
+              "fieldType": "Table",
+              "mandatory": false,
+              "validationRules": [
+                "DATE_FMT"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q96",
+                "section": "5. Permissions",
+                "apqcDomain": "1.0",
+                "maxLength": "100"
+              },
+              "options": [
+                {
+                  "label": "Firm name|Author|Date",
+                  "value": "Firm name|Author|Date"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q95",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q95",
+                "equals": "Yes"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q97",
+              "label": "Upload legal advice",
+              "fieldName": "q97",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "validationRules": [
+                "FILE_TYPE",
+                "FILE_SIZE_10MB",
+                "MAX_FILES_3"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q97",
+                "section": "5. Permissions",
+                "apqcDomain": "1.0"
+              },
+              "options": [
+                {
+                  "label": "PDF|DOC|DOCX",
+                  "value": "PDF|DOC|DOCX"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q95",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q95",
+                "equals": "Yes"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d9_financial_resources",
+      "title": "Financial Resources",
+      "apqcDomainId": "9.0",
+      "apqcDomainName": "Manage Financial Resources",
+      "groups": [
+        {
+          "id": "credit_rating",
+          "groupName": "Credit Rating",
+          "fields": [
+            {
+              "id": "stage1.Q25",
+              "label": "Does the applicant or Parent have a long-term credit rating?",
+              "fieldName": "q25",
+              "fieldType": "select",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q25",
+                "section": "3-7. Credit Rating",
+                "apqcDomain": "9.0",
+                "triggers": "If Yes \u2192 Show Q26"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "mandatoryWhen": {
+                "field": "q13",
+                "equals": "Non-DIFC"
+              },
+              "defaultValue": "No"
+            },
+            {
+              "id": "stage1.Q26",
+              "label": "Credit rating details table",
+              "fieldName": "q26",
+              "fieldType": "Table",
+              "mandatory": false,
+              "validationRules": [
+                "DATE_FMT",
+                "MAX_ROWS_5",
+                "MIN_1_ROW"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q26",
+                "section": "3-7. Credit Rating",
+                "apqcDomain": "9.0",
+                "helpTextRaw": "5 rows max"
+              },
+              "options": [
+                {
+                  "label": "Agency Name",
+                  "value": "Agency Name"
+                },
+                {
+                  "label": "Rating",
+                  "value": "Rating"
+                },
+                {
+                  "label": "Outlook",
+                  "value": "Outlook"
+                },
+                {
+                  "label": "Date",
+                  "value": "Date"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q25",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q25",
+                "equals": "Yes"
+              }
+            }
+          ]
+        },
+        {
+          "id": "initial_capital_evidence_(start-ups)",
+          "groupName": "Initial Capital Evidence (Start-ups)",
+          "fields": [],
+          "meta": {
+            "note": "Initial capital evidence captured in Governance > Initial Capital (Start-ups)",
+            "referencesField": "q92"
+          }
+        }
+      ]
+    },
+    {
+      "id": "d12_external_relationships",
+      "title": "External Relationships",
+      "apqcDomainId": "12.0",
+      "apqcDomainName": "Manage External Relationships",
+      "groups": [
+        {
+          "id": "application_contact",
+          "groupName": "Application Contact",
+          "fields": [
+            {
+              "id": "stage1.Q4",
+              "label": "Is the applicant's contact person for all matters relating to this application a member of the applicant firm and not an external adviser?",
+              "fieldName": "q4",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q4",
+                "section": "1. Submission",
+                "apqcDomain": "12.0",
+                "triggers": "If No \u2192 Show Q5"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q5",
+              "label": "Please provide details of the main contact at the applicant firm",
+              "fieldName": "q5",
+              "fieldType": "Table",
+              "mandatory": false,
+              "validationRules": [
+                "EMAIL_FMT",
+                "PHONE_FMT",
+                "MAX_CHAR_100"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q5",
+                "section": "1. Submission",
+                "apqcDomain": "12.0",
+                "maxLength": "100"
+              },
+              "options": [
+                {
+                  "label": "Name|Position|Email|Phone",
+                  "value": "Name|Position|Email|Phone"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q4",
+                "equals": "No"
+              },
+              "mandatoryWhen": {
+                "field": "q4",
+                "equals": "No"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q6",
+              "label": "Please select the firm on behalf of which you are making this application",
+              "fieldName": "q6",
+              "fieldType": "Lookup",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q6",
+                "section": "1. Submission",
+                "apqcDomain": "N/A",
+                "helpTextRaw": "Searchable list of regulated firms"
+              },
+              "options": [
+                {
+                  "label": "Existing DFSA firms list",
+                  "value": "Existing DFSA firms list"
+                }
+              ],
+              "mandatoryWhen": {
+                "expression": "Existing firm"
+              },
+              "defaultValue": "None"
+            }
+          ]
+        },
+        {
+          "id": "professional_adviser",
+          "groupName": "Professional Adviser",
+          "fields": [
+            {
+              "id": "stage1.Q45",
+              "label": "Is the applicant using a professional adviser?",
+              "fieldName": "q45",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q45",
+                "section": "3-12. Professional Adviser",
+                "apqcDomain": "12.0",
+                "triggers": "If Yes \u2192 Show Q46-Q49"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q46",
+              "label": "Please select the professional adviser",
+              "fieldName": "q46",
+              "fieldType": "select",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q46",
+                "section": "3-12. Professional Adviser",
+                "apqcDomain": "12.0",
+                "triggers": "If Other \u2192 Show Q47"
+              },
+              "options": [
+                {
+                  "label": "Professional Advisers List",
+                  "value": "Professional Advisers List"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q45",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q45",
+                "equals": "Yes"
+              },
+              "defaultValue": "Please select one..."
+            },
+            {
+              "id": "stage1.Q47",
+              "label": "Other adviser - please specify",
+              "fieldName": "q47",
+              "fieldType": "Text",
+              "mandatory": false,
+              "validationRules": [
+                "MAX_CHAR_100"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q47",
+                "section": "3-12. Professional Adviser",
+                "apqcDomain": "12.0",
+                "maxLength": "100"
+              },
+              "visibleWhen": {
+                "field": "q46",
+                "equals": "Other"
+              },
+              "mandatoryWhen": {
+                "field": "q46",
+                "equals": "Other"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q48",
+              "label": "Adviser contact details",
+              "fieldName": "q48",
+              "fieldType": "Table",
+              "mandatory": false,
+              "validationRules": [
+                "EMAIL_FMT",
+                "PHONE_FMT"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q48",
+                "section": "3-12. Professional Adviser",
+                "apqcDomain": "12.0",
+                "maxLength": "100"
+              },
+              "options": [
+                {
+                  "label": "Name|Email|Phone",
+                  "value": "Name|Email|Phone"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q45",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q45",
+                "equals": "Yes"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q49",
+              "label": "Would you like us to copy correspondence to your adviser?",
+              "fieldName": "q49",
+              "fieldType": "select",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q49",
+                "section": "3-12. Professional Adviser",
+                "apqcDomain": "12.0"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q45",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q45",
+                "equals": "Yes"
+              },
+              "defaultValue": "None"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d6_premises_infrastructure",
+      "title": "Premises & Infrastructure",
+      "apqcDomainId": "6.0",
+      "apqcDomainName": "Manage Business Capabilities",
+      "groups": [
+        {
+          "id": "difc_premises_and_shared_office",
+          "groupName": "DIFC Premises & Shared Office",
+          "fields": [
+            {
+              "id": "stage1.Q39",
+              "label": "Does the applicant have premises within the DIFC?",
+              "fieldName": "q39",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q39",
+                "section": "3-11. DIFC Premises",
+                "apqcDomain": "6.0",
+                "triggers": "If Yes \u2192 Show Q40-Q44"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q40",
+              "label": "Please provide premises details",
+              "fieldName": "q40",
+              "fieldType": "Table",
+              "mandatory": false,
+              "validationRules": [
+                "PHONE_FMT"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q40",
+                "section": "3-11. DIFC Premises",
+                "apqcDomain": "6.0",
+                "maxLength": "100"
+              },
+              "options": [
+                {
+                  "label": "Office number|Building|District|Phone",
+                  "value": "Office number|Building|District|Phone"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q39",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q39",
+                "equals": "Yes"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q42",
+              "label": "Will this office be shared with another entity?",
+              "fieldName": "q42",
+              "fieldType": "select",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q42",
+                "section": "3-11. DIFC Premises",
+                "apqcDomain": "6.0",
+                "triggers": "If Yes (either) \u2192 Show Q43"
+              },
+              "options": [
+                {
+                  "label": "Yes - related Group entity",
+                  "value": "Yes - related Group entity"
+                },
+                {
+                  "label": "Yes - unrelated entity",
+                  "value": "Yes - unrelated entity"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q39",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q39",
+                "equals": "Yes"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q43",
+              "label": "Has a 'no objection' letter been received from DIFC Authority?",
+              "fieldName": "q43",
+              "fieldType": "select",
+              "mandatory": false,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q43",
+                "section": "3-11. DIFC Premises",
+                "apqcDomain": "6.0",
+                "triggers": "If Yes \u2192 Show Q44"
+              },
+              "options": [
+                {
+                  "label": "Yes",
+                  "value": "Yes"
+                },
+                {
+                  "label": "No",
+                  "value": "No"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q42",
+                "equals": "Yes (either)"
+              },
+              "mandatoryWhen": {
+                "field": "q42",
+                "equals": "Yes"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q44",
+              "label": "Please upload the 'no objection' letter",
+              "fieldName": "q44",
+              "fieldType": "File Upload",
+              "mandatory": false,
+              "validationRules": [
+                "FILE_TYPE",
+                "FILE_SIZE_5MB",
+                "MAX_FILES_1"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q44",
+                "section": "3-11. DIFC Premises",
+                "apqcDomain": "6.0"
+              },
+              "options": [
+                {
+                  "label": "PDF|DOC|DOCX",
+                  "value": "PDF|DOC|DOCX"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q43",
+                "equals": "Yes"
+              },
+              "mandatoryWhen": {
+                "field": "q43",
+                "equals": "Yes"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d2_products_services",
+      "title": "Products & Services",
+      "apqcDomainId": "2.0",
+      "apqcDomainName": "Develop and Manage Products and Services",
+      "groups": [
+        {
+          "id": "sector_selection",
+          "groupName": "Sector Selection",
+          "fields": [
+            {
+              "id": "stage1.Q98",
+              "label": "Select sector for Financial Services business",
+              "fieldName": "q98",
+              "fieldType": "select",
+              "mandatory": true,
+              "validationRules": [],
+              "meta": {
+                "dfsaQuestionId": "Q98",
+                "section": "5-1. Sector Selection",
+                "apqcDomain": "2.0",
+                "helpTextRaw": "Single selection; determines form branching",
+                "triggers": "Determines Q99-Q103 visibility and Stage 2 forms",
+                "triggersFormsBySelection": {
+                  "Banking/Investment/Insurance Intermediation": [
+                    "2-4",
+                    "2-5",
+                    "2-6",
+                    "2-7",
+                    "2-12"
+                  ],
+                  "Insurance (General)": [
+                    "2-11 Insurance"
+                  ],
+                  "Insurance (Life)": [
+                    "2-11 Insurance"
+                  ],
+                  "Employee Money Purchase Scheme": [],
+                  "Money Services": [
+                    "2-10 Money Services"
+                  ],
+                  "Credit Rating Agency": [
+                    "2-15 Credit Rating Agency"
+                  ],
+                  "Alternative Trading System": [
+                    "2-19 ATS Operator"
+                  ],
+                  "Protected Cell Company": []
+                }
+              },
+              "options": [
+                {
+                  "label": "Banking/Investment/Insurance Intermediation",
+                  "value": "Banking/Investment/Insurance Intermediation"
+                },
+                {
+                  "label": "Insurance (General)",
+                  "value": "Insurance (General)"
+                },
+                {
+                  "label": "Insurance (Life)",
+                  "value": "Insurance (Life)"
+                },
+                {
+                  "label": "Employee Money Purchase Scheme",
+                  "value": "Employee Money Purchase Scheme"
+                },
+                {
+                  "label": "Money Services",
+                  "value": "Money Services"
+                },
+                {
+                  "label": "Credit Rating Agency",
+                  "value": "Credit Rating Agency"
+                },
+                {
+                  "label": "Alternative Trading System",
+                  "value": "Alternative Trading System"
+                },
+                {
+                  "label": "Protected Cell Company",
+                  "value": "Protected Cell Company"
+                }
+              ],
+              "defaultValue": "None"
+            }
+          ]
+        },
+        {
+          "id": "banking_and_investment_matrix",
+          "groupName": "Banking & Investment Matrix",
+          "fields": [
+            {
+              "id": "stage1.Q99",
+              "label": "Financial Services selection matrix",
+              "fieldName": "q99",
+              "fieldType": "Table",
+              "mandatory": false,
+              "validationRules": [
+                "MIN_1"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q99",
+                "section": "5-1. Banking & Investment",
+                "apqcDomain": "2.0",
+                "helpTextRaw": "Checkbox matrix",
+                "triggers": "Triggers Stage 2 forms based on selections",
+                "triggersForms": [
+                  "2-4",
+                  "2-5",
+                  "2-6",
+                  "2-7",
+                  "2-12"
+                ]
+              },
+              "options": [
+                {
+                  "label": "20 activities x 12 investment types",
+                  "value": "20 activities x 12 investment types"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q98",
+                "equals": "Banking/Investment"
+              },
+              "mandatoryWhen": {
+                "field": "q98",
+                "equals": "A1"
+              },
+              "defaultValue": "None"
+            }
+          ]
+        },
+        {
+          "id": "insurance_classes_(general_and_life)",
+          "groupName": "Insurance Classes (General & Life)",
+          "fields": [
+            {
+              "id": "stage1.Q100",
+              "label": "Insurance General classes matrix",
+              "fieldName": "q100",
+              "fieldType": "Table",
+              "mandatory": false,
+              "validationRules": [
+                "MIN_1"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q100",
+                "section": "5-1. Insurance General",
+                "apqcDomain": "2.0",
+                "triggers": "Triggers Form 2-11",
+                "triggersForms": [
+                  "2-11 Insurance"
+                ]
+              },
+              "options": [
+                {
+                  "label": "2 activities x 9 classes",
+                  "value": "2 activities x 9 classes"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q98",
+                "equals": "Insurance General"
+              },
+              "mandatoryWhen": {
+                "field": "q98",
+                "equals": "A2"
+              },
+              "defaultValue": "None"
+            },
+            {
+              "id": "stage1.Q101",
+              "label": "Insurance Life classes matrix",
+              "fieldName": "q101",
+              "fieldType": "Table",
+              "mandatory": false,
+              "validationRules": [
+                "MIN_1"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q101",
+                "section": "5-1. Insurance Life",
+                "apqcDomain": "2.0",
+                "triggers": "Triggers Form 2-11",
+                "triggersForms": [
+                  "2-11 Insurance"
+                ]
+              },
+              "options": [
+                {
+                  "label": "2 activities x 7 classes",
+                  "value": "2 activities x 7 classes"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q98",
+                "equals": "Insurance Life"
+              },
+              "mandatoryWhen": {
+                "field": "q98",
+                "equals": "A3"
+              },
+              "defaultValue": "None"
+            }
+          ]
+        },
+        {
+          "id": "employee_money_purchase_scheme",
+          "groupName": "Employee Money Purchase Scheme",
+          "fields": [
+            {
+              "id": "stage1.Q102",
+              "label": "Employee Money Purchase Scheme activities",
+              "fieldName": "q102",
+              "fieldType": "Table",
+              "mandatory": false,
+              "validationRules": [
+                "MIN_1"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q102",
+                "section": "5-1. EMP Scheme",
+                "apqcDomain": "2.0"
+              },
+              "options": [
+                {
+                  "label": "3 activities x 2 options",
+                  "value": "3 activities x 2 options"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q98",
+                "equals": "EMP Scheme"
+              },
+              "mandatoryWhen": {
+                "field": "q98",
+                "equals": "A4"
+              },
+              "defaultValue": "None"
+            }
+          ]
+        },
+        {
+          "id": "money_services_activities",
+          "groupName": "Money Services Activities",
+          "fields": [
+            {
+              "id": "stage1.Q103",
+              "label": "Money Services activities matrix",
+              "fieldName": "q103",
+              "fieldType": "Table",
+              "mandatory": false,
+              "validationRules": [
+                "MIN_1"
+              ],
+              "meta": {
+                "dfsaQuestionId": "Q103",
+                "section": "5-1. Money Services",
+                "apqcDomain": "2.0",
+                "triggers": "Triggers Form 2-10",
+                "triggersForms": [
+                  "2-10 Money Services"
+                ]
+              },
+              "options": [
+                {
+                  "label": "2 activities x 9 service types",
+                  "value": "2 activities x 9 service types"
+                }
+              ],
+              "visibleWhen": {
+                "field": "q98",
+                "equals": "Money Services"
+              },
+              "mandatoryWhen": {
+                "field": "q98",
+                "equals": "A5"
+              },
+              "defaultValue": "None"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

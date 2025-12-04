@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState,} from "react";
+﻿import React, {useCallback, useEffect, useMemo, useRef, useState,} from "react";
 import {TabSection} from "./TabSection";
 import {DocumentSection} from "./DocumentSection";
 import {mockDocuments, mockMultiEntryData} from "../../utils/mockData";
@@ -47,7 +47,7 @@ type ProfileData = {
     companySize?: string;
 };
 
-// --- 💡 HELPER FUNCTION TO MAP API DATA TO SECTION DATA ---
+// --- ðŸ’¡ HELPER FUNCTION TO MAP API DATA TO SECTION DATA ---
 // This function transforms the flat API profile object into the nested structure
 // expected by a single TabSection component.
 const mapApiProfileToSectionData = (
@@ -71,7 +71,7 @@ const mapApiProfileToSectionData = (
             if (apiFieldName && apiProfile[apiFieldName] !== undefined) {
                 let value = apiProfile[apiFieldName];
 
-                // --- 💡 DATA TRANSFORMATION/CLEANUP (Example for Date Only) ---
+                // --- ðŸ’¡ DATA TRANSFORMATION/CLEANUP (Example for Date Only) ---
                 if (field.fieldType === "Date Only" && typeof value === "string") {
                     // Truncate the full ISO date string ('1991-06-10T00:00:00Z') to YYYY-MM-DD ('1991-06-10')
                     value = value.split("T")[0];
@@ -105,8 +105,8 @@ export function BusinessProfile({activeSection = "profile"}) {
     const {user} = useAuth();
 
     // Config, mapping, and strings loaded from JSON-backed loader
-    const profileConfig = useMemo(() => getProfileConfig(), []);
-    const apiFieldMapping = useMemo(() => getProfileMapping(), []);
+    const profileConfig = useMemo(() => getProfileConfig("v3"), []);
+    const apiFieldMapping = useMemo(() => getProfileMapping("v3"), []);
 
     // In demo mode, use the demo user
     const effectiveUser = isDemoModeEnabled() ? getDemoUser() : user;
@@ -150,7 +150,7 @@ export function BusinessProfile({activeSection = "profile"}) {
             const apiProfile = apiProfileData;
             const mappedSections: Record<string, unknown> = {};
 
-            console.log("📝 [BusinessProfile] Data retrieved from cache:", apiProfile);
+            console.log("ðŸ“ [BusinessProfile] Data retrieved from cache:", apiProfile);
 
             // Map all sections
             for (const section of profileConfig.tabs) {
@@ -172,7 +172,7 @@ export function BusinessProfile({activeSection = "profile"}) {
             // to manage editing state within the BusinessProfile component:
             setProfileData(newProfileData);
 
-            // 🎯 CRITICAL FIX: Calculate completions after setting profile data!
+            // ðŸŽ¯ CRITICAL FIX: Calculate completions after setting profile data!
             const completions = {};
             const mandatoryStats = {};
 
@@ -192,8 +192,8 @@ export function BusinessProfile({activeSection = "profile"}) {
                 );
             });
 
-            console.log("📊 Section Completions Calculated:", completions);
-            console.log("📊 Mandatory Completions Calculated:", mandatoryStats);
+            console.log("ðŸ“Š Section Completions Calculated:", completions);
+            console.log("ðŸ“Š Mandatory Completions Calculated:", mandatoryStats);
 
             setSectionCompletions(completions);
             setMandatoryCompletions(mandatoryStats);
@@ -244,17 +244,18 @@ export function BusinessProfile({activeSection = "profile"}) {
             const dataToSend = normalizedData;
             const apiPayload = mapToApiPayload(normalizedData);
 
-            if (!profileData) {
-                setSavingGroupIndex(null);
-                return;
-            }
+            // Use existing profile data or fall back to an empty structure (useful for demo/offline)
+            const baseProfileData: ProfileData = profileData || {
+                companyStage: apiProfileData?.department || "growth",
+                sections: {},
+            };
 
             const updatedSections = {
-                ...profileData.sections,
+                ...baseProfileData.sections,
                 [currentSection.id]: {
-                    ...profileData.sections?.[currentSection.id],
+                    ...baseProfileData.sections?.[currentSection.id],
                     fields: {
-                        ...profileData.sections?.[currentSection.id]?.fields,
+                        ...baseProfileData.sections?.[currentSection.id]?.fields,
                         // Use the raw editingData to update the state, as this is what the UI expects
                         ...editingData,
                     },
@@ -263,7 +264,7 @@ export function BusinessProfile({activeSection = "profile"}) {
 
             // Create the new profileData object
             const newProfileData = {
-                ...profileData,
+                ...baseProfileData,
                 sections: updatedSections,
             };
 
@@ -279,93 +280,79 @@ export function BusinessProfile({activeSection = "profile"}) {
             try {
                 console.log("API call in BusinessProfile being called");
                 const accountId = apiProfileData?.accountId;
-
-                if (!accountId) {
-                    console.error("No account ID found!");
-                    toast.error(
-                        formatProfileString(
-                            "toast.saveError",
-                            undefined,
-                            "Failed to save changes. Account information is missing."
-                        )
-                    );
-                    setSavingGroupIndex(null);
-                    return;
+                const hasAccountId = Boolean(accountId);
+                if (!hasAccountId) {
+                    console.warn("No account ID found - skipping API persistence, keeping local state only.");
+                } else {
+                    console.log(accountId);
                 }
-                console.log(accountId);
                 // Calculate dynamic values based on completion
                 const sectionCompletion = sectionCompletions[currentSection.id] || 0;
                 const mandatoryCompletion =
                     mandatoryCompletions[currentSection.id]?.percentageComplete || 0;
 
-                if (currentSection.id === "basic") {
-                    console.log("💾 Saving Vision & Strategy to API...");
+                if (hasAccountId) {
+                    if (currentSection.id === "basic") {
+                        console.log("Saving Vision & Strategy to API...");
 
-                    const visionStrategyPayload = {
-                        ...apiPayload,
-                        alignmentScore: Math.round(mandatoryCompletion), // Use mandatory completion as alignment
-                        dataCompleteness: Math.round(sectionCompletion), // Use overall completion
-                    };
-                    console.log(visionStrategyPayload);
-                    console.log("Data sent to CRM");
-
-                    await saveVisionStrategyMutation.mutateAsync({
-                        accountId,
-                        sectionData: visionStrategyPayload,
-                    });
-                    console.log("✅ Successfully saved to API!");
-                } else if (currentSection.id === "products") {
-                    await saveProductsMutation.mutateAsync({
-                        accountId,
-                        sectionData: apiPayload,
-                    });
-                }  else if (currentSection.id === "Sales") {
-                    await saveSalesAndMarketingMutation.mutateAsync({
-                        accountId,
-                        sectionData: apiPayload,
-                    });
-                } else if (currentSection.id === "customer") {
-                    await saveCustomerExperienceMutation.mutateAsync({
-                        accountId,
-                        sectionData: apiPayload,
-                    });
-                } else if (currentSection.id === "supply") {
-                    await saveSupplyAndLogisticsMutation.mutateAsync({
-                        accountId,
-                        sectionData: apiPayload,
-                    });
-                } else if (currentSection.id === "service") {
-                    await saveServiceRequestsMutation.mutateAsync({
-                        accountId,
-                        sectionData: apiPayload,
-                    });
-                } else if (currentSection.id === "people") {
-                    await savePeopleAndGovernanceMutation.mutateAsync({
-                        accountId,
-                        sectionData: apiPayload,
-                    });
+                        const visionStrategyPayload = {
+                            ...apiPayload,
+                            alignmentScore: Math.round(mandatoryCompletion),
+                            dataCompleteness: Math.round(sectionCompletion),
+                        };
+                        await saveVisionStrategyMutation.mutateAsync({
+                            accountId,
+                            sectionData: visionStrategyPayload,
+                        });
+                    } else if (currentSection.id === "products") {
+                        await saveProductsMutation.mutateAsync({
+                            accountId,
+                            sectionData: apiPayload,
+                        });
+                    } else if (currentSection.id === "Sales") {
+                        await saveSalesAndMarketingMutation.mutateAsync({
+                            accountId,
+                            sectionData: apiPayload,
+                        });
+                    } else if (currentSection.id === "customer") {
+                        await saveCustomerExperienceMutation.mutateAsync({
+                            accountId,
+                            sectionData: apiPayload,
+                        });
+                    } else if (currentSection.id === "supply") {
+                        await saveSupplyAndLogisticsMutation.mutateAsync({
+                            accountId,
+                            sectionData: apiPayload,
+                        });
+                    } else if (currentSection.id === "service") {
+                        await saveServiceRequestsMutation.mutateAsync({
+                            accountId,
+                            sectionData: apiPayload,
+                        });
+                    } else if (currentSection.id === "people") {
+                        await savePeopleAndGovernanceMutation.mutateAsync({
+                            accountId,
+                            sectionData: apiPayload,
+                        });
+                    }
                 }
 
-
-
                 // Update local state (keep your existing code)
-        setProfileData(newProfileData);
+                setProfileData(newProfileData);
 
-        // Save to localStorage for persistence and trigger update event
-        try {
-          const profileDataToSave = {
-            ...newProfileData,
-            updatedAt: new Date().toISOString(),
-          };
-          localStorage.setItem("profileData", JSON.stringify(profileDataToSave));
-          
-          // Dispatch custom event to notify other components (e.g., overview page)
-          window.dispatchEvent(new CustomEvent("profileDataUpdated", {
-            detail: { profileData: profileDataToSave }
-          }));
-        } catch (e) {
-          // Silently handle localStorage save errors
-        }
+                // Save to localStorage for persistence and trigger update event
+                try {
+                    const profileDataToSave = {
+                        ...newProfileData,
+                        updatedAt: new Date().toISOString(),
+                    };
+                    localStorage.setItem("profileData", JSON.stringify(profileDataToSave));
+                    window.dispatchEvent(new CustomEvent("profileDataUpdated", {
+                        detail: { profileData: profileDataToSave }
+                    }));
+                } catch (e) {
+                    // Silently handle localStorage save errors
+                }
 
                 // Show success toast
                 toast.success(formatProfileString("toast.saveSuccess", undefined, "Changes saved successfully"));
@@ -590,14 +577,14 @@ export function BusinessProfile({activeSection = "profile"}) {
             profileData.companyStage
         );
 
-        // ✅ ADD THIS: Safety check for division by zero
+        // âœ… ADD THIS: Safety check for division by zero
         console.log("mandatoryCheck: " + mandatoryCheck);
         if (mandatoryCheck.total === 0) return 100; // No mandatory fields = 100% complete
 
         const percentage = (mandatoryCheck.completed / mandatoryCheck.total) * 100;
 
-        // ✅ ADD THIS: Debug logging (remove after testing)
-        console.log("📊 Overall Mandatory Completion:", {
+        // âœ… ADD THIS: Debug logging (remove after testing)
+        console.log("ðŸ“Š Overall Mandatory Completion:", {
             completed: mandatoryCheck.completed,
             total: mandatoryCheck.total,
             percentage: Math.round(percentage),
@@ -766,7 +753,7 @@ export function BusinessProfile({activeSection = "profile"}) {
                                                 )}
                                             </div>
                                             <p className="text-sm text-gray-500 break-word">
-                                                {profileData?.companyType || "Industry"} •{" "}
+                                                {profileData?.companyType || "Industry"} â€¢{" "}
                                                 {profileData?.companySize || "Company Size"}
                                             </p>
                                         </div>
@@ -1192,3 +1179,5 @@ export function BusinessProfile({activeSection = "profile"}) {
         </div>
     );
 }
+
+
