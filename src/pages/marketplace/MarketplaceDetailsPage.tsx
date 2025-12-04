@@ -196,26 +196,36 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
                     <Globe className="mr-3 text-primary" />
                     Application Process
                   </h2>
-                  <div className="relative">
-                    {/* Vertical Line */}
-                    <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
-                    
-                    <div className="space-y-8">
-                      {processSteps.map((step: any, idx: number) => (
-                        <div key={idx} className="relative flex items-start pl-12">
-                          <div className="absolute left-0 top-1 w-8 h-8 bg-white border-2 border-primary rounded-full flex items-center justify-center z-10 font-bold text-primary text-sm">
-                            {idx + 1}
-                          </div>
-                          <div>
-                            <h3 className="text-lg font-bold text-gray-900 mb-1">
-                              {step.title || `Step ${idx + 1}`}
-                            </h3>
-                            <p className="text-gray-600">{step.description || step}</p>
-                          </div>
-                        </div>
-                      ))}
+                  
+                  {processSteps.length === 1 ? (
+                    // Single step - clean simple layout
+                    <div className="bg-gray-50 rounded-xl p-6">
+                      <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                        {processSteps[0].description || processSteps[0]}
+                      </p>
                     </div>
-                  </div>
+                  ) : (
+                    // Multiple steps - timeline layout
+                    <div className="relative">
+                      <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
+                      
+                      <div className="space-y-8">
+                        {processSteps.map((step: any, idx: number) => (
+                          <div key={idx} className="relative flex items-start pl-12">
+                            <div className="absolute left-0 top-1 w-8 h-8 bg-white border-2 border-primary rounded-full flex items-center justify-center z-10 font-bold text-primary text-sm">
+                              {idx + 1}
+                            </div>
+                            <div>
+                              <h3 className="text-lg font-bold text-gray-900 mb-1">
+                                {step.title || `Step ${idx + 1}`}
+                              </h3>
+                              <p className="text-gray-600">{step.description || step}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -241,24 +251,37 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
                 </button>
                 
                 <div className="mt-8 pt-6 border-t border-gray-100">
-                  <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
-                    <Lock size={16} className="mr-2 text-gray-400" />
+                  <h4 className="font-bold text-gray-900 mb-4 flex items-center text-base">
+                    <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center mr-3">
+                      <FileText size={16} className="text-primary" />
+                    </div>
                     Required Documents
                   </h4>
-                  <ul className="space-y-3">
-                    {requirements.length > 0 ? (
-                      requirements.map((req: string, idx: number) => (
-                        <li key={idx} className="text-sm text-gray-600 flex items-start">
-                          <div className="w-1.5 h-1.5 bg-primary/60 rounded-full mt-1.5 mr-2 flex-shrink-0"></div>
-                          {req}
-                        </li>
-                      ))
-                    ) : (
-                      <li className="text-sm text-gray-500 italic">
-                        Check guide for details
-                      </li>
-                    )}
-                  </ul>
+                  {requirements.length > 0 ? (
+                    <div className="space-y-2">
+                      {requirements.map((req: string, idx: number) => (
+                        <div 
+                          key={idx} 
+                          className="bg-gray-50 rounded-lg p-3 border border-gray-100 hover:border-primary/20 transition-colors"
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                              <CheckCircle size={12} className="text-primary" />
+                            </div>
+                            <p className="text-sm text-gray-700 leading-relaxed flex-1">
+                              {req}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-100 text-center">
+                      <p className="text-sm text-gray-500">
+                        Check the application guide for document requirements
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
               
