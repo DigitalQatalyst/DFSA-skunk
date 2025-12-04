@@ -60,6 +60,7 @@ export const dfsaEnquirySignupValidationSchema = yup.object({
   phone: yup
     .string()
     .required("Please enter a valid telephone number")
+    .transform((value) => value?.replace(/[\s\-()]/g, '') || '')
     .matches(
       /^\+?[1-9]\d{1,14}$/,
       "Please enter a valid international telephone number (E.164 format, e.g., +971501234567)"
@@ -70,9 +71,17 @@ export const dfsaEnquirySignupValidationSchema = yup.object({
   suggestedDate: yup
     .date()
     .nullable()
-    .min(
-      new Date(),
-      "Suggested date must be in the future"
+    .test(
+      'is-future-date',
+      'Suggested date must be today or in the future',
+      function(value) {
+        if (!value) return true; // nullable
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Reset to midnight for date-only comparison
+        const selectedDate = new Date(value);
+        selectedDate.setHours(0, 0, 0, 0);
+        return selectedDate >= today;
+      }
     )
     .typeError("Please enter a valid date"),
 

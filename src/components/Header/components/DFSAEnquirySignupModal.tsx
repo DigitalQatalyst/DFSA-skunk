@@ -72,6 +72,24 @@ export const DFSAEnquirySignupModal: React.FC<DFSAEnquirySignupModalProps> = ({
 
   if (!isOpen) return null;
 
+  // Helper function to get step title by step number
+  const getStepTitleByNumber = (stepNum: number): string => {
+    switch (stepNum) {
+      case 1:
+        return 'Contact Information';
+      case 2:
+        return 'Activity Type';
+      case 3:
+        return 'Entity Type';
+      case 4:
+        return 'Regulatory Status';
+      case 5:
+        return 'Data Consent';
+      default:
+        return '';
+    }
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
@@ -255,6 +273,34 @@ export const DFSAEnquirySignupModal: React.FC<DFSAEnquirySignupModalProps> = ({
           }
         });
         setErrors(validationErrors);
+
+        // Navigate to first step with errors
+        const errorFields = Object.keys(validationErrors);
+        if (errorFields.length > 0) {
+          const firstErrorField = errorFields[0];
+
+          // Map fields to steps
+          const fieldStepMap: Record<string, number> = {
+            companyName: 1,
+            contactName: 1,
+            email: 1,
+            phone: 1,
+            suggestedDate: 1,
+            activityType: 2,
+            entityType: 3,
+            entityTypeOther: 3,
+            currentlyRegulated: 4,
+            difcaConsent: 5,
+          };
+
+          const errorStep = fieldStepMap[firstErrorField] || 1;
+          setCurrentStep(errorStep);
+
+          // Show user-friendly message
+          setSubmitError(
+            `Please correct the errors in ${getStepTitleByNumber(errorStep)} before submitting.`
+          );
+        }
 
         auditLog.log(DFSA_AUDIT_EVENTS.ENQUIRY_VALIDATION_FAILED, {
           errors: validationErrors,
