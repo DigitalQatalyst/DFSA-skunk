@@ -11,6 +11,7 @@
  */
 
 import { useEffect, useRef, useCallback, useState } from 'react'
+import { toast } from 'sonner'
 import { DFSAOnboardingFormData } from '../types'
 
 interface UseAutoSaveOptions {
@@ -87,9 +88,21 @@ export const useAutoSave = (
         activityType: formData.activityType,
       })
 
+      // Show subtle success toast
+      toast.success('Progress saved', {
+        duration: 2000,
+        position: 'bottom-right',
+      })
+
       onSaveSuccess?.()
     } catch (error) {
       console.error('[AutoSave] Failed to save form data:', error)
+
+      // Show error toast
+      toast.error('Failed to save progress', {
+        duration: 3000,
+      })
+
       onSaveError?.(error as Error)
     } finally {
       setIsSaving(false)
