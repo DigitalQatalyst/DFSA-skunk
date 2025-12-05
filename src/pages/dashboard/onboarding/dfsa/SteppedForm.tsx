@@ -11,20 +11,23 @@
  * - Audit logging
  */
 
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm, FormProvider } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Check, ChevronRight, ArrowLeft, ArrowRight } from 'lucide-react'
+import { Check, ChevronRight, ArrowLeft } from 'lucide-react'
 import { Button } from '../../../../components/Button/Button'
 import { DFSAOnboardingFormData, getInitialValues, DFSAActivityType } from './types'
 import { getDynamicSchema } from './validation'
 import { usePathwayConfig } from './hooks/usePathwayConfig'
-import { useAutoSave } from './hooks/useAutoSave'
-import { usePrePopulation } from './hooks/usePrePopulation'
+import { useFormPersistence } from './hooks/useFormPersistence'
+import { useSubmitApplicationMutation } from './hooks/useOnboardingQueries'
 import { setDemoOnboardingStatus } from '../../../../services/onboardingStatus'
 import { auditLog as auditLogger, DFSA_AUDIT_EVENTS } from '../../../../utils/auditLogger'
 import { getStepFields } from './utils/stepFieldMapping'
+import { toast } from 'sonner'
+import { SuccessModal } from './components/SuccessModal'
+import { LoadingStep } from './components/LoadingStep'
 
 // Import all step components
 import { WelcomeStep } from './steps/WelcomeStep'
@@ -37,45 +40,6 @@ import { RegulatoryComplianceStep } from './steps/RegulatoryComplianceStep'
 import { DocumentUploadsStep } from './steps/DocumentUploadsStep'
 import { ReviewSubmitStep } from './steps/ReviewSubmitStep'
 
-interface SuccessModalProps {
-  onClose: () => void
-  applicationReference: string
-}
-
-const SuccessModal: React.FC<SuccessModalProps> = ({ onClose, applicationReference }) => {
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-8 max-w-md w-[90%] text-center">
-        <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Check size={32} className="text-white" />
-        </div>
-        <h3 className="text-xl font-semibold text-gray-900 mb-4">
-          Application Submitted Successfully!
-        </h3>
-        <p className="text-gray-600 text-sm mb-4">
-          Your DFSA licence application has been submitted and is now under review.
-        </p>
-        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 text-left">
-          <p className="text-xs font-medium text-blue-800 mb-1">Application Reference</p>
-          <p className="text-lg font-bold text-blue-900">{applicationReference}</p>
-        </div>
-        <p className="text-gray-500 text-xs mb-8">
-          You will receive an email confirmation shortly. The DFSA will review your application and
-          may request additional information. Typical processing time is 30-90 business days.
-        </p>
-        <Button
-          variant="primary"
-          onClick={onClose}
-          icon={<ArrowRight size={16} />}
-          iconPosition="right"
-        >
-          Return to Dashboard
-        </Button>
-      </div>
-    </div>
-  )
-}
-
 interface SteppedFormProps {
   onComplete?: () => void
   isModal?: boolean
@@ -86,10 +50,6 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
   const [currentStep, setCurrentStep] = useState<number>(0) // 0-indexed for array access
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [applicationReference, setApplicationReference] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  // Pre-population from sign-up
-  const { prePopulatedData, hasSignUpData, clearSignUpData } = usePrePopulation()
 
   // Initialize form with React Hook Form
   const form = useForm<DFSAOnboardingFormData>({
@@ -99,26 +59,94 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
   })
 
   const activityType = form.watch('activityType') as DFSAActivityType
+  const formId = form.watch('formId')
 
   // Get pathway configuration and visible steps
   const { visibleSteps, totalSteps } = usePathwayConfig(activityType)
 
-  // Auto-save (60 seconds)
-  const { isSaving, lastSaved } = useAutoSave(() => form.getValues(), {
-    interval: 60000,
-    enabled: true,
-  })
-
-  // Pre-populate form on mount
-  useEffect(() => {
-    if (prePopulatedData && hasSignUpData) {
-      form.reset(prePopulatedData)
-      clearSignUpData()
-      auditLogger.log('DFSA_ONBOARDING_PREPOPULATED', {
-        activityType: prePopulatedData.activityType,
-      })
+  // Form persistence with React Query (replaces useAutoSave + usePrePopulation)
+  const { draftData, isLoadingDraft, isSaving, lastSaved } = useFormPersistence(
+    () => form.getValues(),
+    {
+      userId: 'demo', // Replace with actual user ID when auth is implemented
+      formId: formId,
+      enabled: true,
+      autoSaveInterval: 60000, // 60 seconds
+      onLoadSuccess: (data) => {
+        // Merge loaded draft with current form values
+        form.reset({ ...form.getValues(), ...data })
+        auditLogger.log('DFSA_ONBOARDING_DRAFT_LOADED', {
+          activityType: data.activityType,
+        })
+      },
     }
-  }, [prePopulatedData, hasSignUpData])
+  )
+
+  // Submit application mutation
+  const submitMutation = useSubmitApplicationMutation()
+
+  // Step completion tracking
+  const [stepCompletions, setStepCompletions] = useState<Record<string, number>>({})
+
+  // Calculate completion percentage for a step
+  const calculateStepCompletion = useCallback(
+    (stepId: string) => {
+      const fieldsToCheck = getStepFields(stepId)
+
+      if (fieldsToCheck.length === 0) {
+        return 0
+      }
+
+      const formValues = form.getValues()
+      let completedCount = 0
+
+      fieldsToCheck.forEach((fieldPath) => {
+        // Get nested field value (e.g., "businessAddress.line1")
+        const value = fieldPath.split('.').reduce((obj: any, key) => obj?.[key], formValues)
+
+        // Check if field has a value
+        if (value !== null && value !== undefined && value !== '') {
+          // Handle arrays (e.g., shareholders)
+          if (Array.isArray(value) && value.length > 0) {
+            completedCount++
+          }
+          // Handle boolean values
+          else if (typeof value === 'boolean') {
+            completedCount++
+          }
+          // Handle strings and numbers
+          else if (value) {
+            completedCount++
+          }
+        }
+      })
+
+      return Math.round((completedCount / fieldsToCheck.length) * 100)
+    },
+    [form]
+  )
+
+  // Update completion tracking when form values change
+  useEffect(() => {
+    const subscription = form.watch(() => {
+      const newCompletions: Record<string, number> = {}
+
+      visibleSteps.forEach((step) => {
+        newCompletions[step.id] = calculateStepCompletion(step.id)
+      })
+
+      setStepCompletions(newCompletions)
+    })
+
+    // Initial calculation
+    const initialCompletions: Record<string, number> = {}
+    visibleSteps.forEach((step) => {
+      initialCompletions[step.id] = calculateStepCompletion(step.id)
+    })
+    setStepCompletions(initialCompletions)
+
+    return () => subscription.unsubscribe()
+  }, [form, visibleSteps, calculateStepCompletion])
 
   // Log onboarding start
   useEffect(() => {
@@ -175,8 +203,6 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
 
   // Handle final submission
   const handleSubmit = form.handleSubmit(async (data) => {
-    setIsSubmitting(true)
-
     try {
       auditLogger.log('DFSA_FORM_SUBMITTED', {
         userId: data.userId,
@@ -184,17 +210,18 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
         pathway: data.pathway,
       })
 
-      // Mock submission (replace with actual API call when backend is ready)
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      // Submit application using React Query mutation
+      const result = await submitMutation.mutateAsync(data)
 
-      const appRef = `APP-${new Date().getFullYear()}-${Math.floor(Math.random() * 99999)
-        .toString()
-        .padStart(5, '0')}`
-
-      setApplicationReference(appRef)
+      setApplicationReference(result.applicationReference)
 
       auditLogger.log('DFSA_SUBMISSION_SUCCESS', {
-        applicationReference: appRef,
+        applicationReference: result.applicationReference,
+        submittedAt: result.submittedAt,
+      })
+
+      toast.success('Application submitted successfully!', {
+        description: `Reference: ${result.applicationReference}`,
       })
 
       setShowSuccessModal(true)
@@ -202,9 +229,10 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
       auditLogger.log('DFSA_SUBMISSION_FAILED', {
         error: String(error),
       })
-      alert('Submission failed. Please try again.')
-    } finally {
-      setIsSubmitting(false)
+      toast.error('Submission failed. Please try again.', {
+        description: 'If the problem persists, please contact support.',
+        duration: 5000,
+      })
     }
   })
 
@@ -246,7 +274,7 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
           <ReviewSubmitStep
             onEdit={handleEdit}
             onSubmit={handleSubmit}
-            isSubmitting={isSubmitting}
+            isSubmitting={submitMutation.isPending}
           />
         )
       default:
@@ -263,11 +291,38 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
       <div className={isModal ? '' : 'min-h-screen bg-gray-50 py-12 px-4 sm:px-6'}>
         <div className={isModal ? '' : 'max-w-6xl mx-auto'}>
           <div className="bg-white rounded-lg shadow-sm overflow-hidden p-8">
+            {/* Enhanced Progress Indicator */}
+            <div className="mb-6 bg-gray-50 border border-gray-200 rounded-lg p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-gray-700">
+                  Step {currentStep + 1} of {totalSteps}
+                </span>
+                <span className="text-sm text-gray-600">
+                  {Math.round(((currentStep + 1) / totalSteps) * 100)}% Complete
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-[#9B1823] h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${((currentStep + 1) / totalSteps) * 100}%` }}
+                  role="progressbar"
+                  aria-valuenow={currentStep + 1}
+                  aria-valuemin={0}
+                  aria-valuemax={totalSteps}
+                  aria-label={`Step ${currentStep + 1} of ${totalSteps}`}
+                />
+              </div>
+              <p className="text-xs text-gray-500 mt-2">
+                Estimated time remaining: {Math.max(1, totalSteps - currentStep - 1) * 5} minutes
+              </p>
+            </div>
+
             {/* Top Tab Navigation */}
             <div className="flex gap-0 border-b-2 border-gray-200 mb-8 overflow-x-auto">
               {visibleSteps.map((step, index) => {
                 const isActive = currentStep === index
                 const isCompleted = currentStep > index
+                const completion = stepCompletions[step.id] || 0
 
                 return (
                   <button
@@ -299,16 +354,45 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
                     </div>
 
                     {/* Tab Content */}
-                    <div className="flex flex-col items-start text-left">
-                      <span
-                        className={`
-                        text-sm font-semibold
-                        ${isActive ? 'text-[#9B1823]' : 'text-gray-700'}
-                        max-sm:hidden
-                      `}
-                      >
-                        {step.title}
-                      </span>
+                    <div className="flex flex-col items-start text-left flex-1">
+                      <div className="flex items-center gap-2 w-full">
+                        <span
+                          className={`
+                          text-sm font-semibold
+                          ${isActive ? 'text-[#9B1823]' : 'text-gray-700'}
+                          max-sm:hidden
+                        `}
+                        >
+                          {step.title}
+                        </span>
+
+                        {/* Completion Badge - only show for steps with progress */}
+                        {completion > 0 && (
+                          <span
+                            className={`
+                            flex items-center text-xs px-1.5 py-0.5 rounded-full whitespace-nowrap
+                            ${
+                              completion === 100
+                                ? 'bg-green-100 text-green-700'
+                                : 'bg-amber-100 text-amber-700'
+                            }
+                            max-sm:hidden
+                          `}
+                          >
+                            {completion === 100 ? (
+                              <>
+                                <Check size={12} className="mr-1" />
+                                {completion}%
+                              </>
+                            ) : (
+                              <>
+                                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1" />
+                                {completion}%
+                              </>
+                            )}
+                          </span>
+                        )}
+                      </div>
                       <span className="text-xs text-gray-500 max-sm:hidden">{step.description}</span>
                     </div>
                   </button>
@@ -351,7 +435,9 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
             )}
 
             {/* Main Content */}
-            <div className="py-8">{renderStepContent()}</div>
+            <div className="py-8">
+              {isLoadingDraft ? <LoadingStep /> : renderStepContent()}
+            </div>
 
             {/* Navigation Buttons */}
             {currentStepData?.id !== 'review' && (

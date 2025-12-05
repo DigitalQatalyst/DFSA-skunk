@@ -15,6 +15,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 import { DFSAOnboardingFormData } from '../types'
 import { usePathwayConfig } from '../hooks/usePathwayConfig'
 import { getRequiredDocuments } from '../validation'
+import { FormFieldGroup } from '../components/FormFieldGroup'
 
 interface DocumentFieldProps {
   name: string
@@ -57,14 +58,14 @@ const DocumentField: React.FC<DocumentFieldProps> = ({ name, label, required, he
                 }
               }}
               className={`
-                w-full px-3 py-2 border rounded-md text-sm
-                focus:ring-2 focus:ring-primary focus:border-transparent
+                w-full px-3 py-2 border rounded-md text-sm min-h-[44px]
+                focus:ring-2 focus:ring-[#9B1823] focus:border-transparent
                 file:mr-4 file:py-2 file:px-4
                 file:rounded-md file:border-0
                 file:text-sm file:font-medium
-                file:bg-dfsa-teal-50 file:text-dfsa-teal-800
-                hover:file:bg-dfsa-teal-100
-                ${error ? 'border-red-500' : 'border-gray-300'}
+                file:bg-blue-50 file:text-blue-800
+                hover:file:bg-blue-100
+                ${error ? 'border-red-500 bg-red-50' : 'border-gray-300'}
               `}
             />
             {field.value && (
@@ -97,10 +98,10 @@ export const DocumentUploadsStep: React.FC = () => {
   const requiredDocs = getRequiredDocuments(activityType)
 
   return (
-    <div className="space-y-8 max-w-4xl">
+    <div className="space-y-6 max-w-4xl">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Document Uploads</h2>
+        <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Document Uploads</h2>
         <p className="text-sm text-gray-600 mt-2">
           Upload all required documentation. Documents must be clear, legible, and in English or
           accompanied by certified translations.
@@ -111,10 +112,10 @@ export const DocumentUploadsStep: React.FC = () => {
       </div>
 
       {/* File Requirements */}
-      <div className="bg-dfsa-teal-50 border-l-4 border-dfsa-teal-600 p-4">
+      <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
         <div className="flex">
           <div className="flex-shrink-0">
-            <svg className="h-5 w-5 text-dfsa-teal-600" viewBox="0 0 20 20" fill="currentColor">
+            <svg className="h-5 w-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
               <path
                 fillRule="evenodd"
                 d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
@@ -123,8 +124,8 @@ export const DocumentUploadsStep: React.FC = () => {
             </svg>
           </div>
           <div className="ml-3">
-            <h3 className="text-sm font-medium text-dfsa-teal-800">File Upload Requirements</h3>
-            <ul className="mt-2 text-sm text-dfsa-teal-800 list-disc pl-5 space-y-1">
+            <h4 className="text-sm font-medium text-blue-800">File Upload Requirements</h4>
+            <ul className="mt-2 text-sm text-blue-800 list-disc pl-5 space-y-1">
               <li>Accepted formats: PDF, DOC, DOCX, JPG, PNG</li>
               <li>Maximum file size: 10MB per document</li>
               <li>Documents must be current and not expired</li>
@@ -135,173 +136,198 @@ export const DocumentUploadsStep: React.FC = () => {
         </div>
       </div>
 
-      {/* Base Documents (All Pathways) */}
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Essential Documents</h3>
-        <p className="text-sm text-gray-600 mb-6">
-          The following documents are required for all licence applications.
-        </p>
+      {/* Essential Documents Group */}
+      <FormFieldGroup
+        title="Essential Documents"
+        groupId="essential-documents"
+        fieldNames={[
+          'documents.certificateOfIncorporation',
+          'documents.articlesOfAssociation',
+          'documents.businessPlan',
+        ]}
+        isRequired={true}
+        helpText="The following documents are required for all licence applications. (Ref: DFSA Rulebook GEN Module Rule 2.2.8)"
+        defaultExpanded={true}
+        fields={
+          <div className="space-y-6">
+            <DocumentField
+              name="documents.certificateOfIncorporation"
+              label="Certificate of Incorporation"
+              required={true}
+              helpText="Official document evidencing legal incorporation, issued by the incorporating authority."
+            />
 
-        <div className="space-y-6">
-          <DocumentField
-            name="documents.certificateOfIncorporation"
-            label="Certificate of Incorporation"
-            required={true}
-            helpText="Official document evidencing legal incorporation, issued by the incorporating authority."
-          />
+            <DocumentField
+              name="documents.articlesOfAssociation"
+              label="Articles of Association (or equivalent constitutional documents)"
+              required={true}
+              helpText="The governing documents that set out the entity's structure and rules."
+            />
 
-          <DocumentField
-            name="documents.articlesOfAssociation"
-            label="Articles of Association (or equivalent constitutional documents)"
-            required={true}
-            helpText="The governing documents that set out the entity's structure and rules."
-          />
+            <DocumentField
+              name="documents.businessPlan"
+              label="Business Plan"
+              required={true}
+              helpText="Comprehensive business plan detailing proposed activities, target markets, revenue model, and growth strategy (minimum 3-year projection)."
+            />
+          </div>
+        }
+      />
 
-          <DocumentField
-            name="documents.businessPlan"
-            label="Business Plan"
-            required={true}
-            helpText="Comprehensive business plan detailing proposed activities, target markets, revenue model, and growth strategy (minimum 3-year projection)."
-          />
-        </div>
-      </div>
-
-      {/* Pathway A - Financial Services */}
+      {/* Financial Services Additional Documents Group (Pathway A) */}
       {config.pathway === 'A' && (
-        <div className="bg-white border border-gray-200 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Financial Services - Additional Documents
-          </h3>
-          <p className="text-sm text-gray-600 mb-6">
-            Additional documents required for Financial Services licence applications.
-          </p>
+        <FormFieldGroup
+          title="Financial Services - Additional Documents"
+          groupId="financial-services-documents"
+          fieldNames={[
+            'documents.complianceManual',
+            'documents.amlPolicy',
+            'documents.shareholderRegistry',
+            'documents.keyPersonnelCVs',
+          ]}
+          isRequired={true}
+          helpText="Additional documents required for Financial Services licence applications. (Ref: DFSA Rulebook GEN Module Rule 2.2.8)"
+          defaultExpanded={true}
+          fields={
+            <div className="space-y-6">
+              <DocumentField
+                name="documents.complianceManual"
+                label="Compliance Manual"
+                required={true}
+                helpText="Comprehensive compliance policies and procedures manual covering all regulatory obligations."
+              />
 
-          <div className="space-y-6">
-            <DocumentField
-              name="documents.complianceManual"
-              label="Compliance Manual"
-              required={true}
-              helpText="Comprehensive compliance policies and procedures manual covering all regulatory obligations."
-            />
+              <DocumentField
+                name="documents.amlPolicy"
+                label="AML/CFT Policy & Procedures"
+                required={true}
+                helpText="Anti-Money Laundering and Combating Financing of Terrorism policies, including customer due diligence, transaction monitoring, and suspicious activity reporting."
+              />
 
-            <DocumentField
-              name="documents.amlPolicy"
-              label="AML/CFT Policy & Procedures"
-              required={true}
-              helpText="Anti-Money Laundering and Combating Financing of Terrorism policies, including customer due diligence, transaction monitoring, and suspicious activity reporting."
-            />
+              <DocumentField
+                name="documents.shareholderRegistry"
+                label="Shareholder Registry"
+                required={true}
+                helpText="Official register of all shareholders with ownership percentages and identification details."
+              />
 
-            <DocumentField
-              name="documents.shareholderRegistry"
-              label="Shareholder Registry"
-              required={true}
-              helpText="Official register of all shareholders with ownership percentages and identification details."
-            />
-
-            <DocumentField
-              name="documents.keyPersonnelCVs"
-              label="CVs of Key Personnel (Compliance Officer, MLRO, Senior Management)"
-              required={true}
-              helpText="Detailed CVs demonstrating qualifications and experience of all key personnel."
-            />
-          </div>
-        </div>
+              <DocumentField
+                name="documents.keyPersonnelCVs"
+                label="CVs of Key Personnel (Compliance Officer, MLRO, Senior Management)"
+                required={true}
+                helpText="Detailed CVs demonstrating qualifications and experience of all key personnel."
+              />
+            </div>
+          }
+        />
       )}
 
-      {/* Pathway C - Crypto Token */}
+      {/* Crypto Token Additional Documents Group (Pathway C) */}
       {config.pathway === 'C' && (
-        <div className="bg-white border border-gray-200 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Crypto Token - Additional Documents
-          </h3>
-          <p className="text-sm text-gray-600 mb-6">
-            Additional documents required for Crypto Token licence applications.
-          </p>
+        <FormFieldGroup
+          title="Crypto Token - Additional Documents"
+          groupId="crypto-token-documents"
+          fieldNames={[
+            'documents.whitePaper',
+            'documents.tokenEconomicsModel',
+            'documents.cryptoShareholderRegistry',
+            'documents.technicalArchitecture',
+            'documents.securityAudit',
+          ]}
+          isRequired={true}
+          helpText="Additional documents required for Crypto Token licence applications. (Ref: DFSA Rulebook GEN Module Rule 2.2.8)"
+          defaultExpanded={true}
+          fields={
+            <div className="space-y-6">
+              <DocumentField
+                name="documents.whitePaper"
+                label="White Paper"
+                required={true}
+                helpText="Comprehensive white paper detailing the token project, technology, use cases, and tokenomics."
+              />
 
-          <div className="space-y-6">
-            <DocumentField
-              name="documents.whitePaper"
-              label="White Paper"
-              required={true}
-              helpText="Comprehensive white paper detailing the token project, technology, use cases, and tokenomics."
-            />
+              <DocumentField
+                name="documents.tokenEconomicsModel"
+                label="Token Economics Model"
+                required={true}
+                helpText="Detailed token economics including supply, distribution, vesting schedules, and utility."
+              />
 
-            <DocumentField
-              name="documents.tokenEconomicsModel"
-              label="Token Economics Model"
-              required={true}
-              helpText="Detailed token economics including supply, distribution, vesting schedules, and utility."
-            />
+              <DocumentField
+                name="documents.cryptoShareholderRegistry"
+                label="Shareholder Registry"
+                required={true}
+                helpText="Official register of all shareholders with ownership percentages and identification details."
+              />
 
-            <DocumentField
-              name="documents.cryptoShareholderRegistry"
-              label="Shareholder Registry"
-              required={true}
-              helpText="Official register of all shareholders with ownership percentages and identification details."
-            />
+              <DocumentField
+                name="documents.technicalArchitecture"
+                label="Technical Architecture Document"
+                required={true}
+                helpText="Technical documentation describing blockchain architecture, smart contracts, and security measures."
+              />
 
-            <DocumentField
-              name="documents.technicalArchitecture"
-              label="Technical Architecture Document"
-              required={true}
-              helpText="Technical documentation describing blockchain architecture, smart contracts, and security measures."
-            />
-
-            <DocumentField
-              name="documents.securityAudit"
-              label="Security Audit Report"
-              required={false}
-              helpText="Independent security audit of smart contracts and platform infrastructure (highly recommended)."
-            />
-          </div>
-        </div>
+              <DocumentField
+                name="documents.securityAudit"
+                label="Security Audit Report"
+                required={false}
+                helpText="Independent security audit of smart contracts and platform infrastructure (highly recommended)."
+              />
+            </div>
+          }
+        />
       )}
 
-      {/* Optional Supporting Documents */}
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
-          Optional Supporting Documents
-        </h3>
-        <p className="text-sm text-gray-600 mb-6">
-          Additional documents that may support your application (not required but recommended).
-        </p>
+      {/* Optional Supporting Documents Group */}
+      <FormFieldGroup
+        title="Optional Supporting Documents"
+        groupId="optional-documents"
+        fieldNames={[
+          'documents.auditedFinancials',
+          'documents.bankReferences',
+          'documents.professionalIndemnity',
+          'documents.groupStructureDiagram',
+        ]}
+        isRequired={false}
+        helpText="Additional documents that may support your application (not required but recommended)."
+        fields={
+          <div className="space-y-6">
+            <DocumentField
+              name="documents.auditedFinancials"
+              label="Audited Financial Statements"
+              required={false}
+              helpText="Most recent audited financial statements (if available)."
+            />
 
-        <div className="space-y-6">
-          <DocumentField
-            name="documents.auditedFinancials"
-            label="Audited Financial Statements"
-            required={false}
-            helpText="Most recent audited financial statements (if available)."
-          />
+            <DocumentField
+              name="documents.bankReferences"
+              label="Bank References"
+              required={false}
+              helpText="Reference letters from banking institutions."
+            />
 
-          <DocumentField
-            name="documents.bankReferences"
-            label="Bank References"
-            required={false}
-            helpText="Reference letters from banking institutions."
-          />
+            <DocumentField
+              name="documents.professionalIndemnity"
+              label="Professional Indemnity Insurance"
+              required={false}
+              helpText="Proof of professional indemnity insurance coverage (if applicable)."
+            />
 
-          <DocumentField
-            name="documents.professionalIndemnity"
-            label="Professional Indemnity Insurance"
-            required={false}
-            helpText="Proof of professional indemnity insurance coverage (if applicable)."
-          />
-
-          <DocumentField
-            name="documents.groupStructureDiagram"
-            label="Group Structure Diagram"
-            required={false}
-            helpText="Visual diagram showing corporate group structure (if part of a group)."
-          />
-        </div>
-      </div>
+            <DocumentField
+              name="documents.groupStructureDiagram"
+              label="Group Structure Diagram"
+              required={false}
+              helpText="Visual diagram showing corporate group structure (if part of a group)."
+            />
+          </div>
+        }
+      />
 
       {/* Information Note */}
-      <div className="bg-gray-50 border-l-4 border-gray-400 p-4">
+      <div className="bg-gray-50 border-l-4 border-gray-400 p-4 rounded-r-lg">
         <div className="flex">
           <div className="flex-shrink-0">
-            <svg className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+            <svg className="h-5 w-5 text-gray-600" viewBox="0 0 20 20" fill="currentColor">
               <path
                 fillRule="evenodd"
                 d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
@@ -320,7 +346,7 @@ export const DocumentUploadsStep: React.FC = () => {
       </div>
 
       {/* Regulatory Note */}
-      <div className="text-xs text-gray-500 pt-4 border-t border-gray-200">
+      <div className="text-xs text-gray-500 pt-4 border-t border-gray-200 bg-gray-50 p-4 rounded-lg">
         <p>
           <strong>Note:</strong> Document retention requirements apply. Copies of all submitted
           documents should be retained for a minimum of 7 years.
