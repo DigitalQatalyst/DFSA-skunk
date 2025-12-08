@@ -22,7 +22,7 @@ type MarketplaceType =
   | "courses"
   | "financial"
   | "events"
-  | "non-financial"
+  | "business-services"
   | "knowledge-hub";
 
 // Centralized promo card definitions
@@ -42,7 +42,7 @@ const promoCardDefinitions: Record<string, PromoCard> = {
     title: "Need expert advice?",
     description: "Connect with industry experts and get personalized guidance.",
     icon: <Briefcase size={24} className="text-white" />,
-    path: "/marketplace/non-financial",
+    path: "/marketplace/business-services",
     gradientFrom: "from-purple-600",
     gradientTo: "to-pink-500",
   },
@@ -83,7 +83,7 @@ const marketplacePromoCards: Record<MarketplaceType, PromoCard[]> = {
     promoCardDefinitions.advisory,
   ],
   events: [],
-  "non-financial": [],
+  "business-services": [],
   "knowledge-hub": [],
 };
 
@@ -105,9 +105,9 @@ export const MarketplaceRouter: React.FC = () => {
       title: "Events Marketplace",
       description: "Find upcoming events.",
     },
-    "non-financial": getMarketplaceConfig("non-financial") ?? {
-      title: "Non-Financial Services",
-      description: "Access advisory services.",
+    "business-services": getMarketplaceConfig("business-services") ?? {
+      title: "Business Services Hub",
+      description: "Access professional services to support and grow your business.",
     },
     "knowledge-hub": getMarketplaceConfig("knowledge-hub") ?? {
       title: "Knowledge Hub",
@@ -122,7 +122,7 @@ export const MarketplaceRouter: React.FC = () => {
     courses: [],
     financial: [],
     events: [],
-    "non-financial": [],
+    "business-services": [],
     "knowledge-hub": [],
   });
 
@@ -148,7 +148,7 @@ export const MarketplaceRouter: React.FC = () => {
     "courses",
     "financial",
     "events",
-    "non-financial",
+    "business-services",
     "knowledge-hub",
   ];
 

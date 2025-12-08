@@ -168,7 +168,7 @@ export const MarketplaceCard: React.FC<MarketplaceItemProps> = ({
     switch (marketplaceType) {
       case 'financial':
         return 'from-primary to-primary-light';
-      case 'non-financial':
+      case 'business-services':
         return 'from-primary to-dfsa-gold';
       case 'courses':
         return 'from-dfsa-gold to-yellow-500';

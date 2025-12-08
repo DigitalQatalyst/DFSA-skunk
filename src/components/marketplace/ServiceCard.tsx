@@ -36,8 +36,8 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
         return `/courses/${item.id}`;
       case 'financial':
         return `/marketplace/financial/${item.id}`;
-      case 'non-financial':
-        return `/marketplace/non-financial/${item.id}`;
+      case 'business-services':
+        return `/marketplace/business-services/${item.id}`;
       default:
         return `/${type}/${item.id}`;
     }
@@ -49,7 +49,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
         return 'Enroll Now';
       case 'financial':
         return 'Apply Now';
-      case 'non-financial':
+      case 'business-services':
         return 'Request Service';
       default:
         return 'Get Started';
