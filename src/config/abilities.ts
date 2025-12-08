@@ -344,7 +344,7 @@ export const routePermissions: Record<string, { subject: Subjects; action: Actio
   '/marketplace': { subject: 'marketplace', action: 'read' },
   '/courses': { subject: 'marketplace', action: 'read' },
   '/financial': { subject: 'marketplace', action: 'read' },
-  '/non-financial': { subject: 'marketplace', action: 'read' },
+  '/business-services': { subject: 'marketplace', action: 'read' },
   '/knowledge-hub': { subject: 'marketplace', action: 'read' },
 };
 

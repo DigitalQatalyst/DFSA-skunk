@@ -30,7 +30,7 @@ const marketplaces: Marketplace[] = [
     description:
       "Business registration, legal advisory, tax, compliance, and SME support services",
     icon: BuildingIcon,
-    href: "/marketplace/non-financial",
+    href: "/marketplace/business-services",
   },
   {
     id: "enquiries",

@@ -36,7 +36,7 @@ const normalizeDocumentName = (raw: string): string => {
 
 export interface UseProductDetailsArgs {
   itemId?: string;
-  marketplaceType: "courses" | "financial" | "non-financial" | "knowledge-hub";
+  marketplaceType: "courses" | "financial" | "business-services" | "knowledge-hub";
   shouldTakeAction?: boolean;
 }
 
@@ -214,7 +214,7 @@ export function useProductDetails({
   useEffect(() => {
     if (!itemId) return;
 
-    if (marketplaceType === 'non-financial') {
+    if (marketplaceType === 'business-services') {
       // Fetch from Supabase
       fetchNonFinancialServiceBySlug(itemId).then(service => {
         if (service) {
@@ -247,7 +247,7 @@ export function useProductDetails({
           });
         }
       }).catch(err => {
-        console.error('Error fetching non-financial service:', err);
+        console.error('Error fetching business service:', err);
       });
       return;
     }

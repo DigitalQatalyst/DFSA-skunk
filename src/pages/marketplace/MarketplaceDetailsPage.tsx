@@ -20,7 +20,7 @@ import { useProductDetails } from "../../hooks/useProductDetails";
 import { getMarketplaceConfig } from "../../utils/marketplaceConfig";
 
 interface MarketplaceDetailsPageProps {
-  marketplaceType: "courses" | "financial" | "events" | "non-financial" | "knowledge-hub";
+  marketplaceType: "courses" | "financial" | "events" | "business-services" | "knowledge-hub";
   bookmarkedItems?: string[];
   onToggleBookmark?: (itemId: string) => void;
   onAddToComparison?: (item: any) => void;

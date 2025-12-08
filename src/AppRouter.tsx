@@ -16,7 +16,8 @@ import {DiscoverAbuDhabi} from "./pages/discoverAbuDhabi";
 import NotFound from "./pages/NotFound";
 import MediaDetailPage from "./pages/media/MediaDetailPage";
 import KfBot from "./bot/KfBot";
-import GenericServiceRequestForm from "./pages/forms/GenericServiceRequestForm";
+import SchemaBasedServiceRequestForm from "./pages/forms/SchemaBasedServiceRequestForm";
+import TestSchemas from "./pages/TestSchemas";
 
 
 import NeedsAssessmentForm from "./pages/forms/NeedsAssessmentForm";
@@ -122,7 +123,7 @@ export function AppRouter() {
                   path="/forms/request-service" 
                   element={
                     // <ProtectedRoute>
-                      <GenericServiceRequestForm />
+                      <SchemaBasedServiceRequestForm />
                     //  </ProtectedRoute>
                   } 
                 />
@@ -339,6 +340,7 @@ export function AppRouter() {
         <Route path="/service-delivery-overview" element={<EJPOperationsDashboard />} />
 
                 {/* Test Pages */}
+                <Route path="/test/schemas" element={<TestSchemas />} />
                 <Route
                   path="/test/document-selector"
                   element={
