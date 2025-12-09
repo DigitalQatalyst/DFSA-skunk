@@ -144,18 +144,25 @@ export function ProfileSummaryTab() {
     group.fields.forEach((field) => {
       const isMandatory = field.mandatory === true || 
                          (Array.isArray(field.mandatory) && field.mandatory.length > 0);
+      const isReadOnly = field.readOnly === true;
+      
+      // Skip read-only (system-generated) fields from completion tracking
+      // They are filled by the system, not by the user
+      if (isReadOnly) {
+        return; // Don't count system-generated fields
+      }
       
       const value = profileData[field.fieldName];
       const hasValue = value !== null && value !== undefined && value !== '' && 
                       (!Array.isArray(value) || value.length > 0);
 
-      // Count all fields for overall completion
+      // Count all user-fillable fields for overall completion
       totalFields++;
       if (hasValue) {
         completedFields++;
       }
 
-      // Count mandatory fields separately
+      // Count mandatory user-fillable fields separately
       if (isMandatory) {
         totalMandatoryFields++;
         if (hasValue) {
@@ -164,17 +171,22 @@ export function ProfileSummaryTab() {
       }
     });
 
-    // Overall completion: percentage of all fields that are filled
+    // Overall completion: percentage of user-fillable fields that are filled
+    // If no user-fillable fields exist (all are read-only), show 0% or handle specially
     const completion = totalFields > 0 ? Math.round((completedFields / totalFields) * 100) : 0;
     
-    // Mandatory completion: percentage of mandatory fields that are filled
+    // Mandatory completion: percentage of mandatory user-fillable fields that are filled
     // If no mandatory fields exist, consider it 100% (nothing required)
     const mandatoryCompletion = totalMandatoryFields > 0 
       ? Math.round((completedMandatoryFields / totalMandatoryFields) * 100)
       : 100;
 
-    // Group is only "required" if it has mandatory fields
-    const isRequired = totalMandatoryFields > 0;
+    // Group is "required" if:
+    // 1. It has mandatory user-fillable fields, OR
+    // 2. It has user-fillable fields and is a critical group (like lifecycle_events)
+    // Special case: lifecycle_events is always required if it has user-fillable fields
+    const isRequired = totalMandatoryFields > 0 || 
+                      (totalFields > 0 && group.id === 'lifecycle_events');
 
     return {
       id: group.id,

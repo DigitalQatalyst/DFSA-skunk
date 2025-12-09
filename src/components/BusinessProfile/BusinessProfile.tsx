@@ -208,15 +208,21 @@ export function BusinessProfile({activeSection = "profile"}) {
             setSectionCompletions(completions);
             setMandatoryCompletions(mandatoryStats);
 
+            // Merge Profile Summary data for mandatory field checks
+            const mergedProfileData = {
+                ...newProfileData,
+                ...(profileSummaryData?.data || {}), // Include Profile Summary data
+            };
+
             const mandatoryFieldsCheck = checkMandatoryFieldsCompletion(
-                newProfileData,
+                mergedProfileData,
                 newProfileData.companyStage
             );
 
             // 5. Update the state used by your button
             setMissingMandatoryFields(mandatoryFieldsCheck.missing);
         }
-    }, [apiProfileData, apiFieldMapping, isContextLoading, profileConfig]);
+    }, [apiProfileData, apiFieldMapping, isContextLoading, profileConfig, profileSummaryData]);
 
     // Handle saving group changes from TabSection
     const handleSaveGroupChanges = useCallback(
@@ -382,9 +388,20 @@ export function BusinessProfile({activeSection = "profile"}) {
                 setSavingGroupIndex(null);
             }
 
-            // Perform all recalculations on the new data
+            // Merge Profile Summary data for mandatory field checks
+            const mergedProfileData = {
+                ...newProfileData,
+                sections: {
+                    ...(newProfileData.sections || {}),
+                    profile_summary: profileSummaryData?.data ? {
+                        fields: profileSummaryData.data
+                    } : (newProfileData.sections?.profile_summary || { fields: {} })
+                }
+            };
+
+            // Perform all recalculations on the merged data
             const mandatoryCheck = checkMandatoryFieldsCompletion(
-                newProfileData,
+                mergedProfileData,
                 newProfileData.companyStage
             );
             setMissingMandatoryFields(mandatoryCheck.missing);
@@ -557,6 +574,11 @@ export function BusinessProfile({activeSection = "profile"}) {
                         let completedFields = 0;
                         
                         group.fields?.forEach((field: any) => {
+                            // Skip read-only (system-generated) fields from completion tracking
+                            if (field.readOnly === true) {
+                                return;
+                            }
+                            
                             totalFields++;
                             const value = profileData[field.fieldName];
                             const hasValue = value !== null && value !== undefined && value !== '' && 
@@ -566,6 +588,7 @@ export function BusinessProfile({activeSection = "profile"}) {
                             }
                         });
                         
+                        // Only count groups that have user-fillable fields
                         if (totalFields > 0) {
                             const groupCompletion = Math.round((completedFields / totalFields) * 100);
                             totalGroupCompletion += groupCompletion;
@@ -636,8 +659,20 @@ export function BusinessProfile({activeSection = "profile"}) {
     const overallMandatoryCompletion = useMemo(() => {
         if (!profileData || !profileData.companyStage) return 0;
 
+        // Merge Profile Summary data into profileData structure for mandatory field checks
+        const mergedProfileData = {
+            ...profileData,
+            sections: {
+                ...(profileData.sections || {}),
+                // Add Profile Summary data in the expected sections structure
+                profile_summary: profileSummaryData?.data ? {
+                    fields: profileSummaryData.data
+                } : (profileData.sections?.profile_summary || { fields: {} })
+            }
+        };
+
         const mandatoryCheck = checkMandatoryFieldsCompletion(
-            profileData,
+            mergedProfileData,
             profileData.companyStage
         );
 
@@ -656,7 +691,7 @@ export function BusinessProfile({activeSection = "profile"}) {
         });
 
         return Math.round(percentage);
-    }, [profileData]);
+    }, [profileData, profileSummaryData]);
 
     const getCurrentSectionTitle = () => {
         return sectionsToDisplay[activeTabIndex]?.title || "";
