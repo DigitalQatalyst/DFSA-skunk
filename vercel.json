@@ -18,10 +18,6 @@
     "api/**/*.js": {
       "memory": 1024,
       "maxDuration": 30
-    },
-    "api/upload.ts": {
-      "memory": 2048,
-      "maxDuration": 60
     }
   }
 }
