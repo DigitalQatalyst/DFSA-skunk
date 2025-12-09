@@ -15,13 +15,62 @@
  * - Pathways D, E: Hidden
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { DFSAOnboardingFormData } from '../types'
 import { usePathwayConfig } from '../hooks/usePathwayConfig'
 import { FormFieldGroup } from '../components/FormFieldGroup'
+import { HelpDrawer, HelpSection } from '../components/HelpDrawer'
+
+/**
+ * Help sections for the regulatory compliance form
+ */
+const regulatoryComplianceHelpSections: HelpSection[] = [
+  {
+    id: 'regulatory-status-guidance',
+    type: 'guidance',
+    title: 'Regulatory Status Information',
+    content: (
+      <div className="space-y-2">
+        <p>
+          Disclose existing regulatory relationships. If currently regulated, provide full details
+          of the regulator, licence number, and regulated activities.
+        </p>
+        <p>
+          This information assists DFSA in understanding your entity's regulatory history and
+          current obligations.
+        </p>
+      </div>
+    ),
+  },
+  {
+    id: 'mlro-requirements',
+    type: 'information',
+    title: 'MLRO Requirements',
+    content: (
+      <p>
+        The MLRO must possess appropriate AML/CFT qualifications and experience. The individual
+        will serve as the primary contact for suspicious activity reports and regulatory liaison.
+      </p>
+    ),
+  },
+  {
+    id: 'compliance-documents',
+    type: 'documents',
+    title: 'Required Documentation',
+    content: (
+      <p>
+        All individuals named as Compliance Officers or MLROs must undergo fit and proper
+        assessments. CVs, reference letters, and certification documentation will be required in
+        the documents section.
+      </p>
+    ),
+  },
+]
 
 export const RegulatoryComplianceStep: React.FC = () => {
+  const [isHelpDrawerOpen, setIsHelpDrawerOpen] = useState(false)
+
   const {
     control,
     watch,
@@ -35,15 +84,24 @@ export const RegulatoryComplianceStep: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-4xl">
-      {/* Header */}
-      <div>
-        <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Regulatory & Compliance</h2>
-        <p className="text-sm text-gray-600 mt-2">
-          Provide information about existing regulatory relationships and key compliance personnel.
-        </p>
-        <p className="text-xs text-gray-500 mt-1">
-          (Ref: DFSA Rulebook GEN Module Rules 5.3.1 - 5.3.7 - Compliance and MLRO Requirements)
-        </p>
+      {/* Header with Help Button */}
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Regulatory & Compliance</h2>
+          <p className="text-sm text-gray-600 mt-2">
+            Provide information about existing regulatory relationships and key compliance personnel.
+          </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            (Ref: DFSA Rulebook GEN Module Rules 5.3.1 - 5.3.7)
+          </p>
+        </div>
+        <HelpDrawer
+          formTitle="Regulatory & Compliance"
+          sections={regulatoryComplianceHelpSections}
+          isOpen={isHelpDrawerOpen}
+          onOpenChange={setIsHelpDrawerOpen}
+          ruleReference="DFSA Rulebook GEN Module Rules 5.3.1 - 5.3.7 - Compliance and MLRO Requirements"
+        />
       </div>
 
       {/* Regulatory Status Group */}
@@ -314,31 +372,9 @@ export const RegulatoryComplianceStep: React.FC = () => {
           groupId="mlro"
           fieldNames={['mlroName', 'mlroEmail', 'mlroQualifications']}
           isRequired={true}
-          helpText="Financial services entities must appoint an MLRO responsible for AML/CFT compliance, suspicious activity reporting, and liaison with the DFSA and other authorities. (Ref: DFSA Rulebook GEN Module Rules 5.3.1 - 5.3.7)"
+          helpText="Financial services entities must appoint an MLRO responsible for AML/CFT compliance and suspicious activity reporting. (Ref: DFSA Rulebook GEN Module Rules 5.3.1 - 5.3.7)"
           fields={
             <div className="space-y-4">
-              {/* MLRO Information Box */}
-              <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
-                <div className="flex">
-                  <div className="flex-shrink-0">
-                    <svg className="h-5 w-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
-                      <path
-                        fillRule="evenodd"
-                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-sm text-blue-800">
-                      The MLRO must possess appropriate AML/CFT qualifications and experience. The
-                      individual will serve as the primary contact for suspicious activity reports and
-                      regulatory liaison.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
               {/* MLRO Name */}
               <div>
                 <label htmlFor="mlroName" className="block text-sm font-medium text-gray-700 mb-1">
@@ -427,15 +463,6 @@ export const RegulatoryComplianceStep: React.FC = () => {
           }
         />
       )}
-
-      {/* Information Note */}
-      <div className="text-xs text-gray-500 pt-4 border-t border-gray-200 bg-gray-50 p-4 rounded-lg">
-        <p>
-          <strong>Note:</strong> All individuals named as Compliance Officers or MLROs must undergo
-          fit and proper assessments. CVs, reference letters, and certification documentation will
-          be required in the documents section.
-        </p>
-      </div>
     </div>
   )
 }

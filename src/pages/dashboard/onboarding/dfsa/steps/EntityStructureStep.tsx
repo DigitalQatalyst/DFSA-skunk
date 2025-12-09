@@ -14,12 +14,83 @@
  * - All pathways see this step
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { DFSAOnboardingFormData } from '../types'
 import { FormFieldGroup } from '../components/FormFieldGroup'
+import { HelpDrawer, HelpSection } from '../components/HelpDrawer'
+
+/**
+ * Help sections for the entity structure form
+ */
+const entityStructureHelpSections: HelpSection[] = [
+  {
+    id: 'entity-type-guidance',
+    type: 'guidance',
+    title: 'Entity Type Selection',
+    content: (
+      <div className="space-y-2">
+        <p>
+          Select the type of entity you are registering. This determines the applicable regulatory
+          requirements under DFSA rules.
+        </p>
+        <dl className="space-y-2 mt-3">
+          <div>
+            <dt className="font-medium text-gray-700">DIFC Incorporation</dt>
+            <dd className="text-gray-600 mt-0.5">
+              Entity incorporated within the Dubai International Financial Centre jurisdiction.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-medium text-gray-700">Other Jurisdiction (Foreign Entity)</dt>
+            <dd className="text-gray-600 mt-0.5">
+              Entity incorporated outside the DIFC, seeking to establish presence or conduct
+              regulated activities.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-medium text-gray-700">Other</dt>
+            <dd className="text-gray-600 mt-0.5">
+              Other entity structures not covered by the standard classifications.
+            </dd>
+          </div>
+        </dl>
+      </div>
+    ),
+  },
+  {
+    id: 'parent-company-guidance',
+    type: 'guidance',
+    title: 'Parent Company Information',
+    content: (
+      <div className="space-y-2">
+        <p>
+          Disclose parent company relationships and group structure information. This is required
+          if your entity is part of a larger corporate group.
+        </p>
+        <p className="mt-2">
+          The ultimate parent company is the entity at the top of the corporate structure that is
+          not controlled by any other entity.
+        </p>
+      </div>
+    ),
+  },
+  {
+    id: 'group-structure-documents',
+    type: 'documents',
+    title: 'Group Structure Documentation',
+    content: (
+      <p>
+        You will be required to upload a group structure diagram in the documents section if your
+        entity is part of a corporate group.
+      </p>
+    ),
+  },
+]
 
 export const EntityStructureStep: React.FC = () => {
+  const [isHelpDrawerOpen, setIsHelpDrawerOpen] = useState(false)
+
   const {
     control,
     watch,
@@ -31,15 +102,24 @@ export const EntityStructureStep: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-4xl">
-      {/* Header */}
-      <div>
-        <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Entity Structure</h2>
-        <p className="text-sm text-gray-600 mt-2">
-          Provide information about your entity type and corporate structure.
-        </p>
-        <p className="text-xs text-gray-500 mt-1">
-          (Ref: DFSA Rulebook GEN Module Rule 2.2.6 - Entity Structure Disclosure)
-        </p>
+      {/* Header with Help Button */}
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Entity Structure</h2>
+          <p className="text-sm text-gray-600 mt-2">
+            Provide information about your entity type and corporate structure.
+          </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            (Ref: DFSA Rulebook GEN Module Rule 2.2.6)
+          </p>
+        </div>
+        <HelpDrawer
+          formTitle="Entity Structure"
+          sections={entityStructureHelpSections}
+          isOpen={isHelpDrawerOpen}
+          onOpenChange={setIsHelpDrawerOpen}
+          ruleReference="DFSA Rulebook GEN Module Rule 2.2.6 - Entity Structure Disclosure"
+        />
       </div>
 
       {/* Entity Type Group */}
@@ -308,27 +388,6 @@ export const EntityStructureStep: React.FC = () => {
                 Provide an overview of how your entity fits within a larger corporate group, if
                 applicable.
               </p>
-            </div>
-
-            {/* Information Note */}
-            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-blue-800">
-                    You will be required to upload a group structure diagram in the documents section if
-                    your entity is part of a corporate group.
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         }
