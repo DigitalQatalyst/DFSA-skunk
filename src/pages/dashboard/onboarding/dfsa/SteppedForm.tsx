@@ -318,7 +318,7 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
             </div>
 
             {/* Top Tab Navigation */}
-            <div className="flex gap-0 border-b-2 border-gray-200 mb-8 overflow-x-auto">
+            <div className="flex gap-0 border-b-2 border-gray-200 mb-8 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               {visibleSteps.map((step, index) => {
                 const isActive = currentStep === index
                 const isCompleted = currentStep > index
@@ -331,23 +331,23 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
                     disabled={currentStep < index}
                     className={`
                       flex-1 min-w-[200px] px-6 py-5 border-none bg-transparent cursor-pointer
-                      relative flex items-center gap-3 transition-all
+                      relative flex items-center gap-3 transition-all duration-300
                       hover:bg-gray-50
-                      ${isActive ? 'bg-[#9B18230D] border-b-3 border-[#9B1823] -mb-0.5' : ''}
+                      ${isActive ? 'bg-[#b82933]/5 border-b-3 border-[#b82933] -mb-0.5' : ''}
                       ${currentStep < index ? 'opacity-50 cursor-not-allowed hover:bg-transparent' : ''}
                     `}
                     style={
-                      isActive ? { borderBottomWidth: '3px', borderBottomColor: '#9B1823' } : {}
+                      isActive ? { borderBottomWidth: '3px', borderBottomColor: '#b82933' } : {}
                     }
                   >
                     {/* Tab Number/Icon */}
                     <div
                       className={`
                       flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center
-                      text-sm font-semibold
-                      ${isActive ? 'bg-[#9B1823] text-white shadow-md' : ''}
-                      ${isCompleted && !isActive ? 'bg-green-500 text-white' : ''}
-                      ${!isActive && !isCompleted ? 'bg-gray-200 text-gray-500 border-2 border-gray-200' : ''}
+                      text-sm font-semibold transition-all duration-300
+                      ${isActive ? 'bg-[#b82933] text-white shadow-lg scale-110' : ''}
+                      ${isCompleted && !isActive ? 'bg-[#a39143] text-white shadow-md' : ''}
+                      ${!isActive && !isCompleted ? 'bg-gray-200 text-gray-500 border-2 border-gray-300' : ''}
                     `}
                     >
                       {isCompleted ? <Check size={16} /> : index + 1}
@@ -358,8 +358,8 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
                       <div className="flex items-center gap-2 w-full">
                         <span
                           className={`
-                          text-sm font-semibold
-                          ${isActive ? 'text-[#9B1823]' : 'text-gray-700'}
+                          text-sm font-semibold transition-colors
+                          ${isActive ? 'text-[#b82933]' : 'text-gray-700'}
                           max-sm:hidden
                         `}
                         >
@@ -370,11 +370,12 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
                         {completion > 0 && (
                           <span
                             className={`
-                            flex items-center text-xs px-1.5 py-0.5 rounded-full whitespace-nowrap
+                            flex items-center text-xs px-2 py-0.5 rounded-full whitespace-nowrap font-semibold
+                            transition-all duration-300
                             ${
                               completion === 100
-                                ? 'bg-green-100 text-green-700'
-                                : 'bg-amber-100 text-amber-700'
+                                ? 'bg-[#a39143]/10 text-[#a39143] border border-[#a39143]/30'
+                                : 'bg-[#a39143]/10 text-[#a39143] border border-[#a39143]/30'
                             }
                             max-sm:hidden
                           `}
@@ -386,7 +387,7 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
                               </>
                             ) : (
                               <>
-                                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1" />
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#a39143] mr-1" />
                                 {completion}%
                               </>
                             )}
@@ -463,7 +464,7 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
                     onClick={handleNext}
                     icon={<ChevronRight size={16} />}
                     iconPosition="right"
-                    className="bg-[#9B1823] hover:bg-[#7A1319]"
+                    className="bg-[#b82933] hover:bg-[#a39143] shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 font-semibold px-8"
                   >
                     Next
                   </Button>
