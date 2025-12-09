@@ -31,7 +31,7 @@ type SubjectType = {
 
 export type AppAbility = MongoAbility<[Actions, Subjects], SubjectType>;
 
-export type Role = 'admin' | 'creator' | 'approver' | 'viewer';
+export type Role = 'admin' | 'contributor' | 'creator' | 'approver' | 'viewer';
 
 
 /**
@@ -153,7 +153,52 @@ export function defineAbilityFor(role?: Role): AppAbility {
     });
   }
 
-  // Contributor & Creator roles: Dashboard access without delete permissions, cannot access onboarding
+  // Contributor role: Dashboard access without delete permissions, can update profile
+  if (effectiveRole === 'contributor') {
+    return defineAbility<AppAbility>((can, cannot) => {
+      // Dashboard overview
+      can('read', 'user-dashboard');
+
+      // Documents: CRUD without delete
+      can('read', 'user-documents');
+      can('create', 'user-documents');
+      can('update', 'user-documents');
+
+      // Requests: CRUD without delete
+      can('read', 'user-requests');
+      can('create', 'user-requests');
+      can('update', 'user-requests');
+
+      // Reporting: CRUD without delete
+      can('read', 'user-reporting');
+      can('create', 'user-reporting');
+      can('update', 'user-reporting');
+
+      // Profile and settings - Contributor can update profile
+      can('read', 'user-profile');
+      can('update', 'user-profile');
+      can('read', 'user-settings');
+      can('update', 'user-settings');
+      can('create', 'user-settings');
+
+      // Support and help center
+      can('read', 'user-dashboard');
+      can('read', 'user-help-center');
+      can('update', 'user-help-center');
+
+      // Forms: CRUD without delete
+      can('read', 'user-forms');
+      can('create', 'user-forms');
+      can('update', 'user-forms');
+
+      // Cannot access onboarding
+      cannot('read', 'onboarding');
+      cannot('create', 'onboarding');
+      cannot('update', 'onboarding');
+    });
+  }
+
+  // Creator role: Dashboard access without delete permissions, cannot access onboarding
   if (effectiveRole === 'creator' ) {
     return defineAbility<AppAbility>((can, cannot) => {
       // Dashboard overview
@@ -225,9 +270,9 @@ export function defineAbilityFor(role?: Role): AppAbility {
       cannot('update', 'user-reporting');
       cannot('delete', 'user-reporting');
 
-      // Profile and settings: can update own profile/settings
+      // Profile and settings: Viewer is read-only
       can('read', 'user-profile');
-      // can('update', 'user-profile');
+      cannot('update', 'user-profile'); // Viewer cannot update profile
       can('read', 'user-settings');
       cannot('update', 'user-settings');
 

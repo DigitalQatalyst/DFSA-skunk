@@ -10,11 +10,8 @@ import {
   ContainerClient
 } from '@azure/storage-blob';
 
-export const config = {
-  api: {
-    bodyParser: true,
-  },
-};
+// Vercel serverless functions don't use Next.js config pattern
+// Body parsing is handled automatically by Vercel for JSON requests
 
 // Sanitize environment variables - remove quotes and semicolons
 const sanitizeEnv = (v?: string) => (v || '').toString().trim().replace(/^["']|["'];?$/g, '');

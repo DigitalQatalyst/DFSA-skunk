@@ -1,0 +1,292 @@
+{
+  "companyStages": [
+    {
+      "id": "startup",
+      "label": "Startup",
+      "color": "bg-purple-500"
+    },
+    {
+      "id": "growth",
+      "label": "Growth",
+      "color": "bg-blue-500"
+    },
+    {
+      "id": "mature",
+      "label": "Mature",
+      "color": "bg-green-500"
+    },
+    {
+      "id": "enterprise",
+      "label": "Enterprise",
+      "color": "bg-gray-700"
+    }
+  ],
+  "tabs": [
+    {
+      "id": "profile_summary",
+      "title": "Profile Summary",
+      "groups": [
+        {
+          "id": "firm_identification",
+          "groupName": "Firm Identification",
+          "fields": [
+            {
+              "id": "profile_summary.legal_name",
+              "label": "Legal Name",
+              "fieldName": "legal_name",
+              "fieldType": "Text",
+              "mandatory": true,
+              "placeholder": "Enter the registered legal name as per incorporation documents"
+            },
+            {
+              "id": "profile_summary.trading_name",
+              "label": "Trading Name",
+              "fieldName": "trading_name",
+              "fieldType": "Text",
+              "mandatory": false,
+              "placeholder": "If different from legal name, provide the trading/brand name"
+            },
+            {
+              "id": "profile_summary.legal_status",
+              "label": "Legal Status",
+              "fieldName": "legal_status",
+              "fieldType": "select",
+              "mandatory": true,
+              "options": [
+                {
+                  "label": "Entity formed in the DIFC",
+                  "value": "Entity formed in the DIFC"
+                },
+                {
+                  "label": "Non-DIFC entity (branch)",
+                  "value": "Non-DIFC entity (branch)"
+                }
+              ]
+            },
+            {
+              "id": "profile_summary.entity_type",
+              "label": "DIFC/Non-DIFC Entity",
+              "fieldName": "entity_type",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "DIFC Entity",
+                  "value": "DIFC Entity"
+                },
+                {
+                  "label": "Non-DIFC Entity",
+                  "value": "Non-DIFC Entity"
+                }
+              ]
+            },
+            {
+              "id": "profile_summary.jurisdiction",
+              "label": "Incorporation Jurisdiction",
+              "fieldName": "jurisdiction",
+              "fieldType": "Text",
+              "mandatory": true,
+              "placeholder": "Enter the jurisdiction of incorporation"
+            },
+            {
+              "id": "profile_summary.date_of_formation",
+              "label": "Date of Formation",
+              "fieldName": "date_of_formation",
+              "fieldType": "Date Only",
+              "mandatory": true
+            },
+            {
+              "id": "profile_summary.head_office_address",
+              "label": "Head Office Address",
+              "fieldName": "head_office_address",
+              "fieldType": "Address",
+              "mandatory": true,
+              "addressFields": {
+                "line1": {
+                  "label": "Address Line 1",
+                  "fieldName": "head_office_address_line1",
+                  "mandatory": true
+                },
+                "line2": {
+                  "label": "Address Line 2",
+                  "fieldName": "head_office_address_line2",
+                  "mandatory": false
+                },
+                "city": {
+                  "label": "City",
+                  "fieldName": "head_office_address_city",
+                  "mandatory": true
+                },
+                "state": {
+                  "label": "State/Region",
+                  "fieldName": "head_office_address_state",
+                  "mandatory": false
+                },
+                "postalCode": {
+                  "label": "Postal Code",
+                  "fieldName": "head_office_address_postal_code",
+                  "mandatory": false
+                },
+                "country": {
+                  "label": "Country",
+                  "fieldName": "head_office_address_country",
+                  "mandatory": true
+                }
+              }
+            },
+            {
+              "id": "profile_summary.website",
+              "label": "Website",
+              "fieldName": "website",
+              "fieldType": "Text",
+              "mandatory": false,
+              "placeholder": "https://example.com"
+            }
+          ]
+        },
+        {
+          "id": "primary_contact",
+          "groupName": "Primary Contact",
+          "fields": [
+            {
+              "id": "profile_summary.contact_name",
+              "label": "Contact Name",
+              "fieldName": "contact_name",
+              "fieldType": "Text",
+              "mandatory": true,
+              "placeholder": "Enter primary contact person name"
+            },
+            {
+              "id": "profile_summary.contact_email",
+              "label": "Contact Email",
+              "fieldName": "contact_email",
+              "fieldType": "Text",
+              "mandatory": true,
+              "placeholder": "contact@example.com",
+              "validation": {
+                "type": "email"
+              }
+            },
+            {
+              "id": "profile_summary.contact_telephone",
+              "label": "Contact Telephone",
+              "fieldName": "contact_telephone",
+              "fieldType": "Text",
+              "mandatory": false,
+              "placeholder": "+971 4 XXX XXXX"
+            }
+          ]
+        },
+        {
+          "id": "license_profile",
+          "groupName": "License Profile",
+          "fields": [
+            {
+              "id": "profile_summary.authorisation_category",
+              "label": "Authorisation Category",
+              "fieldName": "authorisation_category",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Authorised Firm",
+                  "value": "Authorised Firm"
+                },
+                {
+                  "label": "Ancillary Service Provider",
+                  "value": "Ancillary Service Provider"
+                },
+                {
+                  "label": "Representative Office",
+                  "value": "Representative Office"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ]
+            },
+            {
+              "id": "profile_summary.license_status",
+              "label": "License Status",
+              "fieldName": "license_status",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Active",
+                  "value": "Active"
+                },
+                {
+                  "label": "Suspended",
+                  "value": "Suspended"
+                },
+                {
+                  "label": "Revoked",
+                  "value": "Revoked"
+                },
+                {
+                  "label": "Pending",
+                  "value": "Pending"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "lifecycle_events",
+          "groupName": "Lifecycle and Events",
+          "fields": [
+            {
+              "id": "profile_summary.supervisory_cluster",
+              "label": "Supervisory Cluster",
+              "fieldName": "supervisory_cluster",
+              "fieldType": "select",
+              "mandatory": false,
+              "options": [
+                {
+                  "label": "Banking",
+                  "value": "Banking"
+                },
+                {
+                  "label": "Insurance",
+                  "value": "Insurance"
+                },
+                {
+                  "label": "Securities",
+                  "value": "Securities"
+                },
+                {
+                  "label": "Collective Investment Funds",
+                  "value": "Collective Investment Funds"
+                },
+                {
+                  "label": "Other",
+                  "value": "Other"
+                }
+              ]
+            },
+            {
+              "id": "profile_summary.last_significant_event",
+              "label": "Last Significant Event",
+              "fieldName": "last_significant_event",
+              "fieldType": "Text",
+              "mandatory": false,
+              "readOnly": true,
+              "placeholder": "System generated"
+            },
+            {
+              "id": "profile_summary.last_material_change_date",
+              "label": "Date of Last Material Change",
+              "fieldName": "last_material_change_date",
+              "fieldType": "Date Only",
+              "mandatory": false,
+              "readOnly": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+

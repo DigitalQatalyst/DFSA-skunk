@@ -38,6 +38,8 @@ import {
     useSaveVisionStrategyMutation,
 } from "../../modules/profile/hooks/useProfileQueries";
 import {toast} from "sonner";
+import {ProfileSummaryTab} from "./ProfileSummaryTab";
+import {useProfileSummaryQuery} from "../../hooks/useProfileQueries";
 
 type ProfileData = {
     companyStage?: string | null;
@@ -104,9 +106,17 @@ export function BusinessProfile({activeSection = "profile"}) {
     // Get user from auth context
     const {user} = useAuth();
 
+    // Get Profile Summary completion from API
+    const { data: profileSummaryData } = useProfileSummaryQuery({
+        retry: 1,
+        retryDelay: 1000,
+    });
+
     // Config, mapping, and strings loaded from JSON-backed loader
+    // Use APQC config for Profile Summary, fallback to v3 for other tabs
+    const apqcConfig = useMemo(() => getProfileConfig("apqc"), []);
     const profileConfig = useMemo(() => getProfileConfig("v3"), []);
-    const apiFieldMapping = useMemo(() => getProfileMapping("v3"), []);
+    const apiFieldMapping = useMemo(() => getProfileMapping("apqc"), []);
 
     // In demo mode, use the demo user
     const effectiveUser = isDemoModeEnabled() ? getDemoUser() : user;
@@ -524,12 +534,66 @@ export function BusinessProfile({activeSection = "profile"}) {
     };
 
     const getAllSections = () => {
-        return profileConfig.tabs.map((tab) => ({
-            id: tab.id,
-            title: tab.title,
-            completion: sectionCompletions[tab.id] || 0,
-            mandatoryCompletion: mandatoryCompletions[tab.id] || {percentage: 0},
-        }));
+        // Add Profile Summary as first tab if it exists in APQC config
+        const profileSummaryTab = apqcConfig.tabs.find(tab => tab.id === 'profile_summary');
+        const allTabs = profileSummaryTab 
+            ? [{ id: 'profile_summary', title: 'Profile Summary' }, ...profileConfig.tabs]
+            : profileConfig.tabs;
+        
+        return allTabs.map((tab) => {
+            // For Profile Summary tab, calculate completion from group completions
+            if (tab.id === 'profile_summary') {
+                // Calculate tab completion as average of all group completions
+                let tabCompletion = 0;
+                if (profileSummaryData?.schema?.groups) {
+                    const groups = profileSummaryData.schema.groups;
+                    const profileData = profileSummaryData.data || {};
+                    
+                    let totalGroupCompletion = 0;
+                    let groupCount = 0;
+                    
+                    groups.forEach((group: any) => {
+                        let totalFields = 0;
+                        let completedFields = 0;
+                        
+                        group.fields?.forEach((field: any) => {
+                            totalFields++;
+                            const value = profileData[field.fieldName];
+                            const hasValue = value !== null && value !== undefined && value !== '' && 
+                                          (!Array.isArray(value) || value.length > 0);
+                            if (hasValue) {
+                                completedFields++;
+                            }
+                        });
+                        
+                        if (totalFields > 0) {
+                            const groupCompletion = Math.round((completedFields / totalFields) * 100);
+                            totalGroupCompletion += groupCompletion;
+                            groupCount++;
+                        }
+                    });
+                    
+                    if (groupCount > 0) {
+                        tabCompletion = Math.round(totalGroupCompletion / groupCount);
+                    }
+                }
+                
+                return {
+                    id: tab.id,
+                    title: tab.title,
+                    completion: tabCompletion,
+                    mandatoryCompletion: { percentage: tabCompletion }, // Use same value for now
+                };
+            }
+            
+            // For other tabs, use calculated completions
+            return {
+                id: tab.id,
+                title: tab.title,
+                completion: sectionCompletions[tab.id] || 0,
+                mandatoryCompletion: mandatoryCompletions[tab.id] || {percentage: 0},
+            };
+        });
     };
 
     const getSectionsToDisplay = () => {
@@ -1076,6 +1140,12 @@ export function BusinessProfile({activeSection = "profile"}) {
                                 aria-labelledby={`tab-${section.id}`}
                             >
                                 {(() => {
+                                    // Render Profile Summary tab if it's the active section
+                                    if (section.id === 'profile_summary') {
+                                        return <ProfileSummaryTab />;
+                                    }
+                                    
+                                    // Render other tabs using TabSection
                                     const tabCfg = profileConfig.tabs.find(
                                         (tab) => tab.id === section.id
                                     );

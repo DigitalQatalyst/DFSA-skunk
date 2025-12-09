@@ -9,11 +9,8 @@
 
 import { handleGetDocument, handleDeleteDocument, handleGetDocumentVersions, handleCreateDocumentVersion } from '../../middleware/documents.js';
 
-export const config = {
-  api: {
-    bodyParser: false, // Allow formidable to parse multipart for version creation
-  },
-};
+// Vercel serverless functions don't use Next.js config pattern
+// For multipart/form-data, parsing is handled in middleware
 
 type AnyRequest = {
   method?: string;

@@ -5,9 +5,10 @@
     "type": "module",
     "scripts": {
         "dev:api": "vercel dev --listen 3001",
+        "dev:api:ps1": "powershell -ExecutionPolicy Bypass -File ./scripts/start-api-dev.ps1",
         "dev:frontend": "vite",
         "dev": "vite",
-        "dev:full": "concurrently \"vercel dev --listen 3001\" \"vite\"",
+        "dev:full": "concurrently -n \"vite,api\" -c \"blue,green\" \"vite\" \"vercel dev --listen 3001\"",
         "build": "npx vite build",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx --quiet",
         "preview": "npx vite preview",

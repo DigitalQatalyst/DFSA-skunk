@@ -1,17 +1,30 @@
 {
-  "buildCommand": "npm run build",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install",
-  "framework": null,
-  "outputDirectory": "dist",
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
-    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ]
+  ],
+  "framework": null,
+  "buildCommand": "npm run build",
+  "devCommand": "echo 'Skipping framework dev server'",
+  "installCommand": "npm install",
+  "outputDirectory": "dist",
+  "functions": {
+    "api/**/*.ts": {
+      "runtime": "nodejs20.x",
+      "memory": 1024,
+      "maxDuration": 30
+    },
+    "api/**/*.js": {
+      "runtime": "nodejs20.x",
+      "memory": 1024,
+      "maxDuration": 30
+    },
+    "api/upload.ts": {
+      "runtime": "nodejs20.x",
+      "memory": 2048,
+      "maxDuration": 60
+    }
+  }
 }

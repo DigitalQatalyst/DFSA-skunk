@@ -15,11 +15,8 @@ import {
   BlobServiceClient
 } from '@azure/storage-blob';
 
-export const config = {
-  api: {
-    bodyParser: false, // allow formidable to parse the raw request
-  },
-};
+// Vercel serverless functions don't use Next.js config pattern
+// For multipart/form-data, we handle parsing manually with formidable
 
 const sanitizeEnv = (v?: string) => (v || '').toString().trim().replace(/^["']|["'];?$/g, '');
 

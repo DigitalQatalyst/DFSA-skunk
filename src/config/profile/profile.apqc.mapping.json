@@ -1,0 +1,29 @@
+{
+  "apiFieldMapping": {
+    "legal_name": "legal_name",
+    "trading_name": "trading_name",
+    "legal_status": "legal_status",
+    "entity_type": "entity_type",
+    "jurisdiction": "jurisdiction",
+    "date_of_formation": "date_of_formation",
+    "head_office_address": "head_office_address",
+    "head_office_address_line1": "head_office_address->>'line1'",
+    "head_office_address_line2": "head_office_address->>'line2'",
+    "head_office_address_city": "head_office_address->>'city'",
+    "head_office_address_state": "head_office_address->>'state'",
+    "head_office_address_postal_code": "head_office_address->>'postalCode'",
+    "head_office_address_country": "head_office_address->>'country'",
+    "website": "website",
+    "contact_name": "contact_name",
+    "contact_email": "contact_email",
+    "contact_telephone": "contact_telephone",
+    "authorisation_category": "authorisation_category",
+    "license_status": "license_status",
+    "supervisory_cluster": "supervisory_cluster",
+    "last_significant_event": "last_significant_event",
+    "last_material_change_date": "last_material_change_date"
+  }
+}
+
+
+
