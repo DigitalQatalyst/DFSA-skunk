@@ -327,14 +327,12 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
                 return (
                   <button
                     key={step.id}
-                    onClick={() => isCompleted && setCurrentStep(index)}
-                    disabled={currentStep < index}
+                    onClick={() => setCurrentStep(index)}
                     className={`
                       flex-1 min-w-[200px] px-6 py-5 border-none bg-transparent cursor-pointer
                       relative flex items-center gap-3 transition-all duration-300
                       hover:bg-gray-50
                       ${isActive ? 'bg-[#b82933]/5 border-b-3 border-[#b82933] -mb-0.5' : ''}
-                      ${currentStep < index ? 'opacity-50 cursor-not-allowed hover:bg-transparent' : ''}
                     `}
                     style={
                       isActive ? { borderBottomWidth: '3px', borderBottomColor: '#b82933' } : {}
