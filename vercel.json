@@ -12,17 +12,14 @@
   "outputDirectory": "dist",
   "functions": {
     "api/**/*.ts": {
-      "runtime": "nodejs20.x",
       "memory": 1024,
       "maxDuration": 30
     },
     "api/**/*.js": {
-      "runtime": "nodejs20.x",
       "memory": 1024,
       "maxDuration": 30
     },
     "api/upload.ts": {
-      "runtime": "nodejs20.x",
       "memory": 2048,
       "maxDuration": 60
     }
