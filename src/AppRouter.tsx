@@ -101,7 +101,7 @@ export function AppRouter() {
                 <Route path="/courses" element={<App />} />
 
                 {/* DFSA Pathway Selection Routes */}
-                <Route path="/authorization" element={<AuthorizationPage />} />
+                <Route path="/authorisation" element={<AuthorizationPage />} />
                 <Route path="/registration" element={<RegistrationPage />} />
                 <Route path="/recognition" element={<RecognitionPage />} />
 

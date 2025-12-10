@@ -28,12 +28,12 @@ interface ServiceItem {
 const WhatWeDoSection: React.FC = () => {
   const services: ServiceItem[] = [
     {
-      id: 'authorization',
+      id: 'authorisation',
       icon: Shield,
-      label: 'Authorization',
+      label: 'Authorisation',
       description:
-        'Obtain DFSA authorization and licensing to conduct financial services in or from the DIFC. Our streamlined process covers asset management, banking, securities, funds, custody, Islamic finance, and insurance.',
-      learnMoreUrl: '/authorization',
+        'Obtain DFSA authorisation and licensing to conduct financial services in or from the DIFC. Our streamlined process covers asset management, banking, securities, funds, custody, Islamic finance, and insurance.',
+      learnMoreUrl: '/authorisation',
     },
     {
       id: 'recognition',
