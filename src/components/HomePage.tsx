@@ -45,11 +45,12 @@ const HomePage: React.FC = () => {
       />
       <main className="flex-grow">
         <HeroSection />
-        <DFSADecisionAuthoritySection />
+        {/* <DFSADecisionAuthoritySection /> */}
         <WhatWeDoSection />
-        <AuthorizationJourneySection />
         <LicenseCategoriesSection />
-        <CallToAction />
+        {/* <AuthorizationJourneySection /> */}
+        
+        {/* <CallToAction /> */}
       </main>
       <Footer isLoggedIn={false} />
     </div>
