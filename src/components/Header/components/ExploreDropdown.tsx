@@ -4,7 +4,6 @@ import { ChevronDownIcon } from "lucide-react";
 import {
   BuildingIcon,
   CreditCardIcon,
-  NewspaperIcon,
   UsersIcon,
   GraduationCapIcon,
   TrendingUpIcon,
@@ -25,20 +24,28 @@ interface Marketplace {
 
 const marketplaces: Marketplace[] = [
   {
-    id: "services",
-    name: "Services",
+    id: "authorisation",
+    name: "Authorisation",
     description:
-      "Business registration, legal advisory, tax, compliance, and SME support services",
+      "Apply for authorisation to conduct financial services activities in the DIFC",
     icon: BuildingIcon,
-    href: "/marketplace/non-financial",
+    href: "/authorisation",
   },
   {
-    id: "enquiries",
-    name: "Enquiries",
+    id: "registration",
+    name: "Registration",
     description:
-      "Submit your enquiries and get assistance with your business needs",
-    icon: NewspaperIcon,
-    href: "/enquiries",
+      "Register your entity with the DFSA regulatory framework",
+    icon: CreditCardIcon,
+    href: "/registration",
+  },
+  {
+    id: "recognition",
+    name: "Recognition",
+    description:
+      "Obtain recognition for regulatory activities and qualifications",
+    icon: GraduationCapIcon,
+    href: "/recognition",
   },
 ];
 

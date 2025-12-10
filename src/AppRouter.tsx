@@ -59,6 +59,11 @@ import { Toaster as SonnerToaster } from "./components/ui/sonner";
 import EJPEnterpriseOperationsInsightDashboard from "./modules/ejp-enterprise-operations-insight";
 import EJPOperationsDashboard from "./modules/service-delivery-overview";
 
+// DFSA Pathway Selection Pages
+import AuthorizationPage from "./pages/dfsa/AuthorizationPage";
+import RegistrationPage from "./pages/dfsa/RegistrationPage";
+import RecognitionPage from "./pages/dfsa/RecognitionPage";
+
 export function AppRouter() {
   const [bookmarkedCourses, setBookmarkedCourses] = useState<string[]>([]);
   const [compareCourses, setCompareCourses] = useState<CourseType[]>([]);
@@ -94,6 +99,12 @@ export function AppRouter() {
               <Routes>
                 <Route path="/" element={<App />} />
                 <Route path="/courses" element={<App />} />
+
+                {/* DFSA Pathway Selection Routes */}
+                <Route path="/authorization" element={<AuthorizationPage />} />
+                <Route path="/registration" element={<RegistrationPage />} />
+                <Route path="/recognition" element={<RecognitionPage />} />
+
                 <Route
                   path="/courses/:itemId"
                   element={
