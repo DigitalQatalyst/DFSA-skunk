@@ -44,12 +44,14 @@ module.exports = {
           light: "#c5505c",
           50: '#fef2f2',
           100: '#fee2e2',
+          200: '#fecaca',
+          300: '#fca5a5',
           600: '#9b1823',
           700: '#7a1219',
           800: '#621015',
           900: '#4a0c10',
         },
-        // DFSA Secondary - Gold 
+        // DFSA Secondary - Gold
         'dfsa-gold': {
           DEFAULT: '#a39143',
           50: '#f9f7f1',

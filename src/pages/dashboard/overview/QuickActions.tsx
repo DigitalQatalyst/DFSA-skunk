@@ -17,7 +17,7 @@ import {
 
 export const QuickActions: React.FC = () => {
   const navigate = useNavigate();
-  
+
   // Handle navigation to home page services section with scrolling
   const handleCreateRequest = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -101,8 +101,8 @@ export const QuickActions: React.FC = () => {
         const permission = getPermissionForAction(action.id);
         const actionClassName = `flex flex-col items-center justify-center p-4 rounded-lg transition-colors w-full ${
           action.primary
-            ? "bg-blue-600 text-white hover:bg-blue-700"
-            : "bg-white border border-gray-200 hover:border-blue-300 hover:bg-gray-50"
+            ? "bg-primary text-white hover:bg-primary-dark shadow-lg hover:shadow-xl"
+            : "bg-white border border-gray-200 hover:border-primary-300 hover:bg-primary-50"
         }`;
         const iconClassName = `p-2 rounded-full mb-3 `;
         const labelClassName = `text-sm font-medium ${
@@ -212,7 +212,7 @@ export const QuickActions: React.FC = () => {
               }
 
 
-              
+
               return link;
             }}
           </Can>

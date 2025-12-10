@@ -54,7 +54,7 @@ export const OnboardingProgress: React.FC<OnboardingProgressProps> = ({
                     <div className="px-6">
                         <div className="w-full bg-gray-200 rounded-full h-3 mb-6">
                             <div
-                                className="bg-gradient-to-r from-blue-500 to-teal-400 h-3 rounded-full"
+                                className="bg-gradient-to-r from-primary to-dfsa-gold h-3 rounded-full"
                                 style={{
                                     width: `${overallCompletion}%`,
                                 }}
@@ -70,7 +70,7 @@ export const OnboardingProgress: React.FC<OnboardingProgressProps> = ({
                                 </div>
                                 <div className="w-full bg-gray-200 rounded-full h-2">
                                     <div
-                                        className="bg-gray-500 h-2 rounded-full"
+                                        className="bg-primary h-2 rounded-full"
                                         style={{
                                             width: `${validProfileCompletion}%`,
                                         }}
@@ -86,7 +86,7 @@ export const OnboardingProgress: React.FC<OnboardingProgressProps> = ({
                                 </div>
                                 <div className="w-full bg-gray-200 rounded-full h-2">
                                     <div
-                                        className="bg-gray-500 h-2 rounded-full"
+                                        className="bg-dfsa-teal h-2 rounded-full"
                                         style={{
                                             width: `${validDocumentCompletion}%`,
                                         }}
@@ -100,7 +100,7 @@ export const OnboardingProgress: React.FC<OnboardingProgressProps> = ({
                             onClick={() => {
                                 navigate(ctaUrl);
                             }}
-                            className="px-4 py-2 text-sm font-medium text-white rounded-md bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            className="px-4 py-2 text-sm font-medium text-white rounded-md bg-gradient-to-r from-primary to-dfsa-gold hover:from-primary-dark hover:to-dfsa-gold-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary shadow-lg hover:shadow-xl transform hover:scale-105 transition-all"
                         >
                             Continue Setup
                         </button>

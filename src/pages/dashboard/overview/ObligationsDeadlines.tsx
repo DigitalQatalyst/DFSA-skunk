@@ -27,17 +27,17 @@ export const ObligationsDeadlines: React.FC<ObligationsDeadlinesProps> = ({
   obligations,
   error,
 }) => {
-  console.log('🎯 [ObligationsDeadlines] Received props:', { 
-    isLoading, 
-    obligationsCount: obligations?.length, 
-    obligations, 
-    error 
+  console.log('🎯 [ObligationsDeadlines] Received props:', {
+    isLoading,
+    obligationsCount: obligations?.length,
+    obligations,
+    error
   });
   const getStatusIcon = (status: string) => {
     if (status === "overdue") {
       return <AlertTriangleIcon className="h-5 w-5 text-red-500" />;
     }
-    return <CalendarIcon className="h-5 w-5 text-gray-400" />;
+    return <CalendarIcon className="h-5 w-5 text-dfsa-teal" />;
   };
 
   const formatDate = (dateString: string) => {
@@ -141,7 +141,7 @@ export const ObligationsDeadlines: React.FC<ObligationsDeadlinesProps> = ({
                 <td className="px-4 py-3 whitespace-nowrap text-center text-sm">
                   <Link
                     to={obligation.actionUrl || "/dashboard/reporting-obligations"}
-                    className="px-3 py-1 border border-gray-300 rounded-md text-xs text-gray-600 hover:text-blue-600 hover:border-blue-300 inline-block"
+                    className="px-3 py-1 border border-primary-300 rounded-md text-xs text-primary hover:text-white hover:bg-primary hover:border-primary inline-block transition-all"
                   >
                     Take Action
                   </Link>
@@ -153,7 +153,7 @@ export const ObligationsDeadlines: React.FC<ObligationsDeadlinesProps> = ({
       <div className="mt-4 text-right">
         <Link
           to="/dashboard/reporting-obligations"
-          className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+          className="text-primary hover:text-primary-dark text-sm font-medium"
         >
           View All Obligations
         </Link>

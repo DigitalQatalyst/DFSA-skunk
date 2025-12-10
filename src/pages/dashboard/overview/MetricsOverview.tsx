@@ -35,7 +35,7 @@ const fetchMetric = async (endpoint: string, enterpriseId: string): Promise<Metr
   try {
     const response = await fetch(`http://localhost:5000/api/metrics/${endpoint}/${enterpriseId}`);
     const result = await response.json();
-    
+
     if (result.success) {
       return result.data;
     } else {
@@ -59,7 +59,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
   const navigate = useNavigate();
   const [realMetrics, setRealMetrics] = useState<Metric[]>([]);
   const [fetchingMetrics, setFetchingMetrics] = useState(false);
-  
+
   // Fetch real metrics from backend
   useEffect(() => {
     const loadRealMetrics = async () => {
@@ -67,32 +67,32 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
         console.warn('[MetricsOverview] No enterprise ID available');
         return;
       }
-      
+
       setFetchingMetrics(true);
-      
+
       const [serviceRequests, pendingApplications, reportingObligations, approvalsPending] = await Promise.all([
         fetchMetric('service-requests', enterpriseId),
         fetchMetric('pending-applications', enterpriseId),
         fetchMetric('reporting-obligations', enterpriseId),
         fetchMetric('approvals-pending', enterpriseId)
       ]);
-      
+
       const loadedMetrics: Metric[] = [];
-      
+
       // Add real metrics from API
       if (serviceRequests) loadedMetrics.push(serviceRequests);
       if (pendingApplications) loadedMetrics.push(pendingApplications);
       if (reportingObligations) loadedMetrics.push(reportingObligations);
       if (approvalsPending) loadedMetrics.push(approvalsPending);
-      
+
 
       setRealMetrics(loadedMetrics);
       setFetchingMetrics(false);
     };
-    
+
     loadRealMetrics();
   }, [enterpriseId]);
-  
+
   // Handle card click navigation
   const handleCardClick = (cardId: string) => {
     const metric = displayMetrics.find(m => m.id === cardId);
@@ -155,8 +155,8 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
                 onClick={() => onPeriodChange(p)}
                 className={`text-xs px-2 py-1 rounded ${
                   period === p
-                    ? 'bg-blue-100 text-blue-700 font-medium'
-                    : 'text-gray-600 hover:text-blue-600'
+                    ? 'bg-primary-100 text-primary-700 font-medium'
+                    : 'text-gray-600 hover:text-primary-600'
                 }`}
               >
                 {p === '30d' ? '30d' : p === '90d' ? '90d' : '12m'}
@@ -167,15 +167,15 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {displayMetrics.map((card) => {
-          // Generate theme colors if not provided
+          // Generate theme colors if not provided - using brand colors
           const theme = card.theme || {
-            bgColor: 'bg-blue-50',
-            borderColor: 'border-blue-200',
-            labelColor: 'text-blue-700',
-            valueColor: 'text-blue-900',
-            trendColor: 'text-blue-600',
+            bgColor: 'bg-primary-50',
+            borderColor: 'border-primary-100',
+            labelColor: 'text-primary-700',
+            valueColor: 'text-primary-900',
+            trendColor: 'text-primary-600',
           };
-          
+
           return (
             <div
               key={card.id}
