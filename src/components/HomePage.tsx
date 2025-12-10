@@ -3,13 +3,9 @@ import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import HeroSection from './HeroSection';
 import DFSADecisionAuthoritySection from './DFSADecisionAuthoritySection';
-import LicenseCategoriesSection from './LicenseCategoriesSection';
+import WhatWeDoSection from './WhatWeDoSection';
 import AuthorizationJourneySection from './AuthorizationJourneySection';
-import KeyPersonnelSection from './KeyPersonnelSection';
-import ComplianceServicesSection from './ComplianceServicesSection';
-import FAQSection from './FAQSection';
-import ResourceLibrarySection from './ResourceLibrarySection';
-import ProofAndTrust from './ProofAndTrust';
+import LicenseCategoriesSection from './LicenseCategoriesSection';
 import CallToAction from './CallToAction';
 
 const HomePage: React.FC = () => {
@@ -27,7 +23,7 @@ const HomePage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="fixed inset-0 bg-gradient-to-r from-primary-900 to-dfsa-gold flex items-center justify-center z-50">
+      <div className="fixed inset-0 bg-dfsa-gold flex items-center justify-center z-50">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <h2 className="text-white text-xl font-bold">
@@ -50,17 +46,12 @@ const HomePage: React.FC = () => {
       <main className="flex-grow">
         <HeroSection />
         <DFSADecisionAuthoritySection />
-        <LicenseCategoriesSection />
+        <WhatWeDoSection />
         <AuthorizationJourneySection />
-        <KeyPersonnelSection />
-        <ComplianceServicesSection />
-        <FAQSection />
-        <ResourceLibrarySection />
-        {/* <ProofAndTrust /> */}
+        <LicenseCategoriesSection />
         <CallToAction />
       </main>
       <Footer isLoggedIn={false} />
-      {/* <KhalifaFundAttribution /> */}
     </div>
   );
 };
