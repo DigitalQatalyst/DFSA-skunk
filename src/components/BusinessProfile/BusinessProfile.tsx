@@ -1,4 +1,4 @@
-﻿import React, {useCallback, useEffect, useMemo, useRef, useState,} from "react";
+﻿import React, {useCallback, useEffect, useMemo, useRef, useState, Suspense} from "react";
 import {TabSection} from "./TabSection";
 import {DocumentSection} from "./DocumentSection";
 import {mockDocuments, mockMultiEntryData} from "../../utils/mockData";
@@ -40,6 +40,9 @@ import {
 import {toast} from "sonner";
 import {ProfileSummaryTab} from "./ProfileSummaryTab";
 import {useProfileSummaryQuery} from "../../hooks/useProfileQueries";
+
+// Lazy load ProductsTab
+const ProductsTab = React.lazy(() => import("./ProductsTab").then(module => ({ default: module.ProductsTab })));
 
 type ProfileData = {
     companyStage?: string | null;
@@ -1178,6 +1181,19 @@ export function BusinessProfile({activeSection = "profile"}) {
                                     // Render Profile Summary tab if it's the active section
                                     if (section.id === 'profile_summary') {
                                         return <ProfileSummaryTab />;
+                                    }
+                                    
+                                    // Render Products tab with lazy loading
+                                    if (section.id === 'products') {
+                                        return (
+                                            <Suspense fallback={
+                                                <div className="flex items-center justify-center py-12">
+                                                    <div className="text-gray-600">Loading Products...</div>
+                                                </div>
+                                            }>
+                                                <ProductsTab />
+                                            </Suspense>
+                                        );
                                     }
                                     
                                     // Render other tabs using TabSection

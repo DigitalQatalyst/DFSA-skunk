@@ -22,6 +22,15 @@ console.log('🚀 Starting Supabase migration...\n');
 console.log(`Connection: ${connectionString.replace(/:[^:@]+@/, ':****@')}\n`);
 
 async function runMigration() {
+  // Get migration file path from command-line argument
+  const migrationFileArg = process.argv[2];
+  if (!migrationFileArg) {
+    console.error('❌ Error: Migration file path is required');
+    console.error('Usage: node scripts/run-supabase-migration.mjs <migration-file-path>');
+    console.error('Example: node scripts/run-supabase-migration.mjs supabase/migrations/002_create_products_tables.sql');
+    process.exit(1);
+  }
+
   const client = new Client({
     connectionString: connectionString,
     ssl: {
@@ -34,8 +43,11 @@ async function runMigration() {
     await client.connect();
     console.log('✅ Connected successfully\n');
 
-    // Read migration file
-    const migrationPath = path.join(__dirname, '..', 'supabase', 'migrations', '001_create_profile_summary_table.sql');
+    // Resolve migration file path (can be relative or absolute)
+    const migrationPath = path.isAbsolute(migrationFileArg) 
+      ? migrationFileArg 
+      : path.join(process.cwd(), migrationFileArg);
+    
     console.log(`📄 Reading migration file: ${migrationPath}`);
     
     if (!fs.existsSync(migrationPath)) {
@@ -54,50 +66,32 @@ async function runMigration() {
     console.log('---');
     console.log('✅ Migration executed successfully!\n');
 
-    // Verify table was created
-    console.log('🔍 Verifying table creation...');
-    const result = await client.query(`
-      SELECT 
-        table_name,
-        column_name,
-        data_type
-      FROM information_schema.columns
-      WHERE table_name = 'profiledomain_profilesummary'
-      ORDER BY ordinal_position
-      LIMIT 10;
-    `);
+    // Extract table name from migration file name for verification
+    const migrationFileName = path.basename(migrationPath, '.sql');
+    console.log(`📊 Migration file: ${migrationFileName}`);
+    
+    // Try to detect tables created in this migration
+    // For products migration, check for profiledomain_products
+    const tablesToCheck = migrationFileName.includes('products') 
+      ? ['profiledomain_products', 'firm_license_category', 'activity_master']
+      : ['profiledomain_profilesummary'];
 
-    if (result.rows.length > 0) {
-      console.log('✅ Table verified! Columns:');
-      result.rows.forEach(row => {
-        console.log(`   - ${row.column_name} (${row.data_type})`);
-      });
-    } else {
-      console.log('⚠️  Table not found - migration may have failed');
-    }
+    console.log('\n🔍 Verifying table creation...');
+    for (const tableName of tablesToCheck) {
+      const result = await client.query(`
+        SELECT 
+          table_name,
+          COUNT(*) as column_count
+        FROM information_schema.columns
+        WHERE table_name = $1
+        GROUP BY table_name;
+      `, [tableName]);
 
-    // Check RLS policies
-    console.log('\n🔍 Checking RLS policies...');
-    const rlsResult = await client.query(`
-      SELECT 
-        schemaname,
-        tablename,
-        policyname,
-        permissive,
-        roles,
-        cmd,
-        qual
-      FROM pg_policies
-      WHERE tablename = 'profiledomain_profilesummary';
-    `);
-
-    if (rlsResult.rows.length > 0) {
-      console.log('✅ RLS policies found:');
-      rlsResult.rows.forEach(row => {
-        console.log(`   - ${row.policyname} (${row.cmd})`);
-      });
-    } else {
-      console.log('⚠️  No RLS policies found');
+      if (result.rows.length > 0) {
+        console.log(`✅ Table '${tableName}' verified (${result.rows[0].column_count} columns)`);
+      } else {
+        console.log(`⚠️  Table '${tableName}' not found`);
+      }
     }
 
     console.log('\n✅ Migration completed successfully!');

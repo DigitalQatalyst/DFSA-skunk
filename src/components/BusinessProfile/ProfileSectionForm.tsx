@@ -72,6 +72,7 @@ export function ProfileSectionForm({
                 (Array.isArray(field.mandatory) && field.mandatory.length > 0);
               const isFieldReadOnly = field.readOnly === true || isReadOnly;
               const hasError = !!errors[field.fieldName];
+              const isBooleanField = field.fieldType === 'Boolean';
 
               return (
                 <div key={field.id} className="flex flex-col sm:flex-row sm:items-start gap-2">
@@ -88,12 +89,19 @@ export function ProfileSectionForm({
                       name={field.fieldName}
                       control={control}
                       rules={{
-                        required: isMandatory && !isFieldReadOnly
-                          ? `${field.label} is required`
-                          : false,
                         validate: (value) => {
+                          if (isMandatory && !isFieldReadOnly) {
+                            if (isBooleanField) {
+                              if (typeof value !== 'boolean') {
+                                return `${field.label} is required`;
+                              }
+                            } else if (value === undefined || value === null || value === '') {
+                              return `${field.label} is required`;
+                            }
+                          }
+
                           if (field.fieldType === 'Text' && field.validation?.type === 'email' && value) {
-                            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                            const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
                             if (!emailRegex.test(value)) {
                               return `${field.label} must be a valid email address`;
                             }
@@ -102,6 +110,44 @@ export function ProfileSectionForm({
                         },
                       }}
                       render={({ field: formField }) => {
+                        // Boolean: render Yes/No radios for clarity
+                        if (isBooleanField) {
+                          const value = formField.value;
+                          if (isFieldReadOnly) {
+                            return (
+                              <div className="text-sm text-gray-700">
+                                {value === true ? 'Yes' : value === false ? 'No' : '-'}
+                              </div>
+                            );
+                          }
+                          return (
+                            <div className="flex items-center gap-4">
+                              <label className="inline-flex items-center gap-2 text-sm text-gray-800">
+                                <input
+                                  type="radio"
+                                  value="true"
+                                  checked={value === true}
+                                  onChange={() => formField.onChange(true)}
+                                  disabled={isFieldReadOnly || isLoading}
+                                  className="h-4 w-4 text-red-800 focus:ring-red-800"
+                                />
+                                <span>Yes</span>
+                              </label>
+                              <label className="inline-flex items-center gap-2 text-sm text-gray-800">
+                                <input
+                                  type="radio"
+                                  value="false"
+                                  checked={value === false}
+                                  onChange={() => formField.onChange(false)}
+                                  disabled={isFieldReadOnly || isLoading}
+                                  className="h-4 w-4 text-red-800 focus:ring-red-800"
+                                />
+                                <span>No</span>
+                              </label>
+                            </div>
+                          );
+                        }
+
                         // Basic field rendering - will be enhanced per field type
                         if (field.fieldType === 'select' && field.options) {
                           return (

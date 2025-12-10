@@ -135,7 +135,12 @@ function validateConfig(raw: ProfileConfig): ValidationResult<ProfileConfig> {
   raw.tabs.forEach((tab) => {
     if (!tab.id) warnings.push("Tab missing id");
     tab.groups.forEach((group) => {
-      group.fields.forEach((field) => {
+      // Handle groups with direct fields array
+      const fieldsToValidate = group.fields || 
+        // Handle groups with sections array (each section has fields)
+        (group.sections ? group.sections.flatMap((section: any) => section.fields || []) : []);
+      
+      fieldsToValidate.forEach((field: any) => {
         if (fieldNames.has(field.fieldName)) {
           warnings.push(`Duplicate fieldName detected: ${field.fieldName}`);
         }

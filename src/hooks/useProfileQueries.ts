@@ -260,3 +260,39 @@ export function useUpdateProfileSummaryMutation(
   return useUpdateProfileDomainMutation('profile_summary', mergedOptions);
 }
 
+/**
+ * Convenience hook for Products
+ */
+export function useProductsQuery(
+  options?: Omit<UseQueryOptions<ProfileDomainResponse, Error>, 'queryKey' | 'queryFn'>
+) {
+  return useProfileDomainQuery('products', options);
+}
+
+/**
+ * Convenience mutation hook for Products
+ */
+export function useUpdateProductsMutation(
+  options?: Omit<UseMutationOptions<ProfileDomainResponse, Error, Record<string, any>>, 'mutationFn'>
+) {
+  // Extract custom callbacks
+  const customOnSuccess = options?.onSuccess;
+  const customOnError = options?.onError;
+
+  // Merge callbacks to ensure both default (query invalidation) and custom callbacks are called
+  const mergedOptions: typeof options = {
+    ...options,
+    onSuccess: (data, variables, context) => {
+      // First call the custom onSuccess (which includes toast notification)
+      customOnSuccess?.(data, variables, context);
+      // Query invalidation is handled by useUpdateProfileDomainMutation's default onSuccess
+    },
+    onError: (error, variables, context) => {
+      // Call custom onError
+      customOnError?.(error, variables, context);
+    },
+  };
+
+  return useUpdateProfileDomainMutation('products', mergedOptions);
+}
+
