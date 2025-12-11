@@ -60,9 +60,10 @@ import EJPEnterpriseOperationsInsightDashboard from "./modules/ejp-enterprise-op
 import EJPOperationsDashboard from "./modules/service-delivery-overview";
 
 // DFSA Pathway Selection Pages
-import AuthorizationPage from "./pages/dfsa/AuthorizationPage";
+import AuthorisationPage from "./pages/dfsa/AuthorisationPage";
 import RegistrationPage from "./pages/dfsa/RegistrationPage";
 import RecognitionPage from "./pages/dfsa/RecognitionPage";
+import PathwayServicesPage from "./pages/dfsa/PathwayServicesPage";
 
 export function AppRouter() {
   const [bookmarkedCourses, setBookmarkedCourses] = useState<string[]>([]);
@@ -101,9 +102,15 @@ export function AppRouter() {
                 <Route path="/courses" element={<App />} />
 
                 {/* DFSA Pathway Selection Routes */}
-                <Route path="/authorisation" element={<AuthorizationPage />} />
+                <Route path="/authorisation" element={<AuthorisationPage />} />
                 <Route path="/registration" element={<RegistrationPage />} />
                 <Route path="/recognition" element={<RecognitionPage />} />
+
+                {/* DFSA Pathway Services Routes - Dynamic routing for all regime/pathway combinations */}
+                <Route
+                  path="/:regime/:pathwayId"
+                  element={<PathwayServicesPage />}
+                />
 
                 <Route
                   path="/courses/:itemId"
