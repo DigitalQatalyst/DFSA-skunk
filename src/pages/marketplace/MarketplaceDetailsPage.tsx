@@ -18,6 +18,7 @@ import { Header } from "../../components/Header";
 import { Footer } from "../../components/Footer";
 import { useProductDetails } from "../../hooks/useProductDetails";
 import { getMarketplaceConfig } from "../../utils/marketplaceConfig";
+import { DFSAEnquirySignupModal } from "../../components/Header/components/DFSAEnquirySignupModal";
 
 interface MarketplaceDetailsPageProps {
   marketplaceType: "courses" | "financial" | "events" | "non-financial" | "knowledge-hub";
@@ -32,7 +33,8 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
   const { itemId } = useParams<{ itemId: string }>();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  
+  const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
+
   const { item, loading, error } = useProductDetails({
     itemId,
     marketplaceType,
@@ -45,13 +47,9 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
       navigate("/coming-soon");
       return;
     }
-    
-    // Navigate to the generic service request form
-    navigate('/forms/request-service', { 
-      state: { 
-        service: item 
-      } 
-    });
+
+    // Open signup modal instead of navigating to service request form
+    setIsSignupModalOpen(true);
   };
 
   if (loading) {
@@ -300,6 +298,17 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
         </div>
       </main>
       <Footer isLoggedIn={false} />
+
+      {/* DFSA Enquiry Signup Modal */}
+      <DFSAEnquirySignupModal
+        isOpen={isSignupModalOpen}
+        onClose={() => setIsSignupModalOpen(false)}
+        onSuccess={(referenceNumber) => {
+          console.log('DFSA Enquiry submitted from marketplace:', referenceNumber);
+          // Default behavior: Modal handles navigation to onboarding
+          // or user closes modal to stay on marketplace page
+        }}
+      />
     </div>
   );
 };
