@@ -27,6 +27,7 @@ interface FieldConfig {
   label: string;
   fieldName: string;
   fieldType:
+    | "Table"
     | "select"
     | "multiselect"
     | "Lookup"
@@ -43,7 +44,8 @@ interface FieldConfig {
     | "Text";
   // ✅ REVERTED: Mandatory can be boolean or an array of stage IDs
   mandatory: string[] | boolean;
-  options?: FieldOption[];
+  options?: FieldOption[] | any[];
+  columns?: any[];
   placeholder?: string;
   readOnly?: boolean;
 }
@@ -87,6 +89,12 @@ const buildValidationSchema = (
 
     // Determine base validator type
     switch (field.fieldType) {
+      case "Table":
+        validator = yup
+          .array()
+          .of(yup.mixed())
+          .nullable();
+        break;
       case "Currency":
         validator = yup
           .number()
@@ -159,7 +167,11 @@ const buildValidationSchema = (
 
     // Apply mandatory check based on stage-dependent logic
     if (isMandatory) {
-      if (field.fieldType === "multiselect") {
+      if (field.fieldType === "Table") {
+        validator = (validator as yup.ArraySchema<any>)
+          .min(1, "At least one row is required")
+          .required("This field is required");
+      } else if (field.fieldType === "multiselect") {
         validator = (validator as yup.ArraySchema<any>)
           .min(1, "At least one option is required")
           .required("This field is required");
@@ -176,7 +188,9 @@ const buildValidationSchema = (
       }
     } else {
       // Ensure optional fields are nullable/not required
-      if (field.fieldType === "multiselect") {
+      if (field.fieldType === "Table") {
+        validator = validator.nullable().notRequired();
+      } else if (field.fieldType === "multiselect") {
         validator = validator.nullable().notRequired();
       } else if (
         field.fieldType === "Whole Number" ||
@@ -340,6 +354,9 @@ export function TabSection({
       if (Array.isArray(value)) {
         return value.length === 0;
       }
+      if (field.fieldType === "Table") {
+        return !value || (Array.isArray(value) && value.length === 0);
+      }
       // Handles null, undefined, or empty objects being missing
       return (
         !value || (typeof value === "object" && Object.keys(value).length === 0)
@@ -484,6 +501,8 @@ export function TabSection({
           if (field.fieldType === "multiselect") {
             // Ensure multiselect defaults to array
             initialValues[field.fieldName] = Array.isArray(value) ? value : [];
+          } else if (field.fieldType === "Table") {
+            initialValues[field.fieldName] = Array.isArray(value) ? value : [];
           } else if (
             field.fieldType === "Lookup" &&
             typeof value === "object" &&
@@ -509,6 +528,8 @@ export function TabSection({
         let value = data?.fields?.[field.fieldName];
 
         if (field.fieldType === "multiselect") {
+          currentValues[field.fieldName] = Array.isArray(value) ? value : [];
+        } else if (field.fieldType === "Table") {
           currentValues[field.fieldName] = Array.isArray(value) ? value : [];
         } else if (
           field.fieldType === "Lookup" &&
@@ -799,6 +820,18 @@ export function TabSection({
                               ? new Date(fieldValue).toISOString()
                               : null;
 
+                          case "Table":
+                            if (Array.isArray(fieldValue) && fieldValue.length) {
+                              return fieldValue
+                                .map((row: any) =>
+                                  Object.values(row || {})
+                                    .filter(Boolean)
+                                    .join(" | ")
+                                )
+                                .join("; ");
+                            }
+                            return null;
+
                           default:
                             return fieldValue;
                         }
@@ -878,6 +911,201 @@ export function TabSection({
                                     };
 
                                     switch (field.fieldType) {
+                                      case "Table": {
+                                        const columns =
+                                          (field as any).columns ||
+                                          (field as any).options ||
+                                          [];
+                                        const rows = Array.isArray(
+                                          fieldProps.value
+                                        )
+                                          ? fieldProps.value
+                                          : [];
+
+                                        const handleRowChange = (
+                                          rowIndex: number,
+                                          colKey: string,
+                                          value: string
+                                        ) => {
+                                          const updated = [...rows];
+                                          const row = { ...(updated[rowIndex] || {}) };
+                                          row[colKey] = value;
+                                          updated[rowIndex] = row;
+                                          fieldProps.onChange(updated);
+                                        };
+
+                                        const addRow = () => {
+                                          const emptyRow: Record<string, any> =
+                                            {};
+                                          columns.forEach((col: any) => {
+                                            emptyRow[col.value] = "";
+                                          });
+                                          fieldProps.onChange([
+                                            ...rows,
+                                            emptyRow,
+                                          ]);
+                                        };
+
+                                        const removeRow = (idx: number) => {
+                                          const updated = rows.filter(
+                                            (_: any, i: number) => i !== idx
+                                          );
+                                          fieldProps.onChange(updated);
+                                        };
+
+                                        return (
+                                          <div className="space-y-2">
+                                            <div className="overflow-x-auto border border-gray-200 rounded-md">
+                                              <table className="min-w-full divide-y divide-gray-200 text-sm">
+                                                <thead className="bg-gray-50">
+                                                  <tr>
+                                                    {columns.map((col: any) => (
+                                                      <th
+                                                        key={col.value}
+                                                        className="px-3 py-2 text-left font-medium text-gray-700"
+                                                      >
+                                                        {col.label}
+                                                      </th>
+                                                    ))}
+                                                    <th className="px-3 py-2"></th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody className="divide-y divide-gray-100">
+                                                  {rows.length === 0 ? (
+                                                    <tr>
+                                                      <td
+                                                        className="px-3 py-3 text-gray-400 italic"
+                                                        colSpan={columns.length + 1}
+                                                      >
+                                                        No rows added yet
+                                                      </td>
+                                                    </tr>
+                                                  ) : (
+                                                    rows.map(
+                                                      (row: any, rowIndex: number) => (
+                                                        <tr key={rowIndex}>
+                                                          {columns.map((col: any) => {
+                                                            const colType =
+                                                              (col.type as string) ||
+                                                              "Text";
+                                                            const colOptions =
+                                                              Array.isArray(col.options)
+                                                                ? col.options
+                                                                : [];
+                                                            const currentValue =
+                                                              row?.[col.value] || "";
+                                                            if (
+                                                              colType.toLowerCase() ===
+                                                              "select"
+                                                            ) {
+                                                              return (
+                                                                <td
+                                                                  key={col.value}
+                                                                  className="px-3 py-2"
+                                                                >
+                                                                  <select
+                                                                    className={inputClassName}
+                                                                    value={currentValue}
+                                                                    onChange={(e) =>
+                                                                      handleRowChange(
+                                                                        rowIndex,
+                                                                        col.value,
+                                                                        e.target.value
+                                                                      )
+                                                                    }
+                                                                  >
+                                                                    <option value="" disabled>
+                                                                      Select an option
+                                                                    </option>
+                                                                    {colOptions.map(
+                                                                      (opt: any) => (
+                                                                        <option
+                                                                          key={
+                                                                            opt.value || opt
+                                                                          }
+                                                                          value={
+                                                                            opt.value || opt
+                                                                          }
+                                                                        >
+                                                                          {opt.label || opt}
+                                                                        </option>
+                                                                      )
+                                                                    )}
+                                                                  </select>
+                                                                </td>
+                                                              );
+                                                            }
+                                                            if (
+                                                              colType.toLowerCase() ===
+                                                              "date"
+                                                            ) {
+                                                              return (
+                                                                <td
+                                                                  key={col.value}
+                                                                  className="px-3 py-2"
+                                                                >
+                                                                  <input
+                                                                    type="date"
+                                                                    className={inputClassName}
+                                                                    value={currentValue}
+                                                                    onChange={(e) =>
+                                                                      handleRowChange(
+                                                                        rowIndex,
+                                                                        col.value,
+                                                                        e.target.value
+                                                                      )
+                                                                    }
+                                                                  />
+                                                                </td>
+                                                              );
+                                                            }
+                                                            return (
+                                                              <td
+                                                                key={col.value}
+                                                                className="px-3 py-2"
+                                                              >
+                                                                <input
+                                                                  type="text"
+                                                                  className={inputClassName}
+                                                                  value={currentValue}
+                                                                  onChange={(e) =>
+                                                                    handleRowChange(
+                                                                      rowIndex,
+                                                                      col.value,
+                                                                      e.target.value
+                                                                    )
+                                                                  }
+                                                                />
+                                                              </td>
+                                                            );
+                                                          })}
+                                                          <td className="px-3 py-2">
+                                                            <button
+                                                              type="button"
+                                                              className="text-xs text-red-600 hover:underline"
+                                                              onClick={() => removeRow(rowIndex)}
+                                                            >
+                                                              Remove
+                                                            </button>
+                                                          </td>
+                                                        </tr>
+                                                      )
+                                                    )
+                                                  )}
+                                                </tbody>
+                                              </table>
+                                            </div>
+                                            <button
+                                              type="button"
+                                              className="px-3 py-2 text-sm font-medium text-white rounded bg-indigo-600 hover:bg-indigo-700"
+                                              onClick={addRow}
+                                            >
+                                              Add Row
+                                            </button>
+                                          </div>
+                                        );
+                                      }
+
                                       case "multiselect":
                                         return field.options ? (
                                           <div className="space-y-2">
