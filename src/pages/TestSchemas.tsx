@@ -10,22 +10,22 @@ export default function TestSchemas() {
   useEffect(() => {
     async function loadData() {
       const supabase = getNonFinancialSupabase();
-      
+
       const { data: schemasData } = await supabase
         .from('service_form_schemas')
         .select('service_id, service_name, metadata')
         .order('service_name');
-      
+
       const { data: servicesData } = await supabase
         .from('non_financial_services')
         .select('id, slug, name')
         .order('name');
-      
+
       setSchemas(schemasData || []);
       setServices(servicesData || []);
       setLoading(false);
     }
-    
+
     loadData();
   }, []);
 
@@ -35,7 +35,7 @@ export default function TestSchemas() {
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold mb-8">Schema Verification</h1>
-        
+
         <div className="grid md:grid-cols-2 gap-8">
           {/* Schemas */}
           <div className="bg-white rounded-lg shadow p-6">
@@ -52,12 +52,9 @@ export default function TestSchemas() {
                       {schema.metadata.required_documents.length} documents
                     </div>
                   )}
-                  <Link
-                    to={`/forms/request-service?serviceId=${schema.service_id}&serviceName=${encodeURIComponent(schema.service_name)}`}
-                    className="text-xs text-primary hover:underline mt-1 inline-block"
-                  >
-                    Test Form →
-                  </Link>
+                  <span className="text-xs text-gray-400 mt-1 inline-block">
+                    Form deprecated
+                  </span>
                 </div>
               ))}
             </div>
@@ -71,11 +68,11 @@ export default function TestSchemas() {
             <div className="space-y-2 max-h-96 overflow-y-auto">
               {services.map((service) => {
                 const hasSchema = schemas.some(
-                  s => s.service_id === service.slug || 
+                  s => s.service_id === service.slug ||
                        s.service_id === service.id ||
                        service.slug.includes(s.service_id)
                 );
-                
+
                 return (
                   <div key={service.id} className="p-3 border rounded">
                     <div className="font-medium text-sm">{service.name}</div>
@@ -95,14 +92,13 @@ export default function TestSchemas() {
           <h2 className="text-xl font-bold mb-4">Quick Test Links</h2>
           <div className="grid md:grid-cols-3 gap-4">
             {schemas.slice(0, 6).map((schema) => (
-              <Link
+              <div
                 key={schema.service_id}
-                to={`/forms/request-service?serviceId=${schema.service_id}&serviceName=${encodeURIComponent(schema.service_name)}`}
-                className="p-4 border rounded hover:border-primary hover:bg-primary/5 transition-colors"
+                className="p-4 border rounded bg-gray-50 opacity-60"
               >
                 <div className="font-medium text-sm">{schema.service_name}</div>
-                <div className="text-xs text-primary mt-2">Test Form →</div>
-              </Link>
+                <div className="text-xs text-gray-400 mt-2">Form deprecated</div>
+              </div>
             ))}
           </div>
         </div>

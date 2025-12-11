@@ -63,11 +63,48 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
 
   const handlePrimaryAction = (e: React.MouseEvent) => {
     e.stopPropagation();
+
+    // Handle different service types
     if (type === 'courses') {
       navigate('/coming-soon');
       return;
     }
-    navigate(`${getItemRoute()}?action=true`);
+
+    // Check if this is a DFSA financial services application
+    const isDFSAService = type === 'financial' ||
+                         type === 'business-services' || // Include business-services marketplace
+                         item.id === 'mock-1' || // New Authorisation Services
+                         item.id === 'mock-2' || // New Authorisation: AMI
+                         item.title?.toLowerCase().includes('dfsa') ||
+                         item.title?.toLowerCase().includes('authorisation') ||
+                         item.title?.toLowerCase().includes('authorization') ||
+                         item.title?.toLowerCase().includes('financial services') ||
+                         item.title?.toLowerCase().includes('licence') ||
+                         item.title?.toLowerCase().includes('license') ||
+                         item.description?.toLowerCase().includes('dfsa') ||
+                         item.description?.toLowerCase().includes('financial services') ||
+                         item.description?.toLowerCase().includes('authorisation') ||
+                         item.description?.toLowerCase().includes('authorization');
+
+    // Debug logging
+    console.log('ServiceCard - Service clicked:', {
+      id: item.id,
+      title: item.title,
+      type: type,
+      isDFSAService: isDFSAService,
+      description: item.description?.substring(0, 100)
+    });
+
+    // For DFSA services, navigate to financial services application form
+    if (isDFSAService) {
+      console.log('Navigating to DFSA form');
+      navigate('/forms/financial-services-application');
+      return;
+    }
+
+    // For non-DFSA services, redirect to coming soon page
+    console.log('Navigating to coming soon');
+    navigate('/coming-soon');
   };
 
   // Display tags if available, otherwise use category and deliveryMode
@@ -131,8 +168,8 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
           <button onClick={handleViewDetails} className="px-4 py-2 text-sm font-medium text-blue-600 bg-white border border-blue-600 rounded-md hover:bg-blue-50 transition-colors whitespace-nowrap min-w-[120px] flex-1">
             View Details
           </button>
-          <button 
-            onClick={handlePrimaryAction} 
+          <button
+            onClick={handlePrimaryAction}
             className="px-4 py-2 text-sm font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors whitespace-nowrap flex-1"
           >
             {getPrimaryCTAText()}
