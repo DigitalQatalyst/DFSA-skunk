@@ -268,6 +268,24 @@ try {
   const profileMapping = loadJson<MappingShape>(
     "src/config/profile/profile.mapping.json"
   );
+  const profileConfigV3 = loadJson<ProfileConfig>(
+    "src/config/profile/profile.v3.config.json"
+  );
+  const profileStringsV3 = loadJson<ProfileStrings>(
+    "src/config/profile/profile.v3.strings.json"
+  );
+  const profileMappingV3 = loadJson<MappingShape>(
+    "src/config/profile/profile.v3.mapping.json"
+  );
+  const profileConfigStage1 = loadJson<ProfileConfig>(
+    "src/config/profile/profile.stage1.apqc.config.json"
+  );
+  const profileStringsStage1 = loadJson<ProfileStrings>(
+    "src/config/profile/profile.stage1.apqc.strings.json"
+  );
+  const profileMappingStage1 = loadJson<MappingShape>(
+    "src/config/profile/profile.stage1.apqc.mapping.json"
+  );
   const profileConfigV2 = loadJson<ProfileConfig>(
     "src/config/profile/profile.v2.config.json"
   );
@@ -292,21 +310,32 @@ try {
 
   const warnings: string[] = [];
   const stageIds = validateStages(profileConfig.companyStages, warnings);
+  const stageIdsStage1 = validateStages(
+    profileConfigStage1.companyStages,
+    warnings
+  );
+  const stageIdsV3 = validateStages(profileConfigV3.companyStages, warnings);
   const stageIdsV2 = validateStages(profileConfigV2.companyStages, warnings);
   const phaseIds = validatePhases(profilePhases, warnings);
   const domainCodes = validateDomains(profileDomains, phaseIds, warnings);
   validatePhaseDomainCoverage(profileDomains, profilePhases, warnings);
   validateApplicationStage(applicationStage, warnings);
   validateFields(profileConfig.tabs, stageIds, warnings);
+  validateFields(profileConfigStage1.tabs, stageIdsStage1, warnings);
   validateFields(profileConfigV2.tabs, stageIdsV2, warnings);
+  validateFields(profileConfigV3.tabs, stageIdsV3, warnings);
   validateStrings(profileStrings, warnings);
+  validateStrings(profileStringsStage1, warnings);
   validateStrings(profileStringsV2, warnings);
+  validateStrings(profileStringsV3, warnings);
   validateMapping(profileMapping, warnings);
+  validateMapping(profileMappingStage1, warnings);
   validateMapping(profileMappingV2, warnings);
+  validateMapping(profileMappingV3, warnings);
   validateTabDomainMap(
     tabDomainMap,
     domainCodes,
-    new Set(profileConfigV2.tabs.map((t) => t.id)),
+    new Set(profileConfigV3.tabs.map((t) => t.id)),
     applicationStage?.id,
     warnings
   );

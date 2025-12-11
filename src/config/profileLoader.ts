@@ -13,6 +13,18 @@ const profileMappingJson = (await import("./profile/profile.mapping.json")).defa
 const profileV2ConfigJson = (await import("./profile/profile.v2.config.json")).default;
 const profileV2StringsJson = (await import("./profile/profile.v2.strings.json")).default;
 const profileV2MappingJson = (await import("./profile/profile.v2.mapping.json")).default;
+const profileV3ConfigJson = (await import("./profile/profile.v3.config.json")).default;
+const profileV3StringsJson = (await import("./profile/profile.v3.strings.json")).default;
+const profileV3MappingJson = (await import("./profile/profile.v3.mapping.json")).default;
+const profileStage1ConfigJson = (
+  await import("./profile/profile.stage1.apqc.config.json")
+).default;
+const profileStage1StringsJson = (
+  await import("./profile/profile.stage1.apqc.strings.json")
+).default;
+const profileStage1MappingJson = (
+  await import("./profile/profile.stage1.apqc.mapping.json")
+).default;
 const profileDomainsJson = (await import("./profile/domains.config.json")).default;
 const profilePhasesJson = (await import("./profile/phases.config.json")).default;
 const tabDomainMapJson = (await import("./profile/tabDomainMap.json")).default;
@@ -56,7 +68,7 @@ type ApplicationStageConfig = {
   questionCount?: number;
 };
 
-type ProfileVersion = "v1" | "v2";
+type ProfileVersion = "v1" | "v2" | "v3" | "stage1-apqc";
 
 const allowedFieldTypes: FieldConfig["fieldType"][] = [
   "Text",
@@ -280,14 +292,20 @@ function validateTabDomainMap(
 const validatedConfigs: Record<ProfileVersion, ValidationResult<ProfileConfig>> = {
   v1: validateConfig(profileConfigJson as ProfileConfig),
   v2: validateConfig(profileV2ConfigJson as ProfileConfig),
+  v3: validateConfig(profileV3ConfigJson as ProfileConfig),
+  "stage1-apqc": validateConfig(profileStage1ConfigJson as ProfileConfig),
 };
 const validatedStrings: Record<ProfileVersion, ValidationResult<ProfileStrings>> = {
   v1: validateStrings(profileStringsJson as ProfileStrings),
   v2: validateStrings(profileV2StringsJson as ProfileStrings),
+  v3: validateStrings(profileV3StringsJson as ProfileStrings),
+  "stage1-apqc": validateStrings(profileStage1StringsJson as ProfileStrings),
 };
 const validatedMappings: Record<ProfileVersion, ValidationResult<MappingShape>> = {
   v1: validateMapping(profileMappingJson as MappingShape),
   v2: validateMapping(profileV2MappingJson as MappingShape),
+  v3: validateMapping(profileV3MappingJson as MappingShape),
+  "stage1-apqc": validateMapping(profileStage1MappingJson as MappingShape),
 };
 const validatedPhases = validatePhases(profilePhasesJson as PhaseConfig[]);
 const validatedDomains = validateDomains(
@@ -300,7 +318,7 @@ const validatedApplicationStage = validateApplicationStage(
 const validatedTabDomainMap = validateTabDomainMap(
   tabDomainMapJson as TabDomainMapEntry[],
   validatedDomains.value,
-  validatedConfigs.v2.value.tabs,
+  validatedConfigs.v3.value.tabs,
   validatedApplicationStage.value
 );
 const phaseDomainWarnings = validatePhaseDomainCoverage(
@@ -321,20 +339,32 @@ const reverseMappings: Record<ProfileVersion, Record<string, string>> = {
     acc[api] = ui;
     return acc;
   }, {}),
+  "stage1-apqc": Object.entries(
+    validatedMappings["stage1-apqc"].value.apiFieldMapping
+  ).reduce<Record<string, string>>((acc, [ui, api]) => {
+    acc[api] = ui;
+    return acc;
+  }, {}),
+  v3: Object.entries(validatedMappings.v3.value.apiFieldMapping).reduce<
+    Record<string, string>
+  >((acc, [ui, api]) => {
+    acc[api] = ui;
+    return acc;
+  }, {}),
 };
 
-export function getProfileConfig(version: ProfileVersion = "v2"): ProfileConfig {
+export function getProfileConfig(version: ProfileVersion = "v3"): ProfileConfig {
   return validatedConfigs[version].value;
 }
 
 export function getProfileMapping(
-  version: ProfileVersion = "v2"
+  version: ProfileVersion = "v3"
 ): Record<string, string> {
   return validatedMappings[version].value.apiFieldMapping;
 }
 
 export function getReverseProfileMapping(
-  version: ProfileVersion = "v2"
+  version: ProfileVersion = "v3"
 ): Record<string, string> {
   return reverseMappings[version];
 }
@@ -359,10 +389,16 @@ export function getProfileConfigWarnings(): string[] {
   const versionWarnings = [
     ...validatedConfigs.v1.warnings,
     ...validatedConfigs.v2.warnings,
+    ...validatedConfigs.v3.warnings,
+    ...validatedConfigs["stage1-apqc"].warnings,
     ...validatedStrings.v1.warnings,
     ...validatedStrings.v2.warnings,
+    ...validatedStrings.v3.warnings,
+    ...validatedStrings["stage1-apqc"].warnings,
     ...validatedMappings.v1.warnings,
     ...validatedMappings.v2.warnings,
+    ...validatedMappings.v3.warnings,
+    ...validatedMappings["stage1-apqc"].warnings,
   ];
   return [
     ...versionWarnings,
@@ -395,10 +431,15 @@ function getProfileStringByVersion(
   version: ProfileVersion,
   fallback?: string
 ): string {
-  const primary = validatedStrings[version]?.value?.[key];
-  if (primary !== undefined) return primary;
-  const secondaryVersion: ProfileVersion = version === "v2" ? "v1" : "v2";
-  const secondary = validatedStrings[secondaryVersion]?.value?.[key];
-  if (secondary !== undefined) return secondary;
+  const fallbacks: ProfileVersion[] = [
+    version,
+    ...(["v1", "v2", "v3", "stage1-apqc"] as ProfileVersion[]).filter(
+      (v) => v !== version
+    ),
+  ];
+  for (const candidate of fallbacks) {
+    const value = validatedStrings[candidate]?.value?.[key];
+    if (value !== undefined) return value;
+  }
   return fallback ?? key;
 }
