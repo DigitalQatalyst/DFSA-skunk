@@ -124,3 +124,77 @@ export {
   type UseDocumentsActions,
   type UseDocumentsReturn
 } from './useDocuments';
+
+// Error Handling and User Feedback - Requirements: 6.2, 6.3
+export {
+  ERROR_MESSAGES,
+  createFormError,
+  formatValidationErrors,
+  getNetworkErrorMessage,
+  getFileUploadErrorMessage,
+  formatErrorCount,
+  getFirstErrorFieldId,
+  focusFirstError,
+  groupErrorsByStep,
+  type ErrorCode,
+  type ErrorSeverity,
+  type FormError
+} from './errorMessages';
+
+export {
+  LoadingSpinner,
+  LoadingOverlay,
+  InlineLoading,
+  SaveProgressIndicator,
+  StepProgress,
+  FormSkeleton,
+  RetryButton,
+  StatusBanner,
+  type LoadingSpinnerProps,
+  type LoadingOverlayProps,
+  type InlineLoadingProps,
+  type SaveProgressState,
+  type SaveProgressIndicatorProps,
+  type StepProgressProps,
+  type FormSkeletonProps,
+  type RetryButtonProps,
+  type OperationStatus,
+  type StatusBannerProps
+} from './LoadingStates';
+
+export {
+  ValidationErrorSummary,
+  InlineError,
+  StepValidationStatus,
+  FormValidationSummary,
+  type ValidationErrorSummaryProps,
+  type InlineErrorProps,
+  type StepValidationStatusProps,
+  type FormValidationSummaryProps
+} from './ValidationErrorSummary';
+
+export {
+  FormErrorBoundary,
+  StepErrorBoundary,
+  useFormErrorHandler,
+  type FormErrorBoundaryProps
+} from './FormErrorBoundary';
+
+export {
+  getOnlineStatus,
+  isOnline,
+  isOffline,
+  subscribeToOnlineStatus,
+  saveWithOfflineFallback,
+  loadWithOfflineFallback,
+  getPendingOperations,
+  addPendingOperation,
+  removePendingOperation,
+  updateOperationRetryCount,
+  clearPendingOperations,
+  processPendingOperations,
+  useOnlineStatus,
+  useOfflineSupport,
+  type OnlineStatus,
+  type PendingOperation
+} from './offlineSupport';

@@ -9,15 +9,38 @@ import { jsPDF } from 'jspdf';
 import { FSApplicationFormData, ApplicationStatus } from '../../../types/dfsa';
 import { STAGE_NAMES } from './stepDefinitions';
 
-// DFSA Brand Colors
+/**
+ * DFSA Brand Colors - Consistent with Tailwind theme
+ *
+ * These colors match the system-wide DFSA theming defined in tailwind.config.js
+ * Primary: Red/Burgundy (Pantone 1805 Coated)
+ * Secondary: Gold
+ * Accent: Teal
+ */
 const DFSA_COLORS = {
-  primary: '#003366',      // DFSA Navy Blue
-  secondary: '#0066CC',    // DFSA Light Blue
-  accent: '#CC9900',       // DFSA Gold
-  text: '#333333',         // Dark Gray
-  lightText: '#666666',    // Medium Gray
-  border: '#CCCCCC',       // Light Gray
+  // Primary - Red/Burgundy (matches primary in tailwind)
+  primary: '#b82933',      // DFSA Primary Red/Burgundy
+  primaryDark: '#7a1219',  // DFSA Primary Dark
+  primaryLight: '#c5505c', // DFSA Primary Light
+
+  // Secondary - Gold (matches dfsa-gold in tailwind)
+  secondary: '#a39143',    // DFSA Gold
+  secondaryLight: '#b5a273', // DFSA Gold Light
+
+  // Accent - Teal (matches dfsa-teal in tailwind)
+  accent: '#0891B2',       // DFSA Teal
+  accentLight: '#06B6D4',  // DFSA Teal Light
+
+  // Text colors
+  text: '#333333',         // Dark Gray for body text
+  lightText: '#666666',    // Medium Gray for secondary text
+
+  // UI colors
+  border: '#CCCCCC',       // Light Gray for borders
   background: '#F5F5F5',   // Light Background
+  backgroundAlt: '#fef2f2', // Light primary tint background
+
+  // Status colors
   success: '#28A745',      // Green
   warning: '#FFC107',      // Amber
   error: '#DC3545'         // Red
@@ -148,9 +171,10 @@ export class DFSAPDFGenerator {
   /**
    * Add DFSA branded header
    * Requirement 5.2: Include DFSA branding, application reference, and status
+   * Uses consistent DFSA brand colors (Primary Red/Burgundy with Gold accent)
    */
   private addHeader(applicationRef: string, status: ApplicationStatus): void {
-    // Header background
+    // Header background - DFSA Primary Red/Burgundy
     this.doc.setFillColor(DFSA_COLORS.primary);
     this.doc.rect(0, 0, PDF_CONFIG.pageWidth, PDF_CONFIG.headerHeight, 'F');
 
@@ -178,9 +202,9 @@ export class DFSAPDFGenerator {
     this.doc.setFont('helvetica', 'normal');
     this.doc.text(statusText, PDF_CONFIG.pageWidth - PDF_CONFIG.marginRight - statusWidth, 22);
 
-    // Gold accent line
-    this.doc.setDrawColor(DFSA_COLORS.accent);
-    this.doc.setLineWidth(1);
+    // Gold accent line - DFSA Secondary Gold
+    this.doc.setDrawColor(DFSA_COLORS.secondary);
+    this.doc.setLineWidth(1.5);
     this.doc.line(0, PDF_CONFIG.headerHeight, PDF_CONFIG.pageWidth, PDF_CONFIG.headerHeight);
 
     this.currentY = PDF_CONFIG.headerHeight + 10;
@@ -242,19 +266,20 @@ export class DFSAPDFGenerator {
   /**
    * Add section header
    * Requirement 5.3: Organize data into logical sections with clear headings
+   * Uses DFSA brand colors: Primary for text, Accent Teal for border
    */
   private addSectionHeader(title: string, stageNumber?: number): void {
     this.checkPageBreak(25);
 
-    // Section background
-    this.doc.setFillColor(DFSA_COLORS.background);
+    // Section background - light tint
+    this.doc.setFillColor(DFSA_COLORS.backgroundAlt);
     this.doc.rect(PDF_CONFIG.marginLeft, this.currentY - 2, PDF_CONFIG.contentWidth, 10, 'F');
 
-    // Left border accent
-    this.doc.setFillColor(DFSA_COLORS.secondary);
+    // Left border accent - DFSA Teal
+    this.doc.setFillColor(DFSA_COLORS.accent);
     this.doc.rect(PDF_CONFIG.marginLeft, this.currentY - 2, 3, 10, 'F');
 
-    // Section title
+    // Section title - DFSA Primary
     this.doc.setTextColor(DFSA_COLORS.primary);
     this.doc.setFontSize(12);
     this.doc.setFont('helvetica', 'bold');
@@ -267,18 +292,20 @@ export class DFSAPDFGenerator {
 
   /**
    * Add subsection header
+   * Uses DFSA Gold for subsection titles
    */
   private addSubsectionHeader(title: string): void {
     this.checkPageBreak(15);
 
+    // Subsection title - DFSA Gold
     this.doc.setTextColor(DFSA_COLORS.secondary);
     this.doc.setFontSize(11);
     this.doc.setFont('helvetica', 'bold');
     this.doc.text(title, PDF_CONFIG.marginLeft, this.currentY);
 
-    // Underline
-    this.doc.setDrawColor(DFSA_COLORS.border);
-    this.doc.setLineWidth(0.3);
+    // Underline with gold accent
+    this.doc.setDrawColor(DFSA_COLORS.secondaryLight);
+    this.doc.setLineWidth(0.5);
     this.doc.line(PDF_CONFIG.marginLeft, this.currentY + 2, PDF_CONFIG.marginLeft + PDF_CONFIG.contentWidth, this.currentY + 2);
 
     this.currentY += 8;
@@ -761,11 +788,12 @@ export class DFSAPDFGenerator {
       return;
     }
 
-    // Table header
+    // Table header - DFSA branded
     this.checkPageBreak(20);
-    this.doc.setFillColor(DFSA_COLORS.background);
+    this.doc.setFillColor(DFSA_COLORS.backgroundAlt);
     this.doc.rect(PDF_CONFIG.marginLeft, this.currentY - 2, PDF_CONFIG.contentWidth, 8, 'F');
 
+    // Header text in DFSA Primary
     this.doc.setTextColor(DFSA_COLORS.primary);
     this.doc.setFontSize(8);
     this.doc.setFont('helvetica', 'bold');
