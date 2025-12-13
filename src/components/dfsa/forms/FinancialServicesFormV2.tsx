@@ -2,7 +2,7 @@
  * DFSA Financial Services Application Form V2
  *
  * Main form wizard container with navigation, progress tracking, and state management
- * Requirements: 1.2, 2.1, 2.2, 2.3, 2.4, 2.5, 3.1, 3.2, 3.3, 3.4
+ * Requirements: 1.2, 2.1, 2.2, 2.3, 2.4, 2.5, 3.1, 3.2, 3.3, 3.4, 6.2, 6.3
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -21,7 +21,9 @@ import {
   Circle,
   FileText,
   Loader2,
-  RotateCcw
+  RotateCcw,
+  CloudOff,
+  AlertCircle
 } from 'lucide-react';
 
 // Import step components - Stage 1
@@ -72,6 +74,11 @@ import { validateStep } from './formValidation';
 import { useDraftManager } from './useDraftManager';
 import { SaveStatusIndicator } from './SaveStatusIndicator';
 import { clearDraftFromLocalStorage, DraftData } from './draftManager';
+import { FormErrorBoundary, StepErrorBoundary } from './FormErrorBoundary';
+import { ValidationErrorSummary } from './ValidationErrorSummary';
+import { LoadingOverlay, StatusBanner } from './LoadingStates';
+import { useOnlineStatus, useOfflineSupport } from './offlineSupport';
+import { focusFirstError } from './errorMessages';
 
 export interface FormWizardProps {
   applicationId?: string;
@@ -89,6 +96,14 @@ export const FinancialServicesFormV2: React.FC<FormWizardProps> = ({
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [showDraftRestorePrompt, setShowDraftRestorePrompt] = useState(false);
+  const [showValidationErrors, setShowValidationErrors] = useState(false);
+  const [operationStatus, setOperationStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [operationMessage, setOperationMessage] = useState('');
+  const [isNavigating, setIsNavigating] = useState(false);
+
+  // Online status for offline support - Requirements: 6.2, 6.3
+  const onlineStatus = useOnlineStatus();
+  const { isOffline, pendingCount } = useOfflineSupport();
 
   // Main wizard state
   const [state, setState] = useState<FormWizardState>(createInitialWizardState);
@@ -217,9 +232,14 @@ export const FinancialServicesFormV2: React.FC<FormWizardProps> = ({
   }, [state.currentStepIndex, state.completedSteps, state.applicableSteps, setSearchParams]);
 
   const goToNextStep = useCallback(() => {
+    // Prevent double navigation
+    if (isNavigating) return;
+
+    setIsNavigating(true);
+
     const currentStepId = state.applicableSteps[state.currentStepIndex];
 
-    // Validate current step before proceeding
+    // Validate current step before proceeding - Requirements: 6.2, 6.3
     if (currentStepId) {
       const validation = validateStep(currentStepId, state.formData);
       if (!validation.isValid) {
@@ -227,26 +247,44 @@ export const FinancialServicesFormV2: React.FC<FormWizardProps> = ({
           ...prev,
           errors: validation.errors
         }));
+        // Show validation error summary and focus first error
+        setShowValidationErrors(true);
+        focusFirstError(validation.errors);
+        setIsNavigating(false);
         return;
       }
 
       // Clear errors if validation passes
       setState(prev => ({ ...prev, errors: {} }));
+      setShowValidationErrors(false);
     }
 
     const nextIndex = getNextStepIndex(state.currentStepIndex, state.applicableSteps);
     if (nextIndex !== null) {
-      // Mark current step as completed
-      if (currentStepId && !state.completedSteps.includes(currentStepId)) {
-        setState(prev => ({
-          ...prev,
-          completedSteps: [...prev.completedSteps, currentStepId]
-        }));
-      }
+      // Update state with both completed step and new step index in one update
+      setState(prev => {
+        const newCompletedSteps = currentStepId && !prev.completedSteps.includes(currentStepId)
+          ? [...prev.completedSteps, currentStepId]
+          : prev.completedSteps;
 
-      navigateToStep(nextIndex);
+        return {
+          ...prev,
+          currentStepIndex: nextIndex,
+          completedSteps: newCompletedSteps
+        };
+      });
+
+      // Update URL and scroll
+      const nextStepId = state.applicableSteps[nextIndex];
+      if (nextStepId) {
+        setSearchParams({ step: nextStepId });
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [state.currentStepIndex, state.applicableSteps, state.completedSteps, navigateToStep]);
+
+    // Reset navigation flag after a short delay to allow state updates
+    setTimeout(() => setIsNavigating(false), 100);
+  }, [state.currentStepIndex, state.applicableSteps, state.completedSteps, state.formData, setSearchParams, isNavigating]);
 
   const goToPreviousStep = useCallback(() => {
     const prevIndex = getPreviousStepIndex(state.currentStepIndex);
@@ -260,21 +298,32 @@ export const FinancialServicesFormV2: React.FC<FormWizardProps> = ({
     saveDraft();
   }, [saveDraft]);
 
-  // Submit function
+  // Submit function with error handling - Requirements: 6.2, 6.3
   const handleSubmit = useCallback(async () => {
     if (!onSubmit) return;
 
     setState(prev => ({ ...prev, isSubmitting: true }));
+    setOperationStatus('loading');
+    setOperationMessage('Submitting your application...');
 
     try {
       await onSubmit(state.formData);
       // Clear localStorage on successful submission
       clearDraftFromLocalStorage();
-      // Navigate to success page or dashboard
-      navigate('/dashboard/applications');
+      setOperationStatus('success');
+      setOperationMessage('Application submitted successfully!');
+      // Navigate to success page or dashboard after brief delay
+      setTimeout(() => {
+        navigate('/dashboard/applications');
+      }, 1500);
     } catch (error) {
       console.error('Submission failed:', error);
-      // Handle submission error
+      setOperationStatus('error');
+      setOperationMessage(
+        error instanceof Error
+          ? error.message
+          : 'Unable to submit your application. Please try again.'
+      );
     } finally {
       setState(prev => ({ ...prev, isSubmitting: false }));
     }
@@ -402,8 +451,71 @@ export const FinancialServicesFormV2: React.FC<FormWizardProps> = ({
     }
   };
 
+  // Handle error boundary reset
+  const handleErrorReset = useCallback(() => {
+    setOperationStatus('idle');
+    setOperationMessage('');
+  }, []);
+
+  // Handle navigation to home from error boundary
+  const handleNavigateHome = useCallback(() => {
+    navigate('/');
+  }, [navigate]);
+
+  // Dismiss validation errors
+  const handleDismissValidationErrors = useCallback(() => {
+    setShowValidationErrors(false);
+  }, []);
+
+  // Dismiss operation status
+  const handleDismissStatus = useCallback(() => {
+    setOperationStatus('idle');
+    setOperationMessage('');
+  }, []);
+
   return (
+    <FormErrorBoundary
+      formData={state.formData}
+      currentStep={currentStepId}
+      currentStepIndex={state.currentStepIndex}
+      completedSteps={state.completedSteps}
+      applicableSteps={state.applicableSteps}
+      onReset={handleErrorReset}
+      onNavigateHome={handleNavigateHome}
+    >
     <div className="min-h-screen bg-gray-50">
+      {/* Loading Overlay for async operations */}
+      <LoadingOverlay
+        isVisible={state.isSubmitting}
+        message="Submitting Application"
+        subMessage="Please wait while we process your application..."
+      />
+
+      {/* Offline Banner - Requirements: 6.2, 6.3 */}
+      {isOffline && (
+        <div className="bg-amber-50 border-b border-amber-200 px-4 py-3">
+          <div className="max-w-7xl mx-auto flex items-center gap-3">
+            <CloudOff className="w-5 h-5 text-amber-600" />
+            <p className="text-sm text-amber-800">
+              You're currently offline. Your changes are being saved locally and will sync when you're back online.
+              {pendingCount > 0 && ` (${pendingCount} pending operations)`}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Operation Status Banner */}
+      {operationStatus !== 'idle' && operationStatus !== 'loading' && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+          <StatusBanner
+            status={operationStatus}
+            successMessage={operationMessage}
+            errorMessage={operationMessage}
+            onDismiss={handleDismissStatus}
+          />
+        </div>
+      )}
+
       {/* Draft Restore Prompt - Requirement 2.2 */}
       {showDraftRestorePrompt && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -575,8 +687,26 @@ export const FinancialServicesFormV2: React.FC<FormWizardProps> = ({
               <Separator />
 
               <CardContent className="p-6">
-                {/* Step Content */}
-                {renderStepContent()}
+                {/* Validation Error Summary - Requirements: 6.2, 6.3 */}
+                {showValidationErrors && Object.keys(state.errors).length > 0 && (
+                  <div className="mb-6">
+                    <ValidationErrorSummary
+                      errors={state.errors}
+                      title="Please correct the following errors before continuing:"
+                      onDismiss={handleDismissValidationErrors}
+                      collapsible={true}
+                      showFieldLinks={true}
+                    />
+                  </div>
+                )}
+
+                {/* Step Content with Error Boundary */}
+                <StepErrorBoundary
+                  stepName={currentStep?.name || 'Current Step'}
+                  onRetry={() => setState(prev => ({ ...prev }))}
+                >
+                  {renderStepContent()}
+                </StepErrorBoundary>
               </CardContent>
 
               <Separator />
@@ -593,6 +723,14 @@ export const FinancialServicesFormV2: React.FC<FormWizardProps> = ({
                 </Button>
 
                 <div className="flex items-center space-x-4">
+                  {/* Show error count if there are validation errors */}
+                  {Object.keys(state.errors).length > 0 && (
+                    <div className="flex items-center gap-2 text-red-600 text-sm">
+                      <AlertCircle className="w-4 h-4" />
+                      <span>{Object.keys(state.errors).length} error(s)</span>
+                    </div>
+                  )}
+
                   {isLastStep ? (
                     <Button
                       onClick={handleSubmit}
@@ -611,7 +749,7 @@ export const FinancialServicesFormV2: React.FC<FormWizardProps> = ({
                   ) : (
                     <Button
                       onClick={goToNextStep}
-                      disabled={!canGoNext}
+                      disabled={!canGoNext || isNavigating}
                     >
                       Next
                       <ChevronRight className="w-4 h-4 ml-2" />
@@ -624,5 +762,6 @@ export const FinancialServicesFormV2: React.FC<FormWizardProps> = ({
         </div>
       </div>
     </div>
+    </FormErrorBoundary>
   );
 };
