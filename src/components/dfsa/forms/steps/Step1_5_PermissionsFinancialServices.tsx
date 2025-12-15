@@ -8,13 +8,10 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../ui/card';
 import { Button } from '../../../ui/button';
-import { Separator } from '../../../ui/separator';
 import { Alert, AlertDescription } from '../../../ui/alert';
 import { Badge } from '../../../ui/badge';
 import { Checkbox } from '../../../ui/checkbox';
-import { Label } from '../../../ui/label';
 import { Info, Activity, Grid, CheckCircle, AlertTriangle } from 'lucide-react';
-import { FormCheckbox } from '../FormCheckbox';
 import { FSApplicationFormData } from '../../../../types/dfsa';
 import { cn } from '../../../../lib/utils';
 
@@ -147,14 +144,15 @@ export const Step1_5_PermissionsFinancialServices: React.FC<Step1_5Props> = ({
   const [activeTab, setActiveTab] = useState<'activities' | 'matrix' | 'endorsements'>('activities');
 
   // Activity selection handlers
-  const handleActivityChange = (activityCode: string, checked: boolean) => {
+  const handleActivityChange = (activityCode: string, checked: boolean | 'indeterminate') => {
+    const isChecked = checked === true;
     const updatedSelections = {
       ...formData.activitySelections,
-      [activityCode]: checked
+      [activityCode]: isChecked
     };
 
     // If unchecking A1, clear the financial services matrix
-    if (activityCode === 'A1' && !checked) {
+    if (activityCode === 'A1' && !isChecked) {
       updateFormData({
         activitySelections: updatedSelections,
         financialServicesMatrix: {}
@@ -165,12 +163,13 @@ export const Step1_5_PermissionsFinancialServices: React.FC<Step1_5Props> = ({
   };
 
   // Matrix selection handlers
-  const handleMatrixChange = (activityCode: string, investmentType: string, checked: boolean) => {
+  const handleMatrixChange = (activityCode: string, investmentType: string, checked: boolean | 'indeterminate') => {
+    const isChecked = checked === true;
     const currentMatrix = formData.financialServicesMatrix || {};
     const currentSelections = currentMatrix[activityCode] || [];
 
     let updatedSelections;
-    if (checked) {
+    if (isChecked) {
       updatedSelections = [...currentSelections, investmentType];
     } else {
       updatedSelections = currentSelections.filter(type => type !== investmentType);
@@ -185,11 +184,12 @@ export const Step1_5_PermissionsFinancialServices: React.FC<Step1_5Props> = ({
   };
 
   // Endorsement selection handlers
-  const handleEndorsementChange = (endorsementCode: string, checked: boolean) => {
+  const handleEndorsementChange = (endorsementCode: string, checked: boolean | 'indeterminate') => {
+    const isChecked = checked === true;
     updateFormData({
       endorsementSelections: {
         ...formData.endorsementSelections,
-        [endorsementCode]: checked
+        [endorsementCode]: isChecked
       }
     });
   };
@@ -290,7 +290,7 @@ export const Step1_5_PermissionsFinancialServices: React.FC<Step1_5Props> = ({
                         <div className="flex items-start space-x-3">
                           <Checkbox
                             checked={isSelected}
-                            onChange={(checked) => handleActivityChange(activity.code, checked)}
+                            onCheckedChange={(checked) => handleActivityChange(activity.code, checked)}
                             disabled={isReadOnly}
                             className="mt-1"
                           />
@@ -405,7 +405,7 @@ export const Step1_5_PermissionsFinancialServices: React.FC<Step1_5Props> = ({
                                 <td key={type.code} className="text-center p-2 border-b border-l">
                                   <Checkbox
                                     checked={isSelected}
-                                    onChange={(checked) => handleMatrixChange(activity.code, type.code, checked)}
+                                    onCheckedChange={(checked) => handleMatrixChange(activity.code, type.code, checked)}
                                     disabled={isReadOnly}
                                   />
                                 </td>
@@ -471,7 +471,7 @@ export const Step1_5_PermissionsFinancialServices: React.FC<Step1_5Props> = ({
                         <div className="flex items-start space-x-3">
                           <Checkbox
                             checked={isSelected}
-                            onChange={(checked) => handleEndorsementChange(endorsement.code, checked)}
+                            onCheckedChange={(checked) => handleEndorsementChange(endorsement.code, checked)}
                             disabled={isReadOnly || !isDependencyMet}
                             className="mt-1"
                           />
