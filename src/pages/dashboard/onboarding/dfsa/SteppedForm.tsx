@@ -202,39 +202,61 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
   }
 
   // Handle final submission
-  const handleSubmit = form.handleSubmit(async (data) => {
-    try {
-      auditLogger.log('DFSA_FORM_SUBMITTED', {
-        userId: data.userId,
-        activityType: data.activityType,
-        pathway: data.pathway,
-      })
+  const handleSubmit = form.handleSubmit(
+    async (data) => {
+      try {
+        auditLogger.log('DFSA_FORM_SUBMITTED', {
+          userId: data.userId,
+          activityType: data.activityType,
+          pathway: data.pathway,
+        })
 
-      // Submit application using React Query mutation
-      const result = await submitMutation.mutateAsync(data)
+        // Submit application using React Query mutation
+        const result = await submitMutation.mutateAsync(data)
 
-      setApplicationReference(result.applicationReference)
+        setApplicationReference(result.applicationReference)
 
-      auditLogger.log('DFSA_SUBMISSION_SUCCESS', {
-        applicationReference: result.applicationReference,
-        submittedAt: result.submittedAt,
-      })
+        auditLogger.log('DFSA_SUBMISSION_SUCCESS', {
+          applicationReference: result.applicationReference,
+          submittedAt: result.submittedAt,
+        })
 
-      toast.success('Application submitted successfully!', {
-        description: `Reference: ${result.applicationReference}`,
-      })
+        toast.success('Application submitted successfully!', {
+          description: `Reference: ${result.applicationReference}`,
+        })
 
-      setShowSuccessModal(true)
-    } catch (error) {
-      auditLogger.log('DFSA_SUBMISSION_FAILED', {
-        error: String(error),
-      })
-      toast.error('Submission failed. Please try again.', {
-        description: 'If the problem persists, please contact support.',
-        duration: 5000,
-      })
+        setShowSuccessModal(true)
+      } catch (error) {
+        auditLogger.log('DFSA_SUBMISSION_FAILED', {
+          error: String(error),
+        })
+        toast.error('Submission failed. Please try again.', {
+          description: 'If the problem persists, please contact support.',
+          duration: 5000,
+        })
+      }
+    },
+    (errors) => {
+      // Handle validation errors
+      console.error('Form validation errors:', errors)
+
+      // Check if declarations are missing
+      if (errors.declarations) {
+        toast.error('Please complete all required declarations', {
+          description: 'All declaration checkboxes must be checked before submitting.',
+          duration: 5000,
+        })
+      } else {
+        toast.error('Please complete all required fields', {
+          description: 'Some required information is missing or invalid.',
+          duration: 5000,
+        })
+      }
+
+      // Scroll to top to show errors
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
-  })
+  )
 
   // Handle modal close
   const handleCloseModal = () => {
@@ -245,7 +267,7 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
       onComplete()
     }
 
-    navigate('/dashboard/profile')
+    navigate('/dashboard/overview')
   }
 
   // Render current step content
