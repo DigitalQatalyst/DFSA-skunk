@@ -4,6 +4,8 @@
 
 import React from 'react';
 import { FinancialServicesFormV2 } from '../../components/dfsa/forms';
+import { Header } from '../../components/Header';
+import { Footer } from '../../components/Footer';
 import { FSApplicationFormData } from '../../types/dfsa';
 
 export const FinancialServicesApplicationForm: React.FC = () => {
@@ -23,12 +25,21 @@ export const FinancialServicesApplicationForm: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <FinancialServicesFormV2
-        mode="create"
-        onSave={handleSave}
-        onSubmit={handleSubmit}
-      />
+    <div className="min-h-screen flex flex-col">
+      {/* Global Header */}
+      <Header data-id="financial-services-form-header" />
+      
+      {/* Main Form Content */}
+      <main className="flex-1 bg-gray-50">
+        <FinancialServicesFormV2
+          mode="create"
+          onSave={handleSave}
+          onSubmit={handleSubmit}
+        />
+      </main>
+      
+      {/* Global Footer */}
+      <Footer data-id="financial-services-form-footer" isLoggedIn={true} />
     </div>
   );
 };

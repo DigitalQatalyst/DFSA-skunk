@@ -284,7 +284,7 @@ export const FinancialServicesFormV2: React.FC<FormWizardProps> = ({
 
     // Reset navigation flag after a short delay to allow state updates
     setTimeout(() => setIsNavigating(false), 100);
-  }, [state.currentStepIndex, state.applicableSteps, state.completedSteps, state.formData, setSearchParams, isNavigating]);
+  }, [state.currentStepIndex, state.applicableSteps, state.formData, setSearchParams, isNavigating]);
 
   const goToPreviousStep = useCallback(() => {
     const prevIndex = getPreviousStepIndex(state.currentStepIndex);
@@ -483,7 +483,7 @@ export const FinancialServicesFormV2: React.FC<FormWizardProps> = ({
       onReset={handleErrorReset}
       onNavigateHome={handleNavigateHome}
     >
-    <div className="min-h-screen bg-gray-50">
+    <div className="pt-4">
       {/* Loading Overlay for async operations */}
       <LoadingOverlay
         isVisible={state.isSubmitting}
@@ -554,8 +554,8 @@ export const FinancialServicesFormV2: React.FC<FormWizardProps> = ({
         </div>
       )}
 
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-40">
+      {/* Form Header */}
+      <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
