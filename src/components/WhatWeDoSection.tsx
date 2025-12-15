@@ -67,7 +67,7 @@ const WhatWeDoSection: React.FC = () => {
               id="services-heading"
               className="text-3xl md:text-4xl font-sans font-semibold text-[#1E293B] mb-4"
             >
-              Our Services
+              Our Regulatory Regimes
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto mt-4">
               Comprehensive regulatory services for financial institutions in

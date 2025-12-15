@@ -104,8 +104,13 @@ export const stepFieldMapping: Record<string, string[]> = {
     'cryptoShareholderRegistry',
   ],
 
-  // Step 9: Review & Submit (Display-only - no new fields)
-  review: [],
+  // Step 9: Review & Submit (includes declaration checkboxes)
+  review: [
+    'declarations.fitAndProperConfirmation',
+    'declarations.accuracyConfirmation',
+    'declarations.authorityConfirmation',
+    'declarations.dataConsentProvided',
+  ],
 }
 
 /**
