@@ -40,8 +40,8 @@ export const MarketplaceCard: React.FC<MarketplaceItemProps> = ({
 }) => {
   const navigate = useNavigate();
   const config = getMarketplaceConfig(marketplaceType);
-  
-  
+
+
 
   // Generate route based on marketplace type
   const getItemRoute = () => {
@@ -58,20 +58,48 @@ export const MarketplaceCard: React.FC<MarketplaceItemProps> = ({
   const handlePrimaryAction = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     // For courses listing, route to coming soon
     if (marketplaceType === 'courses') {
       navigate('/coming-soon');
       return;
     }
 
-    // Navigate to the generic service request form
-    console.log('Navigating to generic request form for:', item.title);
-    navigate('/forms/request-service', { 
-      state: { 
-        service: item 
-      } 
+    // Check if this is a DFSA financial services application
+    const isDFSAService = marketplaceType === 'financial' ||
+                         marketplaceType === 'business-services' || // Include business-services marketplace
+                         item?.id === 'mock-1' || // New Authorisation Services
+                         item?.id === 'mock-2' || // New Authorisation: AMI
+                         item?.title?.toLowerCase().includes('dfsa') ||
+                         item?.title?.toLowerCase().includes('authorisation') ||
+                         item?.title?.toLowerCase().includes('authorization') ||
+                         item?.title?.toLowerCase().includes('financial services') ||
+                         item?.title?.toLowerCase().includes('licence') ||
+                         item?.title?.toLowerCase().includes('license') ||
+                         item?.description?.toLowerCase().includes('dfsa') ||
+                         item?.description?.toLowerCase().includes('financial services') ||
+                         item?.description?.toLowerCase().includes('authorisation') ||
+                         item?.description?.toLowerCase().includes('authorization');
+
+    // Debug logging
+    console.log('MarketplaceCard - Service clicked:', {
+      id: item?.id,
+      title: item?.title,
+      marketplaceType: marketplaceType,
+      isDFSAService: isDFSAService,
+      description: item?.description?.substring(0, 100)
     });
+
+    // For DFSA services, navigate to financial services application form
+    if (isDFSAService) {
+      console.log('Navigating to DFSA financial services form for:', item.title);
+      navigate('/forms/financial-services-application');
+      return;
+    }
+
+    // For non-DFSA services, redirect to coming soon page
+    console.log('Navigating to coming soon for:', item.title);
+    navigate('/coming-soon');
   };
 
   // Display tags if available, otherwise use category and deliveryMode
@@ -187,7 +215,7 @@ export const MarketplaceCard: React.FC<MarketplaceItemProps> = ({
       className="flex flex-col min-h-[340px] bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group cursor-pointer"
       onClick={onQuickView}
     >
-      
+
       <div className="px-5 py-5 flex-grow flex flex-col">
         <div className="flex items-start mb-4">
           <div className={`h-12 w-12 rounded-lg bg-gradient-to-br ${gradient} p-0.5 flex-shrink-0 mr-4 shadow-sm group-hover:scale-105 transition-transform duration-300`}>
@@ -208,19 +236,19 @@ export const MarketplaceCard: React.FC<MarketplaceItemProps> = ({
             </p>
           </div>
         </div>
-        
+
         {/* Description */}
         <div className="mb-5 flex-grow">
           <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed">
             {item.description}
           </p>
         </div>
-        
+
         {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-4 mt-auto">
             {displayTags.slice(0, 3).map((tag, index) => (
-                <span 
-                    key={index} 
+                <span
+                    key={index}
                     className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-gray-50 text-gray-600 border border-gray-200"
                 >
                     {tag}

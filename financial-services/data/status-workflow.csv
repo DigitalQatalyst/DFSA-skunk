@@ -1,0 +1,8 @@
+status_code,status_name,description,can_edit,allowed_transitions,color_code,badge_color
+draft,Draft,Application in progress - not yet submitted,Yes,"submitted, withdrawn",#6c757d,gray
+submitted,Submitted,Application submitted for review,No,"under_review, additional_info_required, rejected, withdrawn",#17a2b8,cyan
+under_review,Under Review,Application being reviewed by DFSA,No,"approved, rejected, additional_info_required, withdrawn",#ffc107,yellow
+additional_info_required,Additional Info Required,More information needed from applicant,Yes,"under_review, withdrawn",#fd7e14,orange
+approved,Approved,Application approved by DFSA,No,None,#28a745,green
+rejected,Rejected,Application rejected by DFSA,No,None,#dc3545,red
+withdrawn,Withdrawn,Application withdrawn by applicant,No,None,#6c757d,gray

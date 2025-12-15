@@ -10,7 +10,7 @@ import RealTimeAlerts from './components/RealTimeAlerts';
 import Icon from '../../components/AppIcon';
 import { Button } from '../../components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
-import { Checkbox } from '../../components/ui/Checkbox';
+import { Checkbox } from '../../components/ui/checkbox';
 import ReactECharts from 'echarts-for-react';
 import { 
   ResponsiveContainer, 
@@ -956,7 +956,7 @@ const EJPOperationsDashboard = () => {
     if (dashboardTabs?.length > 0 && !dashboardTabs?.find((tab) => tab?.id === activeDashboardTab)) {
       setActiveDashboardTab(dashboardTabs?.[0]?.id);
     }
-  }, [activeSegmentTab, activeDashboardTab]);
+  }, [activeSegmentTab, activeDashboardTab, dashboardTabsConfig]);
 
 
   // Update global filters
