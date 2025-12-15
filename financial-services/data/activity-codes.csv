@@ -1,0 +1,47 @@
+code_type,code,short_name,full_name,description,available_investment_types
+sector,A1,Financial Services,"Banking, Investment, Insurance Intermediation",Main financial services sector - enables Q99 matrix,"Shows Q99 matrix for detailed selection"
+sector,A2,Insurance (General),Insurance (General) Business,General insurance business sector,Triggers Step 2-11
+sector,A3,Insurance (Life),Insurance (Life) Business,Life insurance business sector,Triggers Step 2-11
+sector,A4,EMPS,Employee Money Purchase Scheme,Employee pension scheme operations,N/A
+sector,A5,Money Services,Money Services Business,Money transmission and currency exchange,Triggers Step 2-10
+sector,A6,CRA,Operating a Credit Rating Agency,Credit rating agency operations,N/A
+sector,A7,Rep Office,Representative Office,Representative office only,Triggers Step 2-2
+sector,A8,PCC,Protected Cell Company (Insurance),Protected cell company for insurance,N/A
+activity,A1,Accepting Deposits,Accepting Deposits,Taking deposits from customers,"C1, C11, C12"
+activity,A2,Advising FS,Advising on Financial Products,Providing advice on financial products,C1-C12
+activity,A3,Arranging Credit,Arranging Credit and Advising on Credit,Credit arrangement services,"C1, C3"
+activity,A4,Arranging Custody,Arranging Custody,Custody arrangement services,C1-C10
+activity,A5,Arranging Deals,Arranging Deals in Investments,Deal arrangement services,C1-C10
+activity,A6,Dealing Agent,Dealing in Investments as Agent,Agent dealing services,C2-C10
+activity,A7,Dealing Principal,Dealing in Investments as Principal,Principal dealing services,C2-C10
+activity,A8,Insurance Int,Insurance Intermediation,Insurance intermediation services,"C1, C7"
+activity,A9,Insurance Mgmt,Insurance Management,Insurance management services,"C1, C7"
+activity,A10,Managing CIF,Managing a Collective Investment Fund,Fund management services,"C1, C9"
+activity,A11,Managing PSIA,Managing a Profit Sharing Investment Account,PSIA management,"C1, C12"
+activity,A12,Accepting PSIA,Accepting a Profit Sharing Investment Account,PSIA acceptance,"C1, C12"
+activity,A13,Trust Services,Providing Trust Services,Trust services provision,C1
+activity,A14,Crowdfunding,Operating a Crowdfunding Platform,Crowdfunding platform operation,C1
+activity,A15,Fund Admin,Providing Fund Administration,Fund administration services,C1
+activity,A16,Fund Trustee,Acting as Trustee of a Fund,Fund trustee services,C1
+activity,A17,Clearing House,Operating a Clearing House,Clearing house operation,C1-C10
+activity,A18,ATS,Operating an Alternative Trading System,ATS operation,C1-C10
+activity,A19,Exchange,Operating an Exchange,Exchange operation,C1-C10
+activity,A20,Custody,Providing Custody,Custody provision,C1-C10
+investment,C1,FS Only,Financial Service only,Financial service without specific investment type,All activities
+investment,C2,Cert,Certificate,Investment certificate,A6-A7 and market infrastructure
+investment,C3,Deb,Debenture,Debt instrument,A2-A5 and market infrastructure
+investment,C4,Future,Future,Futures contract,A4-A7 and market infrastructure
+investment,C5,Option,Option,Options contract,A4-A7 and market infrastructure
+investment,C6,Share,Share,Equity share,A4-A7 and market infrastructure
+investment,C7,LTIC,Rights Under Long Term Insurance Contract,Insurance contract rights,A8-A9
+investment,C8,Struct,Structured Product,Structured investment product,A4-A7 and market infrastructure
+investment,C9,Unit,Unit,Fund unit,A10 and market infrastructure
+investment,C10,Warrant,Warrant,Warrant instrument,A4-A7 and market infrastructure
+investment,C11,Deposit,Deposit,Bank deposit,A1
+investment,C12,PSIA,Profit Sharing Investment Account,Islamic profit sharing account,A1 and A11-A12
+endorsement,E1_A1,Islamic,Islamic Financial Business,Islamic finance endorsement,Always visible
+endorsement,E2_A1,Retail,Retail Client,Retail client endorsement,When A1 sector selected
+endorsement,E2_A3,Client Assets,Holding/Controlling Client Assets,Client assets endorsement,When A1 sector selected
+endorsement,E2_A4,Insurance Monies,Holding Insurance Monies,Insurance monies endorsement,When A8 or A9 selected
+endorsement,E2_A5,Long Term Ins,Long Term Insurance,Long term insurance endorsement,When A8 or A9 selected
+endorsement,E2_A6,Fund Platform ICC,Fund Platform - ICC,ICC fund platform endorsement,When A10 selected

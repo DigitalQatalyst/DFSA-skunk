@@ -16,7 +16,7 @@ import {DiscoverAbuDhabi} from "./pages/discoverAbuDhabi";
 import NotFound from "./pages/NotFound";
 import MediaDetailPage from "./pages/media/MediaDetailPage";
 import KfBot from "./bot/KfBot";
-import SchemaBasedServiceRequestForm from "./pages/forms/SchemaBasedServiceRequestForm";
+
 import TestSchemas from "./pages/TestSchemas";
 
 
@@ -32,6 +32,7 @@ import ReallocationOfLoanDisbursement from "./pages/forms/ReallocationOfLoanDisb
 import RequestToAmendExistingLoanDetails from "./pages/forms/RequestToAmendExistingLoanDetails";
 import TrainingInEntrepreneurship from "./pages/forms/TrainingInEntrepreneurship";
 import IssueSupportLetter from "./pages/forms/IssueSupportLetter";
+import FinancialServicesApplicationForm from "./pages/forms/FinancialServicesApplicationForm";
 import { FormLayoutWrapper } from "./components/Forms/FormLayoutWrapper";
 import GrowthAreasMarketplace from "./pages/GrowthAreasMarketplace";
 import GrowthAreasPage from "./pages/GrowthAreasPage";
@@ -107,7 +108,7 @@ export function AppRouter() {
                   }
                 />
 
-                
+
                 <Route path="/marketplace/*" element={<MarketplaceRouter />} />
                 <Route
                   path="/dashboard/*"
@@ -119,13 +120,16 @@ export function AppRouter() {
                     </ProtectedRoute>
                   }
                 />
-              <Route 
-                  path="/forms/request-service" 
+
+                <Route
+                  path="/forms/financial-services-application"
                   element={
-                    // <ProtectedRoute>
-                      <SchemaBasedServiceRequestForm />
-                    //  </ProtectedRoute>
-                  } 
+                    <ProtectedRoute>
+                      <RBACRoute>
+                        <FinancialServicesApplicationForm />
+                      </RBACRoute>
+                    </ProtectedRoute>
+                  }
                 />
 
                 <Route

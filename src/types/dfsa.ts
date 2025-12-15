@@ -356,3 +356,279 @@ export interface DFSAEnquiryResponse {
   message: string;
   data?: any;
 }
+// ============================================================================
+// FINANCIAL SERVICES APPLICATION FORM TYPES
+// ============================================================================
+
+/**
+ * Address information structure
+ */
+export interface Address {
+  line1: string;
+  line2?: string;
+  city: string;
+  state?: string;
+  postalCode?: string;
+  country: string;
+  poBox?: string;
+}
+
+/**
+ * Shareholder information
+ */
+export interface Shareholder {
+  name: string;
+  percentage: number;
+  country: string;
+  isIndividual: boolean;
+  entityType?: string;
+}
+
+/**
+ * Beneficial owner information
+ */
+export interface BeneficialOwner {
+  name: string;
+  percentage: number;
+  nationality: string;
+  dateOfBirth?: string;
+  passportNumber?: string;
+}
+
+/**
+ * Controller information
+ */
+export interface Controller {
+  name: string;
+  role: string;
+  controlType: string;
+  percentage?: number;
+  nationality: string;
+}
+
+/**
+ * File upload structure
+ */
+export interface FileUpload {
+  fileName: string;
+  mimeType: string;
+  fileSize: number;
+  fileData: string; // Base64
+  uploadDate: string;
+}
+
+/**
+ * Person information (for board composition, etc.)
+ */
+export interface Person {
+  name: string;
+  role: string;
+  nationality: string;
+  experience?: string;
+}
+
+/**
+ * Waiver request information
+ */
+export interface WaiverRequest {
+  requirement: string;
+  justification: string;
+  alternativeApproach?: string;
+}
+
+/**
+ * Fee calculation information
+ */
+export interface FeeCalculation {
+  applicationFee: number;
+  annualFee: number;
+  totalFee: number;
+  currency: string;
+}
+
+/**
+ * Individual declaration information
+ */
+export interface IndividualDeclaration {
+  personName: string;
+  role: string;
+  declarationSigned: boolean;
+  signedDate?: string;
+}
+
+/**
+ * Complete Financial Services Application Form Data
+ */
+export interface FSApplicationFormData {
+  // Step 1-1: Introduction & Disclosure
+  submitterName: string;
+  submitterFunction: string;
+  submitterEmail: string;
+  submitterPhone: string;
+  contactPersonInternal: boolean;
+  externalAdviserName?: string;
+  externalAdviserEmail?: string;
+  externalAdviserCompany?: string;
+  instructionsConfirmed: boolean;
+  disclosureAcknowledged: boolean;
+  informationAccurate: boolean;
+  authorizedToSubmit: boolean;
+  difcaConsent: boolean;
+
+  // Step 1-2: Standing Data
+  isRepresentativeOffice: boolean;
+  legalStatus?: string;
+  generalStructure?: string;
+  firmName: string;
+  tradingNames?: string[];
+  registeredCountry: string;
+  registrationNumber?: string;
+  registrationDate?: string;
+  financialYearEnd?: string;
+  headOfficeAddress: Address;
+  primaryContactName: string;
+  primaryContactEmail: string;
+  primaryContactPhone: string;
+  itReliance: string;
+  itComplexity: string;
+
+  // Step 1-3: Ownership Information
+  isPartOfGroup: boolean;
+  ultimateHoldingCompany?: string;
+  shareholders: Shareholder[];
+  beneficialOwners: BeneficialOwner[];
+  publiclyListed?: boolean;
+  listingExchange?: string;
+
+  // Step 1-4: Controllers & Group Structure
+  hasControllers: boolean;
+  controllers?: Controller[];
+  groupStructureDescription?: string;
+  groupStructureChart?: FileUpload;
+
+  // Step 1-5: Permissions & Financial Services (Critical for visibility)
+  activitySelections: Record<string, boolean>; // A1-A8 sector selections
+  financialServicesMatrix: Record<string, string[]>; // Activity to investment type mapping
+  endorsementSelections: Record<string, boolean>; // E1_A1, E2_A1, etc.
+
+  // Stage 2: Activity-specific data (conditional)
+  // ... activity-specific fields based on selections
+
+  // Stage 3: Core profile data (conditional)
+  businessPlanSummary?: string;
+  projectedFinancials?: object;
+  targetClientSegments?: string[];
+  riskManagementFramework?: string;
+  boardComposition?: Person[];
+
+  // Stage 4: Final submission
+  waiverRequests?: WaiverRequest[];
+  feeCalculation?: FeeCalculation;
+  paymentMethod?: string;
+  individualDeclarations: IndividualDeclaration[];
+  finalReview: boolean;
+  submissionDeclaration: boolean;
+}
+
+/**
+ * Application status type
+ */
+export type ApplicationStatus = 'draft' | 'submitted' | 'under_review' | 'approved' | 'rejected' | 'withdrawn';
+
+/**
+ * Complete application record
+ */
+export interface FSApplication {
+  id: string;
+  applicationRef: string;
+  status: ApplicationStatus;
+  formData: FSApplicationFormData;
+  currentStep: string;
+  completedSteps: string[];
+  progressPercent: number;
+  createdAt: string;
+  updatedAt: string;
+  submittedAt?: string;
+}
+
+/**
+ * Document metadata for file uploads
+ */
+export interface DocumentMetadata {
+  documentType: string;
+  documentName: string;
+  stepId: string;
+  fieldId: string;
+}
+
+/**
+ * Save operation result
+ */
+export interface SaveResult {
+  success: boolean;
+  applicationId?: string;
+  applicationRef?: string;
+  progressPercent?: number;
+  error?: string;
+}
+
+/**
+ * Submit operation result
+ */
+export interface SubmitResult {
+  success: boolean;
+  applicationRef?: string;
+  submittedAt?: string;
+  error?: string;
+}
+
+/**
+ * Validation result
+ */
+export interface ValidationResult {
+  isValid: boolean;
+  errors: Record<string, string>;
+}
+
+/**
+ * Step definition for form wizard
+ */
+export interface StepDefinition {
+  id: string;
+  stage: number;
+  name: string;
+  component: string;
+  visibility: 'always' | 'conditional';
+  triggerCondition?: string;
+}
+
+/**
+ * Rules engine types
+ */
+export interface Rule {
+  id: string;
+  ruleCode: string;
+  ruleName: string;
+  ruleType: 'visibility' | 'validation' | 'calculation';
+  targetType: 'step' | 'field' | 'section';
+  targetId: string;
+  isActive: boolean;
+  priority: number;
+}
+
+export interface RuleCondition {
+  id: string;
+  ruleId: string;
+  fieldPath: string;
+  operator: 'equals' | 'not_equals' | 'is_true' | 'is_false' | 'contains' | 'not_contains' | 'length_gt' | 'length_lt' | 'in' | 'not_in';
+  value?: string;
+  groupId: number;
+  groupOperator: 'AND' | 'OR';
+}
+
+export interface RuleAction {
+  id: string;
+  ruleId: string;
+  actionType: 'show' | 'hide' | 'require' | 'optional' | 'calculate';
+  actionValue: string;
+}
