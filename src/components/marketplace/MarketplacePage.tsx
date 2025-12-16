@@ -193,7 +193,7 @@ export interface MarketplacePageProps {
   marketplaceType:
     | "courses"
     | "financial"
-    | "non-financial"
+    | "business-services"
     | "knowledge-hub"
     | "events";
   title: string;
@@ -771,7 +771,7 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
           return;
         }
 
-        if (marketplaceType === "non-financial") {
+        if (marketplaceType === "business-services") {
           // Generate filters directly from Supabase data
           const services = await fetchNonFinancialServices();
 
@@ -839,7 +839,7 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
               "entity-type",
               "provided-by",
             ];
-          } else if (marketplaceType === "non-financial") {
+          } else if (marketplaceType === "business-services") {
             facetCodes = [
               "service-category",
               "service-type",
@@ -1167,11 +1167,11 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
         }
 
         // Handle Products (Financial, Non-Financial, and Courses)
-        if (productData || marketplaceType === "non-financial") {
+        if (productData || marketplaceType === "business-services") {
           let mappedItems: any[] = [];
 
-          // Handle non-financial separately with Supabase
-          if (marketplaceType === "non-financial") {
+          // Handle business-services separately with Supabase
+          if (marketplaceType === "business-services") {
             const services = await fetchNonFinancialServices();
             mappedItems = services.map((service) => ({
               id: service.id,

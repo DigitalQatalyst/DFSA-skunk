@@ -1,0 +1,27 @@
+step_id,stage,step_name,component_file,visibility,trigger_condition,question_range
+1-1,1,Introduction & Disclosure,Step1_1_IntroductionDisclosure.tsx,Always,None,Q1-Q10
+1-2,1,Standing Data,Step1_2_StandingData.tsx,Always,None,Q11-Q77
+1-3,1,Ownership Information,Step1_3_OwnershipInformation.tsx,Always,None,Q78-Q94
+1-4,1,Controllers & Group Structure,Step1_4_ControllersGroupStructure.tsx,Always,None,N/A
+1-5,1,Permissions & Financial Services,Step1_5_PermissionsFinancialServices.tsx,Always,None,Q95-Q120
+2-1,2,Fund Management,Step2_1_FundManagement.tsx,Conditional,"financialServicesMatrix.A10.length > 0 OR A11 OR A13",N/A
+2-2,2,Representative Office,Step2_2_RepresentativeOffice.tsx,Conditional,isRepresentativeOffice === true,N/A
+2-3,2,Islamic Endorsement,Step2_3_IslamicEndorsement.tsx,Conditional,endorsementSelections.E1_A1 === true,N/A
+2-4,2,Advising & Arranging,Step2_4_AdvisingArranging.tsx,Conditional,"financialServicesMatrix.A6-A9 or A14 has selections",N/A
+2-5,2,Insurance Intermediation,Step2_5_InsuranceIntermediation.tsx,Conditional,Insurance sector AND (A8 or A9 selected),N/A
+2-6,2,Asset Management,Step2_6_AssetManagement.tsx,Conditional,"financialServicesMatrix.A5, A7, A10, A11, or A13 selected",N/A
+2-7,2,Sales & Trading,Step2_7_SalesTrading.tsx,Conditional,"financialServicesMatrix.A4, A5, or A14 selected",N/A
+2-10,2,Money Services,Step2_10_MoneyServices.tsx,Conditional,activitySelections.A5 === true,N/A
+2-11,2,Direct Insurance,Step2_11_InsuranceDirect.tsx,Conditional,activitySelections.A2 OR A3 === true,N/A
+2-12,2,Banking,Step2_12_Banking.tsx,Conditional,"financialServicesMatrix.A1 or A2 selected",N/A
+2-13,2,Retail Endorsement,Step2_13_RetailEndorsement.tsx,Conditional,endorsementSelections.E2_A1 === true,N/A
+2-14,2,Client Assets,Step2_14_ClientAssets.tsx,Conditional,"financialServicesMatrix.A4, A11, A17 or E2_A5 endorsement",N/A
+2-21,2,Crowdfunding,Step2_21_Crowdfunding.tsx,Conditional,"financialServicesMatrix.A14 or A18 selected",N/A
+3-1,3,Business Plan,Step3_1_BusinessPlan.tsx,Conditional,NOT (Rep Office only),N/A
+3-2,3,Clients,Step3_2_Clients.tsx,Conditional,NOT (Rep Office only),N/A
+3-4,3,Risk Management & Compliance,Step3_4_RiskManagementCompliance.tsx,Conditional,NOT (Rep Office only),N/A
+3-5,3,Governance,Step3_5_Governance.tsx,Conditional,NOT (Rep Office only),N/A
+4-1,4,Waivers & Modifications,Step4_1_WaiversModifications.tsx,Always,None,N/A
+4-2,4,Application Fees,Step4_2_ApplicationFees.tsx,Always,None,N/A
+4-3,4,Fit & Proper Declarations,Step4_3_FitProperDeclarations.tsx,Always,None,N/A
+4-4,4,Review & Submit,Step4_4_ReviewSubmit.tsx,Always,None,N/A

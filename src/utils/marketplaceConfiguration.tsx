@@ -479,11 +479,11 @@ export const marketplaceConfig: Record<string, MarketplaceConfig> = {
     // Mock data for fallback and schema reference
     mockData: mockFinancialServicesData
   },
-  'non-financial': {
-    id: 'non-financial',
+  'business-services': {
+    id: 'business-services',
     title: 'Business Services Hub',
     description: 'Find professional services to support and grow your business',
-    route: '/marketplace/non-financial',
+    route: '/marketplace/business-services',
     primaryCTA: 'Request Service',
     secondaryCTA: 'View Details',
     itemName: 'Business Service',

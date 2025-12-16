@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -9,7 +9,6 @@ import {
   ChevronRight,
   ShieldCheck,
   Globe,
-  Lock,
   Download,
   ArrowRight,
   Building,
@@ -21,7 +20,7 @@ import { getMarketplaceConfig } from "../../utils/marketplaceConfig";
 import { DFSAEnquirySignupModal } from "../../components/Header/components/DFSAEnquirySignupModal";
 
 interface MarketplaceDetailsPageProps {
-  marketplaceType: "courses" | "financial" | "events" | "non-financial" | "knowledge-hub";
+  marketplaceType: "courses" | "financial" | "business-services" | "knowledge-hub";
   bookmarkedItems?: string[];
   onToggleBookmark?: (itemId: string) => void;
   onAddToComparison?: (item: any) => void;
@@ -33,7 +32,6 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
   const { itemId } = useParams<{ itemId: string }>();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
 
   const { item, loading, error } = useProductDetails({
     itemId,
@@ -48,8 +46,41 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
       return;
     }
 
-    // Open signup modal instead of navigating to service request form
-    setIsSignupModalOpen(true);
+    // Check if this is a DFSA financial services application
+    const isDFSAService = marketplaceType === 'financial' ||
+      marketplaceType === 'business-services' || // Include business-services marketplace
+      item?.id === 'mock-1' || // New Authorisation Services
+      item?.id === 'mock-2' || // New Authorisation: AMI
+      item?.title?.toLowerCase().includes('dfsa') ||
+      item?.title?.toLowerCase().includes('authorisation') ||
+      item?.title?.toLowerCase().includes('authorization') ||
+      item?.title?.toLowerCase().includes('financial services') ||
+      item?.title?.toLowerCase().includes('licence') ||
+      item?.title?.toLowerCase().includes('license') ||
+      item?.description?.toLowerCase().includes('dfsa') ||
+      item?.description?.toLowerCase().includes('financial services') ||
+      item?.description?.toLowerCase().includes('authorisation') ||
+      item?.description?.toLowerCase().includes('authorization');
+
+    // Debug logging
+    console.log('MarketplaceDetailsPage - Service clicked:', {
+      id: item?.id,
+      title: item?.title,
+      marketplaceType: marketplaceType,
+      isDFSAService: isDFSAService,
+      description: item?.description?.substring(0, 100)
+    });
+
+    // For DFSA services, navigate to financial services application form
+    if (isDFSAService) {
+      console.log('Navigating to DFSA form');
+      navigate('/forms/financial-services-application');
+      return;
+    }
+
+    // For non-DFSA services, redirect to coming soon page
+    console.log('Navigating to coming soon');
+    navigate('/coming-soon');
   };
 
   if (loading) {
@@ -194,7 +225,7 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
                     <Globe className="mr-3 text-primary" />
                     Application Process
                   </h2>
-                  
+
                   {processSteps.length === 1 ? (
                     // Single step - clean simple layout
                     <div className="bg-gray-50 rounded-xl p-6">
@@ -206,7 +237,7 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
                     // Multiple steps - timeline layout
                     <div className="relative">
                       <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
-                      
+
                       <div className="space-y-8">
                         {processSteps.map((step: any, idx: number) => (
                           <div key={idx} className="relative flex items-start pl-12">
@@ -247,7 +278,7 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
                 <button className="w-full bg-white text-primary font-bold py-3 px-4 rounded-xl border border-primary/20 hover:bg-primary/5 transition-all flex items-center justify-center">
                   <Download size={18} className="mr-2" /> Download Guide
                 </button>
-                
+
                 <div className="mt-8 pt-6 border-t border-gray-100">
                   <h4 className="font-bold text-gray-900 mb-4 flex items-center text-base">
                     <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center mr-3">
@@ -258,8 +289,8 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
                   {requirements.length > 0 ? (
                     <div className="space-y-2">
                       {requirements.map((req: string, idx: number) => (
-                        <div 
-                          key={idx} 
+                        <div
+                          key={idx}
                           className="bg-gray-50 rounded-lg p-3 border border-gray-100 hover:border-primary/20 transition-colors"
                         >
                           <div className="flex items-start gap-3">
@@ -282,7 +313,7 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
                   )}
                 </div>
               </div>
-              
+
               {/* Help Card */}
               <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl border border-gray-200 p-6">
                 <h3 className="font-bold text-primary mb-2">Need Assistance?</h3>

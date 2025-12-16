@@ -29,15 +29,7 @@ const marketplaces: Marketplace[] = [
     description:
       "Apply for authorisation to conduct financial services activities in the DIFC",
     icon: BuildingIcon,
-    href: "/authorisation",
-  },
-  {
-    id: "registration",
-    name: "Registration",
-    description:
-      "Register your entity with the DFSA regulatory framework",
-    icon: CreditCardIcon,
-    href: "/registration",
+    href: "/marketplace/business-services",
   },
   {
     id: "recognition",
@@ -156,9 +148,8 @@ export function ExploreDropdown({ isCompact = false }: ExploreDropdownProps) {
         <span>Explore</span>
         <ChevronDownIcon
           size={16}
-          className={`ml-1 transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={`ml-1 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
+            }`}
         />
       </button>
 
@@ -196,9 +187,8 @@ export function ExploreDropdown({ isCompact = false }: ExploreDropdownProps) {
                     marketplace.rel ??
                     (external ? "noopener noreferrer" : undefined)
                   }
-                  className={`flex items-start px-4 py-3 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none transition-colors duration-150 ${
-                    focusedIndex === index ? "bg-gray-50" : ""
-                  }`}
+                  className={`flex items-start px-4 py-3 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none transition-colors duration-150 ${focusedIndex === index ? "bg-gray-50" : ""
+                    }`}
                   role="menuitem"
                   tabIndex={-1}
                   onClick={(e) => {

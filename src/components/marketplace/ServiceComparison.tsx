@@ -82,7 +82,7 @@ export const ServiceComparison: React.FC<ServiceComparisonProps> = ({
         return "Course Comparison";
       case "financial":
         return "Financial Service Comparison";
-      case "non-financial":
+      case "business-services":
         return "Service Comparison";
       default:
         return "Item Comparison";
