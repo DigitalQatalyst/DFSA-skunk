@@ -16,7 +16,8 @@ import { DiscoverAbuDhabi } from "./pages/discoverAbuDhabi";
 import NotFound from "./pages/NotFound";
 import MediaDetailPage from "./pages/media/MediaDetailPage";
 import KfBot from "./bot/KfBot";
-import GenericServiceRequestForm from "./pages/forms/GenericServiceRequestForm";
+
+import TestSchemas from "./pages/TestSchemas";
 
 
 import NeedsAssessmentForm from "./pages/forms/NeedsAssessmentForm";
@@ -31,6 +32,7 @@ import ReallocationOfLoanDisbursement from "./pages/forms/ReallocationOfLoanDisb
 import RequestToAmendExistingLoanDetails from "./pages/forms/RequestToAmendExistingLoanDetails";
 import TrainingInEntrepreneurship from "./pages/forms/TrainingInEntrepreneurship";
 import IssueSupportLetter from "./pages/forms/IssueSupportLetter";
+import FinancialServicesApplicationForm from "./pages/forms/FinancialServicesApplicationForm";
 import { FormLayoutWrapper } from "./components/Forms/FormLayoutWrapper";
 import GrowthAreasMarketplace from "./pages/GrowthAreasMarketplace";
 import GrowthAreasPage from "./pages/GrowthAreasPage";
@@ -119,12 +121,15 @@ export function AppRouter() {
                       </ProtectedRoute>
                     }
                   />
+
                   <Route
-                    path="/forms/request-service"
+                    path="/forms/financial-services-application"
                     element={
-                      // <ProtectedRoute>
-                      <GenericServiceRequestForm />
-                      //  </ProtectedRoute>
+                      <ProtectedRoute>
+                        <RBACRoute>
+                          <FinancialServicesApplicationForm />
+                        </RBACRoute>
+                      </ProtectedRoute>
                     }
                   />
 
@@ -340,6 +345,7 @@ export function AppRouter() {
                   <Route path="/service-delivery-overview" element={<EJPOperationsDashboard />} />
 
                   {/* Test Pages */}
+                  <Route path="/test/schemas" element={<TestSchemas />} />
                   <Route
                     path="/test/document-selector"
                     element={

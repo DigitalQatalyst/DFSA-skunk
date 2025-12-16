@@ -14,7 +14,7 @@ export const getFallbackItems = (marketplaceType: string): any[] => {
       return mockCourses
     case 'financial':
       return mockFinancialServices
-    case 'non-financial':
+    case 'business-services':
       return mockNonFinancialServices
     case 'knowledge-hub':
       return mockKnowledgeHubItems

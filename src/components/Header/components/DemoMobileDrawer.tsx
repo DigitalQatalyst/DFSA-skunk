@@ -5,11 +5,11 @@ interface DemoMobileDrawerProps {
   isCompact?: boolean;
 }
 const marketplaces = [{
-  id: 'non-financial',
-  name: 'Non-Financial Marketplace',
+  id: 'business-services',
+  name: 'Business Services Hub',
   description: 'Business registration, legal advisory, tax, compliance, and SME support services',
   icon: BuildingIcon,
-  href: '/marketplace/non-financial'
+  href: '/marketplace/business-services'
 }, {
   id: 'finance',
   name: 'Finance Marketplace',

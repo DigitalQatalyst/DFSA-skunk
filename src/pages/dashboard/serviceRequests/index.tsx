@@ -24,7 +24,7 @@ export function ServiceRequestsPage() {
     ServiceRequestStatus | "all"
   >("all");
   const [currentCategory, setCurrentCategory] = useState<
-    "all" | "financial" | "non-financial"
+    "all" | "financial" | "business-services"
   >("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [dateRange, setDateRange] = useState<DateRangeFilter>({
@@ -103,7 +103,7 @@ export function ServiceRequestsPage() {
         if (currentCategory === "financial") {
           return categoryLower === "financial";
         } else {
-          return categoryLower === "non-financial";
+          return categoryLower === "business-services" || categoryLower === "non-financial";
         }
       });
     }

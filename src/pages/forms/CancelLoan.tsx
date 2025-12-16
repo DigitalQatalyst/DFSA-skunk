@@ -4,12 +4,15 @@ import { ServiceRequestForm } from "../../components/Forms/FormPreview";
 import { loanCancellationSchema } from "../../components/Forms/form-schemas/CancelLoans";
 import { getFormConfig } from "../../config/formConfig";
 import { useFetchLoanData } from "../../hooks/useFetchLoanData";
-import { createFormSubmissionHandler } from "../../services/formSubmissionService";
 
 function CancelLoan() {
   const navigate = useNavigate();
   const formConfig = getFormConfig('cancel-loan');
-  const submitForm = createFormSubmissionHandler('cancel-loan');
+  
+  const submitForm = async (data: any) => {
+    console.log('Form submitted:', data);
+    // Handle submission here
+  };
 
   // Get loan ID from URL params (can be loan ID or Azure ID)
   const loanId = new URLSearchParams(window.location.search).get('loanId') || 

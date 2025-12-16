@@ -1,0 +1,101 @@
+step_id,step_name,field_id,field_label,field_type,required,conditional_on,validation_rule
+1-1,Introduction & Disclosure,submitterName,Q3.1 Name of person completing form,text,Yes,,Not empty
+1-1,Introduction & Disclosure,submitterFunction,Q3.2 Function in applicant firm,text,Yes,,Not empty
+1-1,Introduction & Disclosure,submitterEmail,Q3.3 Email address,email,Yes,,Valid email format
+1-1,Introduction & Disclosure,submitterPhone,Q3.4 Contact telephone,tel,Yes,,Not empty
+1-1,Introduction & Disclosure,contactPersonInternal,Q4 Is contact person a member of firm?,boolean,Yes,,
+1-1,Introduction & Disclosure,externalAdviserName,Q5.1 External adviser name,text,Conditional,contactPersonInternal=false,Required if Q4=No
+1-1,Introduction & Disclosure,externalAdviserEmail,Q5.2 External adviser email,email,Conditional,contactPersonInternal=false,Required if Q4=No
+1-1,Introduction & Disclosure,externalAdviserCompany,Q5.3 External adviser company,text,No,,
+1-1,Introduction & Disclosure,instructionsConfirmed,Q6 Instructions confirmation,checkbox,Yes,,Must be true
+1-1,Introduction & Disclosure,disclosureAcknowledged,Q7 Disclosure acknowledgment,checkbox,Yes,,Must be true
+1-1,Introduction & Disclosure,informationAccurate,Q8 Information accuracy confirmation,checkbox,Yes,,Must be true
+1-1,Introduction & Disclosure,authorizedToSubmit,Q9 Authorization confirmation,checkbox,Yes,,Must be true
+1-1,Introduction & Disclosure,difcaConsent,Q10 DIFCA consent,boolean,Yes,,Must be explicitly set
+1-2,Standing Data,isRepresentativeOffice,Q7 Are you applying as a Representative Office?,boolean,Yes,,
+1-2,Standing Data,legalStatus,Q11 Legal status of applicant,select,Conditional,isRepresentativeOffice=false,Required if not Rep Office
+1-2,Standing Data,generalStructure,Q12 General structure,select,Conditional,isRepresentativeOffice=false,Required if not Rep Office
+1-2,Standing Data,firmName,Q13 Firm name,text,Yes,,Not empty
+1-2,Standing Data,tradingNames,Q14 Trading names,text[],No,,
+1-2,Standing Data,registeredCountry,Q15 Country of registration,country,Yes,,Valid country
+1-2,Standing Data,registrationNumber,Q16 Registration number,text,No,,
+1-2,Standing Data,registrationDate,Q17 Registration date,date,No,,Valid date
+1-2,Standing Data,financialYearEnd,Q18 Financial year end,date,No,,
+1-2,Standing Data,headOfficeAddress,Q19-Q24 Head office address,address,Yes,,Complete address
+1-2,Standing Data,primaryContactName,Q25 Primary contact name,text,Yes,,Not empty
+1-2,Standing Data,primaryContactEmail,Q26 Primary contact email,email,Yes,,Valid email
+1-2,Standing Data,primaryContactPhone,Q27 Primary contact phone,tel,Yes,,Not empty
+1-2,Standing Data,itReliance,IT reliance level,select,Yes,,
+1-2,Standing Data,itComplexity,IT complexity,select,Yes,,
+1-3,Ownership Information,isPartOfGroup,Q78 Part of a group?,boolean,Yes,,
+1-3,Ownership Information,ultimateHoldingCompany,Q79 Ultimate holding company,text,Conditional,isPartOfGroup=true,Required if part of group
+1-3,Ownership Information,shareholders,Q80-Q85 Shareholder details,array,Yes,,
+1-3,Ownership Information,beneficialOwners,Q86-Q90 Beneficial owners,array,Yes,,
+1-3,Ownership Information,publiclyListed,Q91 Publicly listed?,boolean,No,,
+1-3,Ownership Information,listingExchange,Q92 Listing exchange,text,Conditional,publiclyListed=true,Required if publicly listed
+1-4,Controllers & Group Structure,hasControllers,Has controllers?,boolean,Yes,,
+1-4,Controllers & Group Structure,controllers,Controller details,array,Conditional,hasControllers=true,Required if has controllers
+1-4,Controllers & Group Structure,groupStructureDescription,Group structure,text,No,,
+1-4,Controllers & Group Structure,groupStructureChart,Org chart upload,file,No,,
+1-5,Permissions & Financial Services,activitySelections,Q98 Main activity sector,object,Yes,,At least one selection required
+1-5,Permissions & Financial Services,financialServicesMatrix,Q99 Financial services matrix,object,Conditional,activitySelections.A1=true,Required if Financial Services sector selected
+1-5,Permissions & Financial Services,endorsementSelections,Q114 Endorsements,object,No,,
+2-1,Fund Management,fundTypes,Fund types offered,array,Yes,,
+2-1,Fund Management,fundManagementExperience,Management experience,text,Yes,,
+2-1,Fund Management,custodianArrangements,Custodian arrangements,text,Yes,,
+2-2,Representative Office,repOfficeActivities,Representative activities,array,Yes,,
+2-2,Representative Office,parentCompanyName,Parent company name,text,Yes,,
+2-2,Representative Office,parentCompanyJurisdiction,Parent jurisdiction,country,Yes,,
+2-3,Islamic Endorsement,shariaBoard,Sharia supervisory board details,array,Yes,,
+2-3,Islamic Endorsement,shariaComplianceOfficer,Compliance officer,text,Yes,,
+2-3,Islamic Endorsement,islamicProductTypes,Islamic product types,array,Yes,,
+2-4,Advising & Arranging,advisingActivities,Advising activities,array,Yes,,
+2-4,Advising & Arranging,clientTypes,Client types served,array,Yes,,
+2-4,Advising & Arranging,introducerArrangements,Introducer arrangements,text,No,,
+2-5,Insurance Intermediation,insuranceActivities,Insurance activities,array,Yes,,
+2-5,Insurance Intermediation,insurerRelationships,Insurer relationships,array,Yes,,
+2-5,Insurance Intermediation,piCoverage,PI coverage details,text,Yes,,
+2-6,Asset Management,assetsUnderManagement,Projected AUM,number,Yes,,
+2-6,Asset Management,investmentStrategies,Investment strategies,array,Yes,,
+2-6,Asset Management,portfolioManagementTeam,Portfolio management team,array,Yes,,
+2-7,Sales & Trading,tradingActivities,Trading activities,array,Yes,,
+2-7,Sales & Trading,executionVenues,Execution venues,array,Yes,,
+2-7,Sales & Trading,settlementArrangements,Settlement arrangements,text,Yes,,
+2-10,Money Services,moneyServiceTypes,Service types,array,Yes,,
+2-10,Money Services,remittanceCountries,Remittance countries,array,Yes,,
+2-10,Money Services,correspondentBanks,Correspondent banks,array,Yes,,
+2-11,Direct Insurance,insuranceClasses,Insurance classes,array,Yes,,
+2-11,Direct Insurance,reinsuranceArrangements,Reinsurance arrangements,text,Yes,,
+2-11,Direct Insurance,actuarialOversight,Actuarial oversight,text,Yes,,
+2-12,Banking,bankingServices,Banking services,array,Yes,,
+2-12,Banking,depositTypes,Deposit types,array,Yes,,
+2-12,Banking,lendingActivities,Lending activities,array,Yes,,
+2-13,Retail Endorsement,retailClientCriteria,Retail client criteria,text,Yes,,
+2-13,Retail Endorsement,clientOnboardingProcess,Onboarding process,text,Yes,,
+2-13,Retail Endorsement,complaintsProcedure,Complaints procedure,text,Yes,,
+2-14,Client Assets,clientAssetTypes,Asset types held,array,Yes,,
+2-14,Client Assets,custodialArrangements,Custodial arrangements,text,Yes,,
+2-14,Client Assets,reconciliationProcess,Reconciliation process,text,Yes,,
+2-21,Crowdfunding,crowdfundingModel,Crowdfunding model,select,Yes,,
+2-21,Crowdfunding,platformOperations,Platform operations,text,Yes,,
+2-21,Crowdfunding,investorProtections,Investor protections,text,Yes,,
+3-1,Business Plan,businessPlanSummary,Business plan summary,text,Yes,,
+3-1,Business Plan,projectedFinancials,Projected financials,object,Yes,,
+3-1,Business Plan,marketAnalysis,Market analysis,text,Yes,,
+3-2,Clients,targetClientSegments,Target segments,array,Yes,,
+3-2,Clients,clientAcquisitionStrategy,Acquisition strategy,text,Yes,,
+3-2,Clients,clientServiceModel,Service model,text,Yes,,
+3-4,Risk Management & Compliance,riskManagementFramework,Risk framework,text,Yes,,
+3-4,Risk Management & Compliance,complianceProgram,Compliance program,text,Yes,,
+3-4,Risk Management & Compliance,amlCftPolicies,AML/CFT policies,text,Yes,,
+3-5,Governance,boardComposition,Board composition,array,Yes,,
+3-5,Governance,governanceStructure,Governance structure,text,Yes,,
+3-5,Governance,keyPersonnel,Key personnel,array,Yes,,
+4-1,Waivers & Modifications,waiverRequests,Waiver requests,array,No,,
+4-1,Waivers & Modifications,modificationRequests,Modification requests,array,No,,
+4-2,Application Fees,feeCalculation,Calculated fees,object,Yes,,Read-only
+4-2,Application Fees,paymentMethod,Payment method,select,Yes,,
+4-3,Fit & Proper Declarations,individualDeclarations,Individual declarations,array,Yes,,
+4-3,Fit & Proper Declarations,declarationsConfirmed,Declarations confirmed,boolean,Yes,,Must be true
+4-4,Review & Submit,finalReview,Final review confirmation,boolean,Yes,,Must be true
+4-4,Review & Submit,submissionDeclaration,Submission declaration,boolean,Yes,,Must be true
