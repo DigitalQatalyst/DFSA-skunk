@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { MarketplacePage } from "../../components/marketplace/MarketplacePage";
 import MarketplaceDetailsPage from "./MarketplaceDetailsPage";
 import { EventDetailsPage } from "../../components/marketplace/EventDetailsPage";
+import { FinancialServicesPage } from "./financial-services/FinancialServicesPage";
 import { DollarSign, Briefcase, Users, Calendar, BookOpen } from "lucide-react";
 import { getMarketplaceConfig } from "../../utils/marketplaceConfig";
 
@@ -21,6 +22,7 @@ interface PromoCard {
 type MarketplaceType =
   | "courses"
   | "financial"
+  | "products"
   | "events"
   | "non-financial"
   | "knowledge-hub";
@@ -85,6 +87,7 @@ const marketplacePromoCards: Record<MarketplaceType, PromoCard[]> = {
   events: [],
   "non-financial": [],
   "knowledge-hub": [],
+  "products": [],
 };
 
 export const MarketplaceRouter: React.FC = () => {
@@ -113,6 +116,10 @@ export const MarketplaceRouter: React.FC = () => {
       title: "Knowledge Hub",
       description: "Expand your business knowledge.",
     },
+    "products": {
+      title: "Financial Services Activities",
+      description: "Browse DFSA-regulated financial services activities by regime and pathway.",
+    },
   };
 
   // State for bookmarked items
@@ -121,6 +128,7 @@ export const MarketplaceRouter: React.FC = () => {
   >({
     courses: [],
     financial: [],
+    'products': [],
     events: [],
     "non-financial": [],
     "knowledge-hub": [],
@@ -147,6 +155,7 @@ export const MarketplaceRouter: React.FC = () => {
   const marketplaceRoutes: MarketplaceType[] = [
     "courses",
     "financial",
+    "products",
     "events",
     "non-financial",
     "knowledge-hub",
@@ -154,37 +163,46 @@ export const MarketplaceRouter: React.FC = () => {
 
   return (
     <Routes>
-      {marketplaceRoutes.map((type) => (
-        <React.Fragment key={type}>
-          <Route
-            path={`/${type}`}
-            element={
-              <MarketplacePage
-                marketplaceType={type}
-                title={marketplaceConfigs[type].title}
-                description={marketplaceConfigs[type].description}
-                promoCards={marketplacePromoCards[type]}
-              />
-            }
-          />
-          <Route
-            path={`/${type}/:itemId`}
-            element={
-              type === "events" ? (
-                <EventDetailsPage />
-              ) : (
-                <MarketplaceDetailsPage
+      {/* Financial Services - Custom page */}
+      <Route
+        path="/products"
+        element={<FinancialServicesPage />}
+      />
+
+      {/* Other marketplace routes */}
+      {marketplaceRoutes
+        .filter((type) => type !== "products")
+        .map((type) => (
+          <React.Fragment key={type}>
+            <Route
+              path={`/${type}`}
+              element={
+                <MarketplacePage
                   marketplaceType={type}
-                  bookmarkedItems={bookmarkedItems[type]}
-                  onToggleBookmark={(itemId) =>
-                    handleToggleBookmark(type, itemId)
-                  }
+                  title={marketplaceConfigs[type].title}
+                  description={marketplaceConfigs[type].description}
+                  promoCards={marketplacePromoCards[type]}
                 />
-              )
-            }
-          />
-        </React.Fragment>
-      ))}
+              }
+            />
+            <Route
+              path={`/${type}/:itemId`}
+              element={
+                type === "events" ? (
+                  <EventDetailsPage />
+                ) : (
+                  <MarketplaceDetailsPage
+                    marketplaceType={type}
+                    bookmarkedItems={bookmarkedItems[type]}
+                    onToggleBookmark={(itemId) =>
+                      handleToggleBookmark(type, itemId)
+                    }
+                  />
+                )
+              }
+            />
+          </React.Fragment>
+        ))}
     </Routes>
   );
 };

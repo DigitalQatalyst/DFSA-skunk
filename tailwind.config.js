@@ -69,6 +69,22 @@ module.exports = {
           700: '#0E7490',
           800: '#155E75',
         },
+        // DFSA Gray - for Representation regime
+        'dfsa-gray': {
+          DEFAULT: '#55565A',
+          light: '#6d6e72',
+          dark: '#3d3e41',
+          50: '#f5f5f6',
+          100: '#ebebec',
+          200: '#d7d7d9',
+          300: '#c3c4c6',
+          400: '#afb0b3',
+          500: '#55565A',
+          600: '#484950',
+          700: '#3d3e41',
+          800: '#313233',
+          900: '#252526',
+        },
         // Keep existing teal for backward compatibility
         teal: {
           DEFAULT: "#00E5D1",
