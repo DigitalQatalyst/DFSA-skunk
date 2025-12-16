@@ -33,7 +33,7 @@ const WhatWeDoSection: React.FC = () => {
       label: 'Authorisation',
       description:
         'Obtain DFSA authorisation and licensing to conduct financial services in or from the DIFC. Our streamlined process covers asset management, banking, securities, funds, custody, Islamic finance, and insurance.',
-      learnMoreUrl: '/authorisation',
+      learnMoreUrl: '/marketplace/products?regime=authorisation',
     },
     {
       id: 'recognition',
@@ -41,7 +41,7 @@ const WhatWeDoSection: React.FC = () => {
       label: 'Recognition',
       description:
         "Facilitate recognition of crypto tokens, international firms, and foreign entities. DFSA's framework enables cross-border operations with recognized jurisdictions including UK, EU, Canada, Singapore, and Hong Kong.",
-      learnMoreUrl: '/recognition',
+      learnMoreUrl: '/marketplace/products?regime=recognition',
     },
     {
       id: 'registration',
@@ -49,7 +49,7 @@ const WhatWeDoSection: React.FC = () => {
       label: 'Registration',
       description:
         'Register individuals and Designated Non-Financial Businesses or Professions (DNFBPs) including real estate developers, company service providers, and corporate services in the DIFC.',
-      learnMoreUrl: '/registration',
+      learnMoreUrl: '/marketplace/products?regime=registration',
     },
   ];
 
