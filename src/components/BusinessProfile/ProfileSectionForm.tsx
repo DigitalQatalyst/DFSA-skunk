@@ -110,7 +110,7 @@ export function ProfileSectionForm({
                         },
                       }}
                       render={({ field: formField }) => {
-                        // Boolean: render Yes/No radios for clarity
+                        // Boolean: render checkbox (checked = active/true, unchecked = inactive/false)
                         if (isBooleanField) {
                           const value = formField.value;
                           if (isFieldReadOnly) {
@@ -121,30 +121,15 @@ export function ProfileSectionForm({
                             );
                           }
                           return (
-                            <div className="flex items-center gap-4">
-                              <label className="inline-flex items-center gap-2 text-sm text-gray-800">
-                                <input
-                                  type="radio"
-                                  value="true"
-                                  checked={value === true}
-                                  onChange={() => formField.onChange(true)}
-                                  disabled={isFieldReadOnly || isLoading}
-                                  className="h-4 w-4 text-red-800 focus:ring-red-800"
-                                />
-                                <span>Yes</span>
-                              </label>
-                              <label className="inline-flex items-center gap-2 text-sm text-gray-800">
-                                <input
-                                  type="radio"
-                                  value="false"
-                                  checked={value === false}
-                                  onChange={() => formField.onChange(false)}
-                                  disabled={isFieldReadOnly || isLoading}
-                                  className="h-4 w-4 text-red-800 focus:ring-red-800"
-                                />
-                                <span>No</span>
-                              </label>
-                            </div>
+                            <label className="inline-flex items-center cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={value === true}
+                                onChange={(e) => formField.onChange(e.target.checked)}
+                                disabled={isFieldReadOnly || isLoading}
+                                className="h-4 w-4 text-red-800 focus:ring-red-800 rounded border-gray-300 cursor-pointer disabled:cursor-not-allowed"
+                              />
+                            </label>
                           );
                         }
 

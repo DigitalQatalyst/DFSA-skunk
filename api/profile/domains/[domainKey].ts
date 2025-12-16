@@ -207,8 +207,27 @@ export default async function handler(
         updated_at: new Date().toISOString(),
       };
 
+      // Debug: Log matrix fields being saved
+      const matrixFields = Object.keys(updatePayload).filter(k => k.includes('_matrix'));
+      if (matrixFields.length > 0) {
+        console.log(`💾 [api/profile/domains] Saving matrix fields:`, matrixFields);
+        matrixFields.forEach(fieldName => {
+          const value = updatePayload[fieldName];
+          console.log(`  ${fieldName}:`, {
+            type: typeof value,
+            isObject: typeof value === 'object' && !Array.isArray(value),
+            keys: typeof value === 'object' && !Array.isArray(value) ? Object.keys(value) : null,
+            sampleRow: typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length > 0 ? {
+              rowKey: Object.keys(value)[0],
+              rowData: value[Object.keys(value)[0]],
+            } : null,
+          });
+        });
+      }
+
       // Upsert (insert or update) the profile domain
-      const { data, error } = await supabase
+      // First, do the upsert
+      const { error: upsertError } = await supabase
         .from(tableName)
         .upsert(
           {
@@ -218,24 +237,101 @@ export default async function handler(
           {
             onConflict: 'organisation_id',
           }
-        )
-        .select()
+        );
+
+      if (upsertError) {
+        console.error('❌ [api/profile/domains] Error upserting profile domain:', upsertError);
+        if (res.status) res.status(500);
+        if (res.json) res.json({ error: 'Failed to update profile data', details: upsertError.message });
+        return;
+      }
+
+      console.log('✅ [api/profile/domains] Upsert successful, fetching updated data...');
+
+      // Then, fetch the updated data to ensure we get all columns including matrix fields
+      const { data, error } = await supabase
+        .from(tableName)
+        .select('*')
+        .eq('organisation_id', orgId)
         .single();
 
       if (error) {
-        console.error('Error updating profile domain:', error);
+        console.error('❌ [api/profile/domains] Error fetching updated profile domain:', error);
         if (res.status) res.status(500);
-        if (res.json) res.json({ error: 'Failed to update profile data' });
+        if (res.json) res.json({ error: 'Failed to fetch updated profile data', details: error.message });
         return;
       }
+
+      console.log('✅ [api/profile/domains] Fetched updated data with', Object.keys(data || {}).length, 'fields');
 
       // Calculate updated completion
       const completion = calculateDomainCompletion(data, schema);
 
+      // Debug: Log ALL returned data keys first
+      console.log(`🔍 [api/profile/domains] All keys in returned data:`, Object.keys(data || {}));
+      
+      // Debug: Log returned data
+      const returnedMatrixFields = Object.keys(data || {}).filter(k => k.includes('_matrix'));
+      console.log(`🔍 [api/profile/domains] Matrix fields found in response:`, returnedMatrixFields);
+      
+      if (returnedMatrixFields.length > 0) {
+        console.log(`✅ [api/profile/domains] Returning matrix fields:`, returnedMatrixFields);
+        returnedMatrixFields.forEach(fieldName => {
+          const value = data[fieldName];
+          console.log(`  ${fieldName}:`, {
+            type: typeof value,
+            isObject: typeof value === 'object' && !Array.isArray(value),
+            isString: typeof value === 'string',
+            keys: typeof value === 'object' && !Array.isArray(value) ? Object.keys(value) : null,
+            sampleRow: typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length > 0 ? {
+              rowKey: Object.keys(value)[0],
+              rowData: value[Object.keys(value)[0]],
+            } : null,
+            rawValue: typeof value === 'string' ? value.substring(0, 100) : null, // First 100 chars if string
+          });
+        });
+      } else {
+        console.warn(`⚠️ [api/profile/domains] No matrix fields found in response! Expected fields:`, [
+          'banking_investment_activities_matrix',
+          'insurance_general_activities_matrix',
+          'insurance_life_activities_matrix',
+          'money_services_activities_matrix',
+        ]);
+        // Check if they exist with different casing or format
+        const allKeys = Object.keys(data || {});
+        const possibleMatrixKeys = allKeys.filter(k => 
+          k.toLowerCase().includes('matrix') || 
+          k.toLowerCase().includes('insurance_life') ||
+          k.toLowerCase().includes('banking_investment')
+        );
+        if (possibleMatrixKeys.length > 0) {
+          console.log(`🔍 [api/profile/domains] Found possible matrix-related keys:`, possibleMatrixKeys);
+        }
+      }
+
+      // Filter out Supabase metadata fields before returning
+      const { organisation_id: _, created_at: __, updated_at: ___, ...cleanData } = data || {};
+      
+      // Debug: Log what we're about to return
+      console.log(`📤 [api/profile/domains] Preparing response with ${Object.keys(cleanData).length} fields`);
+      const responseMatrixFields = Object.keys(cleanData).filter(k => k.includes('_matrix'));
+      console.log(`📤 [api/profile/domains] Matrix fields in response:`, responseMatrixFields);
+      if (responseMatrixFields.length > 0) {
+        responseMatrixFields.forEach(fieldName => {
+          const value = cleanData[fieldName];
+          console.log(`📤 [api/profile/domains] Response ${fieldName}:`, {
+            type: typeof value,
+            isObject: typeof value === 'object' && !Array.isArray(value),
+            isString: typeof value === 'string',
+            hasKeys: typeof value === 'object' && !Array.isArray(value) ? Object.keys(value).length : 0,
+          });
+        });
+      }
+
       if (res.status) res.status(200);
       if (res.json) {
         res.json({
-          data,
+          data: cleanData,
           completion,
           message: 'Profile updated successfully',
         });

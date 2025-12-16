@@ -174,18 +174,33 @@ export function useUpdateProfileDomainMutation(
           }
           // Replace data with response data (PUT returns full updated data, not just changes)
           // Preserve schema from oldData since PUT response doesn't include it
+          // Filter out Supabase metadata fields (organisation_id, created_at, updated_at, etc.)
+          const { organisation_id, created_at, updated_at, ...cleanData } = responseData.data || {};
           const updated = {
             ...oldData,
-            data: responseData.data, // Replace with full updated data
+            data: cleanData, // Replace with clean updated data (without Supabase metadata)
             completion: responseData.completion,
           };
           console.log(`[useProfileQueries] Updated cache for ${domainKey}:`, {
             completion: updated.completion,
             dataKeys: Object.keys(updated.data),
+            matrixFields: Object.keys(updated.data).filter(k => k.includes('_matrix')),
+            sampleMatrix: updated.data.banking_investment_activities_matrix ? {
+              keys: Object.keys(updated.data.banking_investment_activities_matrix),
+              sampleRow: Object.keys(updated.data.banking_investment_activities_matrix)[0] ? {
+                rowKey: Object.keys(updated.data.banking_investment_activities_matrix)[0],
+                rowData: updated.data.banking_investment_activities_matrix[Object.keys(updated.data.banking_investment_activities_matrix)[0]],
+              } : null,
+            } : null,
           });
           return updated;
         }
       );
+      
+      // Invalidate and refetch to ensure fresh data
+      queryClient.invalidateQueries({ queryKey: profileKeys.domain(domainKey) });
+      // Trigger immediate refetch to update UI
+      queryClient.refetchQueries({ queryKey: profileKeys.domain(domainKey) });
       
       // Also update summary cache if it exists
       if (domainKey === 'profile_summary') {

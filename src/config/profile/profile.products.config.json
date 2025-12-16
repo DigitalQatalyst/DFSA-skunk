@@ -93,27 +93,15 @@
           ]
         },
         {
-          "id": "banking_investment_q99_banking_investment_activities_a01_a20",
+          "id": "banking_investment_q99_banking_investment_activities_matrix",
           "uiSection": "Banking & Investment",
           "section": "Banking & Investment",
-          "groupName": "Activities",
+          "groupName": "Activities Matrix",
           "fields": [
             {
-              "id": "products.activity_accepting_deposits",
-              "label": "Accepting Deposits",
-              "fieldName": "activity_accepting_deposits",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.activity_advising_financial_products",
-              "label": "Advising on Financial Products",
-              "fieldName": "activity_advising_financial_products",
+              "id": "products.banking_investment_activities_matrix",
+              "label": "Please make all the required selections",
+              "fieldName": "banking_investment_activities_matrix",
               "fieldType": "Matrix",
               "uiBlockType": "matrixAccordion",
               "visibility": {
@@ -121,257 +109,65 @@
                 "source": "license_category",
                 "type": "includes"
               },
-              "matrixDimensions": {
-                "rows": 12,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.activity_arranging_credit",
-              "label": "Arranging Credit and Advising on Credit",
-              "fieldName": "activity_arranging_credit",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.activity_arranging_custody",
-              "label": "Arranging Custody",
-              "fieldName": "activity_arranging_custody",
-              "fieldType": "Matrix",
-              "uiBlockType": "matrixAccordion",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
-              },
-              "matrixDimensions": {
-                "rows": 9,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.activity_arranging_deals",
-              "label": "Arranging Deals in Investments",
-              "fieldName": "activity_arranging_deals",
-              "fieldType": "Matrix",
-              "uiBlockType": "matrixAccordion",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
-              },
-              "matrixDimensions": {
-                "rows": 9,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.activity_dealing_agent",
-              "label": "Dealing in Investments as Agent",
-              "fieldName": "activity_dealing_agent",
-              "fieldType": "Matrix",
-              "uiBlockType": "matrixAccordion",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
-              },
-              "matrixDimensions": {
-                "rows": 9,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.activity_dealing_principal",
-              "label": "Dealing in Investments as Principal",
-              "fieldName": "activity_dealing_principal",
-              "fieldType": "Matrix",
-              "uiBlockType": "matrixAccordion",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
-              },
-              "matrixDimensions": {
-                "rows": 9,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.activity_insurance_intermediation",
-              "label": "Insurance Intermediation",
-              "fieldName": "activity_insurance_intermediation",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.activity_insurance_management",
-              "label": "Insurance Management",
-              "fieldName": "activity_insurance_management",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.activity_managing_cif",
-              "label": "Managing a Collective Investment Fund",
-              "fieldName": "activity_managing_cif",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.activity_managing_psia",
-              "label": "Managing a Profit Sharing Investment Account",
-              "fieldName": "activity_managing_psia",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.activity_managing_assets",
-              "label": "Managing Assets",
-              "fieldName": "activity_managing_assets",
-              "fieldType": "Matrix",
-              "uiBlockType": "matrixAccordion",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
-              },
-              "matrixDimensions": {
-                "rows": 9,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.activity_operating_clearing_house",
-              "label": "Operating a Clearing House",
-              "fieldName": "activity_operating_clearing_house",
-              "fieldType": "Matrix",
-              "uiBlockType": "matrixAccordion",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
-              },
-              "matrixDimensions": {
-                "rows": 9,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.activity_operating_crowdfunding",
-              "label": "Operating a Crowdfunding Platform",
-              "fieldName": "activity_operating_crowdfunding",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.activity_operating_exchange",
-              "label": "Operating an Exchange",
-              "fieldName": "activity_operating_exchange",
-              "fieldType": "Matrix",
-              "uiBlockType": "matrixAccordion",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
-              },
-              "matrixDimensions": {
-                "rows": 9,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.activity_providing_credit",
-              "label": "Providing Credit",
-              "fieldName": "activity_providing_credit",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.activity_providing_custody",
-              "label": "Providing Custody",
-              "fieldName": "activity_providing_custody",
-              "fieldType": "Matrix",
-              "uiBlockType": "matrixAccordion",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
-              },
-              "matrixDimensions": {
-                "rows": 9,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.activity_fund_administration",
-              "label": "Providing Fund Administration",
-              "fieldName": "activity_fund_administration",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.activity_trust_services",
-              "label": "Providing Trust Services",
-              "fieldName": "activity_trust_services",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.activity_fund_trustee",
-              "label": "Acting as the Trustee of a Fund",
-              "fieldName": "activity_fund_trustee",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Banking & Investment",
-                "source": "license_category",
-                "type": "includes"
+              "matrixConfig": {
+                "rowLabels": [
+                  { "key": "accepting_deposits", "label": "Accepting Deposits" },
+                  { "key": "advising_financial_products", "label": "Advising on Financial Products" },
+                  { "key": "arranging_credit", "label": "Arranging Credit and Advising on Credit" },
+                  { "key": "arranging_custody", "label": "Arranging Custody" },
+                  { "key": "arranging_deals", "label": "Arranging Deals in Investments" },
+                  { "key": "dealing_agent", "label": "Dealing in Investments as Agent" },
+                  { "key": "dealing_principal", "label": "Dealing in Investments as Principal" },
+                  { "key": "insurance_intermediation", "label": "Insurance Intermediation" },
+                  { "key": "insurance_management", "label": "Insurance Management" },
+                  { "key": "managing_cif", "label": "Managing a Collective Investment Fund" },
+                  { "key": "managing_psia", "label": "Managing a Profit Sharing Investment Account" },
+                  { "key": "managing_assets", "label": "Managing Assets" },
+                  { "key": "operating_clearing_house", "label": "Operating a Clearing House" },
+                  { "key": "operating_crowdfunding", "label": "Operating a Crowdfunding Platform" },
+                  { "key": "operating_exchange", "label": "Operating an Exchange" },
+                  { "key": "providing_credit", "label": "Providing Credit" },
+                  { "key": "providing_custody", "label": "Providing Custody" },
+                  { "key": "fund_administration", "label": "Providing Fund Administration" },
+                  { "key": "trust_services", "label": "Providing Trust Services" },
+                  { "key": "fund_trustee", "label": "Acting as the Trustee of a Fund" }
+                ],
+                "columnLabels": [
+                  { "key": "financial_service_only", "label": "Financial Service only" },
+                  { "key": "certificate", "label": "Certificate" },
+                  { "key": "debenture", "label": "Debenture" },
+                  { "key": "future", "label": "Future" },
+                  { "key": "option", "label": "Option" },
+                  { "key": "share", "label": "Share" },
+                  { "key": "ltic", "label": "Rights Under a LTIC*" },
+                  { "key": "structured_product", "label": "Structured Product" },
+                  { "key": "unit", "label": "Unit" },
+                  { "key": "warrant", "label": "Warrant" },
+                  { "key": "deposit", "label": "Deposit" },
+                  { "key": "psia", "label": "PSIA**" }
+                ],
+                "applicableCells": {
+                  "accepting_deposits": ["financial_service_only", "deposit"],
+                  "advising_financial_products": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant", "deposit", "psia"],
+                  "arranging_credit": ["financial_service_only"],
+                  "arranging_custody": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "arranging_deals": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "dealing_agent": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "dealing_principal": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "insurance_intermediation": ["financial_service_only"],
+                  "insurance_management": ["financial_service_only"],
+                  "managing_cif": ["financial_service_only"],
+                  "managing_psia": ["financial_service_only"],
+                  "managing_assets": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "operating_clearing_house": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "operating_crowdfunding": ["financial_service_only"],
+                  "operating_exchange": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "providing_credit": ["financial_service_only"],
+                  "providing_custody": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "fund_administration": ["financial_service_only"],
+                  "trust_services": ["financial_service_only"],
+                  "fund_trustee": ["financial_service_only"]
+                }
               }
             }
           ],
@@ -539,15 +335,15 @@
           }
         },
         {
-          "id": "insurance_general_q100_insurance_general_activities",
+          "id": "insurance_general_q100_insurance_general_activities_matrix",
           "uiSection": "Insurance General",
           "section": "Insurance General",
-          "groupName": "Activities",
+          "groupName": "Activities Matrix",
           "fields": [
             {
-              "id": "products.ins_gen_effecting_contracts",
-              "label": "Effecting Contracts of Insurance",
-              "fieldName": "ins_gen_effecting_contracts",
+              "id": "products.insurance_general_activities_matrix",
+              "label": "Please make all the required selections",
+              "fieldName": "insurance_general_activities_matrix",
               "fieldType": "Matrix",
               "uiBlockType": "matrixAccordion",
               "visibility": {
@@ -555,25 +351,22 @@
                 "source": "license_category",
                 "type": "includes"
               },
-              "matrixDimensions": {
-                "rows": 9,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.ins_gen_carrying_out_contracts",
-              "label": "Carrying out Contracts of Insurance",
-              "fieldName": "ins_gen_carrying_out_contracts",
-              "fieldType": "Matrix",
-              "uiBlockType": "matrixAccordion",
-              "visibility": {
-                "value": "Insurance General",
-                "source": "license_category",
-                "type": "includes"
-              },
-              "matrixDimensions": {
-                "rows": 9,
-                "columns": 2
+              "matrixConfig": {
+                "rowLabels": [
+                  { "key": "effecting_contracts", "label": "Effecting Contracts of Insurance" },
+                  { "key": "carrying_out_contracts", "label": "Carrying out Contracts of Insurance" }
+                ],
+                "columnLabels": [
+                  { "key": "class_1_accident", "label": "Class 1 - Accident" },
+                  { "key": "class_2_sickness", "label": "Class 2 - Sickness" },
+                  { "key": "class_3_land_vehicles", "label": "Class 3 - Land Vehicles" },
+                  { "key": "class_4_marine_aviation", "label": "Class 4 - Marine, Aviation and Transport" },
+                  { "key": "class_5_fire_property", "label": "Class 5 - Fire and Other Property Damage" },
+                  { "key": "class_6_liability", "label": "Class 6 - Liability" },
+                  { "key": "class_7a_credit", "label": "Class 7a - Credit" },
+                  { "key": "class_7b_suretyship", "label": "Class 7b - Suretyship" },
+                  { "key": "class_8_other", "label": "Class 8 - Other" }
+                ]
               }
             }
           ],
@@ -584,136 +377,15 @@
           }
         },
         {
-          "id": "insurance_general_q100_insurance_general_classes_cl1_cl8",
-          "uiSection": "Insurance General",
-          "section": "Insurance General",
-          "groupName": "Classes",
-          "fields": [
-            {
-              "id": "products.ins_gen_class_1_accident",
-              "label": "Class 1 - Accident",
-              "fieldName": "ins_gen_class_1_accident",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Insurance General",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.ins_gen_class_2_sickness",
-              "label": "Class 2 - Sickness",
-              "fieldName": "ins_gen_class_2_sickness",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Insurance General",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.ins_gen_class_3_land_vehicles",
-              "label": "Class 3 - Land Vehicles",
-              "fieldName": "ins_gen_class_3_land_vehicles",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Insurance General",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.ins_gen_class_4_marine_aviation",
-              "label": "Class 4 - Marine, Aviation and Transport",
-              "fieldName": "ins_gen_class_4_marine_aviation",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Insurance General",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.ins_gen_class_5_fire_property",
-              "label": "Class 5 - Fire and Other Property Damage",
-              "fieldName": "ins_gen_class_5_fire_property",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Insurance General",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.ins_gen_class_6_liability",
-              "label": "Class 6 - Liability",
-              "fieldName": "ins_gen_class_6_liability",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Insurance General",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.ins_gen_class_7a_credit",
-              "label": "Class 7a - Credit",
-              "fieldName": "ins_gen_class_7a_credit",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Insurance General",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.ins_gen_class_7b_suretyship",
-              "label": "Class 7b - Suretyship",
-              "fieldName": "ins_gen_class_7b_suretyship",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Insurance General",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.ins_gen_class_8_other",
-              "label": "Class 8 - Other",
-              "fieldName": "ins_gen_class_8_other",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Insurance General",
-                "source": "license_category",
-                "type": "includes"
-              }
-            }
-          ],
-          "visibility": {
-            "type": "includes",
-            "source": "license_category",
-            "value": "Insurance General"
-          }
-        },
-        {
-          "id": "insurance_life_q101_insurance_life_activities",
+          "id": "insurance_life_q101_insurance_life_activities_matrix",
           "uiSection": "Insurance Life",
           "section": "Insurance Life",
-          "groupName": "Activities",
+          "groupName": "Activities Matrix",
           "fields": [
             {
-              "id": "products.ins_life_effecting_contracts",
-              "label": "Effecting Contracts of Insurance",
-              "fieldName": "ins_life_effecting_contracts",
+              "id": "products.insurance_life_activities_matrix",
+              "label": "Please make all the required selections",
+              "fieldName": "insurance_life_activities_matrix",
               "fieldType": "Matrix",
               "uiBlockType": "matrixAccordion",
               "visibility": {
@@ -721,122 +393,20 @@
                 "source": "license_category",
                 "type": "includes"
               },
-              "matrixDimensions": {
-                "rows": 7,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.ins_life_carrying_out_contracts",
-              "label": "Carrying out Contracts of Insurance",
-              "fieldName": "ins_life_carrying_out_contracts",
-              "fieldType": "Matrix",
-              "uiBlockType": "matrixAccordion",
-              "visibility": {
-                "value": "Insurance Life",
-                "source": "license_category",
-                "type": "includes"
-              },
-              "matrixDimensions": {
-                "rows": 7,
-                "columns": 2
-              }
-            }
-          ],
-          "visibility": {
-            "type": "includes",
-            "source": "license_category",
-            "value": "Insurance Life"
-          }
-        },
-        {
-          "id": "insurance_life_q101_insurance_life_classes_i_vii",
-          "uiSection": "Insurance Life",
-          "section": "Insurance Life",
-          "groupName": "Classes (I-VII)",
-          "fields": [
-            {
-              "id": "products.ins_life_class_i_life_annuity",
-              "label": "Class I - Life and Annuity",
-              "fieldName": "ins_life_class_i_life_annuity",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Insurance Life",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.ins_life_class_ii_marriage_birth",
-              "label": "Class II - Marriage and Birth",
-              "fieldName": "ins_life_class_ii_marriage_birth",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Insurance Life",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.ins_life_class_iii_linked_long_term",
-              "label": "Class III - Linked Long Term",
-              "fieldName": "ins_life_class_iii_linked_long_term",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Insurance Life",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.ins_life_class_iv_permanent_health",
-              "label": "Class IV - Permanent Health",
-              "fieldName": "ins_life_class_iv_permanent_health",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Insurance Life",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.ins_life_class_v_tontines",
-              "label": "Class V - Tontines",
-              "fieldName": "ins_life_class_v_tontines",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Insurance Life",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.ins_life_class_vi_capital_redemption",
-              "label": "Class VI - Capital Redemption",
-              "fieldName": "ins_life_class_vi_capital_redemption",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Insurance Life",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.ins_life_class_vii_pension_fund",
-              "label": "Class VII - Pension Fund Management",
-              "fieldName": "ins_life_class_vii_pension_fund",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Insurance Life",
-                "source": "license_category",
-                "type": "includes"
+              "matrixConfig": {
+                "rowLabels": [
+                  { "key": "effecting_contracts", "label": "Effecting Contracts of Insurance" },
+                  { "key": "carrying_out_contracts", "label": "Carrying out Contracts of Insurance" }
+                ],
+                "columnLabels": [
+                  { "key": "class_i_life_annuity", "label": "Class I - Life and Annuity" },
+                  { "key": "class_ii_marriage_birth", "label": "Class II - Marriage and Birth" },
+                  { "key": "class_iii_linked_long_term", "label": "Class III - Linked Long Term" },
+                  { "key": "class_iv_permanent_health", "label": "Class IV - Permanent Health" },
+                  { "key": "class_v_tontines", "label": "Class V - Tontines" },
+                  { "key": "class_vi_capital_redemption", "label": "Class VI - Capital Redemption" },
+                  { "key": "class_vii_pension_fund", "label": "Class VII - Pension Fund Management" }
+                ]
               }
             }
           ],
@@ -885,15 +455,15 @@
           ]
         },
         {
-          "id": "money_services_q103_money_services_specifications_ms01_ms09",
+          "id": "money_services_q103_money_services_specifications_matrix",
           "uiSection": "Money Services",
           "section": "Money Services",
-          "groupName": "Specifications",
+          "groupName": "Specifications Matrix",
           "fields": [
             {
-              "id": "products.ms_payment_account",
-              "label": "Providing or Operating a Payment Account",
-              "fieldName": "ms_payment_account",
+              "id": "products.money_services_activities_matrix",
+              "label": "Please make all the required selections",
+              "fieldName": "money_services_activities_matrix",
               "fieldType": "Matrix",
               "uiBlockType": "matrixAccordion",
               "visibility": {
@@ -901,174 +471,22 @@
                 "source": "license_category",
                 "type": "includes"
               },
-              "matrixDimensions": {
-                "rows": 2,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.ms_money_transmission",
-              "label": "Providing Money Transmission",
-              "fieldName": "ms_money_transmission",
-              "fieldType": "Matrix",
-              "uiBlockType": "matrixAccordion",
-              "visibility": {
-                "value": "Money Services",
-                "source": "license_category",
-                "type": "includes"
-              },
-              "matrixDimensions": {
-                "rows": 2,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.ms_payment_transactions",
-              "label": "Executing Payment Transactions",
-              "fieldName": "ms_payment_transactions",
-              "fieldType": "Matrix",
-              "uiBlockType": "matrixAccordion",
-              "visibility": {
-                "value": "Money Services",
-                "source": "license_category",
-                "type": "includes"
-              },
-              "matrixDimensions": {
-                "rows": 2,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.ms_payment_instruments",
-              "label": "Issuing Payment Instruments",
-              "fieldName": "ms_payment_instruments",
-              "fieldType": "Matrix",
-              "uiBlockType": "matrixAccordion",
-              "visibility": {
-                "value": "Money Services",
-                "source": "license_category",
-                "type": "includes"
-              },
-              "matrixDimensions": {
-                "rows": 2,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.ms_stored_value",
-              "label": "Issuing Stored Value",
-              "fieldName": "ms_stored_value",
-              "fieldType": "Matrix",
-              "uiBlockType": "matrixAccordion",
-              "visibility": {
-                "value": "Money Services",
-                "source": "license_category",
-                "type": "includes"
-              },
-              "matrixDimensions": {
-                "rows": 2,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.ms_arrangements",
-              "label": "Making Arrangements for Money Services",
-              "fieldName": "ms_arrangements",
-              "fieldType": "Matrix",
-              "uiBlockType": "matrixAccordion",
-              "visibility": {
-                "value": "Money Services",
-                "source": "license_category",
-                "type": "includes"
-              },
-              "matrixDimensions": {
-                "rows": 2,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.ms_advice",
-              "label": "Giving Advice on Money Services",
-              "fieldName": "ms_advice",
-              "fieldType": "Matrix",
-              "uiBlockType": "matrixAccordion",
-              "visibility": {
-                "value": "Money Services",
-                "source": "license_category",
-                "type": "includes"
-              },
-              "matrixDimensions": {
-                "rows": 2,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.ms_account_information",
-              "label": "Providing Account Information Service",
-              "fieldName": "ms_account_information",
-              "fieldType": "Matrix",
-              "uiBlockType": "matrixAccordion",
-              "visibility": {
-                "value": "Money Services",
-                "source": "license_category",
-                "type": "includes"
-              },
-              "matrixDimensions": {
-                "rows": 2,
-                "columns": 2
-              }
-            },
-            {
-              "id": "products.ms_payment_initiation",
-              "label": "Providing Payment Initiation Service",
-              "fieldName": "ms_payment_initiation",
-              "fieldType": "Matrix",
-              "uiBlockType": "matrixAccordion",
-              "visibility": {
-                "value": "Money Services",
-                "source": "license_category",
-                "type": "includes"
-              },
-              "matrixDimensions": {
-                "rows": 2,
-                "columns": 2
-              }
-            }
-          ],
-          "visibility": {
-            "type": "includes",
-            "source": "license_category",
-            "value": "Money Services"
-          }
-        },
-        {
-          "id": "money_services_q103_money_services_service_types",
-          "uiSection": "Money Services",
-          "section": "Money Services",
-          "groupName": "Service Types",
-          "fields": [
-            {
-              "id": "products.ms_type_arranging_advising",
-              "label": "Arranging or Advising",
-              "fieldName": "ms_type_arranging_advising",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Money Services",
-                "source": "license_category",
-                "type": "includes"
-              }
-            },
-            {
-              "id": "products.ms_type_providing",
-              "label": "Providing",
-              "fieldName": "ms_type_providing",
-              "fieldType": "Boolean",
-              "uiBlockType": "field",
-              "visibility": {
-                "value": "Money Services",
-                "source": "license_category",
-                "type": "includes"
+              "matrixConfig": {
+                "rowLabels": [
+                  { "key": "payment_account", "label": "Providing or Operating a Payment Account" },
+                  { "key": "money_transmission", "label": "Providing Money Transmission" },
+                  { "key": "payment_transactions", "label": "Executing Payment Transactions" },
+                  { "key": "payment_instruments", "label": "Issuing Payment Instruments" },
+                  { "key": "stored_value", "label": "Issuing Stored Value" },
+                  { "key": "arrangements", "label": "Making Arrangements for Money Services" },
+                  { "key": "advice", "label": "Giving Advice on Money Services" },
+                  { "key": "account_information", "label": "Providing Account Information Service" },
+                  { "key": "payment_initiation", "label": "Providing Payment Initiation Service" }
+                ],
+                "columnLabels": [
+                  { "key": "arranging_advising", "label": "Arranging or Advising" },
+                  { "key": "providing", "label": "Providing" }
+                ]
               }
             }
           ],
