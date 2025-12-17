@@ -29,6 +29,21 @@ export interface FinancialActivityHierarchy {
   formCode?: string;      // e.g., "2-12", "2-4"
   pathwayId: string;      // Reference to parent pathway
   regimeId: string;       // Reference to regime
+
+  // Financial details
+  prudentialCategory?: string;  // e.g., "Cat 1", "Cat 4"
+  baseCapital?: {
+    amount: number;
+    display: string;
+  };
+  applicationFee?: {
+    amount: number;
+    display: string;
+  };
+  processingTime?: {
+    days: number;
+    display: string;
+  };
 }
 
 /**
