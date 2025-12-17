@@ -256,25 +256,31 @@ export const FinancialServicesPage: React.FC = () => {
 
                 {/* Selected Activities Summary (Bottom Right, elevated to avoid chatbot) */}
                 {selectedActivityIds.length > 0 && (
-                    <div className="fixed bottom-20 right-4 bg-white rounded-lg shadow-lg border border-gray-200 p-4 max-w-sm z-50">
-                        <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                            Selected Activities
-                        </h3>
-                        <p className="text-xs text-gray-600 mb-3">
-                            {selectedActivityIds.length} {selectedActivityIds.length === 1 ? 'activity' : 'activities'} selected
+                    <div className="fixed bottom-20 right-4 bg-white rounded-lg shadow-2xl border-2 border-primary p-6 max-w-md z-50 animate-in fade-in slide-in-from-bottom-5 duration-300">
+                        <div className="flex items-center justify-between mb-3">
+                            <h3 className="text-lg font-bold text-gray-900">
+                                Selected Activities
+                            </h3>
+                            <span className="inline-flex items-center justify-center w-8 h-8 bg-primary text-white text-sm font-bold rounded-full">
+                                {selectedActivityIds.length}
+                            </span>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-4">
+                            {selectedActivityIds.length} {selectedActivityIds.length === 1 ? 'activity' : 'activities'} ready to proceed
                         </p>
-                        <div className="flex gap-2">
+                        <div className="flex gap-3">
                             <button
                                 onClick={() => setSelectedActivityIds([])}
-                                className="flex-1 text-xs text-gray-600 hover:text-gray-800 font-medium px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                                className="flex-1 text-sm text-gray-700 hover:text-gray-900 font-medium px-4 py-2.5 border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                             >
-                                Clear
+                                Clear All
                             </button>
                             <button
                                 onClick={handleProceed}
-                                className="flex-1 text-xs text-white font-semibold px-3 py-2 bg-primary hover:bg-primary/90 rounded-md transition-colors"
+                                className="flex-1 flex items-center justify-center gap-1 text-sm text-white font-semibold px-4 py-2.5 bg-primary hover:bg-primary/90 rounded-lg transition-colors shadow-md hover:shadow-lg whitespace-nowrap"
                             >
-                                Proceed
+                                <span>Proceed</span>
+                                <span>→</span>
                             </button>
                         </div>
                     </div>
