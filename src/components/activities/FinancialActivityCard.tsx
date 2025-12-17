@@ -11,7 +11,7 @@ import React from 'react';
 import { DollarSign, Clock, FileText, Shield } from 'lucide-react';
 import { FinancialActivity } from '../../types/dfsa-activities';
 import { PrudentialCategoryBadge } from './PrudentialCategoryBadge';
-import { getCategoryByCode } from '../../data/dfsa/prudentialCategories';
+
 
 interface FinancialActivityCardProps {
   /** Activity data to display */
@@ -58,8 +58,6 @@ export const FinancialActivityCard: React.FC<FinancialActivityCardProps> = ({
   isSelected = false,
   className = '',
 }) => {
-  const categoryInfo = getCategoryByCode(activity.prudentialCategory);
-
   // Handle add to application
   const handleAdd = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -91,22 +89,6 @@ export const FinancialActivityCard: React.FC<FinancialActivityCardProps> = ({
       {/* Header Section */}
       <div className="p-5 pb-4 border-b border-gray-100">
         <div className="flex items-start justify-between gap-3 mb-3">
-          {/* Activity Code Badge */}
-          <div className="flex-shrink-0">
-            <span
-              className="
-                inline-flex items-center justify-center
-                w-12 h-12
-                bg-[#f8f8f6] text-[#b82933]
-                font-bold text-lg rounded-lg
-                border-2 border-[#b82933]
-              "
-              aria-label={`Activity code ${activity.activityCode}`}
-            >
-              {activity.activityCode}
-            </span>
-          </div>
-
           {/* Prudential Category Badge */}
           <div className="flex-shrink-0">
             <PrudentialCategoryBadge
@@ -224,10 +206,9 @@ export const FinancialActivityCard: React.FC<FinancialActivityCardProps> = ({
             inline-flex items-center justify-center gap-2
             px-4 py-2 text-sm font-medium
             text-white rounded-lg
-            ${
-              isSelected
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-[#b82933] hover:bg-[#a02229]'
+            ${isSelected
+              ? 'bg-gray-400 cursor-not-allowed'
+              : 'bg-[#b82933] hover:bg-[#a02229]'
             }
             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#b82933]
             transition-colors duration-200

@@ -2,7 +2,8 @@ import React from 'react';
 import { Plus } from 'lucide-react';
 import { FinancialActivityHierarchy } from '../../../data/dfsa/types';
 import { ProductTags } from './ProductTags';
-import { FormTriggerBadge } from './FormTriggerBadge';
+
+
 
 export interface ActivityCardProps {
     activity: FinancialActivityHierarchy;
@@ -41,12 +42,6 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
         gray: 'border-l-dfsa-gray-600',
     }[regimeAccentColor];
 
-    const codeBadgeColorClass = {
-        primary: 'bg-primary/10 text-primary',
-        gold: 'bg-dfsa-gold-100 text-dfsa-gold-700',
-        teal: 'bg-dfsa-teal-100 text-dfsa-teal-700',
-        gray: 'bg-dfsa-gray-100 text-dfsa-gray-700',
-    }[regimeAccentColor];
 
     return (
         <div
@@ -62,16 +57,6 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
             <div className="px-4 py-5 flex-grow">
                 {/* Activity Code Badge and Name */}
                 <div className="flex items-start gap-3 mb-3">
-                    <div
-                        className={`
-              inline-flex items-center justify-center
-              w-12 h-12 rounded-lg font-bold text-lg
-              flex-shrink-0
-              ${codeBadgeColorClass}
-            `}
-                    >
-                        {activity.code}
-                    </div>
                     <div className="flex-grow min-w-0">
                         <h3 className="text-lg font-semibold text-gray-900 mb-1">
                             {activity.name}
@@ -102,11 +87,29 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
             {/* Card Footer */}
             <div className="px-4 py-3 border-t border-gray-100 bg-gray-50/50">
                 <div className="flex items-center justify-between gap-2">
-                    <FormTriggerBadge
-                        triggersForm={activity.triggersForm}
-                        formCode={activity.formCode}
-                        size="sm"
-                    />
+                    {/* Financial Metrics */}
+                    {(activity.baseCapital || activity.applicationFee || activity.processingTime) && (
+                        <div className="grid grid-cols-3 gap-3 flex-1 text-xs">
+                            {activity.baseCapital && (
+                                <div>
+                                    <div className="text-gray-500 uppercase tracking-wide font-medium mb-0.5">Capital</div>
+                                    <div className="text-gray-900 font-semibold">{activity.baseCapital.display}</div>
+                                </div>
+                            )}
+                            {activity.applicationFee && (
+                                <div>
+                                    <div className="text-gray-500 uppercase tracking-wide font-medium mb-0.5">Fee</div>
+                                    <div className="text-gray-900 font-semibold">{activity.applicationFee.display}</div>
+                                </div>
+                            )}
+                            {activity.processingTime && (
+                                <div>
+                                    <div className="text-gray-500 uppercase tracking-wide font-medium mb-0.5">Time</div>
+                                    <div className="text-gray-900 font-semibold">{activity.processingTime.display}</div>
+                                </div>
+                            )}
+                        </div>
+                    )}
 
                     {onAdd && (
                         <button
