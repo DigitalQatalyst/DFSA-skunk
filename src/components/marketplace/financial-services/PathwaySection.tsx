@@ -69,12 +69,23 @@ export const PathwaySection: React.FC<PathwaySectionProps> = ({
 
             {/* Activities Grid */}
             {isExpanded && (
-                <ActivityGrid
-                    activities={pathway.activities}
-                    onActivityAdd={onActivityAdd}
-                    selectedActivityIds={selectedActivityIds}
-                    regimeAccentColor={regimeAccentColor}
-                />
+                <div>
+                    {/* Guidance Text */}
+                    {onActivityAdd && (
+                        <div className="mb-4 bg-blue-50 border border-blue-200 rounded-lg p-3">
+                            <p className="text-sm text-blue-800">
+                                <span className="font-semibold">Tip:</span> You can select multiple services that match your business needs. Click on each service to add it to your selection, then click <span className="font-semibold">Proceed</span> when you're ready to continue.
+                            </p>
+                        </div>
+                    )}
+
+                    <ActivityGrid
+                        activities={pathway.activities}
+                        onActivityAdd={onActivityAdd}
+                        selectedActivityIds={selectedActivityIds}
+                        regimeAccentColor={regimeAccentColor}
+                    />
+                </div>
             )}
 
             {/* Activity Count */}
