@@ -97,7 +97,7 @@ const LicenseCategoriesSection: React.FC = () => {
                 onClick={prevCategory}
                 disabled={isTransitioning}
                 className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-20
-                           bg-white hover:bg-[#F8FAFC] text-[#1E3A8A] rounded-full p-3 shadow-md
+                           bg-white hover:bg-[#F8FAFC] text-primary rounded-full p-3 shadow-md
                            transition-colors disabled:opacity-50 disabled:cursor-not-allowed
                            hidden md:flex items-center justify-center"
                 aria-label="Previous category"
@@ -109,7 +109,7 @@ const LicenseCategoriesSection: React.FC = () => {
                 onClick={nextCategory}
                 disabled={isTransitioning}
                 className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-20
-                           bg-white hover:bg-[#F8FAFC] text-[#1E3A8A] rounded-full p-3 shadow-md
+                           bg-white hover:bg-[#F8FAFC] text-primary rounded-full p-3 shadow-md
                            transition-colors disabled:opacity-50 disabled:cursor-not-allowed
                            hidden md:flex items-center justify-center"
                 aria-label="Next category"
@@ -121,9 +121,8 @@ const LicenseCategoriesSection: React.FC = () => {
 
           {/* Category Card */}
           <div
-            className={`transition-opacity duration-500 max-w-2xl mx-auto ${
-              isTransitioning ? 'opacity-0' : 'opacity-100'
-            }`}
+            className={`transition-opacity duration-500 max-w-2xl mx-auto ${isTransitioning ? 'opacity-0' : 'opacity-100'
+              }`}
           >
             <LicenseCategoryCard
               category={activeCategory}
@@ -139,11 +138,10 @@ const LicenseCategoriesSection: React.FC = () => {
               <button
                 key={category.id}
                 onClick={() => goToCategory(index)}
-                className={`transition-colors duration-300 rounded-full ${
-                  index === activeIndex
-                    ? 'bg-[#1E3A8A] w-12 h-3'
-                    : 'bg-[#E2E8F0] hover:bg-[#64748B] w-3 h-3'
-                }`}
+                className={`transition-colors duration-300 rounded-full ${index === activeIndex
+                  ? 'bg-primary w-12 h-3'
+                  : 'bg-[#E2E8F0] hover:bg-[#64748B] w-3 h-3'
+                  }`}
                 aria-label={`Go to ${category.name}`}
                 title={category.name}
               />
@@ -162,7 +160,7 @@ const LicenseCategoriesSection: React.FC = () => {
             <button
               onClick={prevCategory}
               disabled={isTransitioning}
-              className="px-6 py-2 bg-white text-[#1E3A8A] border-2 border-[#1E3A8A] rounded-md font-semibold
+              className="px-6 py-2 bg-white text-dfsa-gold border-2 border-dfsa-gold rounded-md font-semibold
                          hover:bg-[#F8FAFC] transition-colors
                          disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
@@ -172,7 +170,7 @@ const LicenseCategoriesSection: React.FC = () => {
             <button
               onClick={nextCategory}
               disabled={isTransitioning}
-              className="px-6 py-2 bg-[#1E3A8A] text-white rounded-md font-semibold
+              className="px-6 py-2 bg-dfsa-gold text-white rounded-md font-semibold
                          hover:bg-[#1E293B] transition-colors
                          disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
@@ -186,7 +184,7 @@ const LicenseCategoriesSection: React.FC = () => {
         <div className="text-center mt-12">
           <a
             href="/license-categories"
-            className="inline-flex items-center gap-2 px-8 py-3 bg-white text-[#1E3A8A] border-2 border-[#1E3A8A]
+            className="inline-flex items-center gap-2 px-8 py-3 bg-white text-primary border-2 border-primary
                        hover:bg-[#F8FAFC] font-semibold rounded-md
                        transition-colors shadow-sm"
           >
