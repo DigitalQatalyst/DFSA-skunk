@@ -683,6 +683,10 @@
               "label": "Standard or Non-standard Restriction?",
               "fieldName": "restriction_type",
               "fieldType": "Enum",
+              "options": [
+                { "label": "Standard", "value": "Standard" },
+                { "label": "Non-standard", "value": "Non-standard" }
+              ],
               "uiBlockType": "field",
               "visibility": {
                 "type": "always"
@@ -693,6 +697,25 @@
               "label": "Please select the standard Restriction(s) required",
               "fieldName": "restriction_standard_selection",
               "fieldType": "MultiSelect",
+              "options": [
+                { "label": "RST01 - Dealing as Principal limited to Matched Principal basis only", "value": "RST01" },
+                { "label": "RST02 - Managing CIF and Advising restricted to QIF", "value": "RST02" },
+                { "label": "RST03 - Managing CIF and Advising restricted to QIF and Exempt Funds", "value": "RST03" },
+                { "label": "RST04 - Managing CIF and Advising restricted to QIF and Exempt (VC Form)", "value": "RST04" },
+                { "label": "RST05 - Managing CIF and Advising restricted to QIF (VC Funds only)", "value": "RST05" },
+                { "label": "RST06 - Managing CIF restricted to QIF", "value": "RST06" },
+                { "label": "RST07 - Managing CIF restricted to QIF and Exempt Funds", "value": "RST07" },
+                { "label": "RST08 - Managing CIF restricted to QIF and Exempt (VC Form)", "value": "RST08" },
+                { "label": "RST09 - Managing CIF restricted to QIF (VC Funds only)", "value": "RST09" },
+                { "label": "RST10 - Managing a Restricted Profit Sharing Investment Account", "value": "RST10" },
+                { "label": "RST11 - Providing Custody (only if for a Fund)", "value": "RST11" },
+                { "label": "RST12 - Trust Services limited to non-express trust trustee", "value": "RST12" },
+                { "label": "RST13 - Fund Admin limited to Firm's/Group's Funds", "value": "RST13" },
+                { "label": "RST14 - Restricted to captive insurance services", "value": "RST14" },
+                { "label": "RST15 - Restricted to Class 1 Captive Insurer", "value": "RST15" },
+                { "label": "RST16 - Restricted to Class 2 Captive Insurer", "value": "RST16" },
+                { "label": "RST17 - Restricted to Class 3 Captive Insurer", "value": "RST17" }
+              ],
               "uiBlockType": "field",
               "visibility": {
                 "type": "always"
@@ -965,6 +988,10 @@
               "label": "Standard or Non-standard Condition?",
               "fieldName": "condition_type",
               "fieldType": "Enum",
+              "options": [
+                { "label": "Standard", "value": "Standard" },
+                { "label": "Non-standard", "value": "Non-standard" }
+              ],
               "uiBlockType": "field",
               "visibility": {
                 "type": "always"
@@ -1021,6 +1048,10 @@
               "label": "Islamic Window or Wholly Islamic Operations",
               "fieldName": "endorsement_islamic_type",
               "fieldType": "Enum",
+              "options": [
+                { "label": "Islamic Window", "value": "Islamic Window" },
+                { "label": "Wholly Islamic Operations", "value": "Wholly Islamic Operations" }
+              ],
               "uiBlockType": "field",
               "visibility": {
                 "type": "always"

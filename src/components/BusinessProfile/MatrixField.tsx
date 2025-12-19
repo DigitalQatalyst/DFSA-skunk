@@ -36,8 +36,29 @@ export const MatrixField: React.FC<MatrixFieldProps> = ({
 
   const handleToggle = (rowKey: string, colKey: string) => {
     const currentRow = value[rowKey] || {};
-    const nextRow = { ...currentRow, [colKey]: !currentRow[colKey] };
-    const nextValue = { ...value, [rowKey]: nextRow };
+    const hasCol = Object.prototype.hasOwnProperty.call(currentRow, colKey);
+    const current = hasCol ? currentRow[colKey] : undefined;
+
+    // Tri-state cycle:
+    // - undefined (not answered) -> true
+    // - true -> false
+    // - false -> undefined (clear back to not answered)
+    const next = current === undefined ? true : current === true ? false : undefined;
+
+    const nextRow = { ...currentRow };
+    if (next === undefined) {
+      delete nextRow[colKey];
+    } else {
+      nextRow[colKey] = next;
+    }
+
+    const nextValue = { ...value };
+    if (Object.keys(nextRow).length === 0) {
+      delete nextValue[rowKey];
+    } else {
+      nextValue[rowKey] = nextRow;
+    }
+
     onChange(nextValue);
   };
 
@@ -62,11 +83,20 @@ export const MatrixField: React.FC<MatrixFieldProps> = ({
       );
     }
 
-    const checked = Boolean(value?.[rowKey]?.[colKey]);
+    const row = value?.[rowKey] || {};
+    const hasCol = Object.prototype.hasOwnProperty.call(row, colKey);
+    const cellValue = hasCol ? row[colKey] : undefined;
+
     if (readOnly) {
+      if (cellValue === undefined) {
+        return (
+          <span className="text-gray-300 text-xs" title="Not answered">—</span>
+        );
+      }
+
       return (
-        <span className={`inline-flex items-center px-2 py-1 rounded text-xs ${checked ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
-          {checked ? 'Yes' : 'No'}
+        <span className={`inline-flex items-center px-2 py-1 rounded text-xs ${cellValue ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+          {cellValue ? 'Yes' : 'No'}
         </span>
       );
     }
@@ -74,7 +104,11 @@ export const MatrixField: React.FC<MatrixFieldProps> = ({
       <input
         type="checkbox"
         className="w-4 h-4"
-        checked={checked}
+        checked={cellValue === true}
+        ref={(el) => {
+          if (!el) return;
+          el.indeterminate = cellValue === undefined;
+        }}
         onChange={() => handleToggle(rowKey, colKey)}
       />
     );

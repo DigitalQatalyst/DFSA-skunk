@@ -25,12 +25,20 @@ export interface ProfileDomainResponse {
  * Get the API base URL for profile requests
  * In production: Uses VITE_API_BASE_URL environment variable (should point to deployed Express API)
  * In development: Falls back to '/api' which uses Vite proxy to localhost:5000
+ *
+ * Note: Products is intentionally special-cased to prevent accidentally hitting the frontend
+ * serverless handler (which has a different persistence model for unified matrices).
  */
-function getApiBaseUrl(): string {
+function getApiBaseUrl(domainKey?: string): string {
   const envUrl = import.meta.env.VITE_API_BASE_URL;
   
   // If no env variable, use proxy in development
   if (!envUrl) {
+    if (domainKey === 'products' && !import.meta.env.DEV) {
+      throw new Error(
+        'Products must be served by the Express API. Set VITE_API_BASE_URL to your Express base (e.g. http://localhost:5000/api/v1).'
+      );
+    }
     return '/api';
   }
   
@@ -64,7 +72,7 @@ async function fetchProfileDomain(
     throw new Error('Authentication required');
   }
 
-  const API_BASE_URL = getApiBaseUrl();
+  const API_BASE_URL = getApiBaseUrl(domainKey);
   const response = await fetch(`${API_BASE_URL}/profile/domains/${domainKey}`, {
     method: 'GET',
     headers: {
@@ -93,7 +101,7 @@ async function updateProfileDomain(
     throw new Error('Authentication required');
   }
 
-  const API_BASE_URL = getApiBaseUrl();
+  const API_BASE_URL = getApiBaseUrl(domainKey);
   const response = await fetch(`${API_BASE_URL}/profile/domains/${domainKey}`, {
     method: 'PUT',
     headers: {
@@ -196,36 +204,11 @@ export function useUpdateProfileDomainMutation(
           return updated;
         }
       );
-      
-      // Invalidate and refetch to ensure fresh data
-      queryClient.invalidateQueries({ queryKey: profileKeys.domain(domainKey) });
-      // Trigger immediate refetch to update UI
-      queryClient.refetchQueries({ queryKey: profileKeys.domain(domainKey) });
-      
-      // Also update summary cache if it exists
-      if (domainKey === 'profile_summary') {
-        queryClient.setQueryData<ProfileDomainResponse>(
-          profileKeys.summary(),
-          (oldData) => {
-            if (!oldData) {
-              return {
-                schema: null,
-                data: responseData.data || {},
-                completion: responseData.completion || 0,
-              };
-            }
-            return {
-              ...oldData,
-              data: responseData.data, // Replace with full updated data
-              completion: responseData.completion,
-            };
-          }
-        );
+
+      // If any domain is updated, Profile Summary may need to refresh
+      if (domainKey !== 'profile_summary') {
+        queryClient.invalidateQueries({ queryKey: profileKeys.domain('profile_summary') });
       }
-      
-      // Invalidate queries to ensure fresh data (but cache is already updated)
-      queryClient.invalidateQueries({ queryKey: profileKeys.domain(domainKey) });
-      queryClient.invalidateQueries({ queryKey: profileKeys.summary() });
       
       // Then call custom onSuccess if provided
       customOnSuccess?.(responseData, variables, context);
@@ -310,4 +293,3 @@ export function useUpdateProductsMutation(
 
   return useUpdateProfileDomainMutation('products', mergedOptions);
 }
-

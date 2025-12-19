@@ -288,6 +288,137 @@
       ]
     },
     {
+      "id": "vision_strategy",
+      "title": "Vision & Strategy",
+      "groups": [
+        {
+          "id": "business_vision_structure",
+          "groupName": "Business Vision / Structure",
+          "fields": [
+            {
+              "id": "vision_strategy.entity_structure",
+              "label": "Entity Structure",
+              "fieldName": "entity_structure",
+              "fieldType": "Enum",
+              "mandatory": false,
+              "options": [
+                { "label": "Standalone", "value": "Standalone" },
+                { "label": "Subsidiary", "value": "Subsidiary" },
+                { "label": "Branch", "value": "Branch" },
+                { "label": "Joint Venture", "value": "Joint Venture" }
+              ]
+            },
+            {
+              "id": "vision_strategy.has_parent_company",
+              "label": "Parent Company",
+              "fieldName": "has_parent_company",
+              "fieldType": "Boolean",
+              "mandatory": false
+            },
+            {
+              "id": "vision_strategy.parent_company_name",
+              "label": "Parent Company Name",
+              "fieldName": "parent_company_name",
+              "fieldType": "Text",
+              "mandatory": false,
+              "visibility": { "type": "equals", "field": "has_parent_company", "value": true }
+            },
+            {
+              "id": "vision_strategy.parent_jurisdiction",
+              "label": "Parent Jurisdiction",
+              "fieldName": "parent_jurisdiction",
+              "fieldType": "Country",
+              "mandatory": false,
+              "visibility": { "type": "equals", "field": "has_parent_company", "value": true }
+            }
+          ]
+        },
+        {
+          "id": "difc_presence_relocation",
+          "groupName": "DIFC Presence (Reference + Relocation)",
+          "fields": [
+            {
+              "id": "vision_strategy.is_relocating",
+              "label": "Is the firm relocating from another jurisdiction?",
+              "fieldName": "is_relocating",
+              "fieldType": "Boolean",
+              "mandatory": false
+            },
+            {
+              "id": "vision_strategy.previous_jurisdiction",
+              "label": "Previous Jurisdiction",
+              "fieldName": "previous_jurisdiction",
+              "fieldType": "Country",
+              "mandatory": false,
+              "visibility": { "type": "equals", "field": "is_relocating", "value": true }
+            }
+          ]
+        },
+        {
+          "id": "entity_structure",
+          "groupName": "Entity Structure",
+          "fields": [
+            {
+              "id": "vision_strategy.legal_form",
+              "label": "Legal Form of Entity",
+              "fieldName": "legal_form",
+              "fieldType": "Enum",
+              "mandatory": false,
+              "options": [
+                { "label": "Limited Liability Company (LLC)", "value": "Limited Liability Company (LLC)" },
+                { "label": "Branch", "value": "Branch" },
+                { "label": "Partnership", "value": "Partnership" },
+                { "label": "Other", "value": "Other" }
+              ]
+            },
+            {
+              "id": "vision_strategy.shareholding_structure",
+              "label": "Shareholding Structure",
+              "fieldName": "shareholding_structure",
+              "fieldType": "Enum",
+              "mandatory": false,
+              "options": [
+                { "label": "Private", "value": "Private" },
+                { "label": "Public", "value": "Public" },
+                { "label": "Government", "value": "Government" },
+                { "label": "Non-Profit", "value": "NonProfit" },
+                { "label": "Other", "value": "Other" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "strategic_intent",
+          "groupName": "Strategic Intent",
+          "fields": [
+            {
+              "id": "vision_strategy.high_level_business_strategy",
+              "label": "High-level business strategy",
+              "fieldName": "high_level_business_strategy",
+              "fieldType": "Text",
+              "mandatory": false,
+              "uiBlockType": "textarea"
+            },
+            {
+              "id": "vision_strategy.target_customer_segments",
+              "label": "Target customer segments",
+              "fieldName": "target_customer_segments",
+              "fieldType": "Text",
+              "mandatory": false
+            },
+            {
+              "id": "vision_strategy.strategic_rationale_for_difc",
+              "label": "Strategic rationale for DIFC",
+              "fieldName": "strategic_rationale_for_difc",
+              "fieldType": "Text",
+              "mandatory": false,
+              "uiBlockType": "textarea"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "products",
       "title": "Products",
       "groups": [
@@ -1446,4 +1577,3 @@
     }
   ]
 }
-

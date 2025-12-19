@@ -94,6 +94,12 @@ const allowedFieldTypes: FieldConfig["fieldType"][] = [
   "File Upload",
   "Table",
   "Lookup",
+  "Boolean" as any,
+  "Enum" as any,
+  "Integer" as any,
+  "MultiSelect" as any,
+  "Address" as any,
+  "Country" as any,
 ];
 
 function validateStages(stages: CompanyStageConfig[]): string[] {

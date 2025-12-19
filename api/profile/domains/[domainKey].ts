@@ -69,6 +69,52 @@ export default async function handler(
 
     console.log(`📋 [api/profile/domains] Processing domain: ${domainKey}`);
 
+    // IMPORTANT: Products domain is served by the Express API using normalized matrix tables.
+    // This serverless route historically upserted *_matrix keys as columns on profiledomain_products,
+    // which conflicts with the unified-matrix schema (and can cause PGRST204 errors / data drift).
+    if (domainKey === 'products') {
+      const expressBase = process.env.EXPRESS_API_BASE_URL;
+      if (!expressBase) {
+        if (res.status) res.status(404);
+        if (res.json) {
+          res.json({
+            error: 'Products is disabled on the serverless profile handler',
+            message:
+              'Products must be served by the Express API. Configure VITE_API_BASE_URL in the frontend (and optionally set EXPRESS_API_BASE_URL for serverless proxying).',
+          });
+        }
+        return;
+      }
+
+      // Optional safe proxy: only enabled if EXPRESS_API_BASE_URL is configured.
+      const normalizedBase =
+        expressBase.endsWith('/api/v1')
+          ? expressBase
+          : expressBase.endsWith('/api')
+            ? `${expressBase}/v1`
+            : `${expressBase}/api/v1`;
+
+      const url = `${normalizedBase}/profile/domains/products`;
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      const auth = req.headers?.authorization;
+      if (auth) headers.Authorization = auth;
+
+      const upstream = await fetch(url, {
+        method: req.method,
+        headers,
+        body: req.method === 'GET' ? undefined : JSON.stringify(req.body || {}),
+      });
+
+      const text = await upstream.text();
+      if (res.status) res.status(upstream.status);
+      try {
+        if (res.json) res.json(JSON.parse(text));
+      } catch {
+        if (res.end) res.end(text);
+      }
+      return;
+    }
+
     // Get organisation ID from token
     console.log('🔐 [api/profile/domains] Extracting org ID from token...');
     const orgId = await getOrgIdFromRequest(req);

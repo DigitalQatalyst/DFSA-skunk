@@ -1,6 +1,7 @@
-﻿export type VisibilityRule =
+export type VisibilityRule =
   | { type: 'always' }
-  | { type: 'includes'; source: 'license_category'; value: string };
+  | { type: 'includes'; source: 'license_category'; value: string }
+  | { type: 'equals'; field: string; value: string | number | boolean | null };
 
 // Map license category labels to boolean field names
 const LICENSE_CATEGORY_FIELDS: Record<string, string> = {
@@ -22,6 +23,10 @@ export function isVisible(
     return Boolean(answers?.[fieldName]);
   }
 
+  if (visibility.type === 'equals') {
+    return answers?.[visibility.field] === visibility.value;
+  }
+
   return true;
 }
 
@@ -31,3 +36,4 @@ export function filterVisible<T extends { visibility?: VisibilityRule }>(
 ): T[] {
   return items.filter((item) => isVisible(item.visibility as VisibilityRule, answers));
 }
+

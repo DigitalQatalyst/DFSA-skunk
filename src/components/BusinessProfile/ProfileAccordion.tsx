@@ -73,14 +73,12 @@ export function ProfileAccordion({
                         {section.title}
                       </h3>
                       {section.completion === 100 ? (
+                        // Match Profile Summary "Complete" pill styling
                         <span className="ml-2 flex items-center text-xs px-1.5 py-0.5 rounded-full bg-green-100 text-green-700">
-                          <CheckCircleIcon
-                            size={14}
-                            className="mr-1 flex-shrink-0"
-                          />
+                          <CheckCircleIcon size={12} className="mr-1 flex-shrink-0" />
                           <span className="truncate">Complete</span>
                         </span>
-                      ) : (
+                      ) : typeof section.isRequired === 'boolean' ? (
                         <span
                           className={`ml-2 flex items-center text-xs px-1.5 py-0.5 rounded-full ${
                             section.completion === 0
@@ -93,7 +91,7 @@ export function ProfileAccordion({
                             {section.isRequired ? 'Required' : 'Optional'}
                           </span>
                         </span>
-                      )}
+                      ) : null}
                     </div>
 
                     <div className="sm:ml-3 flex items-center mt-2 sm:mt-0">
@@ -154,6 +152,4 @@ export function ProfileAccordion({
     </div>
   );
 }
-
-
 

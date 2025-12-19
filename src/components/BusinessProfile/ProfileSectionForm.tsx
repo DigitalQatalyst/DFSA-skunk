@@ -85,33 +85,48 @@ export function ProfileSectionForm({
                   </label>
 
                   <div className="flex-1">
-                    <Controller
-                      name={field.fieldName}
-                      control={control}
-                      rules={{
-                        validate: (value) => {
-                          if (isMandatory && !isFieldReadOnly) {
-                            if (isBooleanField) {
-                              if (typeof value !== 'boolean') {
-                                return `${field.label} is required`;
-                              }
-                            } else if (value === undefined || value === null || value === '') {
-                              return `${field.label} is required`;
-                            }
-                          }
+	                  <Controller
+	                    name={field.fieldName}
+	                    control={control}
+	                    rules={{
+	                      validate: (value) => {
+	                        if (isMandatory && !isFieldReadOnly) {
+	                          if (isBooleanField) {
+	                            if (typeof value !== 'boolean') {
+	                              return `${field.label} is required`;
+	                            }
+	                          } else if (value === undefined || value === null || value === '') {
+	                            return `${field.label} is required`;
+	                          }
+	                        }
 
-                          if (field.fieldType === 'Text' && field.validation?.type === 'email' && value) {
-                            const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
-                            if (!emailRegex.test(value)) {
-                              return `${field.label} must be a valid email address`;
-                            }
-                          }
-                          return true;
-                        },
-                      }}
-                      render={({ field: formField }) => {
-                        // Boolean: render checkbox (checked = active/true, unchecked = inactive/false)
-                        if (isBooleanField) {
+	                        if (field.fieldType === 'Integer') {
+	                          if (
+	                            value !== undefined &&
+	                            value !== null &&
+	                            value !== '' &&
+	                            (!Number.isFinite(value) || !Number.isInteger(value))
+	                          ) {
+	                            return `${field.label} must be a whole number`;
+	                          }
+	                        }
+
+	                        if (field.fieldType === 'Text' && field.validation?.type === 'email' && value) {
+	                          const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+	                          if (!emailRegex.test(value)) {
+	                            return `${field.label} must be a valid email address`;
+	                          }
+	                        }
+	                        return true;
+	                      },
+	                    }}
+	                    render={({ field: formField }) => {
+	                      const isEnumField = field.fieldType === 'Enum';
+	                      const isMultiSelectField = field.fieldType === 'MultiSelect';
+	                      const isIntegerField = field.fieldType === 'Integer';
+
+	                      // Boolean: render checkbox (checked = active/true, unchecked = inactive/false)
+	                      if (isBooleanField) {
                           const value = formField.value;
                           if (isFieldReadOnly) {
                             return (
@@ -131,11 +146,154 @@ export function ProfileSectionForm({
                               />
                             </label>
                           );
-                        }
+	                      }
 
-                        // Basic field rendering - will be enhanced per field type
-                        if (field.fieldType === 'select' && field.options) {
-                          return (
+	                      // Enum: render <select> (string)
+	                      if (isEnumField) {
+	                        const value = typeof formField.value === 'string' ? formField.value : '';
+	                        if (isFieldReadOnly) {
+	                          const label =
+	                            field.options?.find((o) => o.value === value)?.label ?? value ?? '-';
+	                          return <div className="text-sm text-gray-700">{label || '-'}</div>;
+	                        }
+	                        if (!field.options || field.options.length === 0) {
+	                          return (
+	                            <input
+	                              {...formField}
+	                              type="text"
+	                              disabled={isFieldReadOnly || isLoading}
+	                              placeholder={field.placeholder || (isMandatory ? 'Required' : 'Optional')}
+	                              className={`w-full text-sm border rounded px-3 py-2 min-h-[44px] ${
+	                                hasError ? 'border-red-300 bg-red-50' : 'border-gray-300'
+	                              } ${isFieldReadOnly ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+	                            />
+	                          );
+	                        }
+	                        return (
+	                          <select
+	                            value={value}
+	                            onChange={(e) => formField.onChange(e.target.value)}
+	                            disabled={isFieldReadOnly || isLoading}
+	                            className={`w-full text-sm border rounded px-3 py-2 min-h-[44px] ${
+	                              hasError ? 'border-red-300 bg-red-50' : 'border-gray-300'
+	                            } ${isFieldReadOnly ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+	                          >
+	                            <option value="">
+	                              {isMandatory ? 'Select a required option' : 'Select an option'}
+	                            </option>
+	                            {field.options.map((option) => (
+	                              <option key={option.value} value={option.value}>
+	                                {option.label}
+	                              </option>
+	                            ))}
+	                          </select>
+	                        );
+	                      }
+
+	                      // MultiSelect: store string[] (render checkbox list if options exist; else freeform lines)
+	                      if (isMultiSelectField) {
+	                        const current: string[] = Array.isArray(formField.value) ? formField.value : [];
+	                        if (isFieldReadOnly) {
+	                          const labels =
+	                            field.options && field.options.length > 0
+	                              ? current
+	                                  .map((v) => field.options?.find((o) => o.value === v)?.label ?? v)
+	                                  .filter(Boolean)
+	                              : current;
+	                          return (
+	                            <div className="text-sm text-gray-700">
+	                              {labels.length > 0 ? labels.join(', ') : '-'}
+	                            </div>
+	                          );
+	                        }
+
+	                        if (field.options && field.options.length > 0) {
+	                          return (
+	                            <div className="space-y-2">
+	                              {field.options.map((opt) => {
+	                                const checked = current.includes(opt.value);
+	                                return (
+	                                  <label key={opt.value} className="flex items-center gap-2 text-sm text-gray-700">
+	                                    <input
+	                                      type="checkbox"
+	                                      className="h-4 w-4 text-red-800 focus:ring-red-800 rounded border-gray-300"
+	                                      checked={checked}
+	                                      disabled={isFieldReadOnly || isLoading}
+	                                      onChange={(e) => {
+	                                        const next = e.target.checked
+	                                          ? Array.from(new Set([...current, opt.value]))
+	                                          : current.filter((v) => v !== opt.value);
+	                                        formField.onChange(next);
+	                                      }}
+	                                    />
+	                                    <span>{opt.label}</span>
+	                                  </label>
+	                                );
+	                              })}
+	                            </div>
+	                          );
+	                        }
+
+	                        return (
+	                          <textarea
+	                            value={current.join('\n')}
+	                            onChange={(e) => {
+	                              const lines = e.target.value
+	                                .split('\n')
+	                                .map((s) => s.trim())
+	                                .filter(Boolean);
+	                              formField.onChange(lines);
+	                            }}
+	                            disabled={isFieldReadOnly || isLoading}
+	                            placeholder={field.placeholder || 'Enter one value per line'}
+	                            className={`w-full text-sm border rounded px-3 py-2 min-h-[96px] ${
+	                              hasError ? 'border-red-300 bg-red-50' : 'border-gray-300'
+	                            } ${isFieldReadOnly ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+	                          />
+	                        );
+	                      }
+
+	                      // Integer: store number|null (prevent NaN)
+	                      if (isIntegerField) {
+	                        const current = typeof formField.value === 'number' ? formField.value : null;
+	                        if (isFieldReadOnly) {
+	                          return (
+	                            <div className="text-sm text-gray-700">
+	                              {current === null || current === undefined ? '-' : String(current)}
+	                            </div>
+	                          );
+	                        }
+	                        return (
+	                          <input
+	                            type="number"
+	                            inputMode="numeric"
+	                            step={1}
+	                            value={current ?? ''}
+	                            onChange={(e) => {
+	                              const raw = e.target.value;
+	                              if (raw === '') {
+	                                formField.onChange(null);
+	                                return;
+	                              }
+	                              const n = Number(raw);
+	                              if (!Number.isFinite(n)) {
+	                                formField.onChange(null);
+	                                return;
+	                              }
+	                              formField.onChange(Math.trunc(n));
+	                            }}
+	                            disabled={isFieldReadOnly || isLoading}
+	                            placeholder={field.placeholder || (isMandatory ? 'Required' : 'Optional')}
+	                            className={`w-full text-sm border rounded px-3 py-2 min-h-[44px] ${
+	                              hasError ? 'border-red-300 bg-red-50' : 'border-gray-300'
+	                            } ${isFieldReadOnly ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+	                          />
+	                        );
+	                      }
+
+	                      // Basic field rendering - will be enhanced per field type
+	                      if (field.fieldType === 'select' && field.options) {
+	                        return (
                             <select
                               {...formField}
                               disabled={isFieldReadOnly || isLoading}
@@ -301,4 +459,3 @@ export function ProfileSectionForm({
     </form>
   );
 }
-

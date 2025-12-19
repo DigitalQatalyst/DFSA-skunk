@@ -39,7 +39,9 @@ import {
 } from "../../modules/profile/hooks/useProfileQueries";
 import {toast} from "sonner";
 import {ProfileSummaryTab} from "./ProfileSummaryTab";
-import {useProfileSummaryQuery} from "../../hooks/useProfileQueries";
+import {VisionStrategyTab} from "./VisionStrategyTab";
+import {useProfileDomainQuery, useProfileSummaryQuery, useProductsQuery} from "../../hooks/useProfileQueries";
+import {calculateDomainCompletionStats} from "../../utils/profileData";
 
 // Lazy load ProductsTab
 const ProductsTab = React.lazy(() => import("./ProductsTab").then(module => ({ default: module.ProductsTab })));
@@ -110,7 +112,20 @@ export function BusinessProfile({activeSection = "profile"}) {
     const {user} = useAuth();
 
     // Get Profile Summary completion from API
-    const { data: profileSummaryData } = useProfileSummaryQuery({
+    const { data: profileSummaryData, isLoading: isProfileSummaryDomainLoading } = useProfileSummaryQuery({
+        retry: 1,
+        retryDelay: 1000,
+    });
+
+    // Products completion comes from the Products domain API (Express-backed).
+    // This keeps the outer tab completion consistent with the ProductsTab UI (APQC schema-driven).
+    const { data: productsDomainData } = useProductsQuery({
+        retry: 1,
+        retryDelay: 1000,
+    });
+
+    // Vision & Strategy completion comes from the domain API (APQC schema-driven).
+    const { data: visionStrategyDomainData, isLoading: isVisionStrategyDomainLoading } = useProfileDomainQuery('vision_strategy', {
         retry: 1,
         retryDelay: 1000,
     });
@@ -120,6 +135,38 @@ export function BusinessProfile({activeSection = "profile"}) {
     const apqcConfig = useMemo(() => getProfileConfig("apqc"), []);
     const profileConfig = useMemo(() => getProfileConfig("v3"), []);
     const apiFieldMapping = useMemo(() => getProfileMapping("apqc"), []);
+
+    const emptyDomainData = useMemo(() => ({} as Record<string, any>), []);
+
+    const profileSummaryDomainSchema =
+        profileSummaryData?.schema ||
+        apqcConfig.tabs.find((tab) => tab.id === "profile_summary");
+    const profileSummaryDomainValues =
+        (profileSummaryData?.data as Record<string, any> | undefined) ||
+        emptyDomainData;
+    const profileSummaryStats = useMemo(
+        () =>
+            calculateDomainCompletionStats(profileSummaryDomainSchema, profileSummaryDomainValues, {
+                excludeReadOnly: true,
+            }),
+        [profileSummaryDomainSchema, profileSummaryDomainValues]
+    );
+    const profileSummaryHasMeaningfulData = profileSummaryStats.answered > 0;
+
+    const visionStrategyDomainSchema =
+        visionStrategyDomainData?.schema ||
+        apqcConfig.tabs.find((tab) => tab.id === "vision_strategy");
+    const visionStrategyDomainValues =
+        (visionStrategyDomainData?.data as Record<string, any> | undefined) ||
+        emptyDomainData;
+    const visionStrategyStats = useMemo(
+        () =>
+            calculateDomainCompletionStats(visionStrategyDomainSchema, visionStrategyDomainValues, {
+                excludeReadOnly: true,
+            }),
+        [visionStrategyDomainSchema, visionStrategyDomainValues]
+    );
+    const visionStrategyHasMeaningfulData = visionStrategyStats.answered > 0;
 
     // In demo mode, use the demo user
     const effectiveUser = isDemoModeEnabled() ? getDemoUser() : user;
@@ -613,6 +660,26 @@ export function BusinessProfile({activeSection = "profile"}) {
             }
             
             // For other tabs, use calculated completions
+            if (tab.id === 'vision_strategy') {
+                const visionCompletion = visionStrategyStats?.percentage ?? 0;
+                return {
+                    id: tab.id,
+                    title: tab.title,
+                    completion: visionCompletion,
+                    mandatoryCompletion: { percentage: visionCompletion },
+                };
+            }
+
+            if (tab.id === 'products') {
+                const productsCompletion = productsDomainData?.completion ?? 0;
+                return {
+                    id: tab.id,
+                    title: tab.title,
+                    completion: productsCompletion,
+                    mandatoryCompletion: { percentage: productsCompletion },
+                };
+            }
+
             return {
                 id: tab.id,
                 title: tab.title,
@@ -629,6 +696,41 @@ export function BusinessProfile({activeSection = "profile"}) {
         } else if (activeSection === "profile") {
             return allSections;
         } else {
+            if (activeSection === 'products') {
+                const productsCompletion = productsDomainData?.completion ?? 0;
+                return [
+                    {
+                        id: activeSection,
+                        title:
+                            profileConfig.tabs.find((tab) => tab.id === activeSection)?.title ||
+                            "Products",
+                        completion: productsCompletion,
+                        mandatoryCompletion: { percentage: productsCompletion },
+                    },
+                ];
+            }
+            if (activeSection === 'profile_summary') {
+                const completion = profileSummaryStats?.percentage ?? 0;
+                return [
+                    {
+                        id: activeSection,
+                        title: 'Profile Summary',
+                        completion,
+                        mandatoryCompletion: { percentage: completion },
+                    },
+                ];
+            }
+            if (activeSection === 'vision_strategy') {
+                const completion = visionStrategyStats?.percentage ?? 0;
+                return [
+                    {
+                        id: activeSection,
+                        title: 'Vision & Strategy',
+                        completion,
+                        mandatoryCompletion: { percentage: completion },
+                    },
+                ];
+            }
             return [
                 {
                     id: activeSection,
@@ -1183,6 +1285,15 @@ export function BusinessProfile({activeSection = "profile"}) {
                                         return <ProfileSummaryTab />;
                                     }
                                     
+                                    // Render Vision & Strategy (APQC domain)
+                                    
+                                    if (section.id === 'vision_strategy') {
+                                    
+                                        return <VisionStrategyTab />;
+                                    
+                                    }
+
+                                    
                                     // Render Products tab with lazy loading
                                     if (section.id === 'products') {
                                         return (
@@ -1243,10 +1354,29 @@ export function BusinessProfile({activeSection = "profile"}) {
 
                                 {!mockMultiEntryData[section.id] &&
                                     !mockDocuments[section.id] &&
-                                    (!profileData?.sections?.[section.id]?.fields ||
-                                        Object.keys(
-                                            profileData?.sections?.[section.id]?.fields || {}
-                                        ).length === 0) && (
+                                    (() => {
+                                        if (section.id === "profile_summary") {
+                                            return (
+                                                !isProfileSummaryDomainLoading &&
+                                                !profileSummaryHasMeaningfulData
+                                            );
+                                        }
+                                        if (section.id === "vision_strategy") {
+                                            return (
+                                                !isVisionStrategyDomainLoading &&
+                                                !visionStrategyHasMeaningfulData
+                                            );
+                                        }
+                                        if (section.id === "products") {
+                                            return false;
+                                        }
+                                        const legacyFields =
+                                            profileData?.sections?.[section.id]?.fields || {};
+                                        return (
+                                            !profileData?.sections?.[section.id]?.fields ||
+                                            Object.keys(legacyFields).length === 0
+                                        );
+                                    })() && (
                                         <div
                                             className="mt-4 sm:mt-5 md:mt-6 lg:mt-8 text-center py-6 sm:py-8 md:py-10 lg:py-12 bg-gray-50 rounded-lg border border-dashed border-gray-300">
                                             <div className="flex flex-col items-center px-4">
@@ -1300,5 +1430,3 @@ export function BusinessProfile({activeSection = "profile"}) {
         </div>
     );
 }
-
-

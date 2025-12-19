@@ -9,6 +9,54 @@ import { CASLAbilityContext } from '../../context/AbilityContext';
 import { AppAbility } from '../../config/abilities';
 import { isVisible, type VisibilityRule } from '../../utils/visibility';
 import { MatrixField, type MatrixValue } from './MatrixField';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '../ui/alert-dialog';
+
+const RESTRICTIONS_SECTION_NAME = 'Restrictions';
+const RESTRICTIONS_CONTROL_GROUP_ID = 'restrictions_restrictions_control_questions';
+
+const RESTRICTION_TYPE_OPTIONS: Array<{ label: string; value: string }> = [
+  { label: 'Standard', value: 'Standard' },
+  { label: 'Non-standard', value: 'Non-standard' },
+];
+
+const RESTRICTION_STANDARD_OPTIONS: Array<{ label: string; value: string }> = [
+  { label: 'RST01 - Dealing as Principal limited to Matched Principal basis only', value: 'RST01' },
+  { label: 'RST02 - Managing CIF and Advising restricted to QIF', value: 'RST02' },
+  { label: 'RST03 - Managing CIF and Advising restricted to QIF and Exempt Funds', value: 'RST03' },
+  { label: 'RST04 - Managing CIF and Advising restricted to QIF and Exempt (VC Form)', value: 'RST04' },
+  { label: 'RST05 - Managing CIF and Advising restricted to QIF (VC Funds only)', value: 'RST05' },
+  { label: 'RST06 - Managing CIF restricted to QIF', value: 'RST06' },
+  { label: 'RST07 - Managing CIF restricted to QIF and Exempt Funds', value: 'RST07' },
+  { label: 'RST08 - Managing CIF restricted to QIF and Exempt (VC Form)', value: 'RST08' },
+  { label: 'RST09 - Managing CIF restricted to QIF (VC Funds only)', value: 'RST09' },
+  { label: 'RST10 - Managing a Restricted Profit Sharing Investment Account', value: 'RST10' },
+  { label: 'RST11 - Providing Custody (only if for a Fund)', value: 'RST11' },
+  { label: 'RST12 - Trust Services limited to non-express trust trustee', value: 'RST12' },
+  { label: "RST13 - Fund Admin limited to Firm's/Group's Funds", value: 'RST13' },
+  { label: 'RST14 - Restricted to captive insurance services', value: 'RST14' },
+  { label: 'RST15 - Restricted to Class 1 Captive Insurer', value: 'RST15' },
+  { label: 'RST16 - Restricted to Class 2 Captive Insurer', value: 'RST16' },
+  { label: 'RST17 - Restricted to Class 3 Captive Insurer', value: 'RST17' },
+];
+
+function normalizeRestrictionType(value: unknown): string {
+  if (value === null || value === undefined) return '';
+  const v = String(value).trim();
+  if (!v) return '';
+  const lower = v.toLowerCase();
+  if (lower === 'standard') return 'Standard';
+  if (lower === 'non-standard' || lower === 'non_standard' || lower === 'nonstandard') return 'Non-standard';
+  return v;
+}
 
 /**
  * Migration function to convert old per-activity matrix format to new unified matrix format
@@ -249,6 +297,18 @@ export function ProductsTab() {
   const [editingBlockId, setEditingBlockId] = useState<string | null>(null);
   const [editingData, setEditingData] = useState<Record<string, any>>({});
   const [matrixDrafts, setMatrixDrafts] = useState<Record<string, MatrixValue>>({});
+  const [savingMatrixFieldName, setSavingMatrixFieldName] = useState<string | null>(null);
+  type LicenseSubTab =
+    | 'categorySelection'
+    | 'bankingInvestment'
+    | 'insuranceGeneral'
+    | 'insuranceLife'
+    | 'moneyServices';
+  const [activeLicenseSubTab, setActiveLicenseSubTab] = useState<LicenseSubTab>('categorySelection');
+  type PendingMatrixEdit = { blockId: string; fieldName: string; currentValue: MatrixValue };
+  const [unsavedLicenseDialogOpen, setUnsavedLicenseDialogOpen] = useState(false);
+  const [pendingMatrixEdit, setPendingMatrixEdit] = useState<PendingMatrixEdit | null>(null);
+  const [resolvingUnsavedLicenseDialog, setResolvingUnsavedLicenseDialog] = useState(false);
 
   const ability = useAbility<AppAbility>(CASLAbilityContext);
   const isReadOnly = !ability.can('update', 'user-profile');
@@ -261,6 +321,40 @@ export function ProductsTab() {
 
   const schema: TabSchema | undefined = data?.schema;
   const rawProductsData = data?.data || {};
+
+  const LICENSE_CATEGORY_GROUP_ID = 'license_category_license_category_q98_category_selection';
+  const UNIFIED_MATRIX_SECTION_NAMES = new Set([
+    'Banking & Investment',
+    'Insurance General',
+    'Insurance Life',
+    'Money Services',
+  ]);
+  const UNIFIED_MATRIX_TABS = [
+    {
+      subTabId: 'bankingInvestment' as const,
+      tabLabel: 'Banking & Investment',
+      licenseFieldName: 'license_category_financial_services',
+      matrixFieldName: 'banking_investment_activities_matrix',
+    },
+    {
+      subTabId: 'insuranceGeneral' as const,
+      tabLabel: 'Insurance General',
+      licenseFieldName: 'license_category_insurance_general',
+      matrixFieldName: 'insurance_general_activities_matrix',
+    },
+    {
+      subTabId: 'insuranceLife' as const,
+      tabLabel: 'Insurance Life',
+      licenseFieldName: 'license_category_insurance_life',
+      matrixFieldName: 'insurance_life_activities_matrix',
+    },
+    {
+      subTabId: 'moneyServices' as const,
+      tabLabel: 'Money Services',
+      licenseFieldName: 'license_category_money_services',
+      matrixFieldName: 'money_services_activities_matrix',
+    },
+  ];
 
   // Debug: Log schema to verify it's loading correctly
   useEffect(() => {
@@ -320,11 +414,6 @@ export function ProductsTab() {
       setEditingBlockId(null);
       setEditingData({});
       setMatrixDrafts({});
-      // Refetch to ensure UI shows latest saved data
-      // Use setTimeout to ensure cache update completes first
-      setTimeout(() => {
-        refetch();
-      }, 100);
     },
     onError: (error: Error) => {
       let errorMessage = 'Failed to update Products';
@@ -450,13 +539,47 @@ export function ProductsTab() {
     return processedData;
   }, [rawProductsData]);
 
+  const licenseCategoryGroupForSave = useMemo(() => {
+    const groups = (schema?.groups as GroupConfig[]) || [];
+    return groups.find((g) => g.id === LICENSE_CATEGORY_GROUP_ID) || null;
+  }, [schema]);
+
+  const licenseCategoryFieldNames = useMemo(() => {
+    return (licenseCategoryGroupForSave?.fields || [])
+      .filter((f) => f.fieldType === 'Boolean')
+      .map((f) => f.fieldName);
+  }, [licenseCategoryGroupForSave]);
+
+  const hasUnsavedLicenseCategoryChanges = useMemo(() => {
+    if (editingBlockId !== LICENSE_CATEGORY_GROUP_ID) return false;
+    if (licenseCategoryFieldNames.length === 0) return false;
+    return licenseCategoryFieldNames.some((fieldName) => {
+      return Boolean(editingData?.[fieldName]) !== Boolean(productsData?.[fieldName]);
+    });
+  }, [editingBlockId, editingData, licenseCategoryFieldNames, productsData]);
+
+  // When editing the License Category group, use the draft answers for visibility + matrix tabs
+  const visibilityAnswers = useMemo(() => {
+    if (editingBlockId === LICENSE_CATEGORY_GROUP_ID) {
+      return { ...productsData, ...editingData };
+    }
+    return productsData;
+  }, [editingBlockId, editingData, productsData]);
+
   const visibleGroupsBySection = useMemo(() => {
     if (!schema?.groups) return [] as Array<{ name: string; groups: GroupConfig[] }>;
 
     const groups = schema.groups as GroupConfig[];
     const sectionMap: Record<string, GroupConfig[]> = {};
 
-    const visibleGroups = groups.filter((group) => isVisible(group.visibility as VisibilityRule, productsData));
+    const visibleGroups = groups
+      .filter((group) => isVisible(group.visibility as VisibilityRule, productsData))
+      .filter((group) => {
+        const sectionName = group.uiSection || 'Other';
+        if (sectionName !== RESTRICTIONS_SECTION_NAME) return true;
+        // Phase 3 UI: show Restrictions via a single control block (selector/textarea), hide legacy RST groups.
+        return group.id === RESTRICTIONS_CONTROL_GROUP_ID;
+      });
 
     visibleGroups.forEach((group) => {
       const name = group.uiSection || 'Other';
@@ -464,78 +587,222 @@ export function ProductsTab() {
       sectionMap[name].push(group);
     });
 
-    return Object.entries(sectionMap).map(([name, groups]) => ({ name, groups }));
+    return Object.entries(sectionMap)
+      .filter(([name]) => !UNIFIED_MATRIX_SECTION_NAMES.has(name))
+      .map(([name, groups]) => ({ name, groups }));
   }, [schema, productsData]);
+
+  const unifiedMatrixByFieldName = useMemo(() => {
+    const groups = (schema?.groups as GroupConfig[]) || [];
+    const map: Record<
+      string,
+      { group: GroupConfig; field: FieldConfig; tabLabel: string; licenseFieldName: string }
+    > = {};
+
+    for (const tab of UNIFIED_MATRIX_TABS) {
+      const group = groups.find((g) =>
+        (g.fields || []).some((f) => f.fieldName === tab.matrixFieldName)
+      );
+      const field = group?.fields?.find((f) => f.fieldName === tab.matrixFieldName);
+      if (group && field) {
+        map[tab.matrixFieldName] = {
+          group,
+          field,
+          tabLabel: tab.tabLabel,
+          licenseFieldName: tab.licenseFieldName,
+        };
+      }
+    }
+
+    return map;
+  }, [schema]);
+
+  const visibleUnifiedMatrixTab = useMemo(() => {
+    for (const t of UNIFIED_MATRIX_TABS) {
+      const matrix = unifiedMatrixByFieldName[t.matrixFieldName];
+      if (!matrix) continue;
+      if (!visibilityAnswers?.[t.licenseFieldName]) continue;
+      if (!isVisible(matrix.group.visibility as VisibilityRule, visibilityAnswers)) continue;
+      if (!isVisible(matrix.field.visibility as VisibilityRule, visibilityAnswers)) continue;
+      if (matrix.field.hidden) continue;
+      return { ...t, ...matrix };
+    }
+    return null;
+  }, [unifiedMatrixByFieldName, visibilityAnswers]);
+
+  useEffect(() => {
+    if (activeLicenseSubTab === 'categorySelection') return;
+    if (!visibleUnifiedMatrixTab || visibleUnifiedMatrixTab.subTabId !== activeLicenseSubTab) {
+      setActiveLicenseSubTab('categorySelection');
+    }
+  }, [activeLicenseSubTab, visibleUnifiedMatrixTab]);
 
   const sectionsForAccordion = useMemo(() => {
     return visibleGroupsBySection.map((section) => {
-      // Count regular fields
-      const regularFields = section.groups.flatMap(g => 
-        g.fields.filter((f) => !f.hidden && !f.readOnly && f.uiBlockType !== 'matrixAccordion')
-      );
-      const totalFields = regularFields.length;
-      const filledFields = regularFields.reduce((acc, f) => {
-        const v = productsData[f.fieldName];
-        const hasValue = v !== null && v !== undefined && v !== '' && (!Array.isArray(v) || v.length > 0) && (typeof v !== 'boolean' || v === true);
-        return acc + (hasValue ? 1 : 0);
-      }, 0);
+      const isAnswered = (field: FieldConfig, value: any): boolean => {
+        if (value === null || value === undefined) return false;
+
+        switch (field.fieldType) {
+          case 'Boolean':
+            return typeof value === 'boolean';
+          case 'Enum':
+            return typeof value === 'string' && value.trim().length > 0;
+          case 'MultiSelect':
+            return Array.isArray(value) && value.length > 0;
+          case 'Integer':
+            return typeof value === 'number' && Number.isFinite(value);
+          case 'Text':
+            return typeof value === 'string' && value.trim().length > 0;
+          default:
+            if (typeof value === 'boolean') return true;
+            if (Array.isArray(value)) return value.length > 0;
+            if (typeof value === 'number') return Number.isFinite(value);
+            if (typeof value === 'object') return Object.keys(value).length > 0;
+            return String(value).trim() !== '';
+        }
+      };
+
+      const isMandatoryField = (field: FieldConfig) => {
+        return (
+          field.mandatory === true ||
+          (Array.isArray(field.mandatory) && field.mandatory.length > 0) ||
+          (typeof field.mandatory === 'string' && field.mandatory.trim().length > 0)
+        );
+      };
+
+      let totalFields = 0;
+      let filledFields = 0;
+
+      if (section.name === RESTRICTIONS_SECTION_NAME) {
+        // Restrictions completion (Phase 3):
+        // - Count restriction_add_flag as answered when boolean.
+        // - If restriction_add_flag === true: count restriction_type, plus only the visible dependent field.
+        const addFlagValue = productsData?.restriction_add_flag;
+        const hasRestriction = addFlagValue === true;
+        const addFlagAnswered = typeof addFlagValue === 'boolean';
+        const restrictionType = normalizeRestrictionType(productsData?.restriction_type);
+
+        totalFields += 1;
+        filledFields += addFlagAnswered ? 1 : 0;
+
+        if (hasRestriction) {
+          totalFields += 1;
+          filledFields += restrictionType.trim().length > 0 ? 1 : 0;
+
+          if (restrictionType === 'Standard') {
+            totalFields += 1;
+            const selected = productsData?.restriction_standard_selection;
+            const answered = Array.isArray(selected) ? selected.length > 0 : false;
+            filledFields += answered ? 1 : 0;
+          } else if (restrictionType === 'Non-standard') {
+            totalFields += 1;
+            const text = productsData?.restriction_custom_text;
+            const answered = typeof text === 'string' && text.trim().length > 0;
+            filledFields += answered ? 1 : 0;
+          }
+        }
+      } else {
+        // Count regular fields
+        const regularFields = section.groups.flatMap(g =>
+          g.fields.filter((f) =>
+            !f.hidden &&
+            !f.readOnly &&
+            f.uiBlockType !== 'matrixAccordion' &&
+            isVisible(f.visibility as VisibilityRule, productsData)
+          )
+        );
+        totalFields = regularFields.length;
+        filledFields = regularFields.reduce((acc, f) => {
+          const v = productsData[f.fieldName];
+          return acc + (isAnswered(f, v) ? 1 : 0);
+        }, 0);
+      }
 
       // Calculate matrix field completion
       const matrixFields = section.groups.flatMap(g => 
-        g.fields.filter((f) => f.uiBlockType === 'matrixAccordion' && !f.hidden && !f.readOnly)
+        g.fields.filter((f) =>
+          f.uiBlockType === 'matrixAccordion' &&
+          !f.hidden &&
+          !f.readOnly &&
+          isVisible(f.visibility as VisibilityRule, productsData)
+        )
       );
 
       let totalMatrixCells = 0;
       let filledMatrixCells = 0;
 
-      matrixFields.forEach((field) => {
-        const matrixValue = productsData[field.fieldName] as MatrixValue | undefined;
-        const matrixConfig = field.matrixConfig;
-        
-        if (matrixConfig) {
-          // Count applicable cells
-          if (matrixConfig.applicableCells) {
-            // Partial matrix: count only applicable cells
-            Object.entries(matrixConfig.applicableCells).forEach(([rowKey, colKeys]) => {
-              totalMatrixCells += colKeys.length;
-              colKeys.forEach((colKey) => {
-                if (matrixValue?.[rowKey]?.[colKey] !== undefined) {
-                  filledMatrixCells++;
-                }
-              });
+      const countMatrix = (matrixValue: MatrixValue | undefined, matrixConfig: any) => {
+        if (!matrixConfig) return;
+
+        if (matrixConfig.applicableCells) {
+          Object.entries(matrixConfig.applicableCells).forEach(([rowKey, colKeys]) => {
+            totalMatrixCells += (colKeys as string[]).length;
+            (colKeys as string[]).forEach((colKey) => {
+              if (typeof matrixValue?.[rowKey]?.[colKey] === 'boolean') {
+                filledMatrixCells++;
+              }
             });
-          } else {
-            // Full matrix: count all row × column combinations
-            const rows = matrixConfig.rowLabels || [];
-            const cols = matrixConfig.columnLabels || [];
-            totalMatrixCells += rows.length * cols.length;
-            rows.forEach((row) => {
-              cols.forEach((col) => {
-                if (matrixValue?.[row.key]?.[col.key] !== undefined) {
-                  filledMatrixCells++;
-                }
-              });
-            });
-          }
+          });
+          return;
         }
+
+        const rows = matrixConfig.rowLabels || [];
+        const cols = matrixConfig.columnLabels || [];
+        totalMatrixCells += rows.length * cols.length;
+        rows.forEach((row: any) => {
+          cols.forEach((col: any) => {
+            if (typeof matrixValue?.[row.key]?.[col.key] === 'boolean') {
+              filledMatrixCells++;
+            }
+          });
+        });
+      };
+
+      matrixFields.forEach((field) => {
+        countMatrix(productsData[field.fieldName] as MatrixValue | undefined, field.matrixConfig);
       });
+
+      // Matrices are rendered under License Category tabs.
+      // Keep License Category section completion intuitive by counting visible unified matrix cells.
+      if (section.name === 'License Category') {
+        UNIFIED_MATRIX_TABS.forEach((t) => {
+          if (!productsData?.[t.licenseFieldName]) return;
+          const matrix = unifiedMatrixByFieldName[t.matrixFieldName];
+          if (!matrix) return;
+          if (!isVisible(matrix.group.visibility as VisibilityRule, productsData)) return;
+          if (!isVisible(matrix.field.visibility as VisibilityRule, productsData)) return;
+          countMatrix(
+            productsData[t.matrixFieldName] as MatrixValue | undefined,
+            (matrix.field as any).matrixConfig
+          );
+        });
+      }
 
       // Combine regular fields and matrix cells for total completion
       const totalAllFields = totalFields + totalMatrixCells;
       const filledAllFields = filledFields + filledMatrixCells;
       const completion = totalAllFields > 0 ? Math.round((filledAllFields / totalAllFields) * 100) : 0;
+
+      const hasRequiredFields = section.groups.some((group) => {
+        if (!isVisible(group.visibility as VisibilityRule, productsData)) return false;
+        return (group.fields || []).some((f) => {
+          if (f.hidden || f.readOnly) return false;
+          if (!isVisible(f.visibility as VisibilityRule, productsData)) return false;
+          return isMandatoryField(f);
+        });
+      });
       
       return {
         id: section.name,
         title: section.name,
         completion,
         mandatoryCompletion: completion,
-        // Hide required/optional pill for Products; keep data for completion only
-        isRequired: undefined,
+        // Show "Required" only when the schema marks something as mandatory; otherwise show no pill.
+        isRequired: hasRequiredFields ? true : undefined,
         hasMissingMandatory: false,
       };
     });
-  }, [visibleGroupsBySection, productsData]);
+  }, [visibleGroupsBySection, productsData, unifiedMatrixByFieldName]);
 
   const handleEditGroup = (group: GroupConfig) => {
     const groupData: Record<string, any> = {};
@@ -545,12 +812,59 @@ export function ProductsTab() {
         setMatrixDrafts((prev) => ({ ...prev, [field.fieldName]: (val as MatrixValue) || {} }));
       } else {
         const value = productsData[field.fieldName];
-        groupData[field.fieldName] =
-          field.fieldType === 'Boolean'
-            ? (typeof value === 'boolean' ? value : undefined)
-            : value ?? '';
+        if (field.fieldType === 'Boolean') {
+          if (group.id === LICENSE_CATEGORY_GROUP_ID) {
+            groupData[field.fieldName] = Boolean(value);
+            return;
+          }
+          groupData[field.fieldName] = typeof value === 'boolean' ? value : undefined;
+          return;
+        }
+
+        if (field.fieldType === 'MultiSelect') {
+          if (Array.isArray(value)) {
+            groupData[field.fieldName] = value;
+            return;
+          }
+          if (typeof value === 'string') {
+            try {
+              const parsed = JSON.parse(value);
+              groupData[field.fieldName] = Array.isArray(parsed) ? parsed : [];
+              return;
+            } catch {
+              groupData[field.fieldName] = [];
+              return;
+            }
+          }
+          groupData[field.fieldName] = [];
+          return;
+        }
+
+        if (field.fieldType === 'Integer') {
+          if (typeof value === 'number' && Number.isFinite(value)) {
+            groupData[field.fieldName] = value;
+            return;
+          }
+          if (typeof value === 'string' && value.trim() !== '') {
+            const n = Number(value);
+            groupData[field.fieldName] = Number.isFinite(n) ? Math.trunc(n) : null;
+            return;
+          }
+          groupData[field.fieldName] = null;
+          return;
+        }
+
+        // Enum/Text/other scalar types default to string (or empty string)
+        groupData[field.fieldName] = value ?? '';
       }
     });
+
+    if (group.id === RESTRICTIONS_CONTROL_GROUP_ID) {
+      groupData.restriction_type = normalizeRestrictionType(productsData?.restriction_type ?? '');
+      groupData.restriction_custom_text =
+        typeof productsData?.restriction_custom_text === 'string' ? productsData.restriction_custom_text : '';
+    }
+
     setEditingBlockId(group.id);
     setEditingData(groupData);
   };
@@ -564,6 +878,66 @@ export function ProductsTab() {
   const handleSaveGroup = async (group: GroupConfig, dataToSave: Record<string, any>) => {
     const payload = { ...dataToSave, _groupId: group.id };
     await updateMutation.mutateAsync(payload);
+  };
+
+  const beginEditMatrix = (blockId: string, fieldName: string, currentValue: MatrixValue) => {
+    setEditingBlockId(blockId);
+    setMatrixDrafts((prev) => ({ ...prev, [fieldName]: currentValue }));
+  };
+
+  const requestEditMatrix = (blockId: string, fieldName: string, currentValue: MatrixValue) => {
+    if (hasUnsavedLicenseCategoryChanges) {
+      setPendingMatrixEdit({ blockId, fieldName, currentValue });
+      setUnsavedLicenseDialogOpen(true);
+      return;
+    }
+    beginEditMatrix(blockId, fieldName, currentValue);
+  };
+
+  const handleUnsavedLicenseDialogSaveAndContinue = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+    if (!pendingMatrixEdit) return;
+
+    if (!licenseCategoryGroupForSave) {
+      toast.error('Unable to save License Category changes', {
+        description: 'Category Selection configuration is missing.',
+        className: 'bg-red-50 border-red-200 text-red-800',
+        style: {
+          backgroundColor: '#fef2f2',
+          borderColor: '#fecaca',
+          color: '#991b1b',
+        },
+      });
+      return;
+    }
+
+    setResolvingUnsavedLicenseDialog(true);
+    const pending = pendingMatrixEdit;
+    try {
+      await handleSaveGroup(licenseCategoryGroupForSave, editingData);
+      setUnsavedLicenseDialogOpen(false);
+      setPendingMatrixEdit(null);
+      beginEditMatrix(pending.blockId, pending.fieldName, pending.currentValue);
+    } catch {
+      // Errors/toasts handled by mutation onError.
+    } finally {
+      setResolvingUnsavedLicenseDialog(false);
+    }
+  };
+
+  const handleUnsavedLicenseDialogDiscardAndContinue = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+    if (!pendingMatrixEdit) return;
+
+    const pending = pendingMatrixEdit;
+    handleCancelEdit();
+    setUnsavedLicenseDialogOpen(false);
+    setPendingMatrixEdit(null);
+    beginEditMatrix(pending.blockId, pending.fieldName, pending.currentValue);
   };
 
   const handleSaveMatrix = async (group: GroupConfig, field: FieldConfig) => {
@@ -581,7 +955,12 @@ export function ProductsTab() {
       [field.fieldName]: matrixValue,
       _groupId: group.id,
     };
-    await updateMutation.mutateAsync(payload);
+    setSavingMatrixFieldName(field.fieldName);
+    try {
+      await updateMutation.mutateAsync(payload);
+    } finally {
+      setSavingMatrixFieldName(null);
+    }
   };
 
   if (isLoading) {
@@ -625,6 +1004,349 @@ export function ProductsTab() {
 
   const renderSimpleBlock = (group: GroupConfig, simpleFields: FieldConfig[]) => {
     const isEditing = editingBlockId === group.id;
+
+    if (group.id === LICENSE_CATEGORY_GROUP_ID) {
+      const fields = simpleFields.filter((f) => f.fieldType === 'Boolean');
+      const selectedFieldName =
+        fields.find((f) => editingData?.[f.fieldName] === true)?.fieldName ||
+        fields.find((f) => productsData?.[f.fieldName] === true)?.fieldName ||
+        '';
+
+        if (isEditing) {
+          const handleSelect = (fieldName: string) => {
+            const next: Record<string, boolean> = {};
+            fields.forEach((f) => {
+              next[f.fieldName] = f.fieldName === fieldName;
+            });
+            setEditingData(next);
+          };
+
+        return (
+          <div className="space-y-4">
+            <div className="space-y-2">
+              {fields.map((field) => (
+                <label key={field.id} className="flex items-center gap-2 text-sm text-gray-800">
+                  <input
+                    type="radio"
+                    name="license-category"
+                    className="h-4 w-4"
+                    checked={selectedFieldName === field.fieldName}
+                    onChange={() => handleSelect(field.fieldName)}
+                    disabled={isReadOnly || updateMutation.isPending}
+                  />
+                  <span>{field.label}</span>
+                </label>
+              ))}
+            </div>
+            <div className="flex gap-2 pt-2 border-t border-gray-100">
+              <button
+                type="button"
+                onClick={() => handleSaveGroup(group, editingData)}
+                disabled={isReadOnly || updateMutation.isPending || !selectedFieldName}
+                className="px-4 py-2 text-sm font-medium text-white rounded"
+                style={{ backgroundColor: '#9b1823', opacity: updateMutation.isPending ? 0.7 : 1 }}
+              >
+                <span className="inline-flex items-center">
+                  {updateMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {updateMutation.isPending ? 'Saving...' : 'Save'}
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={handleCancelEdit}
+                disabled={updateMutation.isPending}
+                className="px-4 py-2 text-sm font-medium text-gray-600 rounded border border-gray-300"
+                style={{ opacity: updateMutation.isPending ? 0.7 : 1 }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      const selectedLabel = fields.find((f) => f.fieldName === selectedFieldName)?.label || '-';
+      return (
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+            <label className="text-sm font-medium text-gray-700 sm:w-1/3 sm:pt-2">
+              Selected Category
+            </label>
+            <div className="flex-1 text-sm text-gray-900">{selectedLabel}</div>
+          </div>
+          {!isReadOnly && (
+            <div className="pt-2 border-t border-gray-100">
+              <button
+                type="button"
+                onClick={() => handleEditGroup(group)}
+                className="px-4 py-2 text-sm font-medium text-white rounded"
+                style={{ backgroundColor: '#9b1823' }}
+              >
+                Edit
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    if (group.id === RESTRICTIONS_CONTROL_GROUP_ID) {
+      const addFlagValue = isEditing ? editingData?.restriction_add_flag : productsData?.restriction_add_flag;
+      const hasRestriction = addFlagValue === true;
+      const restrictionType = normalizeRestrictionType(
+        isEditing ? editingData?.restriction_type : productsData?.restriction_type
+      );
+
+      const getStandardSelection = (source: Record<string, any>) => {
+        const selected = source?.restriction_standard_selection;
+        if (Array.isArray(selected)) return selected as string[];
+        return [];
+      };
+
+      const getCustomText = (source: Record<string, any>) => {
+        const v = source?.restriction_custom_text;
+        return typeof v === 'string' ? v : '';
+      };
+
+      const renderDisplayRow = (label: string, value: React.ReactNode) => (
+        <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+          <label className="text-sm font-medium text-gray-700 sm:w-1/3 sm:pt-2">{label}</label>
+          <div className="flex-1 text-sm text-gray-900">{value}</div>
+        </div>
+      );
+
+      if (!isEditing) {
+        const selected = getStandardSelection(productsData);
+        const selectedLabels = selected
+          .map((v) => RESTRICTION_STANDARD_OPTIONS.find((o) => o.value === v)?.label ?? v)
+          .filter(Boolean);
+
+        const dependentValue =
+          hasRestriction && restrictionType === 'Standard'
+            ? selectedLabels.length > 0
+              ? selectedLabels.join(', ')
+              : '-'
+            : hasRestriction && restrictionType === 'Non-standard'
+              ? (getCustomText(productsData).trim() ? getCustomText(productsData) : '-')
+              : null;
+
+        return (
+          <div className="space-y-4">
+            {renderDisplayRow('Do you want to add a Restriction?', addFlagValue === true ? 'Yes' : addFlagValue === false ? 'No' : '-')}
+            {hasRestriction && renderDisplayRow('Standard or Non-standard Restriction?', restrictionType || '-')}
+            {dependentValue !== null &&
+              renderDisplayRow(
+                restrictionType === 'Standard'
+                  ? 'Please select the standard Restriction(s) required'
+                  : 'Please add the proposed non-standard Restriction',
+                dependentValue
+              )}
+
+            {!isReadOnly && (
+              <div className="pt-2 border-t border-gray-100">
+                <button
+                  type="button"
+                  onClick={() => handleEditGroup(group)}
+                  className="px-4 py-2 text-sm font-medium text-white rounded"
+                  style={{ backgroundColor: '#9b1823' }}
+                >
+                  Edit
+                </button>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      // Edit mode (custom)
+      const selected = getStandardSelection(editingData);
+      const customText = getCustomText(editingData);
+
+      const setAddFlag = (next: boolean) => {
+        setEditingData((prev) => {
+          if (!next) {
+            return {
+              ...prev,
+              restriction_add_flag: false,
+              restriction_type: '',
+              restriction_standard_selection: [],
+              restriction_custom_text: '',
+            };
+          }
+          return { ...prev, restriction_add_flag: true };
+        });
+      };
+
+      const setRestrictionType = (next: string) => {
+        const normalized = normalizeRestrictionType(next);
+        setEditingData((prev) => {
+          if (normalized === 'Standard') {
+            return { ...prev, restriction_type: 'Standard', restriction_custom_text: '' };
+          }
+          if (normalized === 'Non-standard') {
+            return { ...prev, restriction_type: 'Non-standard', restriction_standard_selection: [] };
+          }
+          return { ...prev, restriction_type: normalized };
+        });
+      };
+
+      const toggleStandardCode = (code: string, checked: boolean) => {
+        setEditingData((prev) => {
+          const current: string[] = Array.isArray(prev.restriction_standard_selection)
+            ? prev.restriction_standard_selection
+            : [];
+          const next = checked
+            ? Array.from(new Set([...current, code]))
+            : current.filter((v) => v !== code);
+          return { ...prev, restriction_standard_selection: next };
+        });
+      };
+
+      const handleSaveRestrictions = async () => {
+        const currentAddFlag = editingData?.restriction_add_flag === true;
+        const type = normalizeRestrictionType(editingData?.restriction_type);
+
+        // IMPORTANT:
+        // - The backend enforces group-scoped field allowlists for Products updates.
+        // - restriction_custom_text belongs to a different group than restriction_add_flag/restriction_type.
+        // - To keep a single Save action and still persist/clear conflicting values, send this update without _groupId.
+        const payload: Record<string, any> = {};
+
+        payload.restriction_add_flag = currentAddFlag;
+
+        if (!currentAddFlag) {
+          payload.restriction_type = '';
+          payload.restriction_standard_selection = [];
+          payload.restriction_custom_text = '';
+        } else {
+          payload.restriction_type = type;
+          if (type === 'Standard') {
+            payload.restriction_standard_selection = selected;
+            payload.restriction_custom_text = '';
+          } else if (type === 'Non-standard') {
+            payload.restriction_standard_selection = [];
+            payload.restriction_custom_text = customText;
+          } else {
+            payload.restriction_standard_selection = [];
+            payload.restriction_custom_text = '';
+          }
+        }
+
+        await updateMutation.mutateAsync(payload);
+      };
+
+      return (
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+            <label className="text-sm font-medium text-gray-700 sm:w-1/3 sm:pt-2">
+              Do you want to add a Restriction?
+            </label>
+            <div className="flex-1">
+              <label className="inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={editingData?.restriction_add_flag === true}
+                  onChange={(e) => setAddFlag(e.target.checked)}
+                  disabled={isReadOnly || updateMutation.isPending}
+                  className="h-4 w-4 text-red-800 focus:ring-red-800 rounded border-gray-300 cursor-pointer disabled:cursor-not-allowed"
+                />
+              </label>
+            </div>
+          </div>
+
+          {hasRestriction && (
+            <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+              <label className="text-sm font-medium text-gray-700 sm:w-1/3 sm:pt-2">
+                Standard or Non-standard Restriction?
+              </label>
+              <div className="flex-1">
+                <select
+                  value={restrictionType}
+                  onChange={(e) => setRestrictionType(e.target.value)}
+                  disabled={isReadOnly || updateMutation.isPending}
+                  className="w-full text-sm border rounded px-3 py-2 min-h-[44px] border-gray-300"
+                >
+                  <option value="">Select an option</option>
+                  {RESTRICTION_TYPE_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )}
+
+          {hasRestriction && restrictionType === 'Standard' && (
+            <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+              <label className="text-sm font-medium text-gray-700 sm:w-1/3 sm:pt-2">
+                Please select the standard Restriction(s) required
+              </label>
+              <div className="flex-1 space-y-2">
+                {RESTRICTION_STANDARD_OPTIONS.map((opt) => {
+                  const checked = selected.includes(opt.value);
+                  return (
+                    <label key={opt.value} className="flex items-center gap-2 text-sm text-gray-700">
+                      <input
+                        type="checkbox"
+                        className="h-4 w-4 text-red-800 focus:ring-red-800 rounded border-gray-300"
+                        checked={checked}
+                        disabled={isReadOnly || updateMutation.isPending}
+                        onChange={(e) => toggleStandardCode(opt.value, e.target.checked)}
+                      />
+                      <span>{opt.label}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {hasRestriction && restrictionType === 'Non-standard' && (
+            <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+              <label className="text-sm font-medium text-gray-700 sm:w-1/3 sm:pt-2">
+                Please add the proposed non-standard Restriction
+              </label>
+              <div className="flex-1">
+                <textarea
+                  value={customText}
+                  onChange={(e) =>
+                    setEditingData((prev) => ({ ...prev, restriction_custom_text: e.target.value }))
+                  }
+                  disabled={isReadOnly || updateMutation.isPending}
+                  placeholder="Enter the proposed restriction"
+                  className="w-full text-sm border rounded px-3 py-2 min-h-[120px] border-gray-300"
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="flex gap-2 pt-2 border-t border-gray-100">
+            <button
+              type="button"
+              onClick={handleSaveRestrictions}
+              disabled={isReadOnly || updateMutation.isPending}
+              className="px-4 py-2 text-sm font-medium text-white rounded"
+              style={{ backgroundColor: '#9b1823', opacity: updateMutation.isPending ? 0.7 : 1 }}
+            >
+              <span className="inline-flex items-center">
+                {updateMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {updateMutation.isPending ? 'Saving...' : 'Save'}
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={handleCancelEdit}
+              disabled={updateMutation.isPending}
+              className="px-4 py-2 text-sm font-medium text-gray-600 rounded border border-gray-300"
+              style={{ opacity: updateMutation.isPending ? 0.7 : 1 }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      );
+    }
 
     if (isEditing) {
       return (
@@ -695,6 +1417,7 @@ export function ProductsTab() {
     // After save, drafts are cleared, so we should see saved value
     const currentValue = matrixDrafts[field.fieldName] ?? savedValue;
     const canEdit = !isReadOnly && editingBlockId === blockId;
+    const isSavingThisMatrix = updateMutation.isPending && savingMatrixFieldName === field.fieldName;
     const matrixConfig = field.matrixConfig || {};
     
     // Debug: Log matrix value loading for all matrices
@@ -716,17 +1439,19 @@ export function ProductsTab() {
     return (
       <div key={field.id} className="space-y-3">
         <div className="text-base font-semibold text-gray-900">{field.label}</div>
-        <MatrixField
-          label=""
-          fieldName={field.fieldName}
-          matrixDimensions={field.matrixDimensions}
-          rowLabels={matrixConfig.rowLabels}
-          columnLabels={matrixConfig.columnLabels}
-          applicableCells={matrixConfig.applicableCells}
-          value={currentValue}
-          onChange={(next) => setMatrixDrafts((prev) => ({ ...prev, [field.fieldName]: next }))}
-          readOnly={isReadOnly || !canEdit}
-        />
+        <div className={isSavingThisMatrix ? 'opacity-70 pointer-events-none' : undefined} aria-busy={isSavingThisMatrix}>
+          <MatrixField
+            label=""
+            fieldName={field.fieldName}
+            matrixDimensions={field.matrixDimensions}
+            rowLabels={matrixConfig.rowLabels}
+            columnLabels={matrixConfig.columnLabels}
+            applicableCells={matrixConfig.applicableCells}
+            value={currentValue}
+            onChange={(next) => setMatrixDrafts((prev) => ({ ...prev, [field.fieldName]: next }))}
+            readOnly={isReadOnly || !canEdit}
+          />
+        </div>
         {!isReadOnly && (
           <div className="flex gap-2">
             {canEdit ? (
@@ -734,15 +1459,21 @@ export function ProductsTab() {
                 <button
                   type="button"
                   onClick={() => handleSaveMatrix(group, field)}
+                  disabled={isSavingThisMatrix}
                   className="px-4 py-2 text-sm font-medium text-white rounded"
-                  style={{ backgroundColor: '#9b1823' }}
+                  style={{ backgroundColor: '#9b1823', opacity: isSavingThisMatrix ? 0.7 : 1 }}
                 >
-                  Save
+                  <span className="inline-flex items-center">
+                    {isSavingThisMatrix && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    {isSavingThisMatrix ? 'Saving...' : 'Save'}
+                  </span>
                 </button>
                 <button
                   type="button"
                   onClick={handleCancelEdit}
+                  disabled={isSavingThisMatrix}
                   className="px-4 py-2 text-sm font-medium text-gray-600 rounded border border-gray-300"
+                  style={{ opacity: isSavingThisMatrix ? 0.7 : 1 }}
                 >
                   Cancel
                 </button>
@@ -751,11 +1482,11 @@ export function ProductsTab() {
               <button
                 type="button"
                 onClick={() => {
-                  setEditingBlockId(blockId);
-                  setMatrixDrafts((prev) => ({ ...prev, [field.fieldName]: currentValue }));
+                  requestEditMatrix(blockId, field.fieldName, currentValue);
                 }}
+                disabled={updateMutation.isPending}
                 className="px-4 py-2 text-sm font-medium text-white rounded"
-                style={{ backgroundColor: '#9b1823' }}
+                style={{ backgroundColor: '#9b1823', opacity: updateMutation.isPending ? 0.7 : 1 }}
               >
                 Edit
               </button>
@@ -768,100 +1499,134 @@ export function ProductsTab() {
 
   return (
     <div className="space-y-6">
+      <AlertDialog
+        open={unsavedLicenseDialogOpen}
+        onOpenChange={(open) => {
+          if (!open) {
+            setUnsavedLicenseDialogOpen(false);
+            setPendingMatrixEdit(null);
+            setResolvingUnsavedLicenseDialog(false);
+          }
+        }}
+      >
+        <AlertDialogContent className="bg-white text-slate-900 shadow-lg">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Unsaved changes</AlertDialogTitle>
+            <AlertDialogDescription>
+              You have unsaved License Category selections. Save them before editing the matrix?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={resolvingUnsavedLicenseDialog || updateMutation.isPending}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleUnsavedLicenseDialogDiscardAndContinue}
+              disabled={resolvingUnsavedLicenseDialog || updateMutation.isPending || !pendingMatrixEdit}
+              className="border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+            >
+              Discard & Continue
+            </AlertDialogAction>
+            <AlertDialogAction
+              onClick={handleUnsavedLicenseDialogSaveAndContinue}
+              disabled={resolvingUnsavedLicenseDialog || updateMutation.isPending || !pendingMatrixEdit}
+              className="text-white"
+              style={{ backgroundColor: '#9b1823', opacity: resolvingUnsavedLicenseDialog ? 0.7 : 1 }}
+            >
+              <span className="inline-flex items-center">
+                {resolvingUnsavedLicenseDialog && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Save & Continue
+              </span>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       {/* Sections Accordion */}
       <ProfileAccordion
         sections={sectionsForAccordion}
         defaultExpandedIndex={0}
-        renderHeader={(section) => (
-          <div className="flex flex-col sm:flex-row sm:items-center w-full">
-            <div className="flex items-center">
-              <h3 className="font-medium text-gray-700 mb-1 sm:mb-0 text-sm sm:text-base break-words">
-                {section.title}
-              </h3>
-              {/* Always show Required badge for Products */}
-              <span className="ml-2 flex items-center text-xs px-1.5 py-0.5 rounded-full text-amber-700 bg-amber-100">
-                <span className="w-2 h-2 rounded-full mr-1 flex-shrink-0 bg-current" />
-                <span className="truncate">Required</span>
-              </span>
-              {section.completion === 100 && (
-                <span className="ml-2 flex items-center text-xs px-1.5 py-0.5 rounded-full bg-green-100 text-green-700">
-                  <span className="w-2 h-2 rounded-full mr-1 flex-shrink-0 bg-current" />
-                  <span className="truncate">Complete</span>
-                </span>
-              )}
-            </div>
-            <div className="sm:ml-3 flex items-center mt-2 sm:mt-0">
-              <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                <div
-                  className={`h-full rounded-full ${
-                    section.completion === 100
-                      ? 'bg-green-500'
-                      : section.completion && section.completion >= 30
-                      ? 'bg-yellow-500'
-                      : 'bg-red-500'
-                  }`}
-                  style={{
-                    width: `${section.completion || 0}%`,
-                    backgroundColor:
-                      section.completion &&
-                      section.completion >= 70 &&
-                      section.completion < 100
-                        ? '#9b1823'
-                        : undefined,
-                  }}
-                  aria-valuenow={section.completion || 0}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  role="progressbar"
-                ></div>
-              </div>
-              <span className="ml-2 text-xs text-gray-500">{section.completion || 0}%</span>
-            </div>
-          </div>
-        )}
       >
         {(_section, sectionIndex) => {
           const sectionData = visibleGroupsBySection[sectionIndex];
           if (!sectionData) return null;
 
-          // Unified matrix allowlist
-          const UNIFIED_MATRIX_FIELDNAMES = new Set([
-            'banking_investment_activities_matrix',
-            'insurance_general_activities_matrix',
-            'insurance_life_activities_matrix',
-            'money_services_activities_matrix',
-          ]);
+          if (sectionData.name === 'License Category') {
+            const licenseGroup = sectionData.groups.find((g) => g.id === LICENSE_CATEGORY_GROUP_ID);
+            const licenseFields = (licenseGroup?.fields || []).filter(
+              (f) => !f.hidden && !f.readOnly && isVisible(f.visibility as VisibilityRule, visibilityAnswers)
+            );
 
-          // Check if unified matrix is visible in this section
-          const hasUnifiedMatrix = sectionData.groups.some(group => {
-            const fieldVisibility = (field: FieldConfig) => isVisible(field.visibility as VisibilityRule, productsData);
-            return group.fields.some(f => {
-              const isMatrixLike = f.uiBlockType === 'matrixAccordion' || 
-                (typeof f.fieldType === 'string' && f.fieldType.toLowerCase() === 'matrix');
-              return isMatrixLike && 
-                     f.fieldName && 
-                     UNIFIED_MATRIX_FIELDNAMES.has(f.fieldName) &&
-                     fieldVisibility(f) && 
-                     !f.hidden;
-            });
-          });
+            return (
+              <div className="space-y-4">
+                <div className="flex gap-2 border-b border-gray-200" role="tablist" aria-label="License Category">
+                  <button
+                    key="category-selection"
+                    type="button"
+                    className={`px-3 py-2 text-sm font-medium rounded-t ${
+                      activeLicenseSubTab === 'categorySelection'
+                        ? 'bg-white border border-b-0 border-gray-200 text-gray-900'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                    style={
+                      activeLicenseSubTab === 'categorySelection'
+                        ? { borderTopColor: '#9b1823', borderTopWidth: 2 }
+                        : undefined
+                    }
+                    onClick={() => setActiveLicenseSubTab('categorySelection')}
+                    role="tab"
+                    aria-selected={activeLicenseSubTab === 'categorySelection'}
+                  >
+                    Category Selection
+                  </button>
+
+                  {visibleUnifiedMatrixTab && (
+                    <button
+                      key={visibleUnifiedMatrixTab.matrixFieldName}
+                      type="button"
+                      className={`px-3 py-2 text-sm font-medium rounded-t ${
+                        activeLicenseSubTab === visibleUnifiedMatrixTab.subTabId
+                          ? 'bg-white border border-b-0 border-gray-200 text-gray-900'
+                          : 'text-gray-600 hover:text-gray-900'
+                      }`}
+                      style={
+                        activeLicenseSubTab === visibleUnifiedMatrixTab.subTabId
+                          ? { borderTopColor: '#9b1823', borderTopWidth: 2 }
+                          : undefined
+                      }
+                      onClick={() => setActiveLicenseSubTab(visibleUnifiedMatrixTab.subTabId)}
+                      role="tab"
+                      aria-selected={activeLicenseSubTab === visibleUnifiedMatrixTab.subTabId}
+                    >
+                      {visibleUnifiedMatrixTab.tabLabel}
+                    </button>
+                  )}
+                </div>
+
+                {activeLicenseSubTab === 'categorySelection' && licenseGroup && (
+                  <div className="space-y-4">
+                    <div className="text-base font-semibold text-gray-900">{licenseGroup.groupName}</div>
+                    {renderSimpleBlock({ ...licenseGroup, fields: licenseFields }, licenseFields)}
+                  </div>
+                )}
+
+                {visibleUnifiedMatrixTab && activeLicenseSubTab === visibleUnifiedMatrixTab.subTabId && (
+                  <div className="space-y-4 bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    {renderMatrixBlock(visibleUnifiedMatrixTab.group, visibleUnifiedMatrixTab.field)}
+                  </div>
+                )}
+              </div>
+            );
+          }
 
           const renderGroups = sectionData.groups
             .filter((group) => isVisible(group.visibility as VisibilityRule, productsData))
             .flatMap((group) => {
               const fieldVisibility = (field: FieldConfig) => isVisible(field.visibility as VisibilityRule, productsData);
               
-              // Filter matrix fields: only allow unified matrices
-              const matrixFields = group.fields.filter((f) => {
-                const isMatrixLike = f.uiBlockType === 'matrixAccordion' || 
-                  (typeof f.fieldType === 'string' && f.fieldType.toLowerCase() === 'matrix');
-                
-                if (!isMatrixLike) return false;
-                if (!fieldVisibility(f) || f.hidden) return false;
-                if (!f.fieldName) return false;
-                
-                return UNIFIED_MATRIX_FIELDNAMES.has(f.fieldName);
-              });
+              const matrixFields: FieldConfig[] = [];
 
               // Filter simple fields, but hide old boolean lists when unified matrix is present
               const simpleFields = group.fields.filter((f) => {
@@ -870,23 +1635,7 @@ export function ProductsTab() {
                   return false;
                 }
                 if (!fieldVisibility(f) || f.hidden) return false;
-                
-                // Hide old Banking & Investment activity/investment type boolean fields when unified matrix exists
-                if (hasUnifiedMatrix && 
-                    (sectionData.name === 'Banking & Investment' || 
-                     (group as any).uiSection === 'Banking & Investment' ||
-                     (group as any).section === 'Banking & Investment')) {
-                  // Hide "Investment Types" group
-                  if ((group as any).groupName === 'Investment Types') {
-                    return false;
-                  }
-                  // Hide any group that looks like old activities list (but keep "Activities Matrix" which is the unified one)
-                  if ((group as any).groupName === 'Activities' && 
-                      !group.fields.some(f => f.fieldName === 'banking_investment_activities_matrix')) {
-                    return false;
-                  }
-                }
-                
+
                 return true;
               });
 
@@ -894,9 +1643,6 @@ export function ProductsTab() {
               if (simpleFields.length > 0) {
                 blocks.push({ type: 'simple', key: `${group.id}-simple`, group: { ...group, fields: simpleFields }, fields: simpleFields });
               }
-              matrixFields.forEach((field) => {
-                blocks.push({ type: 'matrix', key: `${group.id}-${field.id}`, group, field });
-              });
               return blocks;
             });
 
