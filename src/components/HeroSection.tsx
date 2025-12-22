@@ -107,7 +107,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
           {/* Headline with animated text */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-6 leading-tight">
             <AnimatedText
-              text="DFSA Authorisation Application Support"
+              text="DFSA - The independent regulator of financial services "
               gap="0.5rem"
             />
           </h1>
@@ -115,9 +115,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
           {/* Subheadline */}
           <FadeInUpOnScroll delay={0.8}>
             <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto font-body">
-              Structured documentation preparation services for financial
-              services firms pursuing authorisation in the Dubai International
-              Financial Centre.
+              conducted in or from the DIFC
             </p>
           </FadeInUpOnScroll>
 
@@ -129,7 +127,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
                 <div className="p-2 flex items-center">
                   <input
                     type="text"
-                    placeholder="Ask how to grow your business in Abu Dhabi..."
+                    placeholder="Ask about financial services authorisation in the DIFC..."
                     className="flex-grow px-4 py-3 text-gray-700 outline-none text-lg bg-transparent"
                     onFocus={() => setIsExpanded(true)}
                   />
@@ -163,8 +161,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
 
               {/* Click outside to collapse */}
               {isExpanded && (
-                <div 
-                  className="fixed inset-0 z-[-1]" 
+                <div
+                  className="fixed inset-0 z-[-1]"
                   onClick={() => setIsExpanded(false)}
                 />
               )}
@@ -201,7 +199,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
         </StaggeredFadeIn>
 
         {/* Trust Indicators */}
-        <FadeInUpOnScroll delay={1.6}>
+        {/* <FadeInUpOnScroll delay={1.6}>
           <div className="mt-12 flex flex-wrap justify-center gap-6 text-white/70 text-sm">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-dfsa-teal rounded-full"></div>
@@ -216,7 +214,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
               <span>DFSA Determines All Authorisation Outcomes</span>
             </div>
           </div>
-        </FadeInUpOnScroll>
+        </FadeInUpOnScroll> */}
       </div>
 
       {/* Scroll indicator */}
