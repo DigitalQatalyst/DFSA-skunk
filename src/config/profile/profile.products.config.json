@@ -1,0 +1,1219 @@
+{
+  "tabs": [
+    {
+      "id": "products",
+      "title": "Products & Services",
+      "groups": [
+        {
+          "id": "license_category_license_category_q98_category_selection",
+          "uiSection": "License Category",
+          "section": "License Category",
+          "groupName": "Category Selection",
+          "fields": [
+            {
+              "id": "products.license_category_financial_services",
+              "label": "Financial Services (Banking & Investment)",
+              "fieldName": "license_category_financial_services",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.license_category_insurance_general",
+              "label": "Insurance Business - General",
+              "fieldName": "license_category_insurance_general",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.license_category_insurance_life",
+              "label": "Insurance Business - Life",
+              "fieldName": "license_category_insurance_life",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.license_category_emps",
+              "label": "Employee Money Purchase Scheme (EMPS)",
+              "fieldName": "license_category_emps",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.license_category_money_services",
+              "label": "Money Services Business",
+              "fieldName": "license_category_money_services",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.license_category_cra",
+              "label": "Operating a Credit Rating Agency",
+              "fieldName": "license_category_cra",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.license_category_ats",
+              "label": "Operating an Alternative Trading System",
+              "fieldName": "license_category_ats",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.license_category_pcc",
+              "label": "Protected Cell Company",
+              "fieldName": "license_category_pcc",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "banking_investment_q99_banking_investment_activities_matrix",
+          "uiSection": "Banking & Investment",
+          "section": "Banking & Investment",
+          "groupName": "Activities Matrix",
+          "fields": [
+            {
+              "id": "products.banking_investment_activities_matrix",
+              "label": "Please make all the required selections",
+              "fieldName": "banking_investment_activities_matrix",
+              "fieldType": "Matrix",
+              "uiBlockType": "matrixAccordion",
+              "visibility": {
+                "value": "Banking & Investment",
+                "source": "license_category",
+                "type": "includes"
+              },
+              "matrixConfig": {
+                "rowLabels": [
+                  { "key": "accepting_deposits", "label": "Accepting Deposits" },
+                  { "key": "advising_financial_products", "label": "Advising on Financial Products" },
+                  { "key": "arranging_credit", "label": "Arranging Credit and Advising on Credit" },
+                  { "key": "arranging_custody", "label": "Arranging Custody" },
+                  { "key": "arranging_deals", "label": "Arranging Deals in Investments" },
+                  { "key": "dealing_agent", "label": "Dealing in Investments as Agent" },
+                  { "key": "dealing_principal", "label": "Dealing in Investments as Principal" },
+                  { "key": "insurance_intermediation", "label": "Insurance Intermediation" },
+                  { "key": "insurance_management", "label": "Insurance Management" },
+                  { "key": "managing_cif", "label": "Managing a Collective Investment Fund" },
+                  { "key": "managing_psia", "label": "Managing a Profit Sharing Investment Account" },
+                  { "key": "managing_assets", "label": "Managing Assets" },
+                  { "key": "operating_clearing_house", "label": "Operating a Clearing House" },
+                  { "key": "operating_crowdfunding", "label": "Operating a Crowdfunding Platform" },
+                  { "key": "operating_exchange", "label": "Operating an Exchange" },
+                  { "key": "providing_credit", "label": "Providing Credit" },
+                  { "key": "providing_custody", "label": "Providing Custody" },
+                  { "key": "fund_administration", "label": "Providing Fund Administration" },
+                  { "key": "trust_services", "label": "Providing Trust Services" },
+                  { "key": "fund_trustee", "label": "Acting as the Trustee of a Fund" }
+                ],
+                "columnLabels": [
+                  { "key": "financial_service_only", "label": "Financial Service only" },
+                  { "key": "certificate", "label": "Certificate" },
+                  { "key": "debenture", "label": "Debenture" },
+                  { "key": "future", "label": "Future" },
+                  { "key": "option", "label": "Option" },
+                  { "key": "share", "label": "Share" },
+                  { "key": "ltic", "label": "Rights Under a LTIC*" },
+                  { "key": "structured_product", "label": "Structured Product" },
+                  { "key": "unit", "label": "Unit" },
+                  { "key": "warrant", "label": "Warrant" },
+                  { "key": "deposit", "label": "Deposit" },
+                  { "key": "psia", "label": "PSIA**" }
+                ],
+                "applicableCells": {
+                  "accepting_deposits": ["financial_service_only", "deposit"],
+                  "advising_financial_products": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant", "deposit", "psia"],
+                  "arranging_credit": ["financial_service_only"],
+                  "arranging_custody": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "arranging_deals": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "dealing_agent": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "dealing_principal": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "insurance_intermediation": ["financial_service_only"],
+                  "insurance_management": ["financial_service_only"],
+                  "managing_cif": ["financial_service_only"],
+                  "managing_psia": ["financial_service_only"],
+                  "managing_assets": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "operating_clearing_house": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "operating_crowdfunding": ["financial_service_only"],
+                  "operating_exchange": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "providing_credit": ["financial_service_only"],
+                  "providing_custody": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "fund_administration": ["financial_service_only"],
+                  "trust_services": ["financial_service_only"],
+                  "fund_trustee": ["financial_service_only"]
+                }
+              }
+            }
+          ],
+          "visibility": {
+            "type": "includes",
+            "source": "license_category",
+            "value": "Banking & Investment"
+          }
+        },
+        {
+          "id": "banking_investment_q99_banking_investment_investment_types_c1_c12",
+          "uiSection": "Banking & Investment",
+          "section": "Banking & Investment",
+          "groupName": "Investment Types",
+          "fields": [
+            {
+              "id": "products.investment_type_fs_only",
+              "label": "Financial Service Only (No Investment Type)",
+              "fieldName": "investment_type_fs_only",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "value": "Banking & Investment",
+                "source": "license_category",
+                "type": "includes"
+              }
+            },
+            {
+              "id": "products.investment_type_certificate",
+              "label": "Certificate",
+              "fieldName": "investment_type_certificate",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "value": "Banking & Investment",
+                "source": "license_category",
+                "type": "includes"
+              }
+            },
+            {
+              "id": "products.investment_type_debenture",
+              "label": "Debenture",
+              "fieldName": "investment_type_debenture",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "value": "Banking & Investment",
+                "source": "license_category",
+                "type": "includes"
+              }
+            },
+            {
+              "id": "products.investment_type_future",
+              "label": "Future",
+              "fieldName": "investment_type_future",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "value": "Banking & Investment",
+                "source": "license_category",
+                "type": "includes"
+              }
+            },
+            {
+              "id": "products.investment_type_option",
+              "label": "Option",
+              "fieldName": "investment_type_option",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "value": "Banking & Investment",
+                "source": "license_category",
+                "type": "includes"
+              }
+            },
+            {
+              "id": "products.investment_type_share",
+              "label": "Share",
+              "fieldName": "investment_type_share",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "value": "Banking & Investment",
+                "source": "license_category",
+                "type": "includes"
+              }
+            },
+            {
+              "id": "products.investment_type_ltic",
+              "label": "Rights Under a Long Term Insurance Contract",
+              "fieldName": "investment_type_ltic",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "value": "Banking & Investment",
+                "source": "license_category",
+                "type": "includes"
+              }
+            },
+            {
+              "id": "products.investment_type_structured_product",
+              "label": "Structured Product",
+              "fieldName": "investment_type_structured_product",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "value": "Banking & Investment",
+                "source": "license_category",
+                "type": "includes"
+              }
+            },
+            {
+              "id": "products.investment_type_unit",
+              "label": "Unit",
+              "fieldName": "investment_type_unit",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "value": "Banking & Investment",
+                "source": "license_category",
+                "type": "includes"
+              }
+            },
+            {
+              "id": "products.investment_type_warrant",
+              "label": "Warrant",
+              "fieldName": "investment_type_warrant",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "value": "Banking & Investment",
+                "source": "license_category",
+                "type": "includes"
+              }
+            },
+            {
+              "id": "products.investment_type_deposit",
+              "label": "Deposit",
+              "fieldName": "investment_type_deposit",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "value": "Banking & Investment",
+                "source": "license_category",
+                "type": "includes"
+              }
+            },
+            {
+              "id": "products.investment_type_psia",
+              "label": "Profit Sharing Investment Account (PSIA)",
+              "fieldName": "investment_type_psia",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "value": "Banking & Investment",
+                "source": "license_category",
+                "type": "includes"
+              }
+            }
+          ],
+          "visibility": {
+            "type": "includes",
+            "source": "license_category",
+            "value": "Banking & Investment"
+          }
+        },
+        {
+          "id": "insurance_general_q100_insurance_general_activities_matrix",
+          "uiSection": "Insurance General",
+          "section": "Insurance General",
+          "groupName": "Activities Matrix",
+          "fields": [
+            {
+              "id": "products.insurance_general_activities_matrix",
+              "label": "Please make all the required selections",
+              "fieldName": "insurance_general_activities_matrix",
+              "fieldType": "Matrix",
+              "uiBlockType": "matrixAccordion",
+              "visibility": {
+                "value": "Insurance General",
+                "source": "license_category",
+                "type": "includes"
+              },
+              "matrixConfig": {
+                "rowLabels": [
+                  { "key": "effecting_contracts", "label": "Effecting Contracts of Insurance" },
+                  { "key": "carrying_out_contracts", "label": "Carrying out Contracts of Insurance" }
+                ],
+                "columnLabels": [
+                  { "key": "class_1_accident", "label": "Class 1 - Accident" },
+                  { "key": "class_2_sickness", "label": "Class 2 - Sickness" },
+                  { "key": "class_3_land_vehicles", "label": "Class 3 - Land Vehicles" },
+                  { "key": "class_4_marine_aviation", "label": "Class 4 - Marine, Aviation and Transport" },
+                  { "key": "class_5_fire_property", "label": "Class 5 - Fire and Other Property Damage" },
+                  { "key": "class_6_liability", "label": "Class 6 - Liability" },
+                  { "key": "class_7a_credit", "label": "Class 7a - Credit" },
+                  { "key": "class_7b_suretyship", "label": "Class 7b - Suretyship" },
+                  { "key": "class_8_other", "label": "Class 8 - Other" }
+                ]
+              }
+            }
+          ],
+          "visibility": {
+            "type": "includes",
+            "source": "license_category",
+            "value": "Insurance General"
+          }
+        },
+        {
+          "id": "insurance_life_q101_insurance_life_activities_matrix",
+          "uiSection": "Insurance Life",
+          "section": "Insurance Life",
+          "groupName": "Activities Matrix",
+          "fields": [
+            {
+              "id": "products.insurance_life_activities_matrix",
+              "label": "Please make all the required selections",
+              "fieldName": "insurance_life_activities_matrix",
+              "fieldType": "Matrix",
+              "uiBlockType": "matrixAccordion",
+              "visibility": {
+                "value": "Insurance Life",
+                "source": "license_category",
+                "type": "includes"
+              },
+              "matrixConfig": {
+                "rowLabels": [
+                  { "key": "effecting_contracts", "label": "Effecting Contracts of Insurance" },
+                  { "key": "carrying_out_contracts", "label": "Carrying out Contracts of Insurance" }
+                ],
+                "columnLabels": [
+                  { "key": "class_i_life_annuity", "label": "Class I - Life and Annuity" },
+                  { "key": "class_ii_marriage_birth", "label": "Class II - Marriage and Birth" },
+                  { "key": "class_iii_linked_long_term", "label": "Class III - Linked Long Term" },
+                  { "key": "class_iv_permanent_health", "label": "Class IV - Permanent Health" },
+                  { "key": "class_v_tontines", "label": "Class V - Tontines" },
+                  { "key": "class_vi_capital_redemption", "label": "Class VI - Capital Redemption" },
+                  { "key": "class_vii_pension_fund", "label": "Class VII - Pension Fund Management" }
+                ]
+              }
+            }
+          ],
+          "visibility": {
+            "type": "includes",
+            "source": "license_category",
+            "value": "Insurance Life"
+          }
+        },
+        {
+          "id": "other_products_services_q102_emps_activities",
+          "uiSection": "Other Products & Services",
+          "section": "Other Products & Services",
+          "groupName": "Activities",
+          "fields": [
+            {
+              "id": "products.emps_administrator",
+              "label": "Acting as Administrator of EMP Scheme",
+              "fieldName": "emps_administrator",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.emps_operating_scheme",
+              "label": "Operating an Employee Money Purchase Scheme",
+              "fieldName": "emps_operating_scheme",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.emps_advising_financial_products",
+              "label": "Advising on Financial Products (Interest in EMP)",
+              "fieldName": "emps_advising_financial_products",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "money_services_q103_money_services_specifications_matrix",
+          "uiSection": "Money Services",
+          "section": "Money Services",
+          "groupName": "Specifications Matrix",
+          "fields": [
+            {
+              "id": "products.money_services_activities_matrix",
+              "label": "Please make all the required selections",
+              "fieldName": "money_services_activities_matrix",
+              "fieldType": "Matrix",
+              "uiBlockType": "matrixAccordion",
+              "visibility": {
+                "value": "Money Services",
+                "source": "license_category",
+                "type": "includes"
+              },
+              "matrixConfig": {
+                "rowLabels": [
+                  { "key": "payment_account", "label": "Providing or Operating a Payment Account" },
+                  { "key": "money_transmission", "label": "Providing Money Transmission" },
+                  { "key": "payment_transactions", "label": "Executing Payment Transactions" },
+                  { "key": "payment_instruments", "label": "Issuing Payment Instruments" },
+                  { "key": "stored_value", "label": "Issuing Stored Value" },
+                  { "key": "arrangements", "label": "Making Arrangements for Money Services" },
+                  { "key": "advice", "label": "Giving Advice on Money Services" },
+                  { "key": "account_information", "label": "Providing Account Information Service" },
+                  { "key": "payment_initiation", "label": "Providing Payment Initiation Service" }
+                ],
+                "columnLabels": [
+                  { "key": "arranging_advising", "label": "Arranging or Advising" },
+                  { "key": "providing", "label": "Providing" }
+                ]
+              }
+            }
+          ],
+          "visibility": {
+            "type": "includes",
+            "source": "license_category",
+            "value": "Money Services"
+          }
+        },
+        {
+          "id": "other_products_services_q104_q107_credit_rating_agency_application",
+          "uiSection": "Other Products & Services",
+          "section": "Other Products & Services",
+          "groupName": "Application",
+          "fields": [
+            {
+              "id": "products.cra_apply_flag",
+              "label": "Do you want to apply for Operating a Credit Rating Agency?",
+              "fieldName": "cra_apply_flag",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "other_products_services_q104_q107_credit_rating_agency_recognition_type",
+          "uiSection": "Other Products & Services",
+          "section": "Other Products & Services",
+          "groupName": "Recognition Type",
+          "fields": [
+            {
+              "id": "products.cra_dfsa_recognition",
+              "label": "Seeking DFSA Recognition",
+              "fieldName": "cra_dfsa_recognition",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.cra_external_recognition",
+              "label": "Seeking External Recognition",
+              "fieldName": "cra_external_recognition",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "other_products_services_q104_q107_credit_rating_agency_details",
+          "uiSection": "Other Products & Services",
+          "section": "Other Products & Services",
+          "groupName": "Details",
+          "fields": [
+            {
+              "id": "products.cra_dfsa_recognition_details",
+              "label": "DFSA Recognition Details",
+              "fieldName": "cra_dfsa_recognition_details",
+              "fieldType": "Text",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.cra_external_recognition_body",
+              "label": "External Recognition Body Details",
+              "fieldName": "cra_external_recognition_body",
+              "fieldType": "Text",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "other_products_services_q108_q111_alternative_trading_system_application",
+          "uiSection": "Other Products & Services",
+          "section": "Other Products & Services",
+          "groupName": "Application",
+          "fields": [
+            {
+              "id": "products.ats_apply_flag",
+              "label": "Do you want to apply for Operating an ATS?",
+              "fieldName": "ats_apply_flag",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "other_products_services_q108_q111_alternative_trading_system_facility_type",
+          "uiSection": "Other Products & Services",
+          "section": "Other Products & Services",
+          "groupName": "Facility Type",
+          "fields": [
+            {
+              "id": "products.ats_operate_mtf",
+              "label": "Operating a Multilateral Trading Facility (MTF)",
+              "fieldName": "ats_operate_mtf",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.ats_operate_otf",
+              "label": "Operating an Organised Trading Facility (OTF)",
+              "fieldName": "ats_operate_otf",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "other_products_services_q108_q111_alternative_trading_system_details",
+          "uiSection": "Other Products & Services",
+          "section": "Other Products & Services",
+          "groupName": "Details",
+          "fields": [
+            {
+              "id": "products.ats_mtf_details",
+              "label": "MTF Operation Details",
+              "fieldName": "ats_mtf_details",
+              "fieldType": "Text",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.ats_otf_details",
+              "label": "OTF Operation Details",
+              "fieldName": "ats_otf_details",
+              "fieldType": "Text",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "other_products_services_pcc_protected_cell_company_application",
+          "uiSection": "Other Products & Services",
+          "section": "Other Products & Services",
+          "groupName": "Application",
+          "fields": [
+            {
+              "id": "products.pcc_apply_flag",
+              "label": "Protected Cell Company",
+              "fieldName": "pcc_apply_flag",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "restrictions_restrictions_control_questions",
+          "uiSection": "Restrictions",
+          "section": "Restrictions",
+          "groupName": "Control Questions",
+          "fields": [
+            {
+              "id": "products.restriction_add_flag",
+              "label": "Do you want to add a Restriction?",
+              "fieldName": "restriction_add_flag",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.restriction_type",
+              "label": "Standard or Non-standard Restriction?",
+              "fieldName": "restriction_type",
+              "fieldType": "Enum",
+              "options": [
+                { "label": "Standard", "value": "Standard" },
+                { "label": "Non-standard", "value": "Non-standard" }
+              ],
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.restriction_standard_selection",
+              "label": "Please select the standard Restriction(s) required",
+              "fieldName": "restriction_standard_selection",
+              "fieldType": "MultiSelect",
+              "options": [
+                { "label": "RST01 - Dealing as Principal limited to Matched Principal basis only", "value": "RST01" },
+                { "label": "RST02 - Managing CIF and Advising restricted to QIF", "value": "RST02" },
+                { "label": "RST03 - Managing CIF and Advising restricted to QIF and Exempt Funds", "value": "RST03" },
+                { "label": "RST04 - Managing CIF and Advising restricted to QIF and Exempt (VC Form)", "value": "RST04" },
+                { "label": "RST05 - Managing CIF and Advising restricted to QIF (VC Funds only)", "value": "RST05" },
+                { "label": "RST06 - Managing CIF restricted to QIF", "value": "RST06" },
+                { "label": "RST07 - Managing CIF restricted to QIF and Exempt Funds", "value": "RST07" },
+                { "label": "RST08 - Managing CIF restricted to QIF and Exempt (VC Form)", "value": "RST08" },
+                { "label": "RST09 - Managing CIF restricted to QIF (VC Funds only)", "value": "RST09" },
+                { "label": "RST10 - Managing a Restricted Profit Sharing Investment Account", "value": "RST10" },
+                { "label": "RST11 - Providing Custody (only if for a Fund)", "value": "RST11" },
+                { "label": "RST12 - Trust Services limited to non-express trust trustee", "value": "RST12" },
+                { "label": "RST13 - Fund Admin limited to Firm's/Group's Funds", "value": "RST13" },
+                { "label": "RST14 - Restricted to captive insurance services", "value": "RST14" },
+                { "label": "RST15 - Restricted to Class 1 Captive Insurer", "value": "RST15" },
+                { "label": "RST16 - Restricted to Class 2 Captive Insurer", "value": "RST16" },
+                { "label": "RST17 - Restricted to Class 3 Captive Insurer", "value": "RST17" }
+              ],
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "restrictions_restrictions_rst01_investment",
+          "uiSection": "Restrictions",
+          "section": "Restrictions",
+          "groupName": "Investment",
+          "fields": [
+            {
+              "id": "products.rst01_matched_principal",
+              "label": "Dealing as Principal limited to Matched Principal basis only",
+              "fieldName": "rst01_matched_principal",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "restrictions_restrictions_rst02_09_fund_management",
+          "uiSection": "Restrictions",
+          "section": "Restrictions",
+          "groupName": "Fund Management",
+          "fields": [
+            {
+              "id": "products.rst02_cif_advising_qif",
+              "label": "Managing CIF and Advising restricted to QIF",
+              "fieldName": "rst02_cif_advising_qif",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.rst03_cif_advising_qif_exempt",
+              "label": "Managing CIF and Advising restricted to QIF and Exempt Funds",
+              "fieldName": "rst03_cif_advising_qif_exempt",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.rst04_cif_advising_qif_exempt_vc",
+              "label": "Managing CIF and Advising restricted to QIF and Exempt (VC Form)",
+              "fieldName": "rst04_cif_advising_qif_exempt_vc",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.rst05_cif_advising_qif_vc",
+              "label": "Managing CIF and Advising restricted to QIF (VC Funds only)",
+              "fieldName": "rst05_cif_advising_qif_vc",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.rst06_cif_qif",
+              "label": "Managing CIF restricted to QIF",
+              "fieldName": "rst06_cif_qif",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.rst07_cif_qif_exempt",
+              "label": "Managing CIF restricted to QIF and Exempt Funds",
+              "fieldName": "rst07_cif_qif_exempt",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.rst08_cif_qif_exempt_vc",
+              "label": "Managing CIF restricted to QIF and Exempt (VC Form)",
+              "fieldName": "rst08_cif_qif_exempt_vc",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.rst09_cif_qif_vc",
+              "label": "Managing CIF restricted to QIF (VC Funds only)",
+              "fieldName": "rst09_cif_qif_vc",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "restrictions_restrictions_rst10_psia",
+          "uiSection": "Restrictions",
+          "section": "Restrictions",
+          "groupName": "PSIA",
+          "fields": [
+            {
+              "id": "products.rst10_managing_restricted_psia",
+              "label": "Managing a Restricted Profit Sharing Investment Account",
+              "fieldName": "rst10_managing_restricted_psia",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "restrictions_restrictions_rst11_custody",
+          "uiSection": "Restrictions",
+          "section": "Restrictions",
+          "groupName": "Custody",
+          "fields": [
+            {
+              "id": "products.rst11_custody_fund_only",
+              "label": "Providing Custody (only if for a Fund)",
+              "fieldName": "rst11_custody_fund_only",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "restrictions_restrictions_rst12_trust_services",
+          "uiSection": "Restrictions",
+          "section": "Restrictions",
+          "groupName": "Trust Services",
+          "fields": [
+            {
+              "id": "products.rst12_trust_non_express",
+              "label": "Trust Services limited to non-express trust trustee",
+              "fieldName": "rst12_trust_non_express",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "restrictions_restrictions_rst13_fund_admin",
+          "uiSection": "Restrictions",
+          "section": "Restrictions",
+          "groupName": "Fund Admin",
+          "fields": [
+            {
+              "id": "products.rst13_fund_admin_group",
+              "label": "Fund Admin limited to Firm's/Group's Funds",
+              "fieldName": "rst13_fund_admin_group",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "restrictions_restrictions_rst14_17_insurance",
+          "uiSection": "Restrictions",
+          "section": "Restrictions",
+          "groupName": "Insurance",
+          "fields": [
+            {
+              "id": "products.rst14_captive_insurance",
+              "label": "Restricted to captive insurance services",
+              "fieldName": "rst14_captive_insurance",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.rst15_captive_class_1",
+              "label": "Restricted to Class 1 Captive Insurer",
+              "fieldName": "rst15_captive_class_1",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.rst16_captive_class_2",
+              "label": "Restricted to Class 2 Captive Insurer",
+              "fieldName": "rst16_captive_class_2",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.rst17_captive_class_3",
+              "label": "Restricted to Class 3 Captive Insurer",
+              "fieldName": "rst17_captive_class_3",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "restrictions_restrictions_custom_restriction",
+          "uiSection": "Restrictions",
+          "section": "Restrictions",
+          "groupName": "Custom Restriction",
+          "fields": [
+            {
+              "id": "products.restriction_custom_text",
+              "label": "Please add the proposed non-standard Restriction",
+              "fieldName": "restriction_custom_text",
+              "fieldType": "Text",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conditions_conditions_control_questions",
+          "uiSection": "Conditions",
+          "section": "Conditions",
+          "groupName": "Control Questions",
+          "fields": [
+            {
+              "id": "products.condition_add_flag",
+              "label": "Do you want to add a Condition?",
+              "fieldName": "condition_add_flag",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.condition_type",
+              "label": "Standard or Non-standard Condition?",
+              "fieldName": "condition_type",
+              "fieldType": "Enum",
+              "options": [
+                { "label": "Standard", "value": "Standard" },
+                { "label": "Non-standard", "value": "Non-standard" }
+              ],
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.condition_standard_selection",
+              "label": "Please select the standard Condition(s) required",
+              "fieldName": "condition_standard_selection",
+              "fieldType": "MultiSelect",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conditions_conditions_custom_condition",
+          "uiSection": "Conditions",
+          "section": "Conditions",
+          "groupName": "Custom Condition",
+          "fields": [
+            {
+              "id": "products.condition_custom_text",
+              "label": "Please add the proposed non-standard Condition",
+              "fieldName": "condition_custom_text",
+              "fieldType": "Text",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "endorsements_endorsements_end01_islamic_financial_business",
+          "uiSection": "Endorsements",
+          "section": "Endorsements",
+          "groupName": "Islamic Financial Business",
+          "fields": [
+            {
+              "id": "products.endorsement_islamic_flag",
+              "label": "Do you want to apply for Islamic Financial Business endorsement?",
+              "fieldName": "endorsement_islamic_flag",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.endorsement_islamic_type",
+              "label": "Islamic Window or Wholly Islamic Operations",
+              "fieldName": "endorsement_islamic_type",
+              "fieldType": "Enum",
+              "options": [
+                { "label": "Islamic Window", "value": "Islamic Window" },
+                { "label": "Wholly Islamic Operations", "value": "Wholly Islamic Operations" }
+              ],
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "endorsements_endorsements_end01_islamic_sub_options",
+          "uiSection": "Endorsements",
+          "section": "Endorsements",
+          "groupName": "Islamic Sub-Options",
+          "fields": [
+            {
+              "id": "products.endorsement_islamic_sharia_board",
+              "label": "Shari'a Supervisory Board established",
+              "fieldName": "endorsement_islamic_sharia_board",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.endorsement_islamic_accounting",
+              "label": "Islamic Accounting Standards applied",
+              "fieldName": "endorsement_islamic_accounting",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.endorsement_islamic_investment",
+              "label": "Islamic Investment Activities",
+              "fieldName": "endorsement_islamic_investment",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.endorsement_islamic_insurance",
+              "label": "Takaful/Islamic Insurance",
+              "fieldName": "endorsement_islamic_insurance",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.endorsement_islamic_intermediation",
+              "label": "Islamic Insurance Intermediation",
+              "fieldName": "endorsement_islamic_intermediation",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.endorsement_islamic_fund_mgmt",
+              "label": "Islamic Fund Management",
+              "fieldName": "endorsement_islamic_fund_mgmt",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "endorsements_endorsements_end02_retail_endorsement",
+          "uiSection": "Endorsements",
+          "section": "Endorsements",
+          "groupName": "Retail Endorsement",
+          "fields": [
+            {
+              "id": "products.endorsement_retail_flag",
+              "label": "Retail Endorsement (derived from Q99 selections)",
+              "fieldName": "endorsement_retail_flag",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "endorsements_endorsements_end03_client_assets",
+          "uiSection": "Endorsements",
+          "section": "Endorsements",
+          "groupName": "Client Assets",
+          "fields": [
+            {
+              "id": "products.endorsement_client_assets_flag",
+              "label": "Holding or Controlling Client Assets (H&C)",
+              "fieldName": "endorsement_client_assets_flag",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "endorsements_endorsements_end04_insurance_monies",
+          "uiSection": "Endorsements",
+          "section": "Endorsements",
+          "groupName": "Insurance Monies",
+          "fields": [
+            {
+              "id": "products.endorsement_insurance_monies_flag",
+              "label": "Holding Insurance Monies",
+              "fieldName": "endorsement_insurance_monies_flag",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "derived_fields_internal_derived_fields_system_calculated",
+          "uiSection": "Derived Fields (internal)",
+          "section": "Derived Fields (internal)",
+          "groupName": "System Calculated",
+          "fields": [
+            {
+              "id": "products.prudential_category",
+              "label": "Prudential Category (Auto-derived)",
+              "fieldName": "prudential_category",
+              "fieldType": "Enum",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              },
+              "hidden": true,
+              "readOnly": true
+            },
+            {
+              "id": "products.total_permissions_count",
+              "label": "Total Permission Matrix Selections",
+              "fieldName": "total_permissions_count",
+              "fieldType": "Integer",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              },
+              "hidden": true,
+              "readOnly": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-﻿import React, {useCallback, useEffect, useMemo, useRef, useState,} from "react";
+﻿import React, {useCallback, useEffect, useMemo, useRef, useState, Suspense} from "react";
 import {TabSection} from "./TabSection";
 import {DocumentSection} from "./DocumentSection";
 import {mockDocuments, mockMultiEntryData} from "../../utils/mockData";
@@ -38,6 +38,13 @@ import {
     useSaveVisionStrategyMutation,
 } from "../../modules/profile/hooks/useProfileQueries";
 import {toast} from "sonner";
+import {ProfileSummaryTab} from "./ProfileSummaryTab";
+import {VisionStrategyTab} from "./VisionStrategyTab";
+import {useProfileDomainQuery, useProfileSummaryQuery, useProductsQuery} from "../../hooks/useProfileQueries";
+import {calculateDomainCompletionStats} from "../../utils/profileData";
+
+// Lazy load ProductsTab
+const ProductsTab = React.lazy(() => import("./ProductsTab").then(module => ({ default: module.ProductsTab })));
 
 type ProfileData = {
     companyStage?: string | null;
@@ -104,9 +111,62 @@ export function BusinessProfile({activeSection = "profile"}) {
     // Get user from auth context
     const {user} = useAuth();
 
+    // Get Profile Summary completion from API
+    const { data: profileSummaryData, isLoading: isProfileSummaryDomainLoading } = useProfileSummaryQuery({
+        retry: 1,
+        retryDelay: 1000,
+    });
+
+    // Products completion comes from the Products domain API (Express-backed).
+    // This keeps the outer tab completion consistent with the ProductsTab UI (APQC schema-driven).
+    const { data: productsDomainData } = useProductsQuery({
+        retry: 1,
+        retryDelay: 1000,
+    });
+
+    // Vision & Strategy completion comes from the domain API (APQC schema-driven).
+    const { data: visionStrategyDomainData, isLoading: isVisionStrategyDomainLoading } = useProfileDomainQuery('vision_strategy', {
+        retry: 1,
+        retryDelay: 1000,
+    });
+
     // Config, mapping, and strings loaded from JSON-backed loader
+    // Use APQC config for Profile Summary, fallback to v3 for other tabs
+    const apqcConfig = useMemo(() => getProfileConfig("apqc"), []);
     const profileConfig = useMemo(() => getProfileConfig("v3"), []);
-    const apiFieldMapping = useMemo(() => getProfileMapping("v3"), []);
+    const apiFieldMapping = useMemo(() => getProfileMapping("apqc"), []);
+
+    const emptyDomainData = useMemo(() => ({} as Record<string, any>), []);
+
+    const profileSummaryDomainSchema =
+        profileSummaryData?.schema ||
+        apqcConfig.tabs.find((tab) => tab.id === "profile_summary");
+    const profileSummaryDomainValues =
+        (profileSummaryData?.data as Record<string, any> | undefined) ||
+        emptyDomainData;
+    const profileSummaryStats = useMemo(
+        () =>
+            calculateDomainCompletionStats(profileSummaryDomainSchema, profileSummaryDomainValues, {
+                excludeReadOnly: true,
+            }),
+        [profileSummaryDomainSchema, profileSummaryDomainValues]
+    );
+    const profileSummaryHasMeaningfulData = profileSummaryStats.answered > 0;
+
+    const visionStrategyDomainSchema =
+        visionStrategyDomainData?.schema ||
+        apqcConfig.tabs.find((tab) => tab.id === "vision_strategy");
+    const visionStrategyDomainValues =
+        (visionStrategyDomainData?.data as Record<string, any> | undefined) ||
+        emptyDomainData;
+    const visionStrategyStats = useMemo(
+        () =>
+            calculateDomainCompletionStats(visionStrategyDomainSchema, visionStrategyDomainValues, {
+                excludeReadOnly: true,
+            }),
+        [visionStrategyDomainSchema, visionStrategyDomainValues]
+    );
+    const visionStrategyHasMeaningfulData = visionStrategyStats.answered > 0;
 
     // In demo mode, use the demo user
     const effectiveUser = isDemoModeEnabled() ? getDemoUser() : user;
@@ -198,15 +258,21 @@ export function BusinessProfile({activeSection = "profile"}) {
             setSectionCompletions(completions);
             setMandatoryCompletions(mandatoryStats);
 
+            // Merge Profile Summary data for mandatory field checks
+            const mergedProfileData = {
+                ...newProfileData,
+                ...(profileSummaryData?.data || {}), // Include Profile Summary data
+            };
+
             const mandatoryFieldsCheck = checkMandatoryFieldsCompletion(
-                newProfileData,
+                mergedProfileData,
                 newProfileData.companyStage
             );
 
             // 5. Update the state used by your button
             setMissingMandatoryFields(mandatoryFieldsCheck.missing);
         }
-    }, [apiProfileData, apiFieldMapping, isContextLoading, profileConfig]);
+    }, [apiProfileData, apiFieldMapping, isContextLoading, profileConfig, profileSummaryData]);
 
     // Handle saving group changes from TabSection
     const handleSaveGroupChanges = useCallback(
@@ -372,9 +438,20 @@ export function BusinessProfile({activeSection = "profile"}) {
                 setSavingGroupIndex(null);
             }
 
-            // Perform all recalculations on the new data
+            // Merge Profile Summary data for mandatory field checks
+            const mergedProfileData = {
+                ...newProfileData,
+                sections: {
+                    ...(newProfileData.sections || {}),
+                    profile_summary: profileSummaryData?.data ? {
+                        fields: profileSummaryData.data
+                    } : (newProfileData.sections?.profile_summary || { fields: {} })
+                }
+            };
+
+            // Perform all recalculations on the merged data
             const mandatoryCheck = checkMandatoryFieldsCompletion(
-                newProfileData,
+                mergedProfileData,
                 newProfileData.companyStage
             );
             setMissingMandatoryFields(mandatoryCheck.missing);
@@ -524,12 +601,92 @@ export function BusinessProfile({activeSection = "profile"}) {
     };
 
     const getAllSections = () => {
-        return profileConfig.tabs.map((tab) => ({
-            id: tab.id,
-            title: tab.title,
-            completion: sectionCompletions[tab.id] || 0,
-            mandatoryCompletion: mandatoryCompletions[tab.id] || {percentage: 0},
-        }));
+        // Add Profile Summary as first tab if it exists in APQC config
+        const profileSummaryTab = apqcConfig.tabs.find(tab => tab.id === 'profile_summary');
+        const allTabs = profileSummaryTab 
+            ? [{ id: 'profile_summary', title: 'Profile Summary' }, ...profileConfig.tabs]
+            : profileConfig.tabs;
+        
+        return allTabs.map((tab) => {
+            // For Profile Summary tab, calculate completion from group completions
+            if (tab.id === 'profile_summary') {
+                // Calculate tab completion as average of all group completions
+                let tabCompletion = 0;
+                if (profileSummaryData?.schema?.groups) {
+                    const groups = profileSummaryData.schema.groups;
+                    const profileData = profileSummaryData.data || {};
+                    
+                    let totalGroupCompletion = 0;
+                    let groupCount = 0;
+                    
+                    groups.forEach((group: any) => {
+                        let totalFields = 0;
+                        let completedFields = 0;
+                        
+                        group.fields?.forEach((field: any) => {
+                            // Skip read-only (system-generated) fields from completion tracking
+                            if (field.readOnly === true) {
+                                return;
+                            }
+                            
+                            totalFields++;
+                            const value = profileData[field.fieldName];
+                            const hasValue = value !== null && value !== undefined && value !== '' && 
+                                          (!Array.isArray(value) || value.length > 0);
+                            if (hasValue) {
+                                completedFields++;
+                            }
+                        });
+                        
+                        // Only count groups that have user-fillable fields
+                        if (totalFields > 0) {
+                            const groupCompletion = Math.round((completedFields / totalFields) * 100);
+                            totalGroupCompletion += groupCompletion;
+                            groupCount++;
+                        }
+                    });
+                    
+                    if (groupCount > 0) {
+                        tabCompletion = Math.round(totalGroupCompletion / groupCount);
+                    }
+                }
+                
+                return {
+                    id: tab.id,
+                    title: tab.title,
+                    completion: tabCompletion,
+                    mandatoryCompletion: { percentage: tabCompletion }, // Use same value for now
+                };
+            }
+            
+            // For other tabs, use calculated completions
+            if (tab.id === 'vision_strategy') {
+                const visionCompletion = visionStrategyStats?.percentage ?? 0;
+                return {
+                    id: tab.id,
+                    title: tab.title,
+                    completion: visionCompletion,
+                    mandatoryCompletion: { percentage: visionCompletion },
+                };
+            }
+
+            if (tab.id === 'products') {
+                const productsCompletion = productsDomainData?.completion ?? 0;
+                return {
+                    id: tab.id,
+                    title: tab.title,
+                    completion: productsCompletion,
+                    mandatoryCompletion: { percentage: productsCompletion },
+                };
+            }
+
+            return {
+                id: tab.id,
+                title: tab.title,
+                completion: sectionCompletions[tab.id] || 0,
+                mandatoryCompletion: mandatoryCompletions[tab.id] || {percentage: 0},
+            };
+        });
     };
 
     const getSectionsToDisplay = () => {
@@ -539,6 +696,41 @@ export function BusinessProfile({activeSection = "profile"}) {
         } else if (activeSection === "profile") {
             return allSections;
         } else {
+            if (activeSection === 'products') {
+                const productsCompletion = productsDomainData?.completion ?? 0;
+                return [
+                    {
+                        id: activeSection,
+                        title:
+                            profileConfig.tabs.find((tab) => tab.id === activeSection)?.title ||
+                            "Products",
+                        completion: productsCompletion,
+                        mandatoryCompletion: { percentage: productsCompletion },
+                    },
+                ];
+            }
+            if (activeSection === 'profile_summary') {
+                const completion = profileSummaryStats?.percentage ?? 0;
+                return [
+                    {
+                        id: activeSection,
+                        title: 'Profile Summary',
+                        completion,
+                        mandatoryCompletion: { percentage: completion },
+                    },
+                ];
+            }
+            if (activeSection === 'vision_strategy') {
+                const completion = visionStrategyStats?.percentage ?? 0;
+                return [
+                    {
+                        id: activeSection,
+                        title: 'Vision & Strategy',
+                        completion,
+                        mandatoryCompletion: { percentage: completion },
+                    },
+                ];
+            }
             return [
                 {
                     id: activeSection,
@@ -572,8 +764,20 @@ export function BusinessProfile({activeSection = "profile"}) {
     const overallMandatoryCompletion = useMemo(() => {
         if (!profileData || !profileData.companyStage) return 0;
 
+        // Merge Profile Summary data into profileData structure for mandatory field checks
+        const mergedProfileData = {
+            ...profileData,
+            sections: {
+                ...(profileData.sections || {}),
+                // Add Profile Summary data in the expected sections structure
+                profile_summary: profileSummaryData?.data ? {
+                    fields: profileSummaryData.data
+                } : (profileData.sections?.profile_summary || { fields: {} })
+            }
+        };
+
         const mandatoryCheck = checkMandatoryFieldsCompletion(
-            profileData,
+            mergedProfileData,
             profileData.companyStage
         );
 
@@ -592,7 +796,7 @@ export function BusinessProfile({activeSection = "profile"}) {
         });
 
         return Math.round(percentage);
-    }, [profileData]);
+    }, [profileData, profileSummaryData]);
 
     const getCurrentSectionTitle = () => {
         return sectionsToDisplay[activeTabIndex]?.title || "";
@@ -1076,6 +1280,34 @@ export function BusinessProfile({activeSection = "profile"}) {
                                 aria-labelledby={`tab-${section.id}`}
                             >
                                 {(() => {
+                                    // Render Profile Summary tab if it's the active section
+                                    if (section.id === 'profile_summary') {
+                                        return <ProfileSummaryTab />;
+                                    }
+                                    
+                                    // Render Vision & Strategy (APQC domain)
+                                    
+                                    if (section.id === 'vision_strategy') {
+                                    
+                                        return <VisionStrategyTab />;
+                                    
+                                    }
+
+                                    
+                                    // Render Products tab with lazy loading
+                                    if (section.id === 'products') {
+                                        return (
+                                            <Suspense fallback={
+                                                <div className="flex items-center justify-center py-12">
+                                                    <div className="text-gray-600">Loading Products...</div>
+                                                </div>
+                                            }>
+                                                <ProductsTab />
+                                            </Suspense>
+                                        );
+                                    }
+                                    
+                                    // Render other tabs using TabSection
                                     const tabCfg = profileConfig.tabs.find(
                                         (tab) => tab.id === section.id
                                     );
@@ -1122,10 +1354,29 @@ export function BusinessProfile({activeSection = "profile"}) {
 
                                 {!mockMultiEntryData[section.id] &&
                                     !mockDocuments[section.id] &&
-                                    (!profileData?.sections?.[section.id]?.fields ||
-                                        Object.keys(
-                                            profileData?.sections?.[section.id]?.fields || {}
-                                        ).length === 0) && (
+                                    (() => {
+                                        if (section.id === "profile_summary") {
+                                            return (
+                                                !isProfileSummaryDomainLoading &&
+                                                !profileSummaryHasMeaningfulData
+                                            );
+                                        }
+                                        if (section.id === "vision_strategy") {
+                                            return (
+                                                !isVisionStrategyDomainLoading &&
+                                                !visionStrategyHasMeaningfulData
+                                            );
+                                        }
+                                        if (section.id === "products") {
+                                            return false;
+                                        }
+                                        const legacyFields =
+                                            profileData?.sections?.[section.id]?.fields || {};
+                                        return (
+                                            !profileData?.sections?.[section.id]?.fields ||
+                                            Object.keys(legacyFields).length === 0
+                                        );
+                                    })() && (
                                         <div
                                             className="mt-4 sm:mt-5 md:mt-6 lg:mt-8 text-center py-6 sm:py-8 md:py-10 lg:py-12 bg-gray-50 rounded-lg border border-dashed border-gray-300">
                                             <div className="flex flex-col items-center px-4">
@@ -1179,5 +1430,3 @@ export function BusinessProfile({activeSection = "profile"}) {
         </div>
     );
 }
-
-

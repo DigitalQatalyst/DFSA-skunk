@@ -25,6 +25,12 @@ const profileStage1StringsJson = (
 const profileStage1MappingJson = (
   await import("./profile/profile.stage1.apqc.mapping.json")
 ).default;
+const profileApqcConfigJson = (
+  await import("./profile/profile.apqc.config.json")
+).default;
+const profileApqcMappingJson = (
+  await import("./profile/profile.apqc.mapping.json")
+).default;
 const profileDomainsJson = (await import("./profile/domains.config.json")).default;
 const profilePhasesJson = (await import("./profile/phases.config.json")).default;
 const tabDomainMapJson = (await import("./profile/tabDomainMap.json")).default;
@@ -68,7 +74,7 @@ type ApplicationStageConfig = {
   questionCount?: number;
 };
 
-type ProfileVersion = "v1" | "v2" | "v3" | "stage1-apqc";
+type ProfileVersion = "v1" | "v2" | "v3" | "stage1-apqc" | "apqc";
 
 const allowedFieldTypes: FieldConfig["fieldType"][] = [
   "Text",
@@ -88,6 +94,12 @@ const allowedFieldTypes: FieldConfig["fieldType"][] = [
   "File Upload",
   "Table",
   "Lookup",
+  "Boolean" as any,
+  "Enum" as any,
+  "Integer" as any,
+  "MultiSelect" as any,
+  "Address" as any,
+  "Country" as any,
 ];
 
 function validateStages(stages: CompanyStageConfig[]): string[] {
@@ -129,7 +141,12 @@ function validateConfig(raw: ProfileConfig): ValidationResult<ProfileConfig> {
   raw.tabs.forEach((tab) => {
     if (!tab.id) warnings.push("Tab missing id");
     tab.groups.forEach((group) => {
-      group.fields.forEach((field) => {
+      // Handle groups with direct fields array
+      const fieldsToValidate = group.fields || 
+        // Handle groups with sections array (each section has fields)
+        (group.sections ? group.sections.flatMap((section: any) => section.fields || []) : []);
+      
+      fieldsToValidate.forEach((field: any) => {
         if (fieldNames.has(field.fieldName)) {
           warnings.push(`Duplicate fieldName detected: ${field.fieldName}`);
         }
@@ -294,18 +311,21 @@ const validatedConfigs: Record<ProfileVersion, ValidationResult<ProfileConfig>> 
   v2: validateConfig(profileV2ConfigJson as ProfileConfig),
   v3: validateConfig(profileV3ConfigJson as ProfileConfig),
   "stage1-apqc": validateConfig(profileStage1ConfigJson as ProfileConfig),
+  apqc: validateConfig(profileApqcConfigJson as ProfileConfig),
 };
 const validatedStrings: Record<ProfileVersion, ValidationResult<ProfileStrings>> = {
   v1: validateStrings(profileStringsJson as ProfileStrings),
   v2: validateStrings(profileV2StringsJson as ProfileStrings),
   v3: validateStrings(profileV3StringsJson as ProfileStrings),
   "stage1-apqc": validateStrings(profileStage1StringsJson as ProfileStrings),
+  apqc: validateStrings({} as ProfileStrings), // APQC version doesn't use separate strings file
 };
 const validatedMappings: Record<ProfileVersion, ValidationResult<MappingShape>> = {
   v1: validateMapping(profileMappingJson as MappingShape),
   v2: validateMapping(profileV2MappingJson as MappingShape),
   v3: validateMapping(profileV3MappingJson as MappingShape),
   "stage1-apqc": validateMapping(profileStage1MappingJson as MappingShape),
+  apqc: validateMapping(profileApqcMappingJson as MappingShape),
 };
 const validatedPhases = validatePhases(profilePhasesJson as PhaseConfig[]);
 const validatedDomains = validateDomains(
@@ -351,20 +371,26 @@ const reverseMappings: Record<ProfileVersion, Record<string, string>> = {
     acc[api] = ui;
     return acc;
   }, {}),
+  apqc: Object.entries(validatedMappings.apqc.value.apiFieldMapping).reduce<
+    Record<string, string>
+  >((acc, [ui, api]) => {
+    acc[api] = ui;
+    return acc;
+  }, {}),
 };
 
-export function getProfileConfig(version: ProfileVersion = "v3"): ProfileConfig {
+export function getProfileConfig(version: ProfileVersion = "apqc"): ProfileConfig {
   return validatedConfigs[version].value;
 }
 
 export function getProfileMapping(
-  version: ProfileVersion = "v3"
+  version: ProfileVersion = "apqc"
 ): Record<string, string> {
   return validatedMappings[version].value.apiFieldMapping;
 }
 
 export function getReverseProfileMapping(
-  version: ProfileVersion = "v3"
+  version: ProfileVersion = "apqc"
 ): Record<string, string> {
   return reverseMappings[version];
 }
@@ -391,6 +417,7 @@ export function getProfileConfigWarnings(): string[] {
     ...validatedConfigs.v2.warnings,
     ...validatedConfigs.v3.warnings,
     ...validatedConfigs["stage1-apqc"].warnings,
+    ...validatedConfigs.apqc.warnings,
     ...validatedStrings.v1.warnings,
     ...validatedStrings.v2.warnings,
     ...validatedStrings.v3.warnings,
