@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ExploreDropdown } from "./components/ExploreDropdown";
 import { MobileDrawer } from "./components/MobileDrawer";
 import { ProfileDropdown } from "./ProfileDropdown";
@@ -13,6 +13,7 @@ import { OnboardingModal } from "./components/OnboardingModal";
 import { SignInModal } from "./components/SignInModal";
 import { SignupModal } from "./components/SignupModal";
 import { DFSAEnquirySignupModal } from "./components/DFSAEnquirySignupModal";
+import { getStoredSignUpData } from "../../pages/dashboard/onboarding/dfsa/hooks/usePrePopulation";
 
 interface HeaderProps {
   toggleSidebar?: () => void;
@@ -35,12 +36,21 @@ export function Header({
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [isDFSAEnquiryModalOpen, setIsDFSAEnquiryModalOpen] = useState(false);
-  const { user, login } = useAuth();
+  const [signupUsername, setSignupUsername] = useState<string | null>(null);
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   // Count unread notifications
   const unreadCount = mockNotifications.filter((notif) => !notif.read).length;
+
+  // Load sign-up username from localStorage
+  useEffect(() => {
+    const signUpData = getStoredSignUpData();
+    if (signUpData?.contactName) {
+      setSignupUsername(signUpData.contactName);
+    }
+  }, []);
 
   // Sticky header behavior
   useEffect(() => {
@@ -125,8 +135,8 @@ export function Header({
     <>
       <header
         className={`flex items-center w-full transition-all duration-300 ${isSticky
-            ? "fixed top-0 left-0 right-0 z-40 shadow-lg backdrop-blur-sm"
-            : "relative shadow-sm"
+          ? "fixed top-0 left-0 right-0 z-40 shadow-lg backdrop-blur-sm"
+          : "relative shadow-sm"
           }`}
         style={{
           background: isSticky
@@ -174,7 +184,7 @@ export function Header({
                 style={{ color: '#ffffff' }}
                 onClick={() => console.log('Explore DIFCA clicked')}
               >
-                Explore DIFCA
+                Explore DIFC
               </button>
             </div>
           </div>
@@ -189,25 +199,41 @@ export function Header({
               <>
                 {/* Desktop CTAs (≥1024px) */}
                 <div className="hidden lg:flex items-center space-x-3">
-                  <button
-                    className={`px-4 py-2 bg-transparent border-2 border-white rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 font-semibold ${isSticky ? "text-sm px-3 py-1.5" : ""
-                      }`}
-                    style={{ color: '#ffffff' }}
-                    onClick={handleSignUp}
-                  >
-                    Sign Up
-                  </button>
+                  {signupUsername ? (
+                    <div
+                      className={`px-4 py-2 text-white font-semibold border-2 border-white rounded-md ${isSticky ? "text-sm px-3 py-1.5" : ""}`}
+                    >
+                      Hi, {signupUsername}
+                    </div>
+                  ) : (
+                    <button
+                      className={`px-4 py-2 bg-transparent border-2 border-white rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 font-semibold ${isSticky ? "text-sm px-3 py-1.5" : ""
+                        }`}
+                      style={{ color: '#ffffff' }}
+                      onClick={handleSignUp}
+                    >
+                      Sign Up
+                    </button>
+                  )}
                 </div>
                 {/* Tablet Sign Up Button (768px - 1023px) */}
                 <div className="hidden md:flex lg:hidden items-center">
-                  <button
-                    className={`px-3 py-2 bg-transparent border-2 border-white rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 font-semibold ${isSticky ? "text-sm px-2 py-1.5" : "text-sm"
-                      }`}
-                    style={{ color: '#ffffff' }}
-                    onClick={handleSignUp}
-                  >
-                    Sign Up
-                  </button>
+                  {signupUsername ? (
+                    <div
+                      className={`px-3 py-2 text-white font-semibold border-2 border-white rounded-md ${isSticky ? "text-sm px-2 py-1.5" : "text-sm"}`}
+                    >
+                      Hi, {signupUsername}
+                    </div>
+                  ) : (
+                    <button
+                      className={`px-3 py-2 bg-transparent border-2 border-white rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 font-semibold ${isSticky ? "text-sm px-2 py-1.5" : "text-sm"
+                        }`}
+                      style={{ color: '#ffffff' }}
+                      onClick={handleSignUp}
+                    >
+                      Sign Up
+                    </button>
+                  )}
                 </div>
               </>
             )}
