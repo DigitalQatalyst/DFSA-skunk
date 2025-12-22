@@ -5,11 +5,8 @@
 
 import { handleDownloadVersion } from '../../../../middleware/documents.js';
 
-export const config = {
-  api: {
-    bodyParser: true,
-  },
-};
+// Vercel serverless functions don't use Next.js config pattern
+// Body parsing is handled automatically by Vercel for JSON requests
 
 type AnyRequest = {
   method?: string;

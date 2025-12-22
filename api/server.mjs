@@ -3,7 +3,8 @@ import { parse } from 'url'
 import signHandler from './uploads/sign.js'
 import deleteHandler from './uploads/delete.js'
 
-const PORT = process.env.API_PORT ? Number(process.env.API_PORT) : 3001
+// const PORT = process.env.API_PORT ? Number(process.env.API_PORT) : 3001
+const PORT = 3001
 
 const server = http.createServer(async (req, res) => {
   try {

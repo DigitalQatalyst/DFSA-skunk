@@ -87,6 +87,11 @@ export async function extractOrgIdFromToken(token: string, azureId?: string, ema
     if (azureId) {
       try {
         const API_BASE_URL = process.env.API_BASE_URL || 'https://kfrealexpressserver.vercel.app/api/v1';
+        
+        // Add timeout to prevent hanging
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+        
         const response = await fetch(`${API_BASE_URL}/auth/organization-info`, {
           method: 'POST',
           headers: {
@@ -96,7 +101,10 @@ export async function extractOrgIdFromToken(token: string, azureId?: string, ema
             azureid: azureId,
             useremail: email || ''
           }),
+          signal: controller.signal,
         });
+
+        clearTimeout(timeoutId);
 
         if (response.ok) {
           const data = await response.json();
@@ -106,8 +114,12 @@ export async function extractOrgIdFromToken(token: string, azureId?: string, ema
             return accountId;
           }
         }
-      } catch (apiError) {
-        console.warn('Could not fetch account ID from API:', apiError);
+      } catch (apiError: any) {
+        if (apiError.name === 'AbortError') {
+          console.warn('⏱️ API call timed out after 5 seconds');
+        } else {
+          console.warn('Could not fetch account ID from API:', apiError.message);
+        }
       }
     }
 
