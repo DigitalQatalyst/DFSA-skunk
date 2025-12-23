@@ -24,21 +24,21 @@ interface Marketplace {
 
 const marketplaces: Marketplace[] = [
   {
-    id: "authorisation",
-    name: "Authorisation",
+    id: "business-services",
+    name: "Business Services",
     description:
       "Apply for authorisation to conduct financial services activities in the DIFC",
     icon: BuildingIcon,
     href: "/marketplace/business-services",
   },
-  {
-    id: "recognition",
-    name: "Recognition",
-    description:
-      "Obtain recognition for regulatory activities and qualifications",
-    icon: GraduationCapIcon,
-    href: "/recognition",
-  },
+  // {
+  //   id: "recognition",
+  //   name: "Recognition",
+  //   description:
+  //     "Obtain recognition for regulatory activities and qualifications",
+  //   icon: GraduationCapIcon,
+  //   href: "/recognition",
+  // },
   {
     id: "what-we-do",
     name: "What we do",
@@ -201,7 +201,7 @@ export function ExploreDropdown({ isCompact = false }: ExploreDropdownProps) {
               Explore Marketplaces
             </h3>
             <p className="text-xs text-gray-500 mt-1">
-              Discover opportunities across Abu Dhabi&apos;s business ecosystem
+              Discover opportunities across DFSA&apos;s infrastructure
             </p>
           </div>
 
@@ -224,8 +224,8 @@ export function ExploreDropdown({ isCompact = false }: ExploreDropdownProps) {
                     (external ? "noopener noreferrer" : undefined)
                   }
                   className={`flex items-start px-4 py-3 text-left transition-colors duration-150 ${marketplace.comingSoon
-                      ? "opacity-60 cursor-not-allowed"
-                      : "hover:bg-gray-50 focus:bg-gray-50"
+                    ? "opacity-60 cursor-not-allowed"
+                    : "hover:bg-gray-50 focus:bg-gray-50"
                     } ${focusedIndex === index && !marketplace.comingSoon ? "bg-gray-50" : ""}`}
                   role="menuitem"
                   tabIndex={-1}
