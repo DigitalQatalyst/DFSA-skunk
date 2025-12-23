@@ -22,11 +22,28 @@ import {
 
 const RESTRICTIONS_SECTION_NAME = 'Restrictions';
 const RESTRICTIONS_CONTROL_GROUP_ID = 'restrictions_restrictions_control_questions';
+const RESTRICTIONS_CUSTOM_GROUP_ID = 'restrictions_restrictions_custom_restriction';
+const CONDITIONS_SECTION_NAME = 'Conditions';
+const CONDITIONS_CONTROL_GROUP_ID = 'conditions_conditions_control_questions';
 
-const RESTRICTION_TYPE_OPTIONS: Array<{ label: string; value: string }> = [
+const CRA_APPLY_FIELD = 'cra_apply_flag';
+const ATS_APPLY_FIELD = 'ats_apply_flag';
+const ISLAMIC_ENDORSEMENT_APPLY_FIELD = 'endorsement_islamic_flag';
+
+const CRA_RECOGNITION_GROUP_ID = 'other_products_services_q104_q107_credit_rating_agency_recognition_type';
+const CRA_DETAILS_GROUP_ID = 'other_products_services_q104_q107_credit_rating_agency_details';
+const ATS_FACILITY_GROUP_ID = 'other_products_services_q108_q111_alternative_trading_system_facility_type';
+const ATS_DETAILS_GROUP_ID = 'other_products_services_q108_q111_alternative_trading_system_details';
+const ENDORSEMENT_ISLAMIC_GROUP_ID = 'endorsements_endorsements_end01_islamic_financial_business';
+const ENDORSEMENT_ISLAMIC_SUB_GROUP_ID = 'endorsements_endorsements_end01_islamic_sub_options';
+
+const STANDARD_NON_STANDARD_TYPE_OPTIONS: Array<{ label: string; value: string }> = [
   { label: 'Standard', value: 'Standard' },
   { label: 'Non-standard', value: 'Non-standard' },
 ];
+
+const RESTRICTION_TYPE_OPTIONS = STANDARD_NON_STANDARD_TYPE_OPTIONS;
+const CONDITION_TYPE_OPTIONS = STANDARD_NON_STANDARD_TYPE_OPTIONS;
 
 const RESTRICTION_STANDARD_OPTIONS: Array<{ label: string; value: string }> = [
   { label: 'RST01 - Dealing as Principal limited to Matched Principal basis only', value: 'RST01' },
@@ -48,7 +65,7 @@ const RESTRICTION_STANDARD_OPTIONS: Array<{ label: string; value: string }> = [
   { label: 'RST17 - Restricted to Class 3 Captive Insurer', value: 'RST17' },
 ];
 
-function normalizeRestrictionType(value: unknown): string {
+function normalizeStandardNonStandardType(value: unknown): string {
   if (value === null || value === undefined) return '';
   const v = String(value).trim();
   if (!v) return '';
@@ -57,6 +74,9 @@ function normalizeRestrictionType(value: unknown): string {
   if (lower === 'non-standard' || lower === 'non_standard' || lower === 'nonstandard') return 'Non-standard';
   return v;
 }
+
+const normalizeRestrictionType = normalizeStandardNonStandardType;
+const normalizeConditionType = normalizeStandardNonStandardType;
 
 /**
  * Migration function to convert old per-activity matrix format to new unified matrix format
@@ -572,13 +592,34 @@ export function ProductsTab() {
     const groups = schema.groups as GroupConfig[];
     const sectionMap: Record<string, GroupConfig[]> = {};
 
+    const craApplied = productsData?.[CRA_APPLY_FIELD] === true;
+    const atsApplied = productsData?.[ATS_APPLY_FIELD] === true;
+    const islamicEndorsementApplied = productsData?.[ISLAMIC_ENDORSEMENT_APPLY_FIELD] === true;
+
     const visibleGroups = groups
       .filter((group) => isVisible(group.visibility as VisibilityRule, productsData))
       .filter((group) => {
         const sectionName = group.uiSection || 'Other';
         if (sectionName !== RESTRICTIONS_SECTION_NAME) return true;
-        // Phase 3 UI: show Restrictions via a single control block (selector/textarea), hide legacy RST groups.
+
+        // Restrictions UX (Phase 3):
+        // - Use restriction_standard_selection as the single source-of-truth for Standard restrictions.
+        // - Do not render RST01–RST17 detail groups or the legacy custom group; they duplicate the selection.
+        // - Always render only the control questions group, which handles Standard vs Non-standard inputs.
         return group.id === RESTRICTIONS_CONTROL_GROUP_ID;
+      })
+      .filter((group) => {
+        const sectionName = group.uiSection || 'Other';
+        if (sectionName !== CONDITIONS_SECTION_NAME) return true;
+        // Phase 3 UI: show Conditions via a single control block (selector/textarea), hide legacy custom group.
+        return group.id === CONDITIONS_CONTROL_GROUP_ID;
+      })
+      .filter((group) => {
+        // Progressive disclosure for CRA / ATS / Islamic endorsement (UI-level gating)
+        if (group.id === CRA_RECOGNITION_GROUP_ID || group.id === CRA_DETAILS_GROUP_ID) return craApplied;
+        if (group.id === ATS_FACILITY_GROUP_ID || group.id === ATS_DETAILS_GROUP_ID) return atsApplied;
+        if (group.id === ENDORSEMENT_ISLAMIC_SUB_GROUP_ID) return islamicEndorsementApplied;
+        return true;
       });
 
     visibleGroups.forEach((group) => {
@@ -697,6 +738,60 @@ export function ProductsTab() {
           } else if (restrictionType === 'Non-standard') {
             totalFields += 1;
             const text = productsData?.restriction_custom_text;
+            const answered = typeof text === 'string' && text.trim().length > 0;
+            filledFields += answered ? 1 : 0;
+          }
+        }
+
+        // Include visible RST detail group fields in completion only when they are rendered.
+        // (They are filtered out of visibleGroupsBySection unless restriction_type === "Standard" and relevant codes are selected.)
+        const alreadyCounted = new Set([
+          'restriction_add_flag',
+          'restriction_type',
+          'restriction_standard_selection',
+          'restriction_custom_text',
+        ]);
+
+        const visibleDetailFields = section.groups
+          .filter((g) => g.id !== RESTRICTIONS_CONTROL_GROUP_ID)
+          .flatMap((g) =>
+            g.fields.filter((f) => {
+              if (alreadyCounted.has(f.fieldName)) return false;
+              if (f.hidden || f.readOnly) return false;
+              if (f.uiBlockType === 'matrixAccordion') return false;
+              return isVisible(f.visibility as VisibilityRule, productsData);
+            })
+          );
+
+        totalFields += visibleDetailFields.length;
+        filledFields += visibleDetailFields.reduce((acc, f) => {
+          const v = productsData[f.fieldName];
+          return acc + (isAnswered(f, v) ? 1 : 0);
+        }, 0);
+      } else if (section.name === CONDITIONS_SECTION_NAME) {
+        // Conditions completion (Phase 3):
+        // - Count condition_add_flag as answered when boolean.
+        // - If condition_add_flag === true: count condition_type, plus only the visible dependent field.
+        const addFlagValue = productsData?.condition_add_flag;
+        const hasCondition = addFlagValue === true;
+        const addFlagAnswered = typeof addFlagValue === 'boolean';
+        const conditionType = normalizeConditionType(productsData?.condition_type);
+
+        totalFields += 1;
+        filledFields += addFlagAnswered ? 1 : 0;
+
+        if (hasCondition) {
+          totalFields += 1;
+          filledFields += conditionType.trim().length > 0 ? 1 : 0;
+
+          if (conditionType === 'Standard') {
+            totalFields += 1;
+            const selected = productsData?.condition_standard_selection;
+            const answered = Array.isArray(selected) ? selected.length > 0 : false;
+            filledFields += answered ? 1 : 0;
+          } else if (conditionType === 'Non-standard') {
+            totalFields += 1;
+            const text = productsData?.condition_custom_text;
             const answered = typeof text === 'string' && text.trim().length > 0;
             filledFields += answered ? 1 : 0;
           }
@@ -865,6 +960,12 @@ export function ProductsTab() {
         typeof productsData?.restriction_custom_text === 'string' ? productsData.restriction_custom_text : '';
     }
 
+    if (group.id === CONDITIONS_CONTROL_GROUP_ID) {
+      groupData.condition_type = normalizeConditionType(productsData?.condition_type ?? '');
+      groupData.condition_custom_text =
+        typeof productsData?.condition_custom_text === 'string' ? productsData.condition_custom_text : '';
+    }
+
     setEditingBlockId(group.id);
     setEditingData(groupData);
   };
@@ -1004,9 +1105,14 @@ export function ProductsTab() {
 
   const renderSimpleBlock = (group: GroupConfig, simpleFields: FieldConfig[]) => {
     const isEditing = editingBlockId === group.id;
+    const islamicEndorsementApplied = productsData?.[ISLAMIC_ENDORSEMENT_APPLY_FIELD] === true;
+    const effectiveSimpleFields =
+      group.id === ENDORSEMENT_ISLAMIC_GROUP_ID && !islamicEndorsementApplied
+        ? simpleFields.filter((f) => f.fieldName === ISLAMIC_ENDORSEMENT_APPLY_FIELD)
+        : simpleFields;
 
     if (group.id === LICENSE_CATEGORY_GROUP_ID) {
-      const fields = simpleFields.filter((f) => f.fieldType === 'Boolean');
+      const fields = effectiveSimpleFields.filter((f) => f.fieldType === 'Boolean');
       const selectedFieldName =
         fields.find((f) => editingData?.[f.fieldName] === true)?.fieldName ||
         fields.find((f) => productsData?.[f.fieldName] === true)?.fieldName ||
@@ -1117,29 +1223,43 @@ export function ProductsTab() {
 
       if (!isEditing) {
         const selected = getStandardSelection(productsData);
-        const selectedLabels = selected
-          .map((v) => RESTRICTION_STANDARD_OPTIONS.find((o) => o.value === v)?.label ?? v)
-          .filter(Boolean);
+        const standardField = simpleFields.find((f) => f.fieldName === 'restriction_standard_selection');
+        const standardOptions = standardField?.options ?? RESTRICTION_STANDARD_OPTIONS;
+        const selectedLabels = selected.map((v) => {
+          const rawLabel = standardOptions.find((o) => o.value === v)?.label;
+          if (typeof rawLabel !== 'string' || rawLabel.trim().length === 0) return v;
+          const prefix = `${v} - `;
+          if (rawLabel.startsWith(prefix)) {
+            return `${v} — ${rawLabel.slice(prefix.length)}`;
+          }
+          return rawLabel;
+        });
 
-        const dependentValue =
-          hasRestriction && restrictionType === 'Standard'
-            ? selectedLabels.length > 0
-              ? selectedLabels.join(', ')
-              : '-'
-            : hasRestriction && restrictionType === 'Non-standard'
-              ? (getCustomText(productsData).trim() ? getCustomText(productsData) : '-')
-              : null;
+        const standardSelectionNode =
+          selectedLabels.length > 0 ? (
+            <ul className="space-y-1">
+              {selectedLabels.map((line) => (
+                <li key={line} className="text-sm text-gray-900">
+                  {line}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="text-sm text-gray-700">No standard restrictions selected.</div>
+          );
 
         return (
           <div className="space-y-4">
             {renderDisplayRow('Do you want to add a Restriction?', addFlagValue === true ? 'Yes' : addFlagValue === false ? 'No' : '-')}
             {hasRestriction && renderDisplayRow('Standard or Non-standard Restriction?', restrictionType || '-')}
-            {dependentValue !== null &&
+            {hasRestriction &&
+              restrictionType === 'Standard' &&
+              renderDisplayRow('Selected standard restrictions', standardSelectionNode)}
+            {hasRestriction &&
+              restrictionType === 'Non-standard' &&
               renderDisplayRow(
-                restrictionType === 'Standard'
-                  ? 'Please select the standard Restriction(s) required'
-                  : 'Please add the proposed non-standard Restriction',
-                dependentValue
+                'Please add the proposed non-standard Restriction',
+                getCustomText(productsData).trim() ? getCustomText(productsData) : '-'
               )}
 
             {!isReadOnly && (
@@ -1348,10 +1468,290 @@ export function ProductsTab() {
       );
     }
 
+    if (group.id === CONDITIONS_CONTROL_GROUP_ID) {
+      const addFlagValue = isEditing ? editingData?.condition_add_flag : productsData?.condition_add_flag;
+      const hasCondition = addFlagValue === true;
+      const conditionType = normalizeConditionType(isEditing ? editingData?.condition_type : productsData?.condition_type);
+
+      const getStandardSelection = (source: Record<string, any>) => {
+        const selected = source?.condition_standard_selection;
+        if (Array.isArray(selected)) return selected as string[];
+        return [];
+      };
+
+      const getCustomText = (source: Record<string, any>) => {
+        const v = source?.condition_custom_text;
+        return typeof v === 'string' ? v : '';
+      };
+
+      const renderDisplayRow = (label: string, value: React.ReactNode) => (
+        <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+          <label className="text-sm font-medium text-gray-700 sm:w-1/3 sm:pt-2">{label}</label>
+          <div className="flex-1 text-sm text-gray-900">{value}</div>
+        </div>
+      );
+
+      const standardField = effectiveSimpleFields.find((f) => f.fieldName === 'condition_standard_selection');
+      const standardOptions = standardField?.options ?? [];
+
+      if (!isEditing) {
+        const selected = getStandardSelection(productsData);
+        const selectedLabels =
+          standardOptions.length > 0
+            ? selected
+                .map((v) => standardOptions.find((o) => o.value === v)?.label ?? v)
+                .filter(Boolean)
+            : selected;
+
+        const dependentValue =
+          hasCondition && conditionType === 'Standard'
+            ? selectedLabels.length > 0
+              ? selectedLabels.join(', ')
+              : '-'
+            : hasCondition && conditionType === 'Non-standard'
+              ? (getCustomText(productsData).trim() ? getCustomText(productsData) : '-')
+              : null;
+
+        return (
+          <div className="space-y-4">
+            {renderDisplayRow(
+              'Do you want to add a Condition?',
+              addFlagValue === true ? 'Yes' : addFlagValue === false ? 'No' : '-'
+            )}
+            {hasCondition && renderDisplayRow('Standard or Non-standard Condition?', conditionType || '-')}
+            {dependentValue !== null &&
+              renderDisplayRow(
+                conditionType === 'Standard'
+                  ? 'Please select the standard Condition(s) required'
+                  : 'Please add the proposed non-standard Condition',
+                dependentValue
+              )}
+
+            {!isReadOnly && (
+              <div className="pt-2 border-t border-gray-100">
+                <button
+                  type="button"
+                  onClick={() => handleEditGroup(group)}
+                  className="px-4 py-2 text-sm font-medium text-white rounded"
+                  style={{ backgroundColor: '#9b1823' }}
+                >
+                  Edit
+                </button>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      const selected = getStandardSelection(editingData);
+      const customText = getCustomText(editingData);
+
+      const setAddFlag = (next: boolean) => {
+        setEditingData((prev) => {
+          if (!next) {
+            return {
+              ...prev,
+              condition_add_flag: false,
+              condition_type: '',
+              condition_standard_selection: [],
+              condition_custom_text: '',
+            };
+          }
+          return { ...prev, condition_add_flag: true };
+        });
+      };
+
+      const setConditionType = (next: string) => {
+        const normalized = normalizeConditionType(next);
+        setEditingData((prev) => {
+          if (normalized === 'Standard') {
+            return { ...prev, condition_type: 'Standard', condition_custom_text: '' };
+          }
+          if (normalized === 'Non-standard') {
+            return { ...prev, condition_type: 'Non-standard', condition_standard_selection: [] };
+          }
+          return { ...prev, condition_type: normalized };
+        });
+      };
+
+      const toggleStandardValue = (value: string, checked: boolean) => {
+        setEditingData((prev) => {
+          const current: string[] = Array.isArray(prev.condition_standard_selection)
+            ? prev.condition_standard_selection
+            : [];
+          const next = checked
+            ? Array.from(new Set([...current, value]))
+            : current.filter((v) => v !== value);
+          return { ...prev, condition_standard_selection: next };
+        });
+      };
+
+      const handleSaveConditions = async () => {
+        const currentAddFlag = editingData?.condition_add_flag === true;
+        const type = normalizeConditionType(editingData?.condition_type);
+
+        // IMPORTANT:
+        // - The backend enforces group-scoped field allowlists for Products updates.
+        // - condition_custom_text belongs to a different group than condition_add_flag/condition_type.
+        // - To keep a single Save action and still persist/clear conflicting values, send this update without _groupId.
+        const payload: Record<string, any> = {};
+
+        payload.condition_add_flag = currentAddFlag;
+
+        if (!currentAddFlag) {
+          payload.condition_type = '';
+          payload.condition_standard_selection = [];
+          payload.condition_custom_text = '';
+        } else {
+          payload.condition_type = type;
+          if (type === 'Standard') {
+            payload.condition_standard_selection = selected;
+            payload.condition_custom_text = '';
+          } else if (type === 'Non-standard') {
+            payload.condition_standard_selection = [];
+            payload.condition_custom_text = customText;
+          } else {
+            payload.condition_standard_selection = [];
+            payload.condition_custom_text = '';
+          }
+        }
+
+        await updateMutation.mutateAsync(payload);
+      };
+
+      const setFreeformLines = (text: string) => {
+        const lines = text
+          .split('\n')
+          .map((s) => s.trim())
+          .filter(Boolean);
+        setEditingData((prev) => ({ ...prev, condition_standard_selection: lines }));
+      };
+
+      return (
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+            <label className="text-sm font-medium text-gray-700 sm:w-1/3 sm:pt-2">Do you want to add a Condition?</label>
+            <div className="flex-1">
+              <label className="inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={editingData?.condition_add_flag === true}
+                  onChange={(e) => setAddFlag(e.target.checked)}
+                  disabled={isReadOnly || updateMutation.isPending}
+                  className="h-4 w-4 text-red-800 focus:ring-red-800 rounded border-gray-300 cursor-pointer disabled:cursor-not-allowed"
+                />
+              </label>
+            </div>
+          </div>
+
+          {hasCondition && (
+            <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+              <label className="text-sm font-medium text-gray-700 sm:w-1/3 sm:pt-2">
+                Standard or Non-standard Condition?
+              </label>
+              <div className="flex-1">
+                <select
+                  value={conditionType}
+                  onChange={(e) => setConditionType(e.target.value)}
+                  disabled={isReadOnly || updateMutation.isPending}
+                  className="w-full text-sm border rounded px-3 py-2 min-h-[44px] border-gray-300"
+                >
+                  <option value="">Select an option</option>
+                  {CONDITION_TYPE_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )}
+
+          {hasCondition && conditionType === 'Standard' && (
+            <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+              <label className="text-sm font-medium text-gray-700 sm:w-1/3 sm:pt-2">
+                Please select the standard Condition(s) required
+              </label>
+              <div className="flex-1">
+                {standardOptions.length > 0 ? (
+                  <div className="space-y-2">
+                    {standardOptions.map((opt) => {
+                      const checked = selected.includes(opt.value);
+                      return (
+                        <label key={opt.value} className="flex items-center gap-2 text-sm text-gray-700">
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 text-red-800 focus:ring-red-800 rounded border-gray-300"
+                            checked={checked}
+                            disabled={isReadOnly || updateMutation.isPending}
+                            onChange={(e) => toggleStandardValue(opt.value, e.target.checked)}
+                          />
+                          <span>{opt.label}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <textarea
+                    value={selected.join('\n')}
+                    onChange={(e) => setFreeformLines(e.target.value)}
+                    disabled={isReadOnly || updateMutation.isPending}
+                    placeholder="Enter one value per line"
+                    className="w-full text-sm border rounded px-3 py-2 min-h-[96px] border-gray-300"
+                  />
+                )}
+              </div>
+            </div>
+          )}
+
+          {hasCondition && conditionType === 'Non-standard' && (
+            <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+              <label className="text-sm font-medium text-gray-700 sm:w-1/3 sm:pt-2">
+                Please add the proposed non-standard Condition
+              </label>
+              <div className="flex-1">
+                <textarea
+                  value={customText}
+                  onChange={(e) => setEditingData((prev) => ({ ...prev, condition_custom_text: e.target.value }))}
+                  disabled={isReadOnly || updateMutation.isPending}
+                  placeholder="Enter the proposed condition"
+                  className="w-full text-sm border rounded px-3 py-2 min-h-[120px] border-gray-300"
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="flex gap-2 pt-2 border-t border-gray-100">
+            <button
+              type="button"
+              onClick={handleSaveConditions}
+              disabled={isReadOnly || updateMutation.isPending}
+              className="px-4 py-2 text-sm font-medium text-white rounded"
+              style={{ backgroundColor: '#9b1823', opacity: updateMutation.isPending ? 0.7 : 1 }}
+            >
+              <span className="inline-flex items-center">
+                {updateMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {updateMutation.isPending ? 'Saving...' : 'Save'}
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={handleCancelEdit}
+              disabled={updateMutation.isPending}
+              className="px-4 py-2 text-sm font-medium text-gray-600 rounded border border-gray-300"
+              style={{ opacity: updateMutation.isPending ? 0.7 : 1 }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     if (isEditing) {
       return (
         <ProfileSectionForm
-          groups={[{ ...group, fields: simpleFields }]}
+          groups={[{ ...group, fields: effectiveSimpleFields }]}
           data={editingData}
           onSubmit={(data) => handleSaveGroup(group, data)}
           onCancel={handleCancelEdit}
@@ -1363,7 +1763,7 @@ export function ProductsTab() {
 
     return (
       <div className="space-y-4">
-        {simpleFields.map((field) => {
+        {effectiveSimpleFields.map((field) => {
           const value = productsData[field.fieldName];
           const isMandatory = field.mandatory === true || (Array.isArray(field.mandatory) && field.mandatory.length > 0);
           const isFieldReadOnly = field.readOnly || isReadOnly;
@@ -1439,6 +1839,16 @@ export function ProductsTab() {
     return (
       <div key={field.id} className="space-y-3">
         <div className="text-base font-semibold text-gray-900">{field.label}</div>
+        <div className="rounded-md border border-gray-200 bg-gray-50 p-3 text-xs text-gray-700">
+          <div className="flex flex-wrap gap-x-6 gap-y-1">
+            <span>— Not answered</span>
+            <span>Yes Selected</span>
+            <span>No Explicitly not selected</span>
+          </div>
+          <div className="mt-1 text-gray-600">
+            Selections represent regulatory permissions under the selected license category.
+          </div>
+        </div>
         <div className={isSavingThisMatrix ? 'opacity-70 pointer-events-none' : undefined} aria-busy={isSavingThisMatrix}>
           <MatrixField
             label=""
