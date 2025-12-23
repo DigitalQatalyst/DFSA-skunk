@@ -25,7 +25,7 @@ export const regimes: Regime[] = [
     {
         id: 'regime-3',
         code: 'REGIME_3',
-        name: 'Representation',
+        name: 'Registration',
         fullName: 'REGIME 3: REPRESENTATIVE OFFICE',
         description: 'Entities conducting marketing activities only (no Financial Services)',
         pathways: [],
