@@ -53,7 +53,8 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
 
   // Initialize form with React Hook Form
   const form = useForm<DFSAOnboardingFormData>({
-    resolver: yupResolver(getDynamicSchema('FINANCIAL_SERVICES' as DFSAActivityType)),
+    // TEMP: Validation disabled for testing
+    // resolver: yupResolver(getDynamicSchema('FINANCIAL_SERVICES' as DFSAActivityType)),
     defaultValues: getInitialValues(),
     mode: 'onChange',
   })
@@ -173,15 +174,16 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
   const handleNext = async () => {
     if (currentStep >= totalSteps - 1) return
 
+    // TEMP: Validation disabled for testing
     // Get fields to validate for current step
-    const fieldsToValidate = getStepFields(currentStepData.id)
+    // const fieldsToValidate = getStepFields(currentStepData.id)
 
     // Skip validation for display-only steps (e.g., welcome, review)
-    let isValid = true
-    if (fieldsToValidate.length > 0) {
-      // Validate only current step's fields
-      isValid = await form.trigger(fieldsToValidate as any)
-    }
+    const isValid = true // Always valid for testing
+    // if (fieldsToValidate.length > 0) {
+    //   // Validate only current step's fields
+    //   isValid = await form.trigger(fieldsToValidate as any)
+    // }
 
     if (isValid) {
       auditLogger.log('DFSA_SECTION_COMPLETED', {
@@ -201,7 +203,46 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
     }
   }
 
-  // Handle final submission
+  // TEMP: For testing - bypass validation entirely
+  const handleSubmitDirect = async () => {
+    const data = form.getValues()
+    try {
+      auditLogger.log('DFSA_FORM_SUBMITTED', {
+        userId: data.userId,
+        activityType: data.activityType,
+        pathway: data.pathway,
+      })
+
+      // Submit application using React Query mutation
+      const result = await submitMutation.mutateAsync(data)
+
+      setApplicationReference(result.applicationReference)
+
+      auditLogger.log('DFSA_SUBMISSION_SUCCESS', {
+        applicationReference: result.applicationReference,
+        submittedAt: result.submittedAt,
+      })
+
+      toast.success('Application submitted successfully!', {
+        description: `Reference: ${result.applicationReference}`,
+      })
+
+      // Set onboarding status to completed immediately after successful submission
+      setDemoOnboardingStatus('completed')
+
+      setShowSuccessModal(true)
+    } catch (error) {
+      auditLogger.log('DFSA_SUBMISSION_FAILED', {
+        error: String(error),
+      })
+      toast.error('Submission failed. Please try again.', {
+        description: 'If the problem persists, please contact support.',
+        duration: 5000,
+      })
+    }
+  }
+
+  // Handle final submission (with validation - currently not used during testing)
   const handleSubmit = form.handleSubmit(
     async (data) => {
       try {
@@ -224,6 +265,9 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
         toast.success('Application submitted successfully!', {
           description: `Reference: ${result.applicationReference}`,
         })
+
+        // Set onboarding status to completed immediately after successful submission
+        setDemoOnboardingStatus('completed')
 
         setShowSuccessModal(true)
       } catch (error) {
@@ -261,13 +305,18 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
   // Handle modal close
   const handleCloseModal = () => {
     setShowSuccessModal(false)
-    setDemoOnboardingStatus('completed')
 
     if (onComplete) {
       onComplete()
     }
 
-    navigate('/dashboard/overview')
+    // In demo mode, force a page reload to re-read onboarding status from localStorage
+    const isDemoMode = import.meta.env.VITE_DEMO_AUTH_BYPASS === 'true'
+    if (isDemoMode) {
+      window.location.href = '/dashboard/overview'
+    } else {
+      navigate('/dashboard/overview')
+    }
   }
 
   // Render current step content
@@ -295,7 +344,7 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
         return (
           <ReviewSubmitStep
             onEdit={handleEdit}
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmitDirect} // TEMP: Use direct submit for testing
             isSubmitting={submitMutation.isPending}
           />
         )
@@ -392,11 +441,10 @@ export const SteppedForm: React.FC<SteppedFormProps> = ({ onComplete, isModal = 
                             className={`
                             flex items-center text-xs px-2 py-0.5 rounded-full whitespace-nowrap font-semibold
                             transition-all duration-300
-                            ${
-                              completion === 100
+                            ${completion === 100
                                 ? 'bg-[#a39143]/10 text-[#a39143] border border-[#a39143]/30'
                                 : 'bg-[#a39143]/10 text-[#a39143] border border-[#a39143]/30'
-                            }
+                              }
                             max-sm:hidden
                           `}
                           >
