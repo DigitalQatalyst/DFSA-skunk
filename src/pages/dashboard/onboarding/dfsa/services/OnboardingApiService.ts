@@ -40,6 +40,19 @@ export class OnboardingApiError extends Error {
 export async function submitOnboardingApplication(
   data: DFSAOnboardingFormData
 ): Promise<{ applicationReference: string; submittedAt: string }> {
+  // TEMP: For demo mode, return mock success response
+  const isDemoMode = import.meta.env.VITE_DEMO_AUTH_BYPASS === 'true'
+  if (isDemoMode) {
+    console.log('🎭 [DEMO MODE] Mocking successful application submission')
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 500))
+
+    return {
+      applicationReference: `DFSA-${Date.now()}-DEMO`,
+      submittedAt: new Date().toISOString(),
+    }
+  }
+
   const response = await fetch(`${API_BASE_URL}/onboarding/applications`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
