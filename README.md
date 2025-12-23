@@ -30,3 +30,6 @@ Code entry points
 Verification
 - Non-KH pages should hit only the default Supabase URL in the network panel.
 - KH pages (marketplace Knowledge Hub grid/details, Admin UI) should hit only the KH Supabase URL.
+
+
+## try trigger deployment
