@@ -3,14 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { ChevronDownIcon } from "lucide-react";
 import {
   BuildingIcon,
-  CreditCardIcon,
-  NewspaperIcon,
-  UsersIcon,
   GraduationCapIcon,
-  TrendingUpIcon,
-  CalendarIcon,
-  SparklesIcon,
   LucideProps,
+  InfoIcon,
+  NewspaperIcon,
+  BookOpenIcon,
+  BriefcaseIcon,
 } from "lucide-react";
 
 interface Marketplace {
@@ -21,24 +19,61 @@ interface Marketplace {
   href: string;
   target?: string;
   rel?: string;
+  comingSoon?: boolean;
 }
 
 const marketplaces: Marketplace[] = [
   {
-    id: "services",
-    name: "Services",
+    id: "authorisation",
+    name: "Authorisation",
     description:
-      "Business registration, legal advisory, tax, compliance, and SME support services",
+      "Apply for authorisation to conduct financial services activities in the DIFC",
     icon: BuildingIcon,
-    href: "/marketplace/non-financial",
+    href: "/marketplace/business-services",
   },
   {
-    id: "enquiries",
-    name: "Enquiries",
+    id: "recognition",
+    name: "Recognition",
     description:
-      "Submit your enquiries and get assistance with your business needs",
+      "Obtain recognition for regulatory activities and qualifications",
+    icon: GraduationCapIcon,
+    href: "/recognition",
+  },
+  {
+    id: "what-we-do",
+    name: "What we do",
+    description:
+      "Structured documentation preparation services for DFSA applications",
+    icon: BriefcaseIcon,
+    href: "#",
+    comingSoon: true,
+  },
+  {
+    id: "about-us",
+    name: "About us",
+    description:
+      "Learn about our team and regulatory expertise",
+    icon: InfoIcon,
+    href: "#",
+    comingSoon: true,
+  },
+  {
+    id: "news",
+    name: "News",
+    description:
+      "Latest updates on DFSA regulations and industry developments",
     icon: NewspaperIcon,
-    href: "/enquiries",
+    href: "#",
+    comingSoon: true,
+  },
+  {
+    id: "resources",
+    name: "Resources",
+    description:
+      "Compliance guides, templates, and regulatory reference materials",
+    icon: BookOpenIcon,
+    href: "#",
+    comingSoon: true,
   },
 ];
 
@@ -149,9 +184,8 @@ export function ExploreDropdown({ isCompact = false }: ExploreDropdownProps) {
         <span>Explore</span>
         <ChevronDownIcon
           size={16}
-          className={`ml-1 transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={`ml-1 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
+            }`}
         />
       </button>
 
@@ -180,7 +214,7 @@ export function ExploreDropdown({ isCompact = false }: ExploreDropdownProps) {
                 <a
                   key={marketplace.id}
                   ref={(el) => (itemRefs.current[index] = el)}
-                  href={marketplace.href}
+                  href={marketplace.comingSoon ? "#" : marketplace.href}
                   // Respect explicit per-item settings, otherwise set sensible defaults
                   target={
                     marketplace.target ?? (external ? "_blank" : undefined)
@@ -189,12 +223,18 @@ export function ExploreDropdown({ isCompact = false }: ExploreDropdownProps) {
                     marketplace.rel ??
                     (external ? "noopener noreferrer" : undefined)
                   }
-                  className={`flex items-start px-4 py-3 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none transition-colors duration-150 ${
-                    focusedIndex === index ? "bg-gray-50" : ""
-                  }`}
+                  className={`flex items-start px-4 py-3 text-left transition-colors duration-150 ${marketplace.comingSoon
+                      ? "opacity-60 cursor-not-allowed"
+                      : "hover:bg-gray-50 focus:bg-gray-50"
+                    } ${focusedIndex === index && !marketplace.comingSoon ? "bg-gray-50" : ""}`}
                   role="menuitem"
                   tabIndex={-1}
                   onClick={(e) => {
+                    // Prevent action for coming soon items
+                    if (marketplace.comingSoon) {
+                      e.preventDefault();
+                      return;
+                    }
                     // Internal routes: prevent default and route via react-router
                     if (!external) {
                       e.preventDefault();
@@ -209,9 +249,16 @@ export function ExploreDropdown({ isCompact = false }: ExploreDropdownProps) {
                     <Icon size={20} style={{ color: '#b82933' }} />
                   </div>
                   <div className="ml-3 flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">
-                      {marketplace.name}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-medium text-gray-900 truncate">
+                        {marketplace.name}
+                      </p>
+                      {marketplace.comingSoon && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-600">
+                          Coming Soon
+                        </span>
+                      )}
+                    </div>
                     <p className="text-xs text-gray-500 mt-1 line-clamp-2">
                       {marketplace.description}
                     </p>

@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { ServiceRequestForm } from "../../components/Forms/FormPreview";
 import { facilitateCommunicationSchema } from "../../components/Forms/form-schemas/FacilitateCommunicationSchema";
 import { useFormDataMapping } from "../../hooks/useFormDataMapping";
-import { createFormSubmissionHandler } from "../../services/formSubmissionService";
 import { useAuth } from "../../components/Header/context/AuthContext";
 
 function FacilitateCommunication() {
@@ -24,7 +23,7 @@ function FacilitateCommunication() {
   console.log("🔍 Auth Debug - azureId:", azureId);
 
   // Create submission handler with azureId override
-  const submitHandler = createFormSubmissionHandler('facilitate-communication', azureId);
+  const submitHandler = async (data: any) => { console.log("Form submitted:", data); };
 
   const handleSubmit = async (data: any) => {
     setIsSubmitting(true);

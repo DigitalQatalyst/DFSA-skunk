@@ -744,11 +744,11 @@ export const marketplaceConfig: Record<string, MarketplaceConfig> = {
     // Mock data for fallback and schema reference
     mockData: mockEventsData
   },
-  'non-financial': {
-    id: 'non-financial',
+  'business-services': {
+    id: 'business-services',
     title: 'Business Services Hub',
     description: 'Find professional services to support and grow your business',
-    route: '/marketplace/non-financial',
+    route: '/marketplace/business-services',
     primaryCTA: 'Request Service',
     secondaryCTA: 'View Details',
     itemName: 'Business Service',
@@ -813,14 +813,29 @@ export const marketplaceConfig: Record<string, MarketplaceConfig> = {
       id: 'serviceCategory',
       title: 'Service Category',
       options: [{
-        id: 'Licensing',
-        name: 'Licensing'
+        id: 'Licensing / Authorisation',
+        name: 'Licensing / Authorisation'
       }, {
-        id: 'Compliance',
-        name: 'Compliance'
+        id: 'Funds',
+        name: 'Funds'
       }, {
-        id: 'Market',
-        name: 'Market'
+        id: 'Compliance / AML',
+        name: 'Compliance / AML'
+      }, {
+        id: 'Market / Innovation',
+        name: 'Market / Innovation'
+      }, {
+        id: 'Securities & Crypto',
+        name: 'Securities & Crypto'
+      }, {
+        id: 'Advisory',
+        name: 'Advisory'
+      }, {
+        id: 'Market Access / Membership',
+        name: 'Market Access / Membership'
+      }, {
+        id: 'Audit / Compliance',
+        name: 'Audit / Compliance'
       }]
     }, {
       id: 'serviceType',
@@ -829,14 +844,26 @@ export const marketplaceConfig: Record<string, MarketplaceConfig> = {
         id: 'New Application',
         name: 'New Application'
       }, {
-        id: 'Amendment',
-        name: 'Amendment'
+        id: 'Registration',
+        name: 'Registration'
       }, {
-        id: 'Renewal',
-        name: 'Renewal'
+        id: 'Authorisation / Registration',
+        name: 'Authorisation / Registration'
       }, {
-        id: 'Enquiries',
-        name: 'Enquiries'
+        id: 'New Application / Amendment / Withdrawal',
+        name: 'New Application / Amendment / Withdrawal'
+      }, {
+        id: 'Registration / Authorisation',
+        name: 'Registration / Authorisation'
+      }, {
+        id: 'New Application / Innovation',
+        name: 'New Application / Innovation'
+      }, {
+        id: 'Authorisation / Recognition',
+        name: 'Authorisation / Recognition'
+      }, {
+        id: 'Recognition',
+        name: 'Recognition'
       }]
     }, {
       id: 'entityType',
@@ -845,23 +872,29 @@ export const marketplaceConfig: Record<string, MarketplaceConfig> = {
         id: 'Authorised Firms',
         name: 'Authorised Firms'
       }, {
-        id: 'Authorised Market Institutions',
-        name: 'Authorised Market Institutions'
+        id: 'Individuals',
+        name: 'Individuals'
       }, {
-        id: 'Investment Funds',
-        name: 'Investment Funds'
+        id: 'Collective Investment Funds',
+        name: 'Collective Investment Funds'
       }, {
-        id: 'Securities & Crypto',
-        name: 'Securities & Crypto'
+        id: 'DNFBP',
+        name: 'DNFBP'
       }, {
-        id: 'Fintech & Innovation',
-        name: 'Fintech & Innovation'
+        id: 'Fintech / Innovation Entities',
+        name: 'Fintech / Innovation Entities'
       }, {
-        id: 'DNFBPs',
-        name: 'DNFBPs'
+        id: 'Issuers / Token Issuers',
+        name: 'Issuers / Token Issuers'
       }, {
         id: 'Professional Advisors',
         name: 'Professional Advisors'
+      }, {
+        id: 'Recognised Persons / Bodies / Members',
+        name: 'Recognised Persons / Bodies / Members'
+      }, {
+        id: 'Registered Auditors',
+        name: 'Registered Auditors'
       }]
     }],
     // Data mapping functions

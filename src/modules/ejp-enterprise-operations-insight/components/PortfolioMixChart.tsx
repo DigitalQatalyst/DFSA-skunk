@@ -106,7 +106,6 @@ const PortfolioMixChart: React.FC<PortfolioMixChartProps> = ({ startDate, endDat
             }
           },
           smooth: true,
-          symbol: 'circle',
           lineStyle: { width: 3, color: '#10b981' },
           data: data.map(d => d.financial),
           emphasis: { focus: 'series' }

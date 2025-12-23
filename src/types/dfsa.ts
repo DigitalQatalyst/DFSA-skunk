@@ -15,6 +15,19 @@ export interface TrustMetric {
   icon?: string;
 }
 
+/**
+ * DFSA Fact Metrics (Compliant replacement for Trust Metrics)
+ * Educational regulatory information, no outcome predictions
+ */
+export interface DFSAFactMetric {
+  id: string;
+  value: number;
+  label: string;
+  description: string;
+  icon: string;
+  ruleReference?: string;
+}
+
 // ============================================================================
 // LICENSE CATEGORIES
 // ============================================================================
@@ -264,3 +277,358 @@ export type AuthorizationStage =
   | 'operational';
 
 export type CompliancePackageTier = 'starter' | 'professional' | 'enterprise' | 'itl';
+
+// ============================================================================
+// DFSA ENQUIRY SIGN-UP TYPES
+// ============================================================================
+
+/**
+ * DFSA Activity Types for Authorisation Enquiry
+ * Maps to SU-6 field in the sign-up form
+ */
+export type DFSAActivityType =
+  | 'FINANCIAL_SERVICES'
+  | 'DNFBP'
+  | 'REGISTERED_AUDITOR'
+  | 'CRYPTO_TOKEN'
+  | 'CRYPTO_TOKEN_RECOGNITION';
+
+/**
+ * DFSA Entity Types for incorporation
+ * Maps to SU-7 field in the sign-up form
+ */
+export type DFSAEntityType =
+  | 'DIFC_INCORPORATION'
+  | 'OTHER_JURISDICTION'
+  | 'OTHER';
+
+/**
+ * DFSA Teams for triage routing based on activity type
+ */
+export type DFSATeam =
+  | 'AUTHORISATION_TEAM'
+  | 'DNFBP_REGISTRATION_TEAM'
+  | 'AUDIT_REGISTRATION_TEAM'
+  | 'CRYPTO_INNOVATION_TEAM';
+
+/**
+ * Contact Information section (SU-1 through SU-5)
+ */
+export interface DFSAContactInfo {
+  companyName: string;           // SU-1: 2-200 chars
+  contactName: string;            // SU-2: 2-100 chars
+  email: string;                  // SU-3: valid email
+  phone: string;                  // SU-4: E.164 format
+  suggestedDate: string | null;   // SU-5: ISO date, future only
+}
+
+/**
+ * Complete DFSA Enquiry Sign-Up Form Data
+ * Aligns with technical specification v1.0
+ */
+export interface DFSAEnquirySignUpFormData {
+  contactInfo: DFSAContactInfo;
+  activityType: DFSAActivityType;        // SU-6
+  entityType: DFSAEntityType;            // SU-7
+  entityTypeOther: string | null;        // SU-7 conditional
+  currentlyRegulated: boolean | null;    // SU-8 conditional
+  difcaConsent: boolean;                 // SU-9
+}
+
+/**
+ * DFSA Enquiry Submission Response
+ * Includes reference number and team assignment
+ */
+export interface DFSAEnquirySignUpSubmission {
+  referenceNumber: string;               // ENQ-YYYY-NNNNN
+  submittedAt: string;                   // ISO datetime
+  formData: DFSAEnquirySignUpFormData;
+  assignedTeam: DFSATeam;
+}
+
+/**
+ * API Response for DFSA Enquiry Submission
+ */
+export interface DFSAEnquiryResponse {
+  success: boolean;
+  referenceNumber?: string;
+  assignedTeam?: DFSATeam;
+  message: string;
+  data?: any;
+}
+// ============================================================================
+// FINANCIAL SERVICES APPLICATION FORM TYPES
+// ============================================================================
+
+/**
+ * Address information structure
+ */
+export interface Address {
+  line1: string;
+  line2?: string;
+  city: string;
+  state?: string;
+  postalCode?: string;
+  country: string;
+  poBox?: string;
+}
+
+/**
+ * Shareholder information
+ */
+export interface Shareholder {
+  name: string;
+  percentage: number;
+  country: string;
+  isIndividual: boolean;
+  entityType?: string;
+}
+
+/**
+ * Beneficial owner information
+ */
+export interface BeneficialOwner {
+  name: string;
+  percentage: number;
+  nationality: string;
+  dateOfBirth?: string;
+  passportNumber?: string;
+}
+
+/**
+ * Controller information
+ */
+export interface Controller {
+  name: string;
+  role: string;
+  controlType: string;
+  percentage?: number;
+  nationality: string;
+}
+
+/**
+ * File upload structure
+ */
+export interface FileUpload {
+  fileName: string;
+  mimeType: string;
+  fileSize: number;
+  fileData: string; // Base64
+  uploadDate: string;
+}
+
+/**
+ * Person information (for board composition, etc.)
+ */
+export interface Person {
+  name: string;
+  role: string;
+  nationality: string;
+  experience?: string;
+}
+
+/**
+ * Waiver request information
+ */
+export interface WaiverRequest {
+  requirement: string;
+  justification: string;
+  alternativeApproach?: string;
+}
+
+/**
+ * Fee calculation information
+ */
+export interface FeeCalculation {
+  applicationFee: number;
+  annualFee: number;
+  totalFee: number;
+  currency: string;
+}
+
+/**
+ * Individual declaration information
+ */
+export interface IndividualDeclaration {
+  personName: string;
+  role: string;
+  declarationSigned: boolean;
+  signedDate?: string;
+}
+
+/**
+ * Complete Financial Services Application Form Data
+ */
+export interface FSApplicationFormData {
+  // Step 1-1: Introduction & Disclosure
+  submitterName: string;
+  submitterFunction: string;
+  submitterEmail: string;
+  submitterPhone: string;
+  contactPersonInternal: boolean;
+  externalAdviserName?: string;
+  externalAdviserEmail?: string;
+  externalAdviserCompany?: string;
+  instructionsConfirmed: boolean;
+  disclosureAcknowledged: boolean;
+  informationAccurate: boolean;
+  authorizedToSubmit: boolean;
+  difcaConsent: boolean;
+
+  // Step 1-2: Standing Data
+  isRepresentativeOffice: boolean;
+  legalStatus?: string;
+  generalStructure?: string;
+  firmName: string;
+  tradingNames?: string[];
+  registeredCountry: string;
+  registrationNumber?: string;
+  registrationDate?: string;
+  financialYearEnd?: string;
+  headOfficeAddress: Address;
+  primaryContactName: string;
+  primaryContactEmail: string;
+  primaryContactPhone: string;
+  itReliance: string;
+  itComplexity: string;
+
+  // Step 1-3: Ownership Information
+  isPartOfGroup: boolean;
+  ultimateHoldingCompany?: string;
+  shareholders: Shareholder[];
+  beneficialOwners: BeneficialOwner[];
+  publiclyListed?: boolean;
+  listingExchange?: string;
+
+  // Step 1-4: Controllers & Group Structure
+  hasControllers: boolean;
+  controllers?: Controller[];
+  groupStructureDescription?: string;
+  groupStructureChart?: FileUpload;
+
+  // Step 1-5: Permissions & Financial Services (Critical for visibility)
+  activitySelections: Record<string, boolean>; // A1-A8 sector selections
+  financialServicesMatrix: Record<string, string[]>; // Activity to investment type mapping
+  endorsementSelections: Record<string, boolean>; // E1_A1, E2_A1, etc.
+
+  // Stage 2: Activity-specific data (conditional)
+  // ... activity-specific fields based on selections
+
+  // Stage 3: Core profile data (conditional)
+  businessPlanSummary?: string;
+  projectedFinancials?: object;
+  targetClientSegments?: string[];
+  riskManagementFramework?: string;
+  boardComposition?: Person[];
+
+  // Stage 4: Final submission
+  waiverRequests?: WaiverRequest[];
+  feeCalculation?: FeeCalculation;
+  paymentMethod?: string;
+  individualDeclarations: IndividualDeclaration[];
+  finalReview: boolean;
+  submissionDeclaration: boolean;
+}
+
+/**
+ * Application status type
+ */
+export type ApplicationStatus = 'draft' | 'submitted' | 'under_review' | 'approved' | 'rejected' | 'withdrawn';
+
+/**
+ * Complete application record
+ */
+export interface FSApplication {
+  id: string;
+  applicationRef: string;
+  status: ApplicationStatus;
+  formData: FSApplicationFormData;
+  currentStep: string;
+  completedSteps: string[];
+  progressPercent: number;
+  createdAt: string;
+  updatedAt: string;
+  submittedAt?: string;
+}
+
+/**
+ * Document metadata for file uploads
+ */
+export interface DocumentMetadata {
+  documentType: string;
+  documentName: string;
+  stepId: string;
+  fieldId: string;
+}
+
+/**
+ * Save operation result
+ */
+export interface SaveResult {
+  success: boolean;
+  applicationId?: string;
+  applicationRef?: string;
+  progressPercent?: number;
+  error?: string;
+}
+
+/**
+ * Submit operation result
+ */
+export interface SubmitResult {
+  success: boolean;
+  applicationRef?: string;
+  submittedAt?: string;
+  error?: string;
+}
+
+/**
+ * Validation result
+ */
+export interface ValidationResult {
+  isValid: boolean;
+  errors: Record<string, string>;
+}
+
+/**
+ * Step definition for form wizard
+ */
+export interface StepDefinition {
+  id: string;
+  stage: number;
+  name: string;
+  component: string;
+  visibility: 'always' | 'conditional';
+  triggerCondition?: string;
+}
+
+/**
+ * Rules engine types
+ */
+export interface Rule {
+  id: string;
+  ruleCode: string;
+  ruleName: string;
+  ruleType: 'visibility' | 'validation' | 'calculation';
+  targetType: 'step' | 'field' | 'section';
+  targetId: string;
+  isActive: boolean;
+  priority: number;
+}
+
+export interface RuleCondition {
+  id: string;
+  ruleId: string;
+  fieldPath: string;
+  operator: 'equals' | 'not_equals' | 'is_true' | 'is_false' | 'contains' | 'not_contains' | 'length_gt' | 'length_lt' | 'in' | 'not_in';
+  value?: string;
+  groupId: number;
+  groupOperator: 'AND' | 'OR';
+}
+
+export interface RuleAction {
+  id: string;
+  ruleId: string;
+  actionType: 'show' | 'hide' | 'require' | 'optional' | 'calculate';
+  actionValue: string;
+}

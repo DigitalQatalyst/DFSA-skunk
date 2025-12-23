@@ -1,0 +1,23 @@
+method,endpoint,description,request_body,response_format,auth_required,admin_only
+POST,/api/fs-applications,Create new application,"{formData, currentStep, completedSteps}","{success, message, application: {id, applicationRef, status, progressPercent}}",No,No
+GET,/api/fs-applications,List all applications,"Query: status, email, limit, offset","{success, applications[], pagination}",No,No
+GET,/api/fs-applications/:id,Get single application,None,"{success, application}",No,No
+PUT,/api/fs-applications/:id,Update application,"{formData, currentStep, completedSteps}","{success, message, progressPercent}",No,No
+DELETE,/api/fs-applications/:id,Delete draft application,None,"{success, message}",No,No
+PUT,/api/fs-applications/:id/status,Update status,"{status, reason, notes, changedBy}","{success, message, previousStatus, newStatus}",Yes,Yes
+POST,/api/fs-applications/:id/submit,Submit application,None,"{success, message, applicationRef, submittedAt}",No,No
+POST,/api/fs-applications/:id/request-documents,Request documents,"{documents[], message, changedBy}","{success, message, documentsRequested[]}",Yes,Yes
+POST,/api/fs-applications/:id/documents,Upload document,"{documentType, documentName, fileName, mimeType, fileSize, fileData, uploadedBy, description, stepId, fieldId}","{success, message, documentId}",No,No
+GET,/api/fs-applications/:id/documents/:docId,Get document,None,"{success, document}",No,No
+DELETE,/api/fs-applications/:id/documents/:docId,Delete document,None,"{success, message}",No,No
+GET,/api/fs-applications/admin/stats,Get statistics,None,"{success, stats: {total, byStatus, recentSubmissions, averageDraftProgress}}",Yes,Yes
+GET,/api/fs-applications/admin/test-email,Test email config,None,"{success, message}",Yes,Yes
+GET,/api/fs-applications/:id/pdf,Download application PDF,None,Binary PDF file,No,No
+GET,/api/fs-applications/admin/export-pdf,Download summary PDF,"Query: status, limit",Binary PDF file,Yes,Yes
+GET,/api/rules/export/:ruleSetCode,Export rules for client,None,"{success, rules[], version}",No,No
+POST,/api/rules/evaluate,Evaluate all rules,"{formData, ruleSetCode}","{success, results}",No,No
+POST,/api/rules/evaluate-field,Evaluate field change,"{formData, changedField, ruleSetCode}","{success, affectedTargets[]}",No,No
+GET,/api/admin/rules/rule-sets,List rule sets,None,"{success, ruleSets[]}",Yes,Yes
+POST,/api/admin/rules,Create rule,Rule definition object,"{success, message, rule}",Yes,Yes
+PUT,/api/admin/rules/:uuid,Update rule,Rule definition object,"{success, message}",Yes,Yes
+DELETE,/api/admin/rules/:uuid,Archive rule,None,"{success, message}",Yes,Yes

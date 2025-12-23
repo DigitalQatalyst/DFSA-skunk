@@ -26,12 +26,12 @@ interface MobileDrawerProps {
 
 const marketplaces = [
   {
-    id: "non-financial",
+    id: "business-services",
     name: "Business Services Hub",
     description:
       "Business registration, legal advisory, tax, compliance, and SME support services",
     icon: Building2,
-    href: "/marketplace/non-financial",
+    href: "/marketplace/business-services",
   },
   {
     id: "finance",

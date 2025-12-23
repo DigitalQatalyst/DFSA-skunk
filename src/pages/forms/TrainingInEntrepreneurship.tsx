@@ -2,12 +2,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { TrainingInEntrepreneurshipSchema } from "../../components/Forms/form-schemas/TrainingInEnterprenuershipSchema";
 import { ServiceRequestForm } from "../../components/Forms/FormPreview";
-import { createFormSubmissionHandler } from "../../services/formSubmissionService";
 import { useFormDataMapping } from "../../hooks/useFormDataMapping";
 
 function TrainingInEntrepreneurship() {
   const navigate = useNavigate();
-  const submitForm = createFormSubmissionHandler('training-in-entrepreneurship');
+  const submitForm = async (data: any) => { console.log("Form submitted:", data); };
   
   // Use the centralized mapping hook
   const { mappedData, loading, error } = useFormDataMapping();

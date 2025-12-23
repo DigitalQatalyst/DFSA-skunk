@@ -32,11 +32,12 @@ import {
 } from "../../utils/comparisonStorage";
 import { useQuery } from "@apollo/client/react";
 import { useLocation } from "react-router-dom";
-import { GET_PRODUCTS, GET_FACETS, GET_ALL_EVENTS } from "../../services/marketplaceQueries.ts";
-import { fetchMarketplaceFilters } from "../../services/marketplace";
-import { isSupabaseConfigured, getSupabase } from "../../lib/supabase/defaultClient";
-import { getSupabaseKnowledgeHub } from "../../lib/supabase";
-import { mockServicesData } from "../../data/mockServicesData";
+import {
+  GET_PRODUCTS,
+  GET_FACETS,
+  GET_ALL_EVENTS,
+} from "../../services/marketplaceQueries.ts";
+import { fetchNonFinancialServices } from "../../services/nonFinancialService";
 
 // Shared mapping + options
 import {
@@ -188,9 +189,13 @@ interface GetEventsData {
   };
 }
 
-
 export interface MarketplacePageProps {
-  marketplaceType: "courses" | "financial" | "non-financial" | "knowledge-hub" | "events";
+  marketplaceType:
+    | "courses"
+    | "financial"
+    | "business-services"
+    | "knowledge-hub"
+    | "events";
   title: string;
   description: string;
   promoCards?: any[];
@@ -262,15 +267,21 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
   };
   // Hydrate local UI from URL and on back/forward
   useEffect(() => {
-    if (marketplaceType !== 'knowledge-hub') return
-    const q = queryParams.get('q') || ''
-    setSearchQuery(q)
-  const fromDbToUi: Record<string, string> = {
-      'News': 'News', 'Article': 'Article', 'Report': 'Reports', 'Tool': 'Toolkits & Templates', 'Guide': 'Guides', 'Video': 'Videos', 'Podcast': 'Podcasts'
-    }
-    const nextActive: string[] = []
-    const typeCsv = getCsv(queryParams.get('type'))
-    const formatCsv = getCsv(queryParams.get('format'))
+    if (marketplaceType !== "knowledge-hub") return;
+    const q = queryParams.get("q") || "";
+    setSearchQuery(q);
+    const fromDbToUi: Record<string, string> = {
+      News: "News",
+      Article: "Article",
+      Report: "Reports",
+      Tool: "Toolkits & Templates",
+      Guide: "Guides",
+      Video: "Videos",
+      Podcast: "Podcasts",
+    };
+    const nextActive: string[] = [];
+    const typeCsv = getCsv(queryParams.get("type"));
+    const formatCsv = getCsv(queryParams.get("format"));
     // Special handling: when DB type is Article, reflect UI as News/Guides depending on selected formats
     typeCsv.forEach((t) => {
       if (t === "Article") {
@@ -307,7 +318,7 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
 
   // Responsive columns (used by non-KH views); KH uses fixed perPage from URL
   const [columns, setColumns] = useState<number>(1);
-  const DEFAULT_PER_PAGE = 12;
+  const DEFAULT_PER_PAGE = 9;
   const urlPerPage = parseInt(
     queryParams.get("perPage") || String(DEFAULT_PER_PAGE),
     10
@@ -324,18 +335,24 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
   // Reduce/disable client-side caching so admin updates reflect immediately
   const KH_CACHE_TTL_MS = 0; // set to 0 to always fetch fresh
   const [khPageSize, setKhPageSize] = useState<number>(0);
-  
+
   // Apollo queries for products, facets, and events
   // Skip GraphQL entirely for Knowledge Hub — it uses Supabase
-  const skipGraph = marketplaceType === 'knowledge-hub';
-  
-  const { data: productData, error: productError } = useQuery<GetProductsData>(GET_PRODUCTS, {
-    skip: skipGraph,
-  });
+  const skipGraph = marketplaceType === "knowledge-hub";
 
-  const { data: eventData, error: eventError } = useQuery<GetEventsData>(GET_ALL_EVENTS, {
-    skip: marketplaceType !== "events",
-  });
+  const { data: productData, error: productError } = useQuery<GetProductsData>(
+    GET_PRODUCTS,
+    {
+      skip: skipGraph,
+    }
+  );
+
+  const { data: eventData, error: eventError } = useQuery<GetEventsData>(
+    GET_ALL_EVENTS,
+    {
+      skip: marketplaceType !== "events",
+    }
+  );
 
   // Debug logging for courses
   useEffect(() => {
@@ -345,37 +362,52 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
       console.log("productData:", productData);
       console.log("productError:", productError);
       console.log("Total products:", productData?.products?.items?.length || 0);
-      
+
       if (productData?.products?.items) {
-        console.log("All products facet values:", productData.products.items.map(p => ({
-          id: p.id,
-          name: p.name,
-          facetValues: p.facetValues.map(fv => ({ id: fv.id, name: fv.name, code: fv.code }))
-        })));
-        
+        console.log(
+          "All products facet values:",
+          productData.products.items.map((p) => ({
+            id: p.id,
+            name: p.name,
+            facetValues: p.facetValues.map((fv) => ({
+              id: fv.id,
+              name: fv.name,
+              code: fv.code,
+            })),
+          }))
+        );
+
         const coursesWithFacet72 = productData.products.items.filter(
           (product) => product.facetValues.some((fv) => fv.id === "72")
         );
         console.log("Products with facet id '72':", coursesWithFacet72.length);
-        console.log("Course products:", coursesWithFacet72.map(p => ({
-          id: p.id,
-          name: p.name,
-          customFields: p.customFields
-        })));
+        console.log(
+          "Course products:",
+          coursesWithFacet72.map((p) => ({
+            id: p.id,
+            name: p.name,
+            customFields: p.customFields,
+          }))
+        );
       }
       console.log("========================");
     }
   }, [marketplaceType, productData, productError, skipGraph]);
-  
-  const { data: facetData, error: facetError } = useQuery<GetFacetsData>(GET_FACETS, {
-    skip: skipGraph,
-    errorPolicy: "all",
-    onError: (error) => {
-      console.error("GraphQL facets query error:", error);
-      // Don't set error for facets as it's not critical - just log it
-      console.warn("Facets query failed, using fallback filter configuration");
-    },
-  });
+
+  const { data: facetData, error: facetError } = useQuery<GetFacetsData>(
+    GET_FACETS,
+    {
+      skip: skipGraph,
+      errorPolicy: "all",
+      onError: (error) => {
+        console.error("GraphQL facets query error:", error);
+        // Don't set error for facets as it's not critical - just log it
+        console.warn(
+          "Facets query failed, using fallback filter configuration"
+        );
+      },
+    }
+  );
 
   // Measure header height for correct sticky offset on mobile
   useEffect(() => {
@@ -414,13 +446,18 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
       Guides: "Article",
       Guide: "Article",
       // Others map 1:1 to canonical types
-      'Reports': 'Report', 'Report': 'Report',
-      'Toolkits & Templates': 'Tool', 'Toolkit': 'Tool', 'Tool': 'Tool',
-      'Videos': 'Video', 'Video': 'Video',
-      'Podcasts': 'Podcast', 'Podcast': 'Podcast',
-    }
-    return m[label] || null
-  }
+      Reports: "Report",
+      Report: "Report",
+      "Toolkits & Templates": "Tool",
+      Toolkit: "Tool",
+      Tool: "Tool",
+      Videos: "Video",
+      Video: "Video",
+      Podcasts: "Podcast",
+      Podcast: "Podcast",
+    };
+    return m[label] || null;
+  };
   const stripHtml = (html: string): string => {
     try {
       const tmp = document.createElement("div");
@@ -436,29 +473,28 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
     }
   };
   // Minimal set of columns needed for KH cards to avoid pulling full body payloads
-  const KH_SELECT_COLUMNS =
-    [
-      "id",
-      "title",
-      "summary",
-      "body_html",
-      "article_body_html",
-      "type",
-      "domain",
-      "business_stage",
-      "format",
-      "popularity",
-      "provider_name:legacy_provider_name",
-      "provider_logo_url:legacy_provider_logo_url",
-      "authors",
-      "thumbnail_url",
-      "image_url",
-      "report_document_url",
-      "tool_document_url",
-      "tags",
-      "published_at",
-      "updated_at",
-    ].join(",");
+  const KH_SELECT_COLUMNS = [
+    "id",
+    "title",
+    "summary",
+    "body_html",
+    "article_body_html",
+    "type",
+    "domain",
+    "business_stage",
+    "format",
+    "popularity",
+    "provider_name:legacy_provider_name",
+    "provider_logo_url:legacy_provider_logo_url",
+    "authors",
+    "thumbnail_url",
+    "image_url",
+    "report_document_url",
+    "tool_document_url",
+    "tags",
+    "published_at",
+    "updated_at",
+  ].join(",");
 
   // Build server-side KH query with all active filters
   const fetchKHPaginated = async ({
@@ -688,8 +724,16 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
 
   // KH page derived from URL; filters/search change will update URL and re-fetch
 
-  // For knowledge-hub we show one page at a time; others untouched.
-  const paginatedItems = filteredItems;
+  // For knowledge-hub we show one page at a time; others use client-side pagination
+  const paginatedItems =
+    marketplaceType === "knowledge-hub"
+      ? filteredItems
+      : filteredItems.slice((currentPage - 1) * perPage, currentPage * perPage);
+
+  const totalPages =
+    marketplaceType === "knowledge-hub"
+      ? 1
+      : Math.ceil(filteredItems.length / perPage);
 
   // Navigate KH pages (update URL page param only)
   const goToKHPage = useCallback(
@@ -710,15 +754,77 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
   useEffect(() => {
     const loadFilterOptions = async () => {
       try {
-        if (!config) { return; }
-        if (marketplaceType === 'knowledge-hub') {
+        if (!config) {
+          return;
+        }
+        if (marketplaceType === "knowledge-hub") {
           // Use static config for Knowledge Hub filters only
           const filterOptions: FilterConfig[] = config.filterCategories;
           setFilterConfig(filterOptions);
 
           // Initialize empty filters based on the configuration
           const initialFilters: Record<string, string[]> = {};
-          filterOptions.forEach((fc) => { initialFilters[fc.id] = []; });
+          filterOptions.forEach((fc) => {
+            initialFilters[fc.id] = [];
+          });
+          setFilters(initialFilters);
+          return;
+        }
+
+        if (marketplaceType === "business-services") {
+          // Generate filters directly from Supabase data
+          const services = await fetchNonFinancialServices();
+
+          const serviceTypes = [...new Set(services.map((s) => s.service_type))]
+            .filter(Boolean)
+            .sort();
+          const serviceCategories = [
+            ...new Set(services.map((s) => s.service_category)),
+          ]
+            .filter(Boolean)
+            .sort();
+          const entityTypes = [...new Set(services.map((s) => s.entity_type))]
+            .filter(Boolean)
+            .sort();
+
+          const filterOptions: FilterConfig[] = [
+            {
+              id: "service-type",
+              title: "Service Type",
+              options: serviceTypes.map((type) => ({
+                id: type.toLowerCase().replace(/\s+/g, "-"),
+                name: type,
+              })),
+            },
+            {
+              id: "service-category",
+              title: "Service Category",
+              options: serviceCategories.map((category) => ({
+                id: category.toLowerCase().replace(/\s+/g, "-"),
+                name: category,
+              })),
+            },
+            {
+              id: "entity-type",
+              title: "Entity Type",
+              options: entityTypes.map((entity) => ({
+                id: entity.toLowerCase().replace(/\s+/g, "-"),
+                name: entity,
+              })),
+            },
+            {
+              id: "provided-by",
+              title: "Provided By",
+              options: [{ id: "dfsa", name: "DFSA" }],
+            },
+          ];
+
+          setFilterConfig(filterOptions);
+
+          const initialFilters: Record<string, string[]> = {};
+          filterOptions.forEach((config) => {
+            initialFilters[config.id] = [];
+          });
           setFilters(initialFilters);
           return;
         }
@@ -726,15 +832,42 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
         if (facetData) {
           // Choose facet codes based on marketplace type
           let facetCodes: string[] = [];
-          if (marketplaceType === 'financial') {
-            facetCodes = ['service-category', 'service-type', 'entity-type', 'provided-by'];
-          } else if (marketplaceType === 'non-financial') {
-            facetCodes = ['service-category', 'service-type', 'entity-type', 'provided-by'];
-          } else if (marketplaceType === 'courses') {
-            facetCodes = ['service-category', 'delivery-mode', 'duration', 'business-stage', 'provided-by'];
-          } else if (marketplaceType === 'events') {
+          if (marketplaceType === "financial") {
+            facetCodes = [
+              "service-category",
+              "service-type",
+              "entity-type",
+              "provided-by",
+            ];
+          } else if (marketplaceType === "business-services") {
+            facetCodes = [
+              "service-category",
+              "service-type",
+              "entity-type",
+              "provided-by",
+            ];
+          } else if (marketplaceType === "courses") {
+            facetCodes = [
+              "service-category",
+              "delivery-mode",
+              "duration",
+              "business-stage",
+              "provided-by",
+            ];
+          } else if (marketplaceType === "events") {
             // Events: strictly use backend facets only
-            facetCodes = ['time-range', 'event-type', 'delivery-mode', 'cost-type', 'duration-band', 'language', 'capability', 'business-stage', 'industry', 'organizer'];
+            facetCodes = [
+              "time-range",
+              "event-type",
+              "delivery-mode",
+              "cost-type",
+              "duration-band",
+              "language",
+              "capability",
+              "business-stage",
+              "industry",
+              "organizer",
+            ];
           } else {
             facetCodes = [
               "service-category",
@@ -786,18 +919,22 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
                 options,
               };
             });
-          
-          console.log('filterOptions:', filterOptions);
-          
+
+          console.log("filterOptions:", filterOptions);
+
           // For events, ensure we have filters loaded from backend
-          if (marketplaceType === 'events' && filterOptions.length === 0) {
-            console.error('No event facets found in backend. Please ensure event facets are configured.');
-            setError('Event filters could not be loaded from backend. Please ensure facets are configured.');
+          if (marketplaceType === "events" && filterOptions.length === 0) {
+            console.error(
+              "No event facets found in backend. Please ensure event facets are configured."
+            );
+            setError(
+              "Event filters could not be loaded from backend. Please ensure facets are configured."
+            );
             setFilterConfig([]);
             setFilters({});
             return;
           }
-          
+
           setFilterConfig(filterOptions);
 
           // Initialize empty filters based on the configuration
@@ -807,29 +944,35 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
           });
           setFilters(initialFilters);
         } else if (
-          marketplaceType === 'events' ||
-          marketplaceType === 'financial' ||
-          marketplaceType === 'non-financial' ||
-          marketplaceType === 'courses'
+          marketplaceType === "events" ||
+          marketplaceType === "financial" ||
+          marketplaceType === "courses"
         ) {
           // These marketplaces require backend facets - no fallback
-          console.error(`No facet data available for ${marketplaceType} marketplace`);
-          setError('Filters could not be loaded from backend. Please ensure facets are configured.');
+          console.error(
+            `No facet data available for ${marketplaceType} marketplace`
+          );
+          setError(
+            "Filters could not be loaded from backend. Please ensure facets are configured."
+          );
           setFilterConfig([]);
           setFilters({});
         }
       } catch (err) {
         console.error("Error fetching filter options:", err);
-        
-        // For events, financial, non-financial, and courses, do NOT use fallback - show error instead
+
+        // For events, financial, and courses, do NOT use fallback - show error instead
         if (
-          marketplaceType === 'events' ||
-          marketplaceType === 'financial' ||
-          marketplaceType === 'non-financial' ||
-          marketplaceType === 'courses'
+          marketplaceType === "events" ||
+          marketplaceType === "financial" ||
+          marketplaceType === "courses"
         ) {
-          console.error(`Failed to load ${marketplaceType} filters from backend`);
-          setError('Failed to load filters. Please check backend configuration.');
+          console.error(
+            `Failed to load ${marketplaceType} filters from backend`
+          );
+          setError(
+            "Failed to load filters. Please check backend configuration."
+          );
           setFilterConfig([]);
           setFilters({});
         } else {
@@ -900,7 +1043,9 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
             }
 
             const getFacetValue = (facetCode: string) => {
-              const facet = event.facetValues.find((fv) => fv.facet.code === facetCode);
+              const facet = event.facetValues.find(
+                (fv) => fv.facet.code === facetCode
+              );
               return facet ? facet.name : null;
             };
 
@@ -940,11 +1085,14 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
               if (!selectedValues.length) return true;
 
               // Check against facetValues directly
-              const hasFacetMatch = selectedValues.some((selectedValue: string) => {
-                return item.facetValues.some((fv: any) =>
-                  fv.facet.code === filterKey && fv.code === selectedValue
-                );
-              });
+              const hasFacetMatch = selectedValues.some(
+                (selectedValue: string) => {
+                  return item.facetValues.some(
+                    (fv: any) =>
+                      fv.facet.code === filterKey && fv.code === selectedValue
+                  );
+                }
+              );
 
               switch (filterKey) {
                 case "time-range": {
@@ -1019,152 +1167,201 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
         }
 
         // Handle Products (Financial, Non-Financial, and Courses)
-        if (productData || marketplaceType === 'non-financial') {
-          let filteredServices = productData?.products?.items || [];
+        if (productData || marketplaceType === "business-services") {
+          let mappedItems: any[] = [];
 
-          if (marketplaceType === "financial") {
-            filteredServices = productData.products.items.filter(
-              (product) =>
+          // Handle business-services separately with Supabase
+          if (marketplaceType === "business-services") {
+            const services = await fetchNonFinancialServices();
+            mappedItems = services.map((service) => ({
+              id: service.id,
+              title: service.name,
+              slug: service.slug,
+              description: service.description,
+              facetValues: [
+                {
+                  code: service.service_type.toLowerCase().replace(/\s+/g, "-"),
+                  name: service.service_type,
+                  facet: { code: "service-type" },
+                },
+                {
+                  code: service.service_category
+                    .toLowerCase()
+                    .replace(/\s+/g, "-"),
+                  name: service.service_category,
+                  facet: { code: "service-category" },
+                },
+                {
+                  code: service.entity_type.toLowerCase().replace(/\s+/g, "-"),
+                  name: service.entity_type,
+                  facet: { code: "entity-type" },
+                },
+                { code: "dfsa", name: "DFSA", facet: { code: "provided-by" } },
+              ],
+              tags: service.tags,
+              provider: {
+                name: "DFSA",
+                logoUrl: "/mzn_logo.png",
+                description: "Dubai Financial Services Authority",
+              },
+              formUrl: "#",
+              serviceType: service.service_type,
+              serviceCategory: service.service_category,
+              entityType: service.entity_type,
+              processingTime: service.processing_time,
+              details: {
+                longDescription: service.long_description,
+                benefits: service.benefits,
+                requirements: service.requirements,
+                processSteps: service.process_steps,
+              },
+            }));
+          } else {
+            // Handle other marketplace types (financial, courses)
+            let filteredServices = productData?.products?.items || [];
+
+            if (marketplaceType === "financial") {
+              filteredServices = productData.products.items.filter((product) =>
                 product.facetValues.some((fv) => fv.id === "1")
-            );
-            
-            // If no products match, show all products
-            if (filteredServices.length === 0) {
-              filteredServices = productData.products.items;
-            }
-          } else if (marketplaceType === "non-financial") {
-            // Use mock data for non-financial services
-            // We don't filter from productData here, we'll handle it in the mapping step
-            filteredServices = []; 
-          } else if (marketplaceType === "courses") {
-            console.log("=== COURSES FILTERING DEBUG ===");
-            console.log("All products before filtering:", productData.products.items.length);
-            
-            filteredServices = productData.products.items.filter(
-              (product) =>
+              );
+
+              // If no products match, show all products
+              if (filteredServices.length === 0) {
+                filteredServices = productData.products.items;
+              }
+            } else if (marketplaceType === "courses") {
+              console.log("=== COURSES FILTERING DEBUG ===");
+              console.log(
+                "All products before filtering:",
+                productData.products.items.length
+              );
+
+              filteredServices = productData.products.items.filter((product) =>
                 product.facetValues.some((fv) => fv.id === "72")
-            );
-            
-            console.log("Filtered courses after facet id '72' filter:", filteredServices.length);
-            console.log("Filtered course products:", filteredServices.map(p => ({
-              id: p.id,
-              name: p.name,
-              facetValues: p.facetValues.map(fv => ({ id: fv.id, name: fv.name }))
-            })));
-            console.log("===============================");
-          }
+              );
 
-          const fallbackLogos = ["/mzn_logo.png"];
+              console.log(
+                "Filtered courses after facet id '72' filter:",
+                filteredServices.length
+              );
+              console.log(
+                "Filtered course products:",
+                filteredServices.map((p) => ({
+                  id: p.id,
+                  name: p.name,
+                  facetValues: p.facetValues.map((fv) => ({
+                    id: fv.id,
+                    name: fv.name,
+                  })),
+                }))
+              );
+              console.log("===============================");
+            }
 
-          // Map product data to match expected MarketplaceItem structure
-          let mappedItems = filteredServices.map((product) => {
-            const randomFallbackLogo =
-              fallbackLogos[Math.floor(Math.random() * fallbackLogos.length)];
+            const fallbackLogos = ["/mzn_logo.png"];
 
-            // Handle course-specific mapping
-            if (marketplaceType === "courses") {
-              console.log("=== COURSE MAPPING DEBUG ===");
-              console.log("Mapping course product:", product.id, product.name);
-              console.log("Product customFields:", product.customFields);
-              
-              const rawCost = product.customFields?.Cost;
-              const parsedCost =
-                typeof rawCost === "number" ? rawCost : parseFloat(String(rawCost ?? ""));
-              const normalizedCost = !isNaN(parsedCost) && parsedCost >= 1 ? parsedCost : 3200;
-              
-              const mappedCourse = {
+            // Map product data to match expected MarketplaceItem structure
+            mappedItems = filteredServices.map((product) => {
+              const randomFallbackLogo =
+                fallbackLogos[Math.floor(Math.random() * fallbackLogos.length)];
+
+              // Handle course-specific mapping
+              if (marketplaceType === "courses") {
+                console.log("=== COURSE MAPPING DEBUG ===");
+                console.log(
+                  "Mapping course product:",
+                  product.id,
+                  product.name
+                );
+                console.log("Product customFields:", product.customFields);
+
+                const rawCost = product.customFields?.Cost;
+                const parsedCost =
+                  typeof rawCost === "number"
+                    ? rawCost
+                    : parseFloat(String(rawCost ?? ""));
+                const normalizedCost =
+                  !isNaN(parsedCost) && parsedCost >= 1 ? parsedCost : 3200;
+
+                const mappedCourse = {
+                  id: product.id,
+                  title: product.name,
+                  slug: `courses/${product.id}`,
+                  description:
+                    product.description || "No description available",
+                  facetValues: product.facetValues,
+                  provider: {
+                    name: product.customFields?.Partner || "Unknown Partner",
+                    logoUrl:
+                      product.customFields?.logoUrl || "/default_logo.png",
+                    description: "No provider description available",
+                  },
+                  formUrl: null,
+                  Cost: normalizedCost,
+                  price: normalizedCost,
+                  BusinessStage: product.customFields?.BusinessStage,
+                  rating: product.customFields?.rating,
+                  reviewCount: product.customFields?.reviewCount,
+                  duration: product.customFields?.duration,
+                  pricingModel: product.customFields?.pricingModel,
+                  serviceCategory: product.customFields?.serviceCategory,
+                  learningObjectives: product.customFields?.learningObjectives,
+                  learningOutcomes: product.customFields?.learningOutcomes,
+                  skillsGained: product.customFields?.skillsGained,
+                  audience: product.customFields?.audience,
+                  courseTimeline: product.customFields?.courseTimeline,
+                  resources: product.customFields?.resources,
+                  documentLink: product.customFields?.documentLink,
+                  uponCompletion: product.customFields?.uponCompletion,
+                  languages: product.customFields?.languages,
+                  resourceType: product.customFields?.resourceType,
+                  notes: product.customFields?.notes,
+                  isFeatured: product.customFields?.isFeatured,
+                  isOnline: product.customFields?.isOnline,
+                  ...product.customFields,
+                };
+
+                console.log("Mapped course item:", mappedCourse);
+                console.log("============================");
+
+                return mappedCourse;
+              }
+
+              // Handle regular products (financial/non-financial)
+              const rawFormUrl = product.customFields?.formUrl;
+              const finalFormUrl =
+                rawFormUrl || "https://www.tamm.abudhabi/en/login";
+
+              if (product.id === "133" || !rawFormUrl) {
+                console.log(
+                  `Product "${product.name}" (ID: ${product.id}): Raw formUrl =`,
+                  rawFormUrl,
+                  "| Final =",
+                  finalFormUrl
+                );
+              }
+
+              return {
                 id: product.id,
                 title: product.name,
-                slug: `courses/${product.id}`,
-                description: product.description || "No description available",
+                slug: product.slug,
+                description:
+                  product.description ||
+                  "Through this service, you can easily reallocate your approved loan funds to different areas of your business to support changing needs and enhance growth.",
                 facetValues: product.facetValues,
+                tags: [
+                  product.customFields?.Industry,
+                  product.customFields?.BusinessStage,
+                ].filter(Boolean),
                 provider: {
-                  name: product.customFields?.Partner || "Unknown Partner",
-                  logoUrl: product.customFields?.logoUrl || "/default_logo.png",
+                  name: product.customFields?.Industry || "Khalifa Fund",
+                  logoUrl: randomFallbackLogo,
                   description: "No provider description available",
                 },
-                formUrl: null,
-                Cost: normalizedCost,
-                price: normalizedCost,
-                BusinessStage: product.customFields?.BusinessStage,
-                rating: product.customFields?.rating,
-                reviewCount: product.customFields?.reviewCount,
-                duration: product.customFields?.duration,
-                pricingModel: product.customFields?.pricingModel,
-                serviceCategory: product.customFields?.serviceCategory,
-                learningObjectives: product.customFields?.learningObjectives,
-                learningOutcomes: product.customFields?.learningOutcomes,
-                skillsGained: product.customFields?.skillsGained,
-                audience: product.customFields?.audience,
-                courseTimeline: product.customFields?.courseTimeline,
-                resources: product.customFields?.resources,
-                documentLink: product.customFields?.documentLink,
-                uponCompletion: product.customFields?.uponCompletion,
-                languages: product.customFields?.languages,
-                resourceType: product.customFields?.resourceType,
-                notes: product.customFields?.notes,
-                isFeatured: product.customFields?.isFeatured,
-                isOnline: product.customFields?.isOnline,
+                formUrl: "https://www.tamm.abudhabi/en/login",
                 ...product.customFields,
               };
-              
-              console.log("Mapped course item:", mappedCourse);
-              console.log("============================");
-              
-              return mappedCourse;
-            }
-
-            // Handle regular products (financial/non-financial)
-            const rawFormUrl = product.customFields?.formUrl;
-            const finalFormUrl = rawFormUrl || "https://www.tamm.abudhabi/en/login";
-
-            if (product.id === "133" || !rawFormUrl) {
-              console.log(
-                `Product "${product.name}" (ID: ${product.id}): Raw formUrl =`,
-                rawFormUrl,
-                "| Final =",
-                finalFormUrl
-              );
-            }
-
-            return {
-              id: product.id,
-              title: product.name,
-              slug: product.slug,
-              description:
-                product.description ||
-                "Through this service, you can easily reallocate your approved loan funds to different areas of your business to support changing needs and enhance growth.",
-              facetValues: product.facetValues,
-              tags: [product.customFields?.Industry, product.customFields?.BusinessStage].filter(Boolean),
-              provider: {
-                name: product.customFields?.Industry || "Khalifa Fund",
-                logoUrl: randomFallbackLogo,
-                description: "No provider description available",
-              },
-              formUrl: "https://www.tamm.abudhabi/en/login",
-              ...product.customFields,
-            };
-          });
-
-          // Override mappedItems for non-financial using mockServicesData
-          if (marketplaceType === "non-financial") {
-             // @ts-ignore
-             mappedItems = mockServicesData.map((service) => ({
-                id: service.id,
-                title: service.name,
-                slug: service.slug,
-                description: service.description,
-                facetValues: [], // Mock data doesn't have facetValues structure, filtering might need adjustment
-                tags: service.customFields.tags,
-                provider: {
-                    name: "DFSA",
-                    logoUrl: "/mzn_logo.png",
-                    description: "Dubai Financial Services Authority"
-                },
-                formUrl: "#",
-                ...service.customFields,
-                details: service.details
-             }));
+            });
           }
 
           // Apply filters and search query
@@ -1172,10 +1369,14 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
             const matchesAllFacets = Object.keys(filters).every((facetCode) => {
               const selectedValues = filters[facetCode] || [];
               if (!selectedValues.length) return true;
+
               return selectedValues.some(
                 (selectedValue) =>
                   product.facetValues.some(
-                    (facetValue: any) => facetValue.code === selectedValue
+                    (facetValue: any) =>
+                      facetValue.code === selectedValue &&
+                      (!facetValue.facet?.code ||
+                        facetValue.facet.code === facetCode)
                   ) ||
                   (facetCode === "pricing-model" &&
                     selectedValue === "one-time-fee" &&
@@ -1232,7 +1433,23 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
     };
 
     loadItems();
-  }, [productData, eventData, filters, debouncedSearch, marketplaceType, activeFilters, filterConfig, loadKHInitial]);
+  }, [
+    productData,
+    eventData,
+    filters,
+    debouncedSearch,
+    marketplaceType,
+    activeFilters,
+    filterConfig,
+    loadKHInitial,
+  ]);
+
+  // Reset to page 1 when filters or search changes (non-KH only)
+  useEffect(() => {
+    if (marketplaceType !== "knowledge-hub") {
+      setCurrentPage(1);
+    }
+  }, [filters, debouncedSearch, marketplaceType]);
 
   // Immediately hydrate compare from navigation state when arriving from details page
   useEffect(() => {
@@ -1301,16 +1518,23 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
           [filterType]: newValues,
         };
 
-      // If changing media type, clear format filter if it's no longer valid
-      if (filterType === 'mediaType' && prev.format && prev.format.length > 0) {
-        const mediaTypeFormatMapping: Record<string, string[]> = {
-          'News': ['Quick Reads'],
-          'Reports': ['In-Depth Reports', 'Downloadable Templates'],
-          'Toolkits & Templates': ['Interactive Tools', 'Downloadable Templates'],
-          'Guides': ['Quick Reads', 'In-Depth Reports'],
-          'Videos': ['Recorded Media'],
-          'Podcasts': ['Recorded Media']
-        };
+        // If changing media type, clear format filter if it's no longer valid
+        if (
+          filterType === "mediaType" &&
+          prev.format &&
+          prev.format.length > 0
+        ) {
+          const mediaTypeFormatMapping: Record<string, string[]> = {
+            News: ["Quick Reads"],
+            Reports: ["In-Depth Reports", "Downloadable Templates"],
+            "Toolkits & Templates": [
+              "Interactive Tools",
+              "Downloadable Templates",
+            ],
+            Guides: ["Quick Reads", "In-Depth Reports"],
+            Videos: ["Recorded Media"],
+            Podcasts: ["Recorded Media"],
+          };
 
           const newMediaTypes = newFilters[filterType];
           if (newMediaTypes.length > 0) {
@@ -1323,19 +1547,27 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
           }
         }
 
-      return newFilters;
-    });
-  }, []);
+        return newFilters;
+      });
+    },
+    []
+  );
 
   // Clear Knowledge Hub filters (URL params)
   const clearKnowledgeHubFilters = useCallback(() => {
-    const next: Record<string,string> = {}
-    queryParams.forEach((v, k) => { next[k] = v })
-    delete next.type; delete next.domain; delete next.stage; delete next.format; delete next.popularity
-    next.page = '1'
-    next.perPage = String(perPage)
-    setQueryParams(next)
-  }, [queryParams, perPage, setQueryParams])
+    const next: Record<string, string> = {};
+    queryParams.forEach((v, k) => {
+      next[k] = v;
+    });
+    delete next.type;
+    delete next.domain;
+    delete next.stage;
+    delete next.format;
+    delete next.popularity;
+    next.page = "1";
+    next.perPage = String(perPage);
+    setQueryParams(next);
+  }, [queryParams, perPage, setQueryParams]);
 
   // Reset all filters
   const resetFilters = useCallback(() => {
@@ -1346,9 +1578,9 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
     setFilters(emptyFilters);
     setSearchQuery("");
     setActiveFilters([]);
-    
+
     // For knowledge-hub, also clear URL params
-    if (marketplaceType === 'knowledge-hub') {
+    if (marketplaceType === "knowledge-hub") {
       clearKnowledgeHubFilters();
     }
   }, [filterConfig, marketplaceType, clearKnowledgeHubFilters]);
@@ -1510,25 +1742,28 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
           });
         }
 
-      if (finalTypes.size > 0) next.type = Array.from(finalTypes).join(',')
-      else delete next.type
-      if (existingFormats.size > 0) next.format = Array.from(existingFormats).join(',')
-      else delete next.format
-    } else if (category.id === 'category' || category.id === 'domain') {
-      toggle('domain', filter)
-    } else if (category.id === 'businessStage') {
-      toggle('stage', filter)
-    } else if (category.id === 'format') {
-      toggle('format', filter)
-    } else if (category.id === 'popularity') {
-      toggle('popularity', filter)
-    }
-    // Reset to page 1 when filters change
-    next.page = '1'
-    // Persist perPage to keep consistent page sizing
-    next.perPage = String(perPage)
-    setQueryParams(next)
-  }, [filterConfig, queryParams, perPage, setQueryParams, activeFilters])
+        if (finalTypes.size > 0) next.type = Array.from(finalTypes).join(",");
+        else delete next.type;
+        if (existingFormats.size > 0)
+          next.format = Array.from(existingFormats).join(",");
+        else delete next.format;
+      } else if (category.id === "category" || category.id === "domain") {
+        toggle("domain", filter);
+      } else if (category.id === "businessStage") {
+        toggle("stage", filter);
+      } else if (category.id === "format") {
+        toggle("format", filter);
+      } else if (category.id === "popularity") {
+        toggle("popularity", filter);
+      }
+      // Reset to page 1 when filters change
+      next.page = "1";
+      // Persist perPage to keep consistent page sizing
+      next.perPage = String(perPage);
+      setQueryParams(next);
+    },
+    [filterConfig, queryParams, perPage, setQueryParams, activeFilters]
+  );
 
   // Toggle collapse state for a filter category
   const toggleCategoryCollapse = useCallback((categoryId: string) => {
@@ -1563,7 +1798,7 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
       const itemValues: Record<string, string | undefined> = {
         mediaType: it.mediaType,
         category: it.domain,
-         format: it.format,
+        format: it.format,
         popularity: it.popularity,
         businessStage: it.businessStage,
       };
@@ -1821,7 +2056,7 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
 
           {/* Filter sidebar - desktop - always visible */}
           <div className="hidden xl:block xl:w-1/4">
-            <div className="bg-white rounded-lg shadow sticky top-24 max-h-[calc(100vh-7rem)] flex flex-col">
+            <div className="bg-white rounded-lg shadow sticky top-24 max-h-[calc(100vh-7rem)] flex flex-col overflow-hidden">
               <div className="flex justify-between items-center p-4 border-b border-gray-200 flex-shrink-0">
                 <h2 className="text-lg font-semibold">Filters</h2>
                 {(Object.values(filters).some((f) => f.length > 0) ||
@@ -1834,7 +2069,7 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
                   </button>
                 )}
               </div>
-              <div className="p-4 overflow-y-auto scrollbar-hide">
+              <div className="p-4 overflow-y-auto flex-1">
                 {marketplaceType === "knowledge-hub" ? (
                   <div className="space-y-2">
                     {filteredKnowledgeHubConfig.map((category) => {
@@ -1935,7 +2170,8 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
               <ErrorDisplay
                 message={
                   error ||
-                  (!skipGraph && (facetError?.message || productError?.message)) ||
+                  (!skipGraph &&
+                    (facetError?.message || productError?.message)) ||
                   `Failed to load ${marketplaceType}`
                 }
                 onRetry={retryFetch}
@@ -1943,7 +2179,9 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
             ) : filteredItems.length === 0 ? (
               <div className="text-center text-gray-600 py-8">
                 <p className="mb-2">No service available</p>
-                <p className="text-sm text-gray-400">Check browser console for debugging info</p>
+                <p className="text-sm text-gray-400">
+                  Check browser console for debugging info
+                </p>
               </div>
             ) : (
               <div ref={gridContainerRef}>
@@ -1957,7 +2195,7 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
                   totalCount={undefined}
                   showingCount={undefined}
                 />
-                {marketplaceType === "knowledge-hub" && (
+                {marketplaceType === "knowledge-hub" ? (
                   <div className="flex items-center justify-center gap-3 mt-8">
                     <button
                       onClick={() => goToKHPage(currentPage - 1)}
@@ -1996,6 +2234,40 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
                       Next
                     </button>
                   </div>
+                ) : (
+                  totalPages > 1 && (
+                    <div className="flex items-center justify-center gap-3 mt-8">
+                      <button
+                        onClick={() =>
+                          setCurrentPage((p) => Math.max(1, p - 1))
+                        }
+                        disabled={currentPage <= 1}
+                        className={`px-3 py-2 rounded-md border ${
+                          currentPage <= 1
+                            ? "text-gray-400 bg-gray-100 cursor-not-allowed"
+                            : "text-gray-700 bg-white hover:bg-gray-50"
+                        }`}
+                      >
+                        Previous
+                      </button>
+                      <span className="text-sm text-gray-600">
+                        Page {currentPage} of {totalPages}
+                      </span>
+                      <button
+                        onClick={() =>
+                          setCurrentPage((p) => Math.min(totalPages, p + 1))
+                        }
+                        disabled={currentPage >= totalPages}
+                        className={`px-3 py-2 rounded-md border ${
+                          currentPage >= totalPages
+                            ? "text-gray-400 bg-gray-100 cursor-not-allowed"
+                            : "text-gray-700 bg-white hover:bg-gray-50"
+                        }`}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  )
                 )}
               </div>
             )}

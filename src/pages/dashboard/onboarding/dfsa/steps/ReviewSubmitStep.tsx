@@ -1,108 +1,101 @@
+/**
+ * ReviewSubmitStep Component
+ * Final step of the DFSA onboarding form
+ *
+ * Features:
+ * - Review all submitted information
+ * - Collapsible sections with edit buttons
+ * - Required declarations
+ * - Final submission
+ *
+ * All pathways see this step
+ */
+
 import React from 'react'
-import { Edit } from 'lucide-react'
-import { FormData } from '../types'
+import { useFormContext } from 'react-hook-form'
+import { DFSAOnboardingFormData } from '../types'
+import { ReviewSection, ReviewField } from '../components/ReviewSection'
+import { DeclarationCheckbox, DeclarationGroup } from '../components/DeclarationCheckbox'
+import { usePathwayConfig } from '../hooks/usePathwayConfig'
 
 interface ReviewSubmitStepProps {
-  formData: FormData
-  onEdit: (step: number) => void
+  onEdit: (stepId: string) => void
+  onSubmit: () => void
+  isSubmitting?: boolean
 }
 
-const ReviewCard: React.FC<{
-  title: string
-  onEdit?: () => void
-  children: React.ReactNode
-}> = ({ title, onEdit, children }) => (
-  <div className="border-b border-gray-300 p-6 mb-6">
-    <div className="flex justify-between items-center mb-4">
-      <h3 className="text-lg font-semibold text-gray-900">
-        {title}
-      </h3>
-      {onEdit && (
-        <button className="p-1 cursor-pointer hover:bg-gray-100 rounded" onClick={onEdit}>
-          <Edit size={18} className="text-gray-500" />
-        </button>
-      )}
-    </div>
-    {children}
-  </div>
-)
+export const ReviewSubmitStep: React.FC<ReviewSubmitStepProps> = ({
+  onEdit,
+  onSubmit,
+  isSubmitting = false,
+}) => {
+  const { watch } = useFormContext<DFSAOnboardingFormData>()
+  const formData = watch()
 
-const InfoRow: React.FC<{ label: string; value: string }> = ({ label, value }) => (
-  <div className="flex justify-between items-center mb-3">
-    <span className="text-gray-500 text-sm">
-      {label}:
-    </span>
-    <span className="text-gray-900 text-sm font-medium">
-      {value || 'Not provided'}
-    </span>
-  </div>
-)
-
-// Helper functions to format display values
-const formatActivityType = (type: string): string => {
-  const mapping: Record<string, string> = {
-    'financial_services': 'Financial Services',
-    'dnfbp': 'DNFBP',
-    'registered_auditor': 'Registered Auditor',
-    'crypto_token': 'Crypto Token Recognition'
-  }
-  return mapping[type] || type
-}
-
-const formatServices = (services: string[]): string => {
-  const mapping: Record<string, string> = {
-    'investment_management': 'Investment Management',
-    'investment_advisory': 'Investment Advisory',
-    'dealing_investments': 'Dealing in Investments',
-    'arranging_deals': 'Arranging Deals in Investments',
-    'insurance_services': 'Insurance Services',
-    'fund_management': 'Fund Management'
-  }
-  return services.map(s => mapping[s] || s).join(', ')
-}
-
-export const ReviewSubmitStep: React.FC<ReviewSubmitStepProps> = ({ formData, onEdit }) => {
-  const isConsultant = formData.applicantRole === 'professional_advisor'
+  const { features } = usePathwayConfig(formData.activityType)
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-        Review & Submit
-      </h2>
-      <p className="text-gray-500 mb-8">
-        Please review your information before submitting.
-      </p>
+    <div className="space-y-8 max-w-6xl">
+      {/* Header */}
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900">Review & Submit</h2>
+        <p className="text-sm text-gray-600 mt-2">
+          Please review all information before submitting your application.
+        </p>
+      </div>
 
-      <ReviewCard title="Applicant Role" onEdit={() => onEdit(1)}>
-        <InfoRow
-          label="Role"
-          value={formData.applicantRole === 'own_firm' ? 'Own Firm' : 'Professional Advisor'}
-        />
-      </ReviewCard>
+      {/* Basic Information */}
+      <ReviewSection
+        title="Basic Information"
+        subtitle={formData.legalEntityName}
+        stepId="basic"
+        onEdit={onEdit}
+      >
+        <dl className="divide-y divide-gray-200">
+          <ReviewField label="Legal Entity Name" value={formData.legalEntityName} isHighlight />
+          <ReviewField label="Jurisdiction" value={formData.incorporationJurisdiction} />
+          <ReviewField label="Registration Number" value={formData.registrationNumber} />
+        </dl>
+      </ReviewSection>
 
-      {isConsultant && (
-        <ReviewCard title="Firm Contact Information" onEdit={() => onEdit(1)}>
-          <InfoRow label="First Name" value={formData.firmContactFirstName} />
-          <InfoRow label="Last Name" value={formData.firmContactLastName} />
-          <InfoRow label="Email" value={formData.firmContactEmail} />
-          <InfoRow label="Phone" value={formData.firmContactPhone} />
-        </ReviewCard>
-      )}
+      {/* Declarations */}
+      <div className="pt-8 border-t-2 border-gray-300">
+        <DeclarationGroup
+          title="Declarations"
+          subtitle="Please confirm the following declarations."
+        >
+          <DeclarationCheckbox name="declarations.fitAndProperConfirmation" required>
+            I confirm that all individuals are fit and proper persons under DFSA standards.
+          </DeclarationCheckbox>
 
-      <ReviewCard title="Contact Information" onEdit={() => onEdit(1)}>
-        <InfoRow label="First Name" value={formData.contactFirstName} />
-        <InfoRow label="Last Name" value={formData.contactLastName} />
-        <InfoRow label="Email" value={formData.contactEmail} />
-        <InfoRow label="Phone" value={formData.contactPhone} />
-      </ReviewCard>
+          <DeclarationCheckbox name="declarations.accuracyConfirmation" required>
+            I confirm that all information provided is accurate and complete.
+          </DeclarationCheckbox>
 
-      <ReviewCard title="Firm Details" onEdit={() => onEdit(2)}>
-        <InfoRow label="Company Name" value={formData.suggestedCompanyName} />
-        <InfoRow label="Activity Type" value={formatActivityType(formData.activityType)} />
-        {formData.activityType === 'financial_services' && formData.services.length > 0 && (
-          <InfoRow label="Services" value={formatServices(formData.services)} />
-        )}
-      </ReviewCard>
+          <DeclarationCheckbox name="declarations.authorityConfirmation" required>
+            I confirm that I have the authority to submit this application.
+          </DeclarationCheckbox>
+
+          <DeclarationCheckbox name="declarations.dataConsentProvided" required>
+            I consent to the DFSA processing the personal data in this application.
+          </DeclarationCheckbox>
+        </DeclarationGroup>
+      </div>
+
+      {/* Submit Button */}
+      <div className="pt-8 border-t border-gray-200">
+        <button
+          type="button"
+          onClick={onSubmit}
+          disabled={isSubmitting}
+          className={`
+            px-8 py-3 text-white font-semibold rounded-lg
+            ${isSubmitting ? 'bg-gray-400' : 'bg-green-600 hover:bg-green-700'}
+          `}
+        >
+          {isSubmitting ? 'Submitting...' : 'Submit Application'}
+        </button>
+      </div>
     </div>
   )
 }

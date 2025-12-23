@@ -1,0 +1,397 @@
+/**
+ * EntityStructureStep Component
+ * Third step of the DFSA onboarding form
+ *
+ * Features:
+ * - Accordion-style field groups for entity structure
+ * - Entity type selection with conditional "other" field
+ * - Parent company information (conditional)
+ * - Group structure details
+ *
+ * DFSA Compliance:
+ * - Maintains formal language
+ * - Includes rule references (GEN Module Rule 2.2.6)
+ * - All pathways see this step
+ */
+
+import React, { useState } from 'react'
+import { Controller, useFormContext } from 'react-hook-form'
+import { DFSAOnboardingFormData } from '../types'
+import { FormFieldGroup } from '../components/FormFieldGroup'
+import { HelpDrawer, HelpSection } from '../components/HelpDrawer'
+
+/**
+ * Help sections for the entity structure form
+ */
+const entityStructureHelpSections: HelpSection[] = [
+  {
+    id: 'entity-type-guidance',
+    type: 'guidance',
+    title: 'Entity Type Selection',
+    content: (
+      <div className="space-y-2">
+        <p>
+          Select the type of entity you are registering. This determines the applicable regulatory
+          requirements under DFSA rules.
+        </p>
+        <dl className="space-y-2 mt-3">
+          <div>
+            <dt className="font-medium text-gray-700">DIFC Incorporation</dt>
+            <dd className="text-gray-600 mt-0.5">
+              Entity incorporated within the Dubai International Financial Centre jurisdiction.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-medium text-gray-700">Other Jurisdiction (Foreign Entity)</dt>
+            <dd className="text-gray-600 mt-0.5">
+              Entity incorporated outside the DIFC, seeking to establish presence or conduct
+              regulated activities.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-medium text-gray-700">Other</dt>
+            <dd className="text-gray-600 mt-0.5">
+              Other entity structures not covered by the standard classifications.
+            </dd>
+          </div>
+        </dl>
+      </div>
+    ),
+  },
+  {
+    id: 'parent-company-guidance',
+    type: 'guidance',
+    title: 'Parent Company Information',
+    content: (
+      <div className="space-y-2">
+        <p>
+          Disclose parent company relationships and group structure information. This is required
+          if your entity is part of a larger corporate group.
+        </p>
+        <p className="mt-2">
+          The ultimate parent company is the entity at the top of the corporate structure that is
+          not controlled by any other entity.
+        </p>
+      </div>
+    ),
+  },
+  {
+    id: 'group-structure-documents',
+    type: 'documents',
+    title: 'Group Structure Documentation',
+    content: (
+      <p>
+        You will be required to upload a group structure diagram in the documents section if your
+        entity is part of a corporate group.
+      </p>
+    ),
+  },
+]
+
+export const EntityStructureStep: React.FC = () => {
+  const [isHelpDrawerOpen, setIsHelpDrawerOpen] = useState(false)
+
+  const {
+    control,
+    watch,
+    formState: { errors },
+  } = useFormContext<DFSAOnboardingFormData>()
+
+  const entityType = watch('entityType')
+  const hasParentCompany = watch('hasParentCompany')
+
+  return (
+    <div className="space-y-6 max-w-4xl">
+      {/* Header with Help Button */}
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Entity Structure</h2>
+          <p className="text-sm text-gray-600 mt-2">
+            Provide information about your entity type and corporate structure.
+          </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            (Ref: DFSA Rulebook GEN Module Rule 2.2.6)
+          </p>
+        </div>
+        <HelpDrawer
+          formTitle="Entity Structure"
+          sections={entityStructureHelpSections}
+          isOpen={isHelpDrawerOpen}
+          onOpenChange={setIsHelpDrawerOpen}
+          ruleReference="DFSA Rulebook GEN Module Rule 2.2.6 - Entity Structure Disclosure"
+        />
+      </div>
+
+      {/* Entity Type Group */}
+      <FormFieldGroup
+        title="Entity Type"
+        groupId="entity-type"
+        fieldNames={entityType === 'OTHER' ? ['entityType', 'entityTypeOther'] : ['entityType']}
+        isRequired={true}
+        helpText="Select the type of entity you are registering. This determines the applicable regulatory requirements under DFSA rules. (Ref: DFSA Rulebook GEN Module Rule 2.2.6)"
+        fields={
+          <div className="space-y-4">
+            {/* Entity Type Selection */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Entity Type <span className="text-red-500">*</span>
+              </label>
+              <Controller
+                name="entityType"
+                control={control}
+                render={({ field }) => (
+                  <div className="space-y-3">
+                    {[
+                      { value: 'DIFC_INCORPORATION', label: 'DIFC Incorporation' },
+                      { value: 'OTHER_JURISDICTION', label: 'Other Jurisdiction (Foreign Entity)' },
+                      { value: 'OTHER', label: 'Other (Please specify)' },
+                    ].map((option) => (
+                      <label
+                        key={option.value}
+                        className={`
+                          flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer
+                          transition-colors min-h-[44px]
+                          ${
+                            field.value === option.value
+                              ? 'border-[#9B1823] bg-red-50'
+                              : 'border-gray-200 hover:border-gray-300'
+                          }
+                        `}
+                      >
+                        <input
+                          type="radio"
+                          {...field}
+                          value={option.value}
+                          checked={field.value === option.value}
+                          className="w-4 h-4 text-[#9B1823] border-gray-300 focus:ring-2 focus:ring-[#9B1823]"
+                        />
+                        <span className="text-sm font-medium text-gray-700">{option.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              />
+              {errors.entityType && (
+                <p className="text-xs text-red-500 mt-2">{errors.entityType.message}</p>
+              )}
+            </div>
+
+            {/* Entity Type Other (conditional) */}
+            {entityType === 'OTHER' && (
+              <div className="pl-4 border-l-2 border-amber-300 bg-amber-50 p-4 rounded-r-lg">
+                <label htmlFor="entityTypeOther" className="block text-sm font-medium text-gray-700 mb-1">
+                  Specify Entity Type <span className="text-red-500">*</span>
+                </label>
+                <Controller
+                  name="entityTypeOther"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      id="entityTypeOther"
+                      type="text"
+                      placeholder="Describe your entity type"
+                      className={`
+                        w-full px-3 py-2 border rounded-md text-sm min-h-[44px]
+                        focus:ring-2 focus:ring-[#9B1823] focus:border-transparent
+                        ${errors.entityTypeOther ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-white'}
+                      `}
+                    />
+                  )}
+                />
+                {errors.entityTypeOther && (
+                  <p className="text-xs text-red-500 mt-1">{errors.entityTypeOther.message}</p>
+                )}
+              </div>
+            )}
+          </div>
+        }
+      />
+
+      {/* Parent Company & Group Structure Group */}
+      <FormFieldGroup
+        title="Parent Company & Group Structure"
+        groupId="parent-company-group"
+        fieldNames={
+          hasParentCompany
+            ? [
+                'hasParentCompany',
+                'parentCompanyName',
+                'parentCompanyJurisdiction',
+                'ultimateParentCompany',
+                'groupStructureDescription',
+              ]
+            : ['hasParentCompany', 'groupStructureDescription']
+        }
+        isRequired={false}
+        helpText="Disclose parent company relationships and group structure information. This is required if your entity is part of a larger corporate group. (Ref: DFSA Rulebook GEN Module Rule 2.2.6)"
+        fields={
+          <div className="space-y-6">
+            {/* Parent Company Question */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Does this entity have a parent company?
+              </label>
+              <Controller
+                name="hasParentCompany"
+                control={control}
+                render={({ field }) => (
+                  <div className="flex gap-4">
+                    <label className="flex items-center gap-2 cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                      <input
+                        type="radio"
+                        {...field}
+                        value="true"
+                        checked={field.value === true}
+                        onChange={() => field.onChange(true)}
+                        className="w-4 h-4 text-[#9B1823] border-gray-300 focus:ring-2 focus:ring-[#9B1823]"
+                      />
+                      <span className="text-sm text-gray-700">Yes</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                      <input
+                        type="radio"
+                        {...field}
+                        value="false"
+                        checked={field.value === false}
+                        onChange={() => field.onChange(false)}
+                        className="w-4 h-4 text-[#9B1823] border-gray-300 focus:ring-2 focus:ring-[#9B1823]"
+                      />
+                      <span className="text-sm text-gray-700">No</span>
+                    </label>
+                  </div>
+                )}
+              />
+            </div>
+
+            {/* Parent Company Details (conditional) */}
+            {hasParentCompany && (
+              <div className="space-y-4 pl-6 border-l-4 border-[#9B1823] bg-gray-50 p-4 rounded-r-lg">
+                {/* Parent Company Name */}
+                <div>
+                  <label
+                    htmlFor="parentCompanyName"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Parent Company Name <span className="text-red-500">*</span>
+                  </label>
+                  <Controller
+                    name="parentCompanyName"
+                    control={control}
+                    render={({ field }) => (
+                      <input
+                        {...field}
+                        id="parentCompanyName"
+                        type="text"
+                        placeholder="Full legal name of parent company"
+                        className={`
+                          w-full px-3 py-2 border rounded-md text-sm min-h-[44px]
+                          focus:ring-2 focus:ring-[#9B1823] focus:border-transparent
+                          ${errors.parentCompanyName ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-white'}
+                        `}
+                      />
+                    )}
+                  />
+                  {errors.parentCompanyName && (
+                    <p className="text-xs text-red-500 mt-1">{errors.parentCompanyName.message}</p>
+                  )}
+                </div>
+
+                {/* Parent Company Jurisdiction */}
+                <div>
+                  <label
+                    htmlFor="parentCompanyJurisdiction"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Parent Company Jurisdiction <span className="text-red-500">*</span>
+                  </label>
+                  <Controller
+                    name="parentCompanyJurisdiction"
+                    control={control}
+                    render={({ field }) => (
+                      <input
+                        {...field}
+                        id="parentCompanyJurisdiction"
+                        type="text"
+                        placeholder="Country of incorporation"
+                        className={`
+                          w-full px-3 py-2 border rounded-md text-sm min-h-[44px]
+                          focus:ring-2 focus:ring-[#9B1823] focus:border-transparent
+                          ${
+                            errors.parentCompanyJurisdiction
+                              ? 'border-red-500 bg-red-50'
+                              : 'border-gray-300 bg-white'
+                          }
+                        `}
+                      />
+                    )}
+                  />
+                  {errors.parentCompanyJurisdiction && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.parentCompanyJurisdiction.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Ultimate Parent Company */}
+                <div>
+                  <label
+                    htmlFor="ultimateParentCompany"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Ultimate Parent Company{' '}
+                    <span className="text-gray-400 text-xs">(if different)</span>
+                  </label>
+                  <Controller
+                    name="ultimateParentCompany"
+                    control={control}
+                    render={({ field }) => (
+                      <input
+                        {...field}
+                        id="ultimateParentCompany"
+                        type="text"
+                        placeholder="Name of ultimate parent entity"
+                        className="w-full px-3 py-2 border border-gray-300 bg-white rounded-md text-sm min-h-[44px] focus:ring-2 focus:ring-[#9B1823] focus:border-transparent"
+                      />
+                    )}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    The ultimate controlling entity at the top of the corporate structure.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Group Structure Description */}
+            <div>
+              <label
+                htmlFor="groupStructureDescription"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Group Structure Description{' '}
+                <span className="text-gray-400 text-xs">(if applicable)</span>
+              </label>
+              <Controller
+                name="groupStructureDescription"
+                control={control}
+                render={({ field }) => (
+                  <textarea
+                    {...field}
+                    id="groupStructureDescription"
+                    rows={4}
+                    placeholder="Describe the corporate group structure, including subsidiaries and related entities"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-[#9B1823] focus:border-transparent resize-none"
+                  />
+                )}
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Provide an overview of how your entity fits within a larger corporate group, if
+                applicable.
+              </p>
+            </div>
+          </div>
+        }
+      />
+    </div>
+  )
+}
