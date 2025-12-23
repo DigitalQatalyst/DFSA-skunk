@@ -167,7 +167,7 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
           onClose={() => setQuickViewItem(null)}
           onViewDetails={() => {
             setQuickViewItem(null);
-            navigate(`/marketplace/${marketplaceType}/${quickViewItem.id}`);
+            navigate(`/marketplace/${marketplaceType}/${quickViewItem.slug || quickViewItem.id}`);
           }}
           isBookmarked={bookmarkedItems.includes(quickViewItem.id)}
           onToggleBookmark={() => onToggleBookmark(quickViewItem.id)}
