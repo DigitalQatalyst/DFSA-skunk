@@ -182,7 +182,7 @@ export function Header({
               <button
                 className="transition-colors duration-200 font-medium hover:opacity-80"
                 style={{ color: '#ffffff' }}
-                onClick={() => console.log('Explore DIFCA clicked')}
+                onClick={() => navigate('/coming-soon')}
               >
                 Explore DIFC
               </button>
