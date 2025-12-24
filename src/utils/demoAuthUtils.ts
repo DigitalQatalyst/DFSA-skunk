@@ -5,13 +5,23 @@
  * This is intended for temporary demo purposes only.
  */
 
+export const DEMO_ORG_ID = '11111111-1111-1111-1111-111111111111';
+export const DEMO_USER_ID = '22222222-2222-2222-2222-222222222222';
+
+let demoWarningLogged = false;
+
 /**
- * Check if demo authentication bypass is enabled
+ * Check if demo authentication bypass is enabled (dev-only).
  */
 export function isDemoModeEnabled(): boolean {
+  if (import.meta.env.PROD) {
+    return false;
+  }
   const isEnabled = import.meta.env.VITE_DEMO_AUTH_BYPASS === 'true';
-  console.log('[DEMO MODE] Environment variable:', import.meta.env.VITE_DEMO_AUTH_BYPASS);
-  console.log('[DEMO MODE] Demo mode enabled:', isEnabled);
+  if (isEnabled && !demoWarningLogged) {
+    console.warn('DEMO AUTH BYPASS ENABLED');
+    demoWarningLogged = true;
+  }
   return isEnabled;
 }
 
@@ -22,7 +32,7 @@ export function isDemoModeEnabled(): boolean {
 export function getDemoUser() {
   return {
     // Core user fields
-    id: "demo-user-123",
+    id: DEMO_USER_ID,
     email: "demo@dfsa-demo.local",
     name: "Demo User",
     username: "demo-user",
@@ -41,7 +51,7 @@ export function getDemoUser() {
 
     // MSAL compatibility fields
     idTokenClaims: {
-      oid: "demo-user-123",
+      oid: DEMO_USER_ID,
       given_name: "Demo",
       family_name: "User",
       email: "demo@dfsa-demo.local",

@@ -5,6 +5,7 @@
 
 import { useQuery, useMutation, useQueryClient, UseQueryOptions, UseMutationOptions } from '@tanstack/react-query';
 import { getAuthToken } from '../utils/getAuthToken';
+import { isDemoModeEnabled, DEMO_ORG_ID, DEMO_USER_ID } from '../utils/demoAuthUtils';
 
 // Query keys
 export const profileKeys = {
@@ -64,21 +65,34 @@ export interface UpdateProfileDomainVariables {
 /**
  * Fetch profile domain data
  */
+function buildProfileHeaders(token: string | null, isDemoMode: boolean): Record<string, string> {
+  if (isDemoMode) {
+    return {
+      'Content-Type': 'application/json',
+      'x-demo-org-id': DEMO_ORG_ID,
+      'x-demo-user-id': DEMO_USER_ID,
+    };
+  }
+  if (!token) {
+    throw new Error('Authentication required');
+  }
+  return {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  };
+}
+
 async function fetchProfileDomain(
   token: string | null,
   domainKey: string
 ): Promise<ProfileDomainResponse> {
-  if (!token) {
-    throw new Error('Authentication required');
-  }
+  const isDemoMode = isDemoModeEnabled();
+  const headers = buildProfileHeaders(token, isDemoMode);
 
   const API_BASE_URL = getApiBaseUrl(domainKey);
   const response = await fetch(`${API_BASE_URL}/profile/domains/${domainKey}`, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
+    headers,
   });
 
   if (!response.ok) {
@@ -97,17 +111,13 @@ async function updateProfileDomain(
   domainKey: string,
   data: Record<string, any>
 ): Promise<ProfileDomainResponse> {
-  if (!token) {
-    throw new Error('Authentication required');
-  }
+  const isDemoMode = isDemoModeEnabled();
+  const headers = buildProfileHeaders(token, isDemoMode);
 
   const API_BASE_URL = getApiBaseUrl(domainKey);
   const response = await fetch(`${API_BASE_URL}/profile/domains/${domainKey}`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
+    headers,
     body: JSON.stringify(data),
   });
 
@@ -133,7 +143,8 @@ export function useProfileDomainQuery(
   return useQuery<ProfileDomainResponse, Error>({
     queryKey: profileKeys.domain(domainKey),
     queryFn: async () => {
-      const token = await getAuthToken();
+      const isDemoMode = isDemoModeEnabled();
+      const token = isDemoMode ? null : await getAuthToken();
       return fetchProfileDomain(token, domainKey);
     },
     enabled: !!domainKey,
@@ -160,7 +171,8 @@ export function useUpdateProfileDomainMutation(
 
   return useMutation<ProfileDomainResponse, Error, Record<string, any>>({
     mutationFn: async (data) => {
-      const token = await getAuthToken();
+      const isDemoMode = isDemoModeEnabled();
+      const token = isDemoMode ? null : await getAuthToken();
       return updateProfileDomain(token, domainKey, data);
     },
     onSuccess: (responseData, variables, context) => {
