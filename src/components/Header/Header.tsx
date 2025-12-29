@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ExploreDropdown } from "./components/ExploreDropdown";
 import { MobileDrawer } from "./components/MobileDrawer";
 import { ProfileDropdown } from "./ProfileDropdown";
@@ -7,9 +7,13 @@ import { NotificationCenter } from "./notifications/NotificationCenter";
 import { mockNotifications } from "./utils/mockNotifications";
 import { useAuth } from "./context/AuthContext";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu } from "lucide-react";
+import { Menu, LayoutDashboard, LogOut } from "lucide-react";
 import EnquiryModal from "../EnquiryModal";
 import { OnboardingModal } from "./components/OnboardingModal";
+import { SignInModal } from "./components/SignInModal";
+import { SignupModal } from "./components/SignupModal";
+import { DFSAEnquirySignupModal } from "./components/DFSAEnquirySignupModal";
+import { getStoredSignUpData } from "../../pages/dashboard/onboarding/dfsa/hooks/usePrePopulation";
 
 interface HeaderProps {
   toggleSidebar?: () => void;
@@ -29,12 +33,43 @@ export function Header({
   const [isSticky, setIsSticky] = useState(false);
   const [isEnquiryModalOpen, setIsEnquiryModalOpen] = useState(false);
   const [isOnboardingModalOpen, setIsOnboardingModalOpen] = useState(false);
-  const { user, login } = useAuth();
+  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
+  const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
+  const [isDFSAEnquiryModalOpen, setIsDFSAEnquiryModalOpen] = useState(false);
+  const [signupUsername, setSignupUsername] = useState<string | null>(null);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   // Count unread notifications
   const unreadCount = mockNotifications.filter((notif) => !notif.read).length;
+
+  // Load sign-up username from localStorage
+  useEffect(() => {
+    const signUpData = getStoredSignUpData();
+    if (signUpData?.contactName) {
+      setSignupUsername(signUpData.contactName);
+    }
+  }, []);
+
+  // Close user dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (showUserDropdown && !target.closest('.user-dropdown-container')) {
+        setShowUserDropdown(false);
+      }
+    };
+
+    if (showUserDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showUserDropdown]);
 
   // Sticky header behavior
   useEffect(() => {
@@ -63,13 +98,14 @@ export function Header({
     setShowNotificationCenter(false);
   };
 
-  // Handle sign in - now opens onboarding modal
+  // Handle sign in - now opens dedicated sign in modal
   const handleSignIn = () => {
-    setIsOnboardingModalOpen(true);
+    setIsSignInModalOpen(true);
   };
 
   const handleSignUp = () => {
-    setIsOnboardingModalOpen(true);
+    // Always show DFSA Enquiry modal for Sign Up
+    setIsDFSAEnquiryModalOpen(true);
   };
 
   // Handle onboarding completion
@@ -114,12 +150,21 @@ export function Header({
     }
   };
 
+  // Handle sign out
+  const handleSignOut = () => {
+    // Clear sign-up data from localStorage
+    localStorage.removeItem('DFSA_ENQUIRY_SIGNUP_DATA');
+    setSignupUsername(null);
+    setShowUserDropdown(false);
+    navigate('/');
+  };
+
   return (
     <>
       <header
         className={`flex items-center w-full transition-all duration-300 ${isSticky
-            ? "fixed top-0 left-0 right-0 z-40 shadow-lg backdrop-blur-sm"
-            : "relative shadow-sm"
+          ? "fixed top-0 left-0 right-0 z-40 shadow-lg backdrop-blur-sm"
+          : "relative shadow-sm"
           }`}
         style={{
           background: isSticky
@@ -165,9 +210,9 @@ export function Header({
               <button
                 className="transition-colors duration-200 font-medium hover:opacity-80"
                 style={{ color: '#ffffff' }}
-                onClick={() => console.log('Explore DIFCA clicked')}
+                onClick={() => navigate('/coming-soon')}
               >
-                Explore DIFCA
+                Explore DIFC
               </button>
             </div>
           </div>
@@ -182,25 +227,97 @@ export function Header({
               <>
                 {/* Desktop CTAs (≥1024px) */}
                 <div className="hidden lg:flex items-center space-x-3">
-                  <button
-                    className={`px-4 py-2 bg-transparent rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 font-semibold ${isSticky ? "text-sm px-3 py-1.5" : ""
-                      }`}
-                    style={{ color: '#ffffff' }}
-                    onClick={handleSignIn}
-                  >
-                    Sign Up
-                  </button>
+                  {signupUsername ? (
+                    <div className="relative user-dropdown-container">
+                      <button
+                        onClick={() => setShowUserDropdown(!showUserDropdown)}
+                        className={`px-4 py-2 text-white font-semibold border-2 border-white rounded-md hover:bg-white/10 transition-all duration-200 cursor-pointer ${isSticky ? "text-sm px-3 py-1.5" : ""}`}
+                      >
+                        Hi, {signupUsername}
+                      </button>
+                      {showUserDropdown && (
+                        <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                          <div className="py-1" role="menu" aria-orientation="vertical">
+                            <button
+                              onClick={() => {
+                                navigate('/dashboard/overview');
+                                setShowUserDropdown(false);
+                              }}
+                              className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                              role="menuitem"
+                            >
+                              <LayoutDashboard size={16} />
+                              Dashboard
+                            </button>
+                            <button
+                              onClick={handleSignOut}
+                              className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                              role="menuitem"
+                            >
+                              <LogOut size={16} />
+                              Sign out
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <button
+                      className={`px-4 py-2 bg-transparent border-2 border-white rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 font-semibold ${isSticky ? "text-sm px-3 py-1.5" : ""
+                        }`}
+                      style={{ color: '#ffffff' }}
+                      onClick={handleSignUp}
+                    >
+                      Sign Up
+                    </button>
+                  )}
                 </div>
                 {/* Tablet Sign Up Button (768px - 1023px) */}
                 <div className="hidden md:flex lg:hidden items-center">
-                  <button
-                    className={`px-3 py-2 bg-transparent rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 font-semibold ${isSticky ? "text-sm px-2 py-1.5" : "text-sm"
-                      }`}
-                    style={{ color: '#ffffff' }}
-                    onClick={handleSignIn}
-                  >
-                    Sign Up
-                  </button>
+                  {signupUsername ? (
+                    <div className="relative user-dropdown-container">
+                      <button
+                        onClick={() => setShowUserDropdown(!showUserDropdown)}
+                        className={`px-3 py-2 text-white font-semibold border-2 border-white rounded-md hover:bg-white/10 transition-all duration-200 cursor-pointer ${isSticky ? "text-sm px-2 py-1.5" : "text-sm"}`}
+                      >
+                        Hi, {signupUsername}
+                      </button>
+                      {showUserDropdown && (
+                        <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                          <div className="py-1" role="menu" aria-orientation="vertical">
+                            <button
+                              onClick={() => {
+                                navigate('/dashboard/overview');
+                                setShowUserDropdown(false);
+                              }}
+                              className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                              role="menuitem"
+                            >
+                              <LayoutDashboard size={16} />
+                              Dashboard
+                            </button>
+                            <button
+                              onClick={handleSignOut}
+                              className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                              role="menuitem"
+                            >
+                              <LogOut size={16} />
+                              Sign out
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <button
+                      className={`px-3 py-2 bg-transparent border-2 border-white rounded-md hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 font-semibold ${isSticky ? "text-sm px-2 py-1.5" : "text-sm"
+                        }`}
+                      style={{ color: '#ffffff' }}
+                      onClick={handleSignUp}
+                    >
+                      Sign Up
+                    </button>
+                  )}
                 </div>
               </>
             )}
@@ -226,11 +343,47 @@ export function Header({
         data-id="enquiry-modal"
       />
 
-      {/* Onboarding Modal */}
+      {/* Onboarding Modal - still used on /onboarding page */}
       <OnboardingModal
         isOpen={isOnboardingModalOpen}
         onClose={() => setIsOnboardingModalOpen(false)}
         onComplete={handleOnboardingComplete}
+      />
+
+      {/* Sign In Modal */}
+      <SignInModal
+        isOpen={isSignInModalOpen}
+        onClose={() => setIsSignInModalOpen(false)}
+        onSignInSuccess={() => {
+          console.log('Sign in successful');
+        }}
+        onSwitchToSignUp={() => {
+          setIsSignInModalOpen(false);
+          setIsSignupModalOpen(true);
+        }}
+      />
+
+      {/* Sign Up Modal */}
+      <SignupModal
+        isOpen={isSignupModalOpen}
+        onClose={() => setIsSignupModalOpen(false)}
+        onSignupSuccess={(data) => {
+          console.log('Signup successful:', data);
+        }}
+        onSwitchToSignIn={() => {
+          setIsSignupModalOpen(false);
+          setIsSignInModalOpen(true);
+        }}
+      />
+
+      {/* DFSA Enquiry Sign-Up Modal */}
+      <DFSAEnquirySignupModal
+        isOpen={isDFSAEnquiryModalOpen}
+        onClose={() => setIsDFSAEnquiryModalOpen(false)}
+        onSuccess={(referenceNumber) => {
+          console.log('DFSA Enquiry submitted:', referenceNumber);
+          // Optional: Navigate to dashboard or confirmation page
+        }}
       />
 
       {/* Notifications Menu */}

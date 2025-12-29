@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -9,7 +9,6 @@ import {
   ChevronRight,
   ShieldCheck,
   Globe,
-  Lock,
   Download,
   ArrowRight,
   Building,
@@ -18,9 +17,10 @@ import { Header } from "../../components/Header";
 import { Footer } from "../../components/Footer";
 import { useProductDetails } from "../../hooks/useProductDetails";
 import { getMarketplaceConfig } from "../../utils/marketplaceConfig";
+import { DFSAEnquirySignupModal } from "../../components/Header/components/DFSAEnquirySignupModal";
 
 interface MarketplaceDetailsPageProps {
-  marketplaceType: "courses" | "financial" | "events" | "non-financial" | "knowledge-hub";
+  marketplaceType: "courses" | "financial" | "business-services" | "knowledge-hub";
   bookmarkedItems?: string[];
   onToggleBookmark?: (itemId: string) => void;
   onAddToComparison?: (item: any) => void;
@@ -32,7 +32,7 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
   const { itemId } = useParams<{ itemId: string }>();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  
+
   const { item, loading, error } = useProductDetails({
     itemId,
     marketplaceType,
@@ -45,13 +45,42 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
       navigate("/coming-soon");
       return;
     }
-    
-    // Navigate to the generic service request form
-    navigate('/forms/request-service', { 
-      state: { 
-        service: item 
-      } 
+
+    // Check if this is a DFSA financial services application
+    const isDFSAService = marketplaceType === 'financial' ||
+      marketplaceType === 'business-services' || // Include business-services marketplace
+      item?.id === 'mock-1' || // New Authorisation Services
+      item?.id === 'mock-2' || // New Authorisation: AMI
+      item?.title?.toLowerCase().includes('dfsa') ||
+      item?.title?.toLowerCase().includes('authorisation') ||
+      item?.title?.toLowerCase().includes('authorization') ||
+      item?.title?.toLowerCase().includes('financial services') ||
+      item?.title?.toLowerCase().includes('licence') ||
+      item?.title?.toLowerCase().includes('license') ||
+      item?.description?.toLowerCase().includes('dfsa') ||
+      item?.description?.toLowerCase().includes('financial services') ||
+      item?.description?.toLowerCase().includes('authorisation') ||
+      item?.description?.toLowerCase().includes('authorization');
+
+    // Debug logging
+    console.log('MarketplaceDetailsPage - Service clicked:', {
+      id: item?.id,
+      title: item?.title,
+      marketplaceType: marketplaceType,
+      isDFSAService: isDFSAService,
+      description: item?.description?.substring(0, 100)
     });
+
+    // For DFSA services, navigate to financial services application form
+    if (isDFSAService) {
+      console.log('Navigating to DFSA form');
+      navigate('/forms/financial-services-application');
+      return;
+    }
+
+    // For non-DFSA services, redirect to coming soon page
+    console.log('Navigating to coming soon');
+    navigate('/coming-soon');
   };
 
   if (loading) {
@@ -66,7 +95,7 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
     );
   }
 
-  if (!item || error) {
+  if (error || !item) {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
         <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
@@ -196,26 +225,36 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
                     <Globe className="mr-3 text-primary" />
                     Application Process
                   </h2>
-                  <div className="relative">
-                    {/* Vertical Line */}
-                    <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
-                    
-                    <div className="space-y-8">
-                      {processSteps.map((step: any, idx: number) => (
-                        <div key={idx} className="relative flex items-start pl-12">
-                          <div className="absolute left-0 top-1 w-8 h-8 bg-white border-2 border-primary rounded-full flex items-center justify-center z-10 font-bold text-primary text-sm">
-                            {idx + 1}
-                          </div>
-                          <div>
-                            <h3 className="text-lg font-bold text-gray-900 mb-1">
-                              {step.title || `Step ${idx + 1}`}
-                            </h3>
-                            <p className="text-gray-600">{step.description || step}</p>
-                          </div>
-                        </div>
-                      ))}
+
+                  {processSteps.length === 1 ? (
+                    // Single step - clean simple layout
+                    <div className="bg-gray-50 rounded-xl p-6">
+                      <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                        {processSteps[0].description || processSteps[0]}
+                      </p>
                     </div>
-                  </div>
+                  ) : (
+                    // Multiple steps - timeline layout
+                    <div className="relative">
+                      <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
+
+                      <div className="space-y-8">
+                        {processSteps.map((step: any, idx: number) => (
+                          <div key={idx} className="relative flex items-start pl-12">
+                            <div className="absolute left-0 top-1 w-8 h-8 bg-white border-2 border-primary rounded-full flex items-center justify-center z-10 font-bold text-primary text-sm">
+                              {idx + 1}
+                            </div>
+                            <div>
+                              <h3 className="text-lg font-bold text-gray-900 mb-1">
+                                {step.title || `Step ${idx + 1}`}
+                              </h3>
+                              <p className="text-gray-600">{step.description || step}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -239,29 +278,42 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
                 <button className="w-full bg-white text-primary font-bold py-3 px-4 rounded-xl border border-primary/20 hover:bg-primary/5 transition-all flex items-center justify-center">
                   <Download size={18} className="mr-2" /> Download Guide
                 </button>
-                
+
                 <div className="mt-8 pt-6 border-t border-gray-100">
-                  <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
-                    <Lock size={16} className="mr-2 text-gray-400" />
+                  <h4 className="font-bold text-gray-900 mb-4 flex items-center text-base">
+                    <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center mr-3">
+                      <FileText size={16} className="text-primary" />
+                    </div>
                     Required Documents
                   </h4>
-                  <ul className="space-y-3">
-                    {requirements.length > 0 ? (
-                      requirements.map((req: string, idx: number) => (
-                        <li key={idx} className="text-sm text-gray-600 flex items-start">
-                          <div className="w-1.5 h-1.5 bg-primary/60 rounded-full mt-1.5 mr-2 flex-shrink-0"></div>
-                          {req}
-                        </li>
-                      ))
-                    ) : (
-                      <li className="text-sm text-gray-500 italic">
-                        Check guide for details
-                      </li>
-                    )}
-                  </ul>
+                  {requirements.length > 0 ? (
+                    <div className="space-y-2">
+                      {requirements.map((req: string, idx: number) => (
+                        <div
+                          key={idx}
+                          className="bg-gray-50 rounded-lg p-3 border border-gray-100 hover:border-primary/20 transition-colors"
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                              <CheckCircle size={12} className="text-primary" />
+                            </div>
+                            <p className="text-sm text-gray-700 leading-relaxed flex-1">
+                              {req}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-100 text-center">
+                      <p className="text-sm text-gray-500">
+                        Check the application guide for document requirements
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
-              
+
               {/* Help Card */}
               <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl border border-gray-200 p-6">
                 <h3 className="font-bold text-primary mb-2">Need Assistance?</h3>
@@ -277,6 +329,17 @@ const MarketplaceDetailsPage: React.FC<MarketplaceDetailsPageProps> = ({
         </div>
       </main>
       <Footer isLoggedIn={false} />
+
+      {/* DFSA Enquiry Signup Modal */}
+      <DFSAEnquirySignupModal
+        isOpen={isSignupModalOpen}
+        onClose={() => setIsSignupModalOpen(false)}
+        onSuccess={(referenceNumber) => {
+          console.log('DFSA Enquiry submitted from marketplace:', referenceNumber);
+          // Default behavior: Modal handles navigation to onboarding
+          // or user closes modal to stay on marketplace page
+        }}
+      />
     </div>
   );
 };

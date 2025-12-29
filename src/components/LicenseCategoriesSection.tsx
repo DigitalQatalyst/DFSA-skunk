@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { FadeInUpOnScroll } from './AnimationUtils';
 import { licenseCategories } from '../data/dfsa';
 import { LicenseCategoryCard } from './dfsa/LicenseCategoryCard';
 
@@ -72,29 +71,22 @@ const LicenseCategoriesSection: React.FC = () => {
   };
 
   return (
-    <section className="w-full bg-gray-50 py-16 md:py-24 relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23DC2626' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }}
-        ></div>
-      </div>
-
-      <div className="container mx-auto px-4 relative z-10">
+    <section className="w-full bg-[#F8FAFC] py-24 md:py-32">
+      <div className="container mx-auto px-4">
         {/* Section Header */}
-        <FadeInUpOnScroll>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-gray-900 mb-4">
-              Find Your DFSA License Category
-            </h2>
-            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-              Each financial service requires specific authorization. Discover which license category aligns with your business model.
+        <div className="text-center mb-12 md:mb-16">
+          <h2 className="text-3xl md:text-4xl font-semibold text-[#1E293B] mb-4">
+            DFSA Licence Categories Information
+          </h2>
+          <p className="text-lg text-[#64748B] max-w-3xl mx-auto mb-6">
+            Information on DFSA licence categories based on AUT Module 3. Each financial service requires specific authorisation.
+          </p>
+          <div className="max-w-4xl mx-auto p-4 bg-white border border-[#E2E8F0] rounded-lg">
+            <p className="text-sm text-[#64748B]">
+              All requirements determined by DFSA. Applications assessed individually based on proposed activities and firm structure.
             </p>
           </div>
-        </FadeInUpOnScroll>
+        </div>
 
         {/* Category Carousel */}
         <div className="relative">
@@ -105,8 +97,8 @@ const LicenseCategoriesSection: React.FC = () => {
                 onClick={prevCategory}
                 disabled={isTransitioning}
                 className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-20
-                           bg-white hover:bg-gray-50 text-primary rounded-full p-3 shadow-lg
-                           transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed
+                           bg-white hover:bg-[#F8FAFC] text-primary rounded-full p-3 shadow-md
+                           transition-colors disabled:opacity-50 disabled:cursor-not-allowed
                            hidden md:flex items-center justify-center"
                 aria-label="Previous category"
               >
@@ -117,8 +109,8 @@ const LicenseCategoriesSection: React.FC = () => {
                 onClick={nextCategory}
                 disabled={isTransitioning}
                 className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-20
-                           bg-white hover:bg-gray-50 text-primary rounded-full p-3 shadow-lg
-                           transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed
+                           bg-white hover:bg-[#F8FAFC] text-primary rounded-full p-3 shadow-md
+                           transition-colors disabled:opacity-50 disabled:cursor-not-allowed
                            hidden md:flex items-center justify-center"
                 aria-label="Next category"
               >
@@ -129,9 +121,8 @@ const LicenseCategoriesSection: React.FC = () => {
 
           {/* Category Card */}
           <div
-            className={`transition-opacity duration-500 max-w-2xl mx-auto ${
-              isTransitioning ? 'opacity-0' : 'opacity-100'
-            }`}
+            className={`transition-opacity duration-500 max-w-2xl mx-auto ${isTransitioning ? 'opacity-0' : 'opacity-100'
+              }`}
           >
             <LicenseCategoryCard
               category={activeCategory}
@@ -147,11 +138,10 @@ const LicenseCategoriesSection: React.FC = () => {
               <button
                 key={category.id}
                 onClick={() => goToCategory(index)}
-                className={`transition-all duration-300 rounded-full ${
-                  index === activeIndex
-                    ? 'bg-primary w-12 h-3'
-                    : 'bg-gray-300 hover:bg-gray-400 w-3 h-3'
-                }`}
+                className={`transition-colors duration-300 rounded-full ${index === activeIndex
+                  ? 'bg-primary w-12 h-3'
+                  : 'bg-[#E2E8F0] hover:bg-[#64748B] w-3 h-3'
+                  }`}
                 aria-label={`Go to ${category.name}`}
                 title={category.name}
               />
@@ -160,7 +150,7 @@ const LicenseCategoriesSection: React.FC = () => {
         )}
 
         {/* Category Count */}
-        <div className="text-center mt-6 text-gray-600 text-sm">
+        <div className="text-center mt-6 text-[#64748B] text-sm">
           Viewing {activeIndex + 1} of {licenseCategories.length} license categories
         </div>
 
@@ -170,8 +160,8 @@ const LicenseCategoriesSection: React.FC = () => {
             <button
               onClick={prevCategory}
               disabled={isTransitioning}
-              className="px-6 py-2 bg-white text-primary border-2 border-primary rounded-lg font-semibold
-                         hover:bg-primary hover:text-white transition-all duration-300
+              className="px-6 py-2 bg-white text-dfsa-gold border-2 border-dfsa-gold rounded-md font-semibold
+                         hover:bg-[#F8FAFC] transition-colors
                          disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               <ChevronLeft size={18} />
@@ -180,8 +170,8 @@ const LicenseCategoriesSection: React.FC = () => {
             <button
               onClick={nextCategory}
               disabled={isTransitioning}
-              className="px-6 py-2 bg-primary text-white rounded-lg font-semibold
-                         hover:bg-primary-dark transition-all duration-300
+              className="px-6 py-2 bg-dfsa-gold text-white rounded-md font-semibold
+                         hover:bg-[#1E293B] transition-colors
                          disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               Next
@@ -191,19 +181,17 @@ const LicenseCategoriesSection: React.FC = () => {
         )}
 
         {/* View All Categories CTA */}
-        <FadeInUpOnScroll delay={0.3}>
-          <div className="text-center mt-12">
-            <a
-              href="/license-categories"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-white text-primary border-2 border-primary
-                         hover:bg-primary hover:text-white font-semibold rounded-lg
-                         transition-all duration-300 hover:-translate-y-1 shadow-md hover:shadow-xl"
-            >
-              <span>View All License Categories</span>
-              <ChevronRight size={20} />
-            </a>
-          </div>
-        </FadeInUpOnScroll>
+        <div className="text-center mt-12">
+          <a
+            href="/license-categories"
+            className="inline-flex items-center gap-2 px-8 py-3 bg-white text-primary border-2 border-primary
+                       hover:bg-[#F8FAFC] font-semibold rounded-md
+                       transition-colors shadow-sm"
+          >
+            <span>View All License Categories</span>
+            <ChevronRight size={20} />
+          </a>
+        </div>
       </div>
     </section>
   );

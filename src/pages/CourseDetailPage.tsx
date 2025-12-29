@@ -530,7 +530,7 @@ export const HomePage: React.FC = () => {
           description:
             'Find professional services to support and grow your business',
           icon: <Briefcase />,
-          path: '/marketplace/non-financial',
+          path: '/marketplace/business-services',
           gradientFrom: 'from-purple-600',
           gradientTo: 'to-purple-400',
           isActive: true,

@@ -176,7 +176,7 @@ interface GetCoursesData {
 }
 
 export interface MarketplacePageProps {
-  marketplaceType: "courses" | "financial" | "events" | "non-financial" | "knowledge-hub";
+  marketplaceType: "courses" | "financial" | "events" | "business-services" | "knowledge-hub";
   title: string;
   description: string;
   promoCards?: any[];
@@ -474,7 +474,7 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
               "provided-by",
               "pricing-model",
             ];
-          } else if (marketplaceType === "non-financial") {
+          } else if (marketplaceType === "business-services") {
             facetCodes = [
               "sector-tag-2",
               "business-stage",
@@ -674,7 +674,7 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
           return;
         }
 
-        // Handle Products (Financial & Non-Financial)
+        // Handle Products (Financial & Business Services)
         if (productData) {
           let filteredServices = productData.products.items;
 
@@ -684,7 +684,7 @@ export const MarketplacePage: React.FC<MarketplacePageProps> = ({
                 product.facetValues.some((fv) => fv.id === "66") &&
                 !product.facetValues.some((fv) => fv.id === "67")
             );
-          } else if (marketplaceType === "non-financial") {
+          } else if (marketplaceType === "business-services") {
             filteredServices = productData.products.items.filter(
               (product) =>
                 product.facetValues.some((fv) => fv.id === "67") &&

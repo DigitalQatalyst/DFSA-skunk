@@ -13,7 +13,7 @@ docs
 node_modules
 api-knowledgehub-server
 magic_patterns_media_marketplace
-.env
+# .env
 dist
 dist-ssr
 *.local

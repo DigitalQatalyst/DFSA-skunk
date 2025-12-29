@@ -1,55 +1,56 @@
 import { AuthorizationStep } from '../../types/dfsa';
 
 /**
- * DFSA Authorization Journey - 8 Steps
- * Complete timeline from discovery to final license issuance
+ * DFSA Authorisation Journey - 8 Steps
+ * Complete process from initial assessment to final licence issuance
+ * DFSA determines all timelines and requirements based on individual circumstances
  */
 export const authorizationSteps: AuthorizationStep[] = [
   {
     stepNumber: 1,
-    title: 'Discovery & Strategy',
-    duration: '1-2 weeks',
+    title: 'Initial Assessment',
+    duration: 'Variable',
     icon: 'Search',
-    description: 'Initial consultation and strategic planning to determine the optimal path for your DFSA authorization.',
+    description: 'Assessment of proposed activities against DFSA regulatory requirements.',
     whatHappens: [
-      'Initial consultation with our regulatory experts',
-      'Business model assessment',
-      'License category determination',
-      'Feasibility analysis',
-      'Cost and timeline projections',
+      'Review proposed financial services activities',
+      'Identify applicable licence category per AUT Module 3',
+      'Assess regulatory requirements per relevant Sourcebooks',
+      'Documentation preparation planning',
+      'Documentation requirements assessment',
     ],
     deliverables: [
-      'Strategic roadmap',
-      'Gap analysis report',
-      'Budget proposal',
+      'Assessment summary',
+      'Applicable regulatory requirements overview',
+      'Documentation preparation plan',
     ],
-    ctaLabel: 'Book Discovery Call',
+    ctaLabel: 'Request Information',
     ctaUrl: '/contact#consultation',
   },
   {
     stepNumber: 2,
     title: 'Pre-Application Preparation',
-    duration: '4-8 weeks',
+    duration: '4-8 weeks (typical)',
     icon: 'FileText',
-    description: 'Comprehensive preparation of all application materials and supporting documentation.',
+    description: 'Preparation of application materials and supporting documentation addressing DFSA requirements.',
     whatHappens: [
-      'Draft Regulatory Business Plan (RBP)',
-      'Develop 3-year financial model',
-      'Create ICAAP/IRAP reports',
-      'Draft compliance policies and procedures',
+      'Draft Regulatory Business Plan per DFSA RBP Guide',
+      'Develop financial model addressing prudential requirements',
+      'Create ICAAP/IRAP reports (if required)',
+      'Draft policies required pursuant to COND Module',
       'Prepare governance framework',
-      'AML/CTF compliance manuals',
+      'AML/CTF procedures per AML Module',
     ],
     keyDocuments: [
-      'Regulatory Business Plan',
-      'Financial projections',
-      'Risk assessment frameworks',
-      'Compliance manuals',
-      'Governance policies',
+      'Regulatory Business Plan (DFSA RBP Guide)',
+      'Financial projections (AMEN Module requirements)',
+      'Risk assessment frameworks (COND Module)',
+      'Compliance policies (various Sourcebooks)',
+      'Governance documentation',
     ],
     deliverables: [
-      'Complete application package',
-      'Pre-submission review',
+      'Application documentation package',
+      'Pre-submission internal review',
     ],
     ctaLabel: 'View Sample RBP',
     ctaUrl: '/resources#rbp-template',
@@ -57,20 +58,19 @@ export const authorizationSteps: AuthorizationStep[] = [
   {
     stepNumber: 3,
     title: 'DFSA Engagement',
-    duration: '1-2 weeks',
+    duration: 'Variable (at DFSA discretion)',
     icon: 'Handshake',
-    description: 'Initial engagement with the DFSA to introduce your application and receive preliminary feedback.',
+    description: 'Optional preliminary engagement with DFSA. DFSA determines whether to provide pre-submission feedback.',
     whatHappens: [
-      'Submit Letter of Intent to DIFC',
-      'Preliminary discussions with DFSA',
-      'Review draft RBP with regulator',
-      'Address initial feedback',
-      'Finalize approach',
+      'Submit Letter of Intent to DIFC (optional)',
+      'Preliminary discussions with DFSA (at DFSA discretion)',
+      'DFSA may provide informal feedback',
+      'Address any preliminary matters raised',
     ],
     support: [
-      'Attend all DFSA meetings',
-      'Manage correspondence',
-      'Navigate regulatory queries',
+      'Assist with correspondence preparation',
+      'Coordinate meetings if arranged',
+      'Support with responding to preliminary queries',
     ],
     ctaLabel: 'Learn More',
     ctaUrl: '/authorization-journey#dfsa-engagement',
@@ -78,22 +78,22 @@ export const authorizationSteps: AuthorizationStep[] = [
   {
     stepNumber: 4,
     title: 'Formal Application Submission',
-    duration: '2-4 weeks',
+    duration: '2-4 weeks (preparation)',
     icon: 'Upload',
-    description: 'Submission of complete application package including all forms, documentation, and application fees.',
+    description: 'Submission of complete application package pursuant to AUT Module requirements.',
     whatHappens: [
       'Complete AUT-CORE application forms',
       'Submit AUT-IND for key personnel',
-      'Submit comprehensive RBP',
+      'Submit comprehensive Regulatory Business Plan',
       'Financial model submission',
-      'All supporting documentation',
+      'All supporting documentation per AUT Module',
     ],
     fees: {
-      category1: 'USD $75,000',
-      category2: 'USD $50,000',
-      category3: 'USD $30,000',
-      category4: 'USD $15,000',
-      category5: 'USD $75,000',
+      category1: 'USD $75,000 (subject to DFSA Fee Schedule)',
+      category2: 'USD $50,000 (subject to DFSA Fee Schedule)',
+      category3: 'USD $30,000 (subject to DFSA Fee Schedule)',
+      category4: 'USD $15,000 (subject to DFSA Fee Schedule)',
+      category5: 'USD $75,000 (subject to DFSA Fee Schedule)',
     },
     ctaLabel: 'Fee Structure Guide',
     ctaUrl: '/resources#fee-structure',
@@ -101,43 +101,43 @@ export const authorizationSteps: AuthorizationStep[] = [
   {
     stepNumber: 5,
     title: 'DFSA Review & Assessment',
-    duration: '8-16 weeks',
+    duration: 'Variable (determined by DFSA)',
     icon: 'ClipboardCheck',
-    description: 'Comprehensive review by DFSA of your application, business model, personnel, and systems.',
+    description: 'DFSA conducts comprehensive assessment in accordance with DFSA Law Article 41A and AUT Module.',
     whatHappens: [
       'DFSA conducts comprehensive review',
-      'Assessment of business model',
-      'Evaluation of key personnel (Fit & Proper)',
-      'Review of systems and controls',
-      'Interviews with senior management',
+      'Assessment of business model viability',
+      'Evaluation of key personnel fitness and propriety',
+      'Review of systems and controls adequacy',
+      'Interviews with senior management (if required)',
       'Due diligence on shareholders and controllers',
     ],
     support: [
-      'We manage all DFSA queries',
-      'Prepare technical responses',
-      'Coordinate interviews',
-      'Address compliance concerns',
+      'Assist with responding to DFSA information requests',
+      'Prepare technical responses to regulatory queries',
+      'Coordinate interview preparation',
+      'Support with addressing compliance matters',
     ],
-    ctaLabel: 'Prepare for Assessment',
+    ctaLabel: 'Assessment Information',
     ctaUrl: '/services#assessment-support',
   },
   {
     stepNumber: 6,
     title: 'In-Principle Approval',
-    duration: '1-2 weeks',
+    duration: '1-2 weeks (if approved)',
     icon: 'CheckCircle',
-    description: 'Receive conditional approval from DFSA subject to fulfilling specific operational requirements.',
+    description: 'If DFSA grants conditional approval pursuant to AUT 6.5. In-principle approval is conditional and does not constitute authorisation.',
     whatHappens: [
-      'Receive conditional approval from DFSA',
-      'Review conditions to be satisfied',
+      'Receive conditional approval from DFSA (if granted)',
+      'Review conditions specified by DFSA',
       'Plan implementation of conditions',
     ],
     deliverables: [
-      'DIFC entity incorporation',
+      'DIFC entity incorporation (required pursuant to AUT 6.5)',
       'Lease office space in DIFC',
       'Open UAE bank account',
-      'Deposit capital requirements',
-      'Provide evidence of compliance',
+      'Deposit capital requirements per AMEN Module',
+      'Provide evidence of condition fulfillment to DFSA',
     ],
     ctaLabel: 'Understand Conditions',
     ctaUrl: '/authorization-journey#in-principle-approval',
@@ -145,89 +145,92 @@ export const authorizationSteps: AuthorizationStep[] = [
   {
     stepNumber: 7,
     title: 'Operational Setup',
-    duration: '4-6 weeks',
+    duration: '4-6 weeks (typical)',
     icon: 'Settings',
-    description: 'Establish your operational presence in DIFC and fulfill all approval conditions.',
+    description: 'Establish operational presence in DIFC and fulfil conditions specified by DFSA in in-principle approval.',
     whatHappens: [
       'Register entity with DIFC Registrar of Companies',
       'Secure office space in DIFC',
       'Set up corporate bank account',
-      'Transfer minimum capital',
+      'Transfer minimum capital per AMEN Module',
       'Implement technology systems',
-      'Hire required personnel',
+      'Hire personnel per AMEN Module requirements',
     ],
     support: [
-      'Entity formation assistance',
-      'Office space recommendations',
-      'Banking introductions',
-      'Systems implementation',
+      'Information on entity formation procedures',
+      'Information on office space requirements',
+      'Information on banking requirements',
+      'Information on systems implementation',
     ],
-    ctaLabel: 'Setup Checklist',
+    ctaLabel: 'Setup Information',
     ctaUrl: '/resources#setup-checklist',
   },
   {
     stepNumber: 8,
-    title: 'Final License Issuance',
-    duration: '1-2 weeks',
+    title: 'Final Licence Issuance',
+    duration: 'Variable (DFSA determines)',
     icon: 'Award',
-    description: 'Final review by DFSA and issuance of your Financial Services Permission.',
+    description: 'If DFSA determines all conditions satisfied and requirements met pursuant to AUT Module. Authorisation subject to ongoing supervision pursuant to SUP Module.',
     whatHappens: [
-      'Submit evidence of condition fulfillment',
-      'Final DFSA review',
-      'Financial Services Permission issued',
-      'License number assigned',
+      'Submit evidence of condition fulfilment to DFSA',
+      'DFSA conducts final review',
+      'Financial Services Permission issued (if approved)',
+      'Licence number assigned',
       'Public register listing',
     ],
     deliverables: [
-      'Fully authorized DFSA firm',
+      'Authorised DFSA firm (if approved)',
       'Listed on DFSA Public Register',
-      'Ready to commence operations',
-      'Subject to ongoing supervision',
+      'May commence regulated activities',
+      'Subject to ongoing supervision (SUP Module)',
     ],
-    ctaLabel: 'Post-License Support',
+    ctaLabel: 'Post-Authorisation Information',
     ctaUrl: '/services#ongoing-compliance',
   },
 ];
 
 /**
- * Timeline overview by license category
+ * Timeline information by licence category
+ * Note: These are historical averages only. DFSA determines actual processing timelines
+ * based on application complexity, completeness, and regulatory assessment requirements.
  */
 export const timelineOverview = {
-  simple: {
+  category4: {
     category: 'Category 4 (Advisory)',
-    duration: '3-4 months',
-    description: 'Simplest and fastest authorization path',
+    typicalRange: '3-4 months',
+    description: 'Lower capital requirements per AMEN Module. Timeline determined by DFSA.',
   },
-  moderate: {
-    category: 'Category 3C (Fund Manager)',
-    duration: '4-6 months',
-    description: 'Standard authorization timeline',
+  category3: {
+    category: 'Category 3 (Investment Services)',
+    typicalRange: '4-6 months',
+    description: 'Variable capital requirements. Timeline determined by DFSA based on scope.',
   },
-  complex: {
+  categories125: {
     category: 'Categories 1, 2, 5',
-    duration: '6-12 months',
-    description: 'Complex authorizations with higher capital requirements',
+    typicalRange: '6-12 months',
+    description: 'Higher capital requirements per AMEN Module. Timeline determined by DFSA.',
   },
 };
 
 /**
- * Helper function to get total estimated duration
+ * Helper function to get typical duration range
+ * IMPORTANT: These are historical ranges only. Actual timeline determined by DFSA.
  */
 export const getTotalDuration = (categoryCode: string): string => {
   switch (categoryCode) {
     case '4':
-      return '3-4 months';
+      return '3-4 months (typical)';
     case '3A':
     case '3B':
     case '3C':
-      return '4-6 months';
+      return '4-6 months (typical)';
     case '1':
     case '2':
     case '5':
-      return '6-12 months';
+      return '6-12 months (typical)';
     case 'ITL':
-      return '2-4 months';
+      return '2-4 months (typical)';
     default:
-      return '3-6 months';
+      return '3-6 months (typical)';
   }
 };

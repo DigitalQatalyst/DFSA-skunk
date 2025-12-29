@@ -35,12 +35,18 @@ const FAQSection: React.FC = () => {
             </div>
 
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-gray-900 mb-4">
-              Your DFSA Questions Answered
+              Frequently Asked Questions
             </h2>
 
-            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-              Find answers to common questions about licensing, capital requirements, compliance, and the authorization process.
+            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-6">
+              Find answers to common questions about licensing, capital requirements, compliance, and the authorisation process.
             </p>
+
+            <div className="max-w-4xl mx-auto p-4 bg-gray-100 rounded-lg">
+              <p className="text-sm text-gray-700 text-center">
+                These FAQs provide general information only. Specific requirements determined by DFSA based on individual circumstances. Refer to DFSA Rulebook for authoritative guidance.
+              </p>
+            </div>
           </div>
         </FadeInUpOnScroll>
 

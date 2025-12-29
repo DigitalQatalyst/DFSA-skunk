@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { MarketplacePage } from "../../components/marketplace/MarketplacePage";
 import MarketplaceDetailsPage from "./MarketplaceDetailsPage";
 import { EventDetailsPage } from "../../components/marketplace/EventDetailsPage";
+import { FinancialServicesPage } from "./financial-services/FinancialServicesPage";
 import { DollarSign, Briefcase, Users, Calendar, BookOpen } from "lucide-react";
 import { getMarketplaceConfig } from "../../utils/marketplaceConfig";
 
@@ -21,8 +22,9 @@ interface PromoCard {
 type MarketplaceType =
   | "courses"
   | "financial"
+  | "products"
   | "events"
-  | "non-financial"
+  | "business-services"
   | "knowledge-hub";
 
 // Centralized promo card definitions
@@ -42,7 +44,7 @@ const promoCardDefinitions: Record<string, PromoCard> = {
     title: "Need expert advice?",
     description: "Connect with industry experts and get personalized guidance.",
     icon: <Briefcase size={24} className="text-white" />,
-    path: "/marketplace/non-financial",
+    path: "/marketplace/business-services",
     gradientFrom: "from-purple-600",
     gradientTo: "to-pink-500",
   },
@@ -83,8 +85,9 @@ const marketplacePromoCards: Record<MarketplaceType, PromoCard[]> = {
     promoCardDefinitions.advisory,
   ],
   events: [],
-  "non-financial": [],
+  "business-services": [],
   "knowledge-hub": [],
+  "products": [],
 };
 
 export const MarketplaceRouter: React.FC = () => {
@@ -105,13 +108,17 @@ export const MarketplaceRouter: React.FC = () => {
       title: "Events Marketplace",
       description: "Find upcoming events.",
     },
-    "non-financial": getMarketplaceConfig("non-financial") ?? {
-      title: "Non-Financial Services",
-      description: "Access advisory services.",
+    "business-services": getMarketplaceConfig("business-services") ?? {
+      title: "Business Services Hub",
+      description: "Access professional services to support and grow your business.",
     },
     "knowledge-hub": getMarketplaceConfig("knowledge-hub") ?? {
       title: "Knowledge Hub",
       description: "Expand your business knowledge.",
+    },
+    "products": {
+      title: "Financial Services Activities",
+      description: "Browse DFSA-regulated financial services activities by regime and pathway.",
     },
   };
 
@@ -121,8 +128,9 @@ export const MarketplaceRouter: React.FC = () => {
   >({
     courses: [],
     financial: [],
+    'products': [],
     events: [],
-    "non-financial": [],
+    "business-services": [],
     "knowledge-hub": [],
   });
 
@@ -147,44 +155,54 @@ export const MarketplaceRouter: React.FC = () => {
   const marketplaceRoutes: MarketplaceType[] = [
     "courses",
     "financial",
+    "products",
     "events",
-    "non-financial",
+    "business-services",
     "knowledge-hub",
   ];
 
   return (
     <Routes>
-      {marketplaceRoutes.map((type) => (
-        <React.Fragment key={type}>
-          <Route
-            path={`/${type}`}
-            element={
-              <MarketplacePage
-                marketplaceType={type}
-                title={marketplaceConfigs[type].title}
-                description={marketplaceConfigs[type].description}
-                promoCards={marketplacePromoCards[type]}
-              />
-            }
-          />
-          <Route
-            path={`/${type}/:itemId`}
-            element={
-              type === "events" ? (
-                <EventDetailsPage />
-              ) : (
-                <MarketplaceDetailsPage
+      {/* Financial Services - Custom page */}
+      <Route
+        path="/products"
+        element={<FinancialServicesPage />}
+      />
+
+      {/* Other marketplace routes */}
+      {marketplaceRoutes
+        .filter((type) => type !== "products")
+        .map((type) => (
+          <React.Fragment key={type}>
+            <Route
+              path={`/${type}`}
+              element={
+                <MarketplacePage
                   marketplaceType={type}
-                  bookmarkedItems={bookmarkedItems[type]}
-                  onToggleBookmark={(itemId) =>
-                    handleToggleBookmark(type, itemId)
-                  }
+                  title={marketplaceConfigs[type].title}
+                  description={marketplaceConfigs[type].description}
+                  promoCards={marketplacePromoCards[type]}
                 />
-              )
-            }
-          />
-        </React.Fragment>
-      ))}
+              }
+            />
+            <Route
+              path={`/${type}/:itemId`}
+              element={
+                type === "events" ? (
+                  <EventDetailsPage />
+                ) : (
+                  <MarketplaceDetailsPage
+                    marketplaceType={type}
+                    bookmarkedItems={bookmarkedItems[type]}
+                    onToggleBookmark={(itemId) =>
+                      handleToggleBookmark(type, itemId)
+                    }
+                  />
+                )
+              }
+            />
+          </React.Fragment>
+        ))}
     </Routes>
   );
 };
