@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "../../../config/apiBase";
+
 export interface DisburseLoanPayload {
   azureId: string;
   userId: string;
@@ -25,7 +27,7 @@ export interface DisburseLoanPayload {
 export async function submitDisburseLoan(data: DisburseLoanPayload): Promise<any> {
   try {
     const response = await fetch(
-      "https://kfrealexpressserver.vercel.app/api/v1/loan/disburse-loan",
+      `${API_BASE_URL}/loan/disburse-loan`,
       {
         method: "POST",
         headers: {

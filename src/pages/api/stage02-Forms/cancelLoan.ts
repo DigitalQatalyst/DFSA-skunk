@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "../../../config/apiBase";
+
 export interface CancelLoanPayload {
   azureId: string;
 git   sequenceNumber: string;
@@ -16,7 +18,7 @@ git   sequenceNumber: string;
 export async function submitCancelLoan(data: CancelLoanPayload): Promise<any> {
   try {
     const response = await fetch(
-      "https://kfrealexpressserver.vercel.app/api/v1/loan/cancel-loan",
+      `${API_BASE_URL}/loan/cancel-loan`,
       {
         method: "POST",
         headers: {

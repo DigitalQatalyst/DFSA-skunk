@@ -2,10 +2,9 @@
 // Handles service request operations using external API instead of Supabase
 
 import { ServiceRequest, ServiceRequestStatus } from "../types";
+import { API_BASE_URL } from "../config/apiBase";
 
-const API_BASE_URL = "https://kfrealexpressserver.vercel.app/api/v1";
-const OPPORTUNITIES_API_URL =
-  "https://kfrealexpressserver.vercel.app/api/v1/opportunity/get-opportunities-and-cases";
+const OPPORTUNITIES_API_URL = `${API_BASE_URL}/opportunity/get-opportunities-and-cases`;
 
 interface ApiServiceRequestItem {
   "@odata.etag"?: string;
@@ -204,7 +203,7 @@ export class ApiServiceRequestService {
 
     try {
       const response = await fetch(
-        `https://kfrealexpressserver.vercel.app/api/v1/contact-info/get-contact?contactid=${contactId}`,
+        `${API_BASE_URL}/contact-info/get-contact?contactid=${contactId}`,
         {
           method: "GET",
           headers: {
@@ -915,7 +914,7 @@ export class ApiServiceRequestService {
   ): Promise<boolean> {
     try {
       const response = await fetch(
-        `https://kfrealexpressserver.vercel.app/api/v1/opportunity/mark-deleted/${entityType}/${requestId}`,
+        `${API_BASE_URL}/opportunity/mark-deleted/${entityType}/${requestId}`,
         {
           method: "PATCH",
           headers: {

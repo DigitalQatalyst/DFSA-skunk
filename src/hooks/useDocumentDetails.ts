@@ -5,6 +5,7 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { useAuth } from '../components/Header/context/AuthContext';
 import { getAuthToken } from '../utils/getAuthToken';
+import { API_BASE_URL } from '../config/apiBase';
 
 export interface DocumentDTO {
   id: string;
@@ -34,11 +35,8 @@ async function fetchDocument(token: string | null, documentId: string): Promise<
     throw new Error('No authentication token available');
   }
 
-  // Use express server directly for metadata operations
-  // Use localhost:5000 in development, or env variable, or production URL
-  const expressServerUrl = import.meta.env.VITE_EXPRESS_SERVER_URL || 
-    (import.meta.env.DEV ? 'http://localhost:5000' : 'https://kfrealexpressserver.vercel.app');
-  const response = await fetch(`${expressServerUrl}/api/v1/documents/${documentId}`, {
+  // Use same-origin API base to avoid CORS in demo deployments.
+  const response = await fetch(`${API_BASE_URL}/documents/${documentId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

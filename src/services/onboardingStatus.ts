@@ -1,7 +1,7 @@
 import { isDemoModeEnabled } from '../utils/demoAuthUtils';
+import { API_BASE_URL } from '../config/apiBase';
 
-const ONBOARDING_API_BASE =
-  'https://kfrealexpressserver.vercel.app/api/v1/onboarding';
+const ONBOARDING_API_BASE = `${API_BASE_URL}/onboarding`;
 
 export type OnboardingState = 'completed' | 'not_completed';
 

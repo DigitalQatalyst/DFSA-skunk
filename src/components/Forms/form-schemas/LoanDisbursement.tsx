@@ -1,5 +1,6 @@
 import * as yup from "yup";
 import { FormSchema, FormField } from "../FormPreview";
+import { API_BASE_URL } from "../../../config/apiBase";
 
 // Define the form schema for the "Reallocation of Loan Disbursement" form
 export const reallocationLoanSchema: FormSchema = {
@@ -10,7 +11,7 @@ export const reallocationLoanSchema: FormSchema = {
   multiStep: true,
   allowSaveAndContinue: true,
   autoSaveInterval: 20000,
-  submitEndpoint: "https://kfrealexpressserver.vercel.app/api/v1/loan/reallocate-disburse-loan",
+  submitEndpoint: `${API_BASE_URL}/loan/reallocate-disburse-loan`,
   steps: [
     {
       stepTitle: "Company and Requestor Information",

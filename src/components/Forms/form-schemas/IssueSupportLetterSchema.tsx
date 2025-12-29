@@ -1,5 +1,6 @@
 import { FormSchema } from "../FormPreview";
 import { PLACEHOLDER_STANDARDS } from "../../../utils/formPlaceholderStandards";
+import { API_BASE_URL } from "../../../config/apiBase";
 
 export const IssueSupportLetterSchema: FormSchema = {
   formId: "issue-support-letter",
@@ -9,7 +10,7 @@ export const IssueSupportLetterSchema: FormSchema = {
   multiStep: true,
   allowSaveAndContinue: true,
   autoSaveInterval: 20000, // Auto-save every 20 seconds
-  submitEndpoint: "https://kfrealexpressserver.vercel.app/api/v1/support/issue-support-letter",
+  submitEndpoint: `${API_BASE_URL}/support/issue-support-letter`,
 
   steps: [
     {

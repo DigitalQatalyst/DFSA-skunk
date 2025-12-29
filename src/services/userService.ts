@@ -1,7 +1,8 @@
 // User Service
 // Handles user information retrieval from external API
 
-const API_BASE_URL = "https://kfrealexpressserver.vercel.app/api/v1";
+import { API_BASE_URL } from '../config/apiBase';
+
 const GET_ACCOUNTS_BY_ORG_URL = `${API_BASE_URL}/auth/get-accounts-by-org`;
 
 export interface OrganizationUser {

@@ -6,6 +6,7 @@ import { useMutation, useQueryClient, UseMutationOptions } from '@tanstack/react
 import { useAuth } from '../components/Header/context/AuthContext';
 import { getAuthToken } from '../utils/getAuthToken';
 import { DocumentDTO } from './useDocumentsQuery';
+import { API_BASE_URL } from '../config/apiBase';
 
 interface CreateDocumentResponse {
   document: DocumentDTO;
@@ -43,10 +44,8 @@ async function createDocument(
     formData.append('isConfidential', variables.isConfidential.toString());
   }
 
-  // Use Express server URL for document uploads (handles blob storage and metadata)
-  const apiUrl = import.meta.env.VITE_EXPRESS_SERVER_URL || 
-    (import.meta.env.DEV ? 'http://localhost:5000' : 'https://kfrealexpressserver.vercel.app');
-  const response = await fetch(`${apiUrl}/api/v1/documents`, {
+  // Use same-origin API base to avoid CORS in demo deployments.
+  const response = await fetch(`${API_BASE_URL}/documents`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,

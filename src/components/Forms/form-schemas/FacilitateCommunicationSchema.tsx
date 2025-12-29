@@ -1,4 +1,5 @@
 import { FormSchema } from '../FormPreview'
+import { API_BASE_URL } from '../../../config/apiBase'
 
 export const facilitateCommunicationSchema: FormSchema = {
     formId: 'facilitate-communication',
@@ -7,7 +8,7 @@ export const facilitateCommunicationSchema: FormSchema = {
     multiStep: true,
     allowSaveAndContinue: true,
     autoSaveInterval: 15000,
-    submitEndpoint: 'https://kfrealexpressserver.vercel.app/api/v1/contact/facilitate-communication',
+    submitEndpoint: `${API_BASE_URL}/contact/facilitate-communication`,
     steps: [
         {
             stepTitle: 'Company Information',

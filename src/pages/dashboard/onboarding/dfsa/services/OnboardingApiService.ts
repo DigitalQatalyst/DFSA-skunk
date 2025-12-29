@@ -11,8 +11,9 @@
  */
 
 import { DFSAOnboardingFormData } from '../types'
+import { API_BASE_URL } from '../../../../../config/apiBase'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://kfrealexpressserver.vercel.app/api/v1'
+// Use same-origin API base to avoid CORS in demo deployments.
 
 /**
  * Custom error class for onboarding API errors

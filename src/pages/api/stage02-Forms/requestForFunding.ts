@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "../../../config/apiBase";
+
 export interface RequestForFundingPayload {
     name: string;
     submittedBy: string;
@@ -21,7 +23,7 @@ export interface RequestForFundingPayload {
 export async function submitRequestForFunding(data: RequestForFundingPayload): Promise<any> {
     try {
         const response = await fetch(
-            "https://kfrealexpressserver.vercel.app/api/v1/funding/requestfunding",
+            `${API_BASE_URL}/funding/requestfunding`,
             {
                 method: "POST",
                 headers: {

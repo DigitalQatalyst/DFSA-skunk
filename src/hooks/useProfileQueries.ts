@@ -6,6 +6,7 @@
 import { useQuery, useMutation, useQueryClient, UseQueryOptions, UseMutationOptions } from '@tanstack/react-query';
 import { getAuthToken } from '../utils/getAuthToken';
 import { isDemoModeEnabled, DEMO_ORG_ID, DEMO_USER_ID } from '../utils/demoAuthUtils';
+import { API_BASE_URL } from '../config/apiBase';
 
 // Query keys
 export const profileKeys = {
@@ -23,39 +24,8 @@ export interface ProfileDomainResponse {
 }
 
 /**
- * Get the API base URL for profile requests
- * In production: Uses VITE_API_BASE_URL environment variable (should point to deployed Express API)
- * In development: Falls back to '/api' which uses Vite proxy to localhost:5000
- *
- * Note: Products is intentionally special-cased to prevent accidentally hitting the frontend
- * serverless handler (which has a different persistence model for unified matrices).
+ * API base uses same-origin proxy by default to avoid CORS in demos.
  */
-function getApiBaseUrl(domainKey?: string): string {
-  const envUrl = import.meta.env.VITE_API_BASE_URL;
-  
-  // If no env variable, use proxy in development
-  if (!envUrl) {
-    if (domainKey === 'products' && !import.meta.env.DEV) {
-      throw new Error(
-        'Products must be served by the Express API. Set VITE_API_BASE_URL to your Express base (e.g. http://localhost:5000/api/v1).'
-      );
-    }
-    return '/api';
-  }
-  
-  // If URL already ends with /api/v1, use as-is
-  if (envUrl.endsWith('/api/v1')) {
-    return envUrl;
-  }
-  
-  // If URL ends with /api, add /v1
-  if (envUrl.endsWith('/api')) {
-    return `${envUrl}/v1`;
-  }
-  
-  // Otherwise, add /api/v1
-  return `${envUrl}/api/v1`;
-}
 
 export interface UpdateProfileDomainVariables {
   domainKey: string;
@@ -89,7 +59,6 @@ async function fetchProfileDomain(
   const isDemoMode = isDemoModeEnabled();
   const headers = buildProfileHeaders(token, isDemoMode);
 
-  const API_BASE_URL = getApiBaseUrl(domainKey);
   const response = await fetch(`${API_BASE_URL}/profile/domains/${domainKey}`, {
     method: 'GET',
     headers,
@@ -114,7 +83,6 @@ async function updateProfileDomain(
   const isDemoMode = isDemoModeEnabled();
   const headers = buildProfileHeaders(token, isDemoMode);
 
-  const API_BASE_URL = getApiBaseUrl(domainKey);
   const response = await fetch(`${API_BASE_URL}/profile/domains/${domainKey}`, {
     method: 'PUT',
     headers,

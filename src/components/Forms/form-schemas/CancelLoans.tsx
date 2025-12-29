@@ -1,6 +1,7 @@
 import * as yup from "yup";
 import { FormSchema, FormField } from "../FormPreview";
 import { PLACEHOLDER_STANDARDS } from "../../../utils/formPlaceholderStandards";
+import { API_BASE_URL } from "../../../config/apiBase";
 
 // Define the form schema for the "Loan Cancellation" form
 export const loanCancellationSchema: FormSchema = {
@@ -11,7 +12,7 @@ export const loanCancellationSchema: FormSchema = {
   multiStep: true,
   allowSaveAndContinue: true,
   autoSaveInterval: 20000,
-  submitEndpoint: "https://kfrealexpressserver.vercel.app/api/v1/loan/cancel-loan",
+  submitEndpoint: `${API_BASE_URL}/loan/cancel-loan`,
   steps: [
     {
       stepTitle: "Personal Information",
