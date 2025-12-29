@@ -219,11 +219,10 @@ export function Footer({ "data-id": dataId, isLoggedIn = false }: FooterProps) {
                   value={email}
                   onChange={handleEmailChange}
                   placeholder="Enter your email"
-                  className={`w-full px-4 py-3 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 ${
-                    !isValid
+                  className={`w-full px-4 py-3 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 ${!isValid
                       ? "border-2 border-red-500"
                       : "border border-gray-300 focus:ring-blue-400"
-                  }`}
+                    }`}
                   aria-label="Email address for newsletter"
                   aria-invalid={!isValid}
                   aria-describedby={!isValid ? "email-error" : undefined}
@@ -235,9 +234,8 @@ export function Footer({ "data-id": dataId, isLoggedIn = false }: FooterProps) {
                 )}
                 {errorMessage && (
                   <p
-                    className={`mt-1 text-sm ${
-                      isDuplicate ? "text-yellow-200" : "text-red-200"
-                    }`}
+                    className={`mt-1 text-sm ${isDuplicate ? "text-yellow-200" : "text-red-200"
+                      }`}
                   >
                     {errorMessage}
                   </p>
@@ -303,7 +301,7 @@ export function Footer({ "data-id": dataId, isLoggedIn = false }: FooterProps) {
                     href="/coming-soon"
                     className="text-gray-600 hover:text-gray-900 transition-colors text-sm block"
                   >
-                    Updates
+                    News
                   </a>
                 </li>
                 <li>
@@ -378,11 +376,10 @@ export function Footer({ "data-id": dataId, isLoggedIn = false }: FooterProps) {
                       value={email}
                       onChange={handleEmailChange}
                       placeholder="Enter your email"
-                      className={`w-full px-4 py-3 pr-12 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 ${
-                        !isValid
+                      className={`w-full px-4 py-3 pr-12 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 ${!isValid
                           ? "border-2 border-red-500"
                           : "border border-gray-300 focus:ring-blue-400"
-                      }`}
+                        }`}
                       aria-label="Email address for newsletter"
                       aria-invalid={!isValid}
                       aria-describedby={
@@ -432,9 +429,8 @@ export function Footer({ "data-id": dataId, isLoggedIn = false }: FooterProps) {
                   )}
                   {errorMessage && (
                     <p
-                      className={`mt-1 text-sm ${
-                        isDuplicate ? "text-yellow-200" : "text-red-200"
-                      }`}
+                      className={`mt-1 text-sm ${isDuplicate ? "text-yellow-200" : "text-red-200"
+                        }`}
                     >
                       {errorMessage}
                     </p>
@@ -494,7 +490,7 @@ export function Footer({ "data-id": dataId, isLoggedIn = false }: FooterProps) {
                     href="/coming-soon"
                     className="text-gray-600 hover:text-gray-900 transition-colors text-sm"
                   >
-                    Updates
+                    News
                   </a>
                 </li>
                 <li>

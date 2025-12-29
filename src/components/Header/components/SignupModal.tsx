@@ -1,18 +1,21 @@
-import React, { useState } from "react";
-import { X, CheckCircle, Sparkles } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { X, CheckCircle } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { signupAPI, SignupFormData } from "../../../services/signupAPI";
+import { auditLog } from "../../../utils/auditLogger";
 
 interface SignupModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSignupSuccess?: (data: any) => void;
+  onSwitchToSignIn?: () => void;
 }
 
 export const SignupModal: React.FC<SignupModalProps> = ({
   isOpen,
   onClose,
   onSignupSuccess,
+  onSwitchToSignIn,
 }) => {
   const { login } = useAuth();
   const [formData, setFormData] = useState({
@@ -29,6 +32,13 @@ export const SignupModal: React.FC<SignupModalProps> = ({
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  // Audit log when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      auditLog.log('SIGNUP_MODAL_OPENED', {});
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -41,6 +51,13 @@ export const SignupModal: React.FC<SignupModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Audit log form submission attempt
+    auditLog.log('SIGNUP_FORM_SUBMITTED', {
+      email: formData.email,
+      companyName: formData.companyName,
+    });
+
     setIsSubmitting(true);
     setSubmitError(null);
 
@@ -48,32 +65,49 @@ export const SignupModal: React.FC<SignupModalProps> = ({
       // Validate form data
       const validation = signupAPI.validateFormData(formData as SignupFormData);
       if (!validation.isValid) {
+        auditLog.log('SIGNUP_VALIDATION_FAILED', {
+          errors: validation.errors,
+        });
         throw new Error(validation.errors.join(", "));
       }
 
       // Submit to CRM API
       const result = await signupAPI.submitSignup(formData as SignupFormData);
-      
+
       if (!result.success) {
+        auditLog.log('SIGNUP_FAILED', {
+          error: result.message,
+          email: formData.email,
+        });
         throw new Error(result.message);
       }
 
+      // Audit log successful signup
+      auditLog.log('SIGNUP_SUCCESS', {
+        email: formData.email,
+        companyName: formData.companyName,
+      });
+
       setIsSuccess(true);
-      
+
       if (onSignupSuccess) {
         onSignupSuccess(result.data);
       }
-      
+
       // Auto-redirect to dashboard overview after showing success message
       // The ProtectedRoute will handle redirecting to onboarding if needed (for admins)
       setTimeout(() => {
         window.location.href = '/dashboard/overview';
       }, 2000);
-      
+
     } catch (error) {
+      auditLog.log('SIGNUP_ERROR', {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        email: formData.email,
+      });
       setSubmitError(
-        error instanceof Error 
-          ? error.message 
+        error instanceof Error
+          ? error.message
           : "An unexpected error occurred. Please try again."
       );
     } finally {
@@ -119,22 +153,20 @@ export const SignupModal: React.FC<SignupModalProps> = ({
                 <CheckCircle className="w-10 h-10 text-white" />
               </div>
               <h2 className="text-2xl font-bold text-white mb-2">
-                🎉 Welcome to Enterprise Journey!
+                Account Registration Submitted
               </h2>
               <p className="text-green-100 text-sm">
-                Your account has been created in our CRM and confirmation email sent. Let's accelerate your business growth!
+                Your registration has been recorded and will be reviewed by the DFSA.
               </p>
             </div>
-            {/* Decorative elements */}
-            <Sparkles className="absolute top-4 right-4 w-6 h-6 text-white/40" />
-            <Sparkles className="absolute bottom-4 left-4 w-4 h-4 text-white/30" />
+            {/* Decorative elements removed for DFSA compliance */}
           </div>
 
           {/* Success Content */}
           <div className="px-8 py-6">
             <div className="text-center mb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                Your business growth journey starts now!
+                Registration Process Initiated
               </h3>
               <div className="space-y-3">
                 <div className="flex items-start space-x-3 text-left">
@@ -142,7 +174,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({
                     <CheckCircle className="w-4 h-4 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Account Created in CRM</p>
+                    <p className="text-sm font-medium text-gray-900">Registration Data Recorded</p>
                     <p className="text-xs text-gray-600">Your details have been securely stored in our system</p>
                   </div>
                 </div>
@@ -160,8 +192,8 @@ export const SignupModal: React.FC<SignupModalProps> = ({
                     <CheckCircle className="w-4 h-4 text-green-600" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Complete Your Business Profile</p>
-                    <p className="text-xs text-gray-600">Tell us about your enterprise to unlock all platform features</p>
+                    <p className="text-sm font-medium text-gray-900">Awaiting DFSA Review</p>
+                    <p className="text-xs text-gray-600">The DFSA will review your application and determine eligibility.</p>
                   </div>
                 </div>
               </div>
@@ -201,9 +233,9 @@ export const SignupModal: React.FC<SignupModalProps> = ({
         {/* Header */}
         <div className="bg-white border-b border-gray-200 px-6 py-5 flex items-center justify-between rounded-t-xl">
           <div className="flex-1">
-            <h2 className="text-2xl font-bold text-gray-900 mb-1">Join Enterprise Journey</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-1">Create Account</h2>
             <p className="text-gray-600 text-sm">
-              Create your account to access UAE's leading business growth platform
+              Register to access the DFSA regulatory platform
             </p>
           </div>
           <button
@@ -402,10 +434,20 @@ export const SignupModal: React.FC<SignupModalProps> = ({
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-0.5 mr-3"
                   />
                   <span className="text-sm text-gray-700">
-                    I agree to the Terms of Service and Privacy Policy <span className="text-red-500">*</span>
+                    I confirm that the information provided is accurate and I agree to the Terms of Service and Privacy Policy <span className="text-red-500">*</span>
                   </span>
                 </label>
               </div>
+            </div>
+
+            {/* Regulatory Disclaimer */}
+            <div className="px-4 py-3 bg-gray-50 border border-gray-200 rounded-md text-xs text-gray-600 mb-4">
+              <p className="font-medium mb-1">Regulatory Information</p>
+              <p>
+                Registration does not guarantee approval. The DFSA will review your
+                application and determine eligibility based on applicable regulations.
+                All decisions are made solely by the DFSA.
+              </p>
             </div>
 
             {/* Submit Button */}
@@ -418,10 +460,10 @@ export const SignupModal: React.FC<SignupModalProps> = ({
                 {isSubmitting ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                    Creating Account...
+                    Submitting Registration...
                   </>
                 ) : (
-                  "Create Account"
+                  "Submit Registration"
                 )}
               </button>
             </div>
@@ -434,9 +476,14 @@ export const SignupModal: React.FC<SignupModalProps> = ({
               <button
                 onClick={() => {
                   onClose();
-                  login();
+                  if (onSwitchToSignIn) {
+                    onSwitchToSignIn();
+                  } else {
+                    login();
+                  }
                 }}
                 className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                type="button"
               >
                 Sign in
               </button>

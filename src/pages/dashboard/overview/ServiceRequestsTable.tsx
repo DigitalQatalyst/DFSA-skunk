@@ -1,8 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../components/Header/context/AuthContext";
-import { useServiceRequests, serviceRequestKeys } from "../../../hooks/useServiceRequests";
-import { useQueryClient } from "@tanstack/react-query";
+import { useCombinedServiceRequests } from "../../../hooks/useCombinedServiceRequests";
 import { useOrganization } from "../../../hooks/useOrganization";
 import { ServiceRequest } from "../../../types";
 import { Can } from "../../../components/RBAC";
@@ -25,44 +24,22 @@ export const ServiceRequestsTable: React.FC<ServiceRequestsTableProps> = ({
   // onViewAll reserved for future use when "View All" button is added
 }) => {
   const { organizationInfo } = useAuth(); // still used for role-based access if needed
-  const { accountId, isLoading: orgLoading, error: orgError } = useOrganization();
+  const { accountId, isLoading: orgLoading } = useOrganization();
   const navigate = useNavigate();
-  
-  const queryClient = useQueryClient();
+
   const effectiveAccountId = accountId || organizationInfo?.organization?.accountId;
-  
-  // Debug logging
-  React.useEffect(() => {
-    console.log('[ServiceRequestsTable] Debug Info:', {
-      accountId,
-      organizationInfo: organizationInfo?.organization,
-      hasOrgInfo: !!organizationInfo,
-      hasAccount: !!organizationInfo?.organization,
-      hasAccountId: !!accountId,
-      fullOrgData: organizationInfo,
-    });
-  }, [accountId, organizationInfo]);
-  
-  // Fetch service requests using React Query hook (only when we have an effective account id)
-  const { data, isLoading: queryLoading, error: queryError } = useServiceRequests(
+
+
+
+  // Fetch combined service requests (regular + FS applications) using React Query hook
+  const { data, isLoading: queryLoading, error: queryError } = useCombinedServiceRequests(
     effectiveAccountId,
     1, // page 1
     maxItems, // fetch only the number we need
     !!effectiveAccountId // only fetch if accountId exists
   );
 
-  // Debug logging for query results
-  React.useEffect(() => {
-    console.log('[ServiceRequestsTable] Query Results:', {
-      isLoading: queryLoading,
-      hasData: !!data,
-      requestsCount: data?.serviceRequests?.length || 0,
-      error: queryError,
-      errorMessage: queryError ? String(queryError) : null,
-      fullData: data,
-      effectiveAccountId,
-    });
-  }, [data, queryLoading, queryError, effectiveAccountId]);
+
 
   // Use prop requests if provided, otherwise use fetched data
   // Sort requests by submittedDate desc for consistency (even if API already sorted)
@@ -74,7 +51,7 @@ export const ServiceRequestsTable: React.FC<ServiceRequestsTableProps> = ({
   });
   const displayError = propError || (queryError instanceof Error ? queryError.message : queryError ? String(queryError) : null);
   const isLoading = queryLoading;
-  
+
   // Show loading state while organization info is being fetched
   const isWaitingForAccountId = !effectiveAccountId && !propRequests;
 
@@ -140,49 +117,47 @@ export const ServiceRequestsTable: React.FC<ServiceRequestsTableProps> = ({
   }
 
   if (!displayRequests || displayRequests.length === 0) {
-    console.log('[ServiceRequestsTable] Empty state - Debug:', {
-      displayRequestsExists: !!displayRequests,
-      displayRequestsLength: displayRequests?.length,
-      propRequests,
-      dataServiceRequests: data?.serviceRequests,
-      accountId: effectiveAccountId,
-      isLoading,
-      queryError,
-    });
-    
+
     return (
       <div className="flex flex-col items-center justify-center py-8 px-4">
         <div className="text-center mb-6">
           <p className="text-gray-600 mb-2">No service requests found</p>
           <p className="text-sm text-gray-500">
-            {effectiveAccountId 
-              ? "Get started by creating your first request" 
+            {effectiveAccountId
+              ? "Get started by creating your first request or financial services application"
               : "Waiting for account information..."}
           </p>
-          {/* Debug info in development */}
-          {/* {import.meta.env.DEV && effectiveAccountId && (
-            <p className="text-xs text-gray-400 mt-2">
-              Account ID: {effectiveAccountId}
-            </p>
-          )} */}
         </div>
-        {/* Manual reload for debugging */}
-        {/* {effectiveAccountId && (
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Can I="create" a="user-requests">
+            <button
+              onClick={() => {
+                navigate({ pathname: '/', hash: '#services-marketplaces' });
+              }}
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+            >
+              <svg
+                className="mr-2 h-4 w-4"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              Create Service Request
+            </button>
+          </Can>
           <button
             onClick={() => {
-              queryClient.invalidateQueries(serviceRequestKeys.list(effectiveAccountId, 1, maxItems));
+              navigate('/financial-services');
             }}
-            className="mb-4 px-3 py-1 border border-gray-300 rounded-md text-xs text-gray-600 hover:text-blue-600 hover:border-blue-300"
-          >
-            Retry Load
-          </button>
-        )} */}
-        <Can I="create" a="user-requests">
-          <button
-            onClick={() => {
-              navigate({ pathname: '/', hash: '#services-marketplaces' });
-            }}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+            className="inline-flex items-center px-4 py-2 border border-blue-600 text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
           >
             <svg
               className="mr-2 h-4 w-4"
@@ -195,12 +170,12 @@ export const ServiceRequestsTable: React.FC<ServiceRequestsTableProps> = ({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M12 4v16m8-8H4"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
               />
             </svg>
-            Create Request
+            Start FS Application
           </button>
-        </Can>
+        </div>
       </div>
     );
   }
@@ -247,30 +222,53 @@ export const ServiceRequestsTable: React.FC<ServiceRequestsTableProps> = ({
             {displayRequests.map((request) => (
               <tr key={request.id || request.serviceName} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {request.serviceName}
+                  <div className="flex items-center">
+                    {request.category === "Financial Services Authorization" && (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 mr-2">
+                        FS
+                      </span>
+                    )}
+                    {request.serviceName}
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {request.category || request.serviceName}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span
-                      className={`text-xs font-medium ${getStatusStyle(
-                          request.status as string
-                      )}`}
-                  >
-                    {formatStatusLabel(request.status)}
-                  </span>
+                  <div className="flex flex-col">
+                    <span
+                        className={`text-xs font-medium ${getStatusStyle(
+                            request.status as string
+                        )}`}
+                    >
+                      {formatStatusLabel(request.status)}
+                    </span>
+                    {request.category === "Financial Services Authorization" && request.description?.includes("Progress:") && (
+                      <span className="text-xs text-gray-500 mt-1">
+                        {request.description.split("Progress: ")[1]?.split(" -")[0] || "0%"}
+                      </span>
+                    )}
+                  </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {new Date(request.submittedDate).toLocaleDateString()}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                                <Link
+                                {request.category === "Financial Services Authorization" ? (
+                                  <Link
+                                    to="/forms/financial-services-application"
+                                    className="px-3 py-1 border border-blue-300 rounded-md text-xs text-blue-600 hover:text-blue-800 hover:border-blue-400 inline-block"
+                                  >
+                                    Continue
+                                  </Link>
+                                ) : (
+                                  <Link
                                     to="/dashboard/requests"
                                     className="px-3 py-1 border border-gray-300 rounded-md text-xs text-gray-600 hover:text-blue-600 hover:border-blue-300 inline-block"
-                                >
+                                  >
                                     View
-                                </Link>
+                                  </Link>
+                                )}
                             </td>
                         </tr>
                     ))}
