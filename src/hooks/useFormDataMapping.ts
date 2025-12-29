@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../components/Header';
+import { API_BASE_URL } from '../config/apiBase';
 
 /**
  * Generic data source configuration
@@ -120,7 +121,7 @@ export const useFormDataMapping = ({
   loanId,
   fieldMappings = DEFAULT_FIELD_MAPPINGS,
   apiEndpoint,
-  fallbackEndpoint = 'https://kfrealexpressserver.vercel.app/api/v1/auth/get-user-profile',
+  fallbackEndpoint = `${API_BASE_URL}/auth/get-user-profile`,
 }: UseFormDataMappingOptions = {}): UseFormDataMappingReturn => {
   const { crmprofile, userProfileData } = useAuth();
   const [apiData, setApiData] = useState<DataSource | null>(null);
@@ -217,7 +218,7 @@ export const useFormDataMapping = ({
       
       // If no custom endpoint, use default loan endpoint
       if (!endpoint && loanId) {
-        endpoint = `https://kfrealexpressserver.vercel.app/api/v1/loans/${loanId}`;
+        endpoint = `${API_BASE_URL}/loans/${loanId}`;
       }
 
       console.log('🔄 Fetching data from:', endpoint);

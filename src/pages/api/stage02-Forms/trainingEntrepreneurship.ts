@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "../../../config/apiBase";
+
 export interface TrainingEntrepreneurshipPayload {
   Name: string;
   submittedBy: string;
@@ -8,7 +10,7 @@ export interface TrainingEntrepreneurshipPayload {
 export async function submitTrainingEntrepreneurship(data: TrainingEntrepreneurshipPayload): Promise<any> {
   try {
     const response = await fetch(
-      "https://kfrealexpressserver.vercel.app/api/v1/training/entrepreneurshiptraining",
+      `${API_BASE_URL}/training/entrepreneurshiptraining`,
       {
         method: "POST",
         headers: {

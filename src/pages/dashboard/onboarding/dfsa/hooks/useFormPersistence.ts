@@ -18,6 +18,7 @@ import { useEffect, useCallback, useState, useRef } from 'react'
 import { useSaveDraftMutation, useLoadDraft, useDeleteDraftMutation } from './useOnboardingQueries'
 import { toast } from 'sonner'
 import { DFSAOnboardingFormData } from '../types'
+import { API_BASE_URL } from '../../../../../config/apiBase'
 
 interface UseFormPersistenceOptions {
   userId: string
@@ -216,8 +217,7 @@ export function useFormPersistence(
       const data = getFormData()
 
       if (data && Object.keys(data).length > 0) {
-        const API_BASE_URL =
-          import.meta.env.VITE_API_BASE_URL || 'https://kfrealexpressserver.vercel.app/api/v1'
+        // Use same-origin API base to avoid CORS in demo deployments.
 
         const blob = new Blob(
           [

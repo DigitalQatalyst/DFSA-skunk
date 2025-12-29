@@ -1,4 +1,5 @@
 // Support service for integrating with Power Automate flow API
+import { API_BASE_URL } from '../config/apiBase';
 export interface AttachmentData {
   filename: string;
   content: string; // base64 encoded
@@ -34,7 +35,7 @@ export interface SupportRequestResponse {
 }
 
 // API endpoint for Power Automate flow
-const SUPPORT_API_ENDPOINT = 'https://kfrealexpressserver.vercel.app/api/v1/support/create-support-request';
+const SUPPORT_API_ENDPOINT = `${API_BASE_URL}/support/create-support-request`;
 
 /**
  * Submit a support request to the Power App endpoint with base64 attachments

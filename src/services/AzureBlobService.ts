@@ -6,6 +6,7 @@
  * for secure SAS token generation in production environments.
  */
 import { getCachedAccountId } from './UserProfileService';
+import { API_ROOT_URL } from '../config/apiBase';
 
 // Configuration values - in a real implementation, these would come from environment variables
 const STORAGE_ACCOUNT_NAME = "kfdocumentwallet";
@@ -66,8 +67,7 @@ export const generateDownloadSasUrl = async (
     }
     
     const expiresInSeconds = expiryMinutes * 60;
-    const baseUrl = import.meta.env.VITE_EXPRESS_SERVER_URL || (import.meta.env.DEV ? 'http://localhost:5000' : '');
-    const apiUrl = baseUrl ? `${baseUrl.replace(/\/$/, '')}/api/download` : `/api/download`;
+    const apiUrl = `${API_ROOT_URL}/api/download`;
     console.log('Calling API:', apiUrl);
 
     const normalizedBlobName = (() => {

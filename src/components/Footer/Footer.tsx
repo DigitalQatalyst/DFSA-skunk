@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
+import { API_BASE_URL } from "../../config/apiBase";
 interface FooterProps {
   "data-id"?: string;
   isLoggedIn?: boolean;
@@ -129,7 +130,7 @@ export function Footer({ "data-id": dataId, isLoggedIn = false }: FooterProps) {
 
     try {
       const response = await fetch(
-        "https://kfrealexpressserver.vercel.app/api/v1/contact/create-newsletter",
+        `${API_BASE_URL}/contact/create-newsletter`,
         {
           method: "POST",
           headers: {

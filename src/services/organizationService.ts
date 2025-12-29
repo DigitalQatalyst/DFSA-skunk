@@ -1,8 +1,9 @@
 // Organization Service
 // Handles organization information retrieval from external API
 
-const ORGANIZATION_API_URL =
-  "https://kfrealexpressserver.vercel.app/api/v1/auth/organization-info";
+import { API_BASE_URL } from '../config/apiBase';
+
+const ORGANIZATION_API_URL = `${API_BASE_URL}/auth/organization-info`;
 
 export interface OrganizationRequest {
   useremail: string;

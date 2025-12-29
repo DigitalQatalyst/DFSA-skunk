@@ -1,6 +1,7 @@
 import * as yup from "yup";
 import { FormSchema, FormField } from "../FormPreview";
 import { PLACEHOLDER_STANDARDS } from "../../../utils/formPlaceholderStandards";
+import { API_BASE_URL } from "../../../config/apiBase";
 
 export const collateralGuideSchema: FormSchema = {
   formId: "collateral-user-guide",
@@ -10,7 +11,7 @@ export const collateralGuideSchema: FormSchema = {
   multiStep: true,
   allowSaveAndContinue: true,
   autoSaveInterval: 15000,
-  submitEndpoint: "https://kfrealexpressserver.vercel.app/api/v1/collateral/create-collateraluserguide",
+  submitEndpoint: `${API_BASE_URL}/collateral/create-collateraluserguide`,
   steps: [
     {
       stepTitle: "Personal & Company Information",

@@ -5,6 +5,7 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { useAuth } from '../components/Header/context/AuthContext';
 import { getAuthToken } from '../utils/getAuthToken';
+import { API_BASE_URL } from '../config/apiBase';
 
 export interface DocumentsQueryParams {
   search?: string;
@@ -48,11 +49,8 @@ async function fetchDocuments(
   if (params?.search) queryParams.append('search', params.search);
   if (params?.category) queryParams.append('category', params.category);
 
-  // Use express server directly for metadata operations
-  // Use localhost:5000 in development, or env variable, or production URL
-  const expressServerUrl = import.meta.env.VITE_EXPRESS_SERVER_URL || 
-    (import.meta.env.DEV ? 'http://localhost:5000' : 'https://kfrealexpressserver.vercel.app');
-  const url = `${expressServerUrl}/api/v1/documents${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+  // Use same-origin API base to avoid CORS in demo deployments.
+  const url = `${API_BASE_URL}/documents${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
   
   const response = await fetch(url, {
     method: 'GET',

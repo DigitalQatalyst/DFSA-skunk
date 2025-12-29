@@ -3,6 +3,7 @@ import {
   submitSupportRequest,
   type SupportRequestData,
 } from "../../services/supportService";
+import { API_BASE_URL } from "../../config/apiBase";
 
 /**
  * Demo component to test the Power App integration
@@ -56,7 +57,7 @@ export const SupportIntegrationDemo: React.FC = () => {
   const testCustomPayload = async () => {
     try {
       const payload = JSON.parse(customPayload);
-      const response = await fetch('https://kfrealexpressserver.vercel.app/api/v1/support/create-support-request', {
+      const response = await fetch(`${API_BASE_URL}/support/create-support-request`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -100,7 +101,7 @@ export const SupportIntegrationDemo: React.FC = () => {
 
     try {
       // Test if endpoint is reachable with OPTIONS request
-      const response = await fetch('https://kfrealexpressserver.vercel.app/api/v1/support/create-support-request', {
+      const response = await fetch(`${API_BASE_URL}/support/create-support-request`, {
         method: 'OPTIONS',
       });
       
@@ -122,7 +123,7 @@ export const SupportIntegrationDemo: React.FC = () => {
         Test the integration with the Power App endpoint:
         <br />
         <code className="text-xs bg-gray-100 px-2 py-1 rounded mt-1 inline-block">
-          https://kfrealexpressserver.vercel.app/api/v1/support/create-support-request
+          ${API_BASE_URL}/support/create-support-request
         </code>
       </p>
 

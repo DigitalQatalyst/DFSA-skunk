@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { API_BASE_URL } from '../config/apiBase';
 
 import { X, Send } from 'lucide-react';
 
@@ -70,7 +71,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ 'data-id': dataId, isOpen, 
     setSubmitError(null);
 
     try {
-      const response = await fetch('https://kfrealexpressserver.vercel.app/api/v1/enquiry/create-enquiry', {
+      const response = await fetch(`${API_BASE_URL}/enquiry/create-enquiry`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

@@ -28,8 +28,7 @@ export function AuthProvider({
 
   // useEffect(()=>{
   //   const getProfile = async()=>{
-  //     const response = await axios.post("https://kfrealexpressserver.vercel.app/api/v1/auth/get-user-profile");
-      
+  //     const response = await axios.post("/api/v1/auth/get-user-profile");
   //   }
   // },[])
 

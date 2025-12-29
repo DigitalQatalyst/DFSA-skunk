@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "../../../config/apiBase";
+
 export interface UserInvitePayload {
     firstName: string;
     lastName: string;
@@ -18,7 +20,7 @@ export async function submitUserInvite(data: UserInvitePayload): Promise<any> {
         // For now, using the same signup endpoint
         // TODO: Update this to a dedicated invite endpoint when backend is ready
         const response = await fetch(
-            "https://kfrealexpressserver.vercel.app/api/v1/auth/user-signup",
+            `${API_BASE_URL}/auth/user-signup`,
             {
                 method: "POST",
                 headers: {

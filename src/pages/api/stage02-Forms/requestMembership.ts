@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "../../../config/apiBase";
+
 export interface RequestMembershipPayload {
     azureId: string;
     name: string;
@@ -12,7 +14,7 @@ export interface RequestMembershipPayload {
 export async function submitRequestMembership(data: RequestMembershipPayload): Promise<any> {
     try {
         const response = await fetch(
-            "https://kfrealexpressserver.vercel.app/api/v1/membership/request-membership",
+            `${API_BASE_URL}/membership/request-membership`,
             {
                 method: "POST",
                 headers: {

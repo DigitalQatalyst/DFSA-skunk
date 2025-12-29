@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../../config/apiBase";
 import { ServiceRequestForm } from "../../components/Forms/FormPreview";
 import { bookConsultationSchema } from "../../components/Forms/form-schemas/BookConsultation";
 import { getFormConfig } from "../../config/formConfig";
@@ -102,7 +103,7 @@ function BookConsultationForEntrepreneurship() {
       console.log("📊 Payload values:", Object.values(powerAppsPayload));
 
       // Submit to Power Apps backend
-      const response = await fetch('https://kfrealexpressserver.vercel.app/api/v1/consultation/book-consultation', {
+      const response = await fetch(`${API_BASE_URL}/consultation/book-consultation`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

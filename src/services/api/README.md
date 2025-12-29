@@ -8,7 +8,7 @@ This directory contains API service functions for interacting with the backend.
 
 Fetches all service requests for a specific user from the backend API.
 
-**Endpoint:** `https://kfrealexpressserver.vercel.app/api/v1/service-request/all-service-requests/{userId}`
+**Endpoint:** `/api/v1/service-request/all-service-requests/{userId}`
 
 **Parameters:**
 

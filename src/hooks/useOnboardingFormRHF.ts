@@ -11,6 +11,7 @@ import {
   fetchAndMapProfileToOnboarding,
 } from "../services/onboardingService";
 import { resetOnboardingIndexedDB } from "../services/idbOnboarding";
+import { API_BASE_URL } from "../config/apiBase";
 
 interface Step {
   id: string;
@@ -451,7 +452,7 @@ export function useOnboardingFormRHF(steps: Step[], onComplete: () => void) {
       }
 
       console.log("📤 [ONBOARDING SUBMIT] Submitting data to API:", {
-        url: "https://kfrealexpressserver.vercel.app/api/v1/auth/onboarding",
+        url: `${API_BASE_URL}/auth/onboarding`,
         method: "POST",
         dataKeys: Object.keys(formData),
         dataPreview: {
@@ -465,7 +466,7 @@ export function useOnboardingFormRHF(steps: Step[], onComplete: () => void) {
       });
 
       const response = await fetch(
-        "https://kfrealexpressserver.vercel.app/api/v1/auth/onboarding",
+        `${API_BASE_URL}/auth/onboarding`,
         {
           method: "POST",
           headers: {

@@ -1,4 +1,5 @@
 import { FormSchema } from "../FormPreview";
+import { API_BASE_URL } from "../../../config/apiBase";
 
 export const RequestForMembershipSchema: FormSchema = {
   formId: "request-for-membership",
@@ -8,7 +9,7 @@ export const RequestForMembershipSchema: FormSchema = {
   multiStep: true,
   allowSaveAndContinue: true,
   autoSaveInterval: 20000, // Auto-save every 20 seconds
-  submitEndpoint: "https://kfrealexpressserver.vercel.app/api/v1/membership/request-membership",
+  submitEndpoint: `${API_BASE_URL}/membership/request-membership`,
 
   steps: [
     {

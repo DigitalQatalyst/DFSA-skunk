@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "../../../config/apiBase";
+
 export interface UserSignupPayload {
     firstName: string;
     lastName: string;
@@ -19,7 +21,7 @@ export async function submitUserSignup(data: UserSignupPayload): Promise<any> {
         }
 
         const response = await fetch(
-            "https://kfrealexpressserver.vercel.app/api/v1/auth/user-signup",
+            `${API_BASE_URL}/auth/user-signup`,
             {
                 method: "POST",
                 headers: {
