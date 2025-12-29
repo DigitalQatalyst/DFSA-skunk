@@ -483,285 +483,286 @@ export const FinancialServicesFormV2: React.FC<FormWizardProps> = ({
       onReset={handleErrorReset}
       onNavigateHome={handleNavigateHome}
     >
-    <div className="pt-4">
-      {/* Loading Overlay for async operations */}
-      <LoadingOverlay
-        isVisible={state.isSubmitting}
-        message="Submitting Application"
-        subMessage="Please wait while we process your application..."
-      />
+      <div>
+        {/* Loading Overlay for async operations */}
+        <LoadingOverlay
+          isVisible={state.isSubmitting}
+          message="Submitting Application"
+          subMessage="Please wait while we process your application..."
+        />
 
-      {/* Offline Banner - Requirements: 6.2, 6.3 */}
-      {isOffline && (
-        <div className="bg-amber-50 border-b border-amber-200 px-4 py-3">
-          <div className="max-w-7xl mx-auto flex items-center gap-3">
-            <CloudOff className="w-5 h-5 text-amber-600" />
-            <p className="text-sm text-amber-800">
-              You're currently offline. Your changes are being saved locally and will sync when you're back online.
-              {pendingCount > 0 && ` (${pendingCount} pending operations)`}
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Operation Status Banner */}
-      {operationStatus !== 'idle' && operationStatus !== 'loading' && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-          <StatusBanner
-            status={operationStatus}
-            successMessage={operationMessage}
-            errorMessage={operationMessage}
-            onDismiss={handleDismissStatus}
-          />
-        </div>
-      )}
-
-      {/* Draft Restore Prompt - Requirement 2.2 */}
-      {showDraftRestorePrompt && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <Card className="w-full max-w-md mx-4">
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <FileText className="w-5 h-5 text-blue-600" />
-                <span>Resume Previous Application?</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-gray-600">
-                We found a saved draft of your application. Would you like to continue where you left off?
+        {/* Offline Banner - Requirements: 6.2, 6.3 */}
+        {isOffline && (
+          <div className="bg-amber-50 border-b border-amber-200 px-4 py-3">
+            <div className="max-w-7xl mx-auto flex items-center gap-3">
+              <CloudOff className="w-5 h-5 text-amber-600" />
+              <p className="text-sm text-amber-800">
+                You're currently offline. Your changes are being saved locally and will sync when you're back online.
+                {pendingCount > 0 && ` (${pendingCount} pending operations)`}
               </p>
-              <p className="text-sm text-gray-500">
-                Last saved: {lastSavedFormatted}
-              </p>
-              <div className="flex space-x-3">
-                <Button
-                  onClick={handleRestoreDraft}
-                  className="flex-1"
-                >
-                  <RotateCcw className="w-4 h-4 mr-2" />
-                  Resume Draft
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={handleStartFresh}
-                  className="flex-1"
-                >
-                  Start Fresh
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
-
-      {/* Form Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-4">
-              <FileText className="w-6 h-6 text-blue-600" />
-              <div>
-                <h1 className="text-lg font-semibold text-gray-900">
-                  Financial Services Application
-                </h1>
-                {state.applicationRef && (
-                  <p className="text-sm text-gray-500">
-                    Reference: {state.applicationRef}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              {/* Save Status Indicator - Requirement 2.5 */}
-              <SaveStatusIndicator
-                status={saveStatus}
-                lastSavedFormatted={lastSavedFormatted}
-                isAutoSaveActive={isAutoSaveActive}
-              />
-
-              {/* Manual Save Button - Requirement 2.4 */}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleManualSave}
-                disabled={saveStatus === 'saving'}
-              >
-                <Save className="w-4 h-4 mr-2" />
-                Save Draft
-              </Button>
             </div>
           </div>
-        </div>
-      </div>
+        )}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar Navigation */}
-          <div className="lg:col-span-1">
-            <Card className="sticky top-24">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg">Progress</CardTitle>
-                <div className="space-y-2">
-                  <Progress value={progressPercent} className="h-2" />
-                  <p className="text-sm text-gray-600">
-                    {state.completedSteps.length} of {state.applicableSteps.length} steps completed ({progressPercent}%)
-                  </p>
-                </div>
+        {/* Operation Status Banner */}
+        {operationStatus !== 'idle' && operationStatus !== 'loading' && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+            <StatusBanner
+              status={operationStatus}
+              successMessage={operationMessage}
+              errorMessage={operationMessage}
+              onDismiss={handleDismissStatus}
+            />
+          </div>
+        )}
+
+        {/* Draft Restore Prompt - Requirement 2.2 */}
+        {showDraftRestorePrompt && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <Card className="w-full max-w-md mx-4">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <FileText className="w-5 h-5 text-primary-600" />
+                  <span>Resume Previous Application?</span>
+                </CardTitle>
               </CardHeader>
-
-              <CardContent className="space-y-6">
-                {Object.entries(stepsByStage).map(([stageNum, stageSteps]) => (
-                  <div key={stageNum}>
-                    <h3 className="font-medium text-gray-900 mb-3">
-                      Stage {stageNum}: {STAGE_NAMES[parseInt(stageNum) as keyof typeof STAGE_NAMES]}
-                    </h3>
-
-                    <div className="space-y-2">
-                      {stageSteps.map(({ stepId, step, index }) => {
-                        const isCompleted = state.completedSteps.includes(stepId);
-                        const isCurrent = index === state.currentStepIndex;
-                        const canAccess = canNavigateToStep(index, state.currentStepIndex, state.completedSteps, state.applicableSteps);
-
-                        return (
-                          <button
-                            key={stepId}
-                            onClick={() => navigateToStep(index)}
-                            disabled={!canAccess}
-                            className={cn(
-                              'w-full text-left p-3 rounded-lg border transition-all duration-200',
-                              'flex items-center space-x-3',
-                              isCurrent && 'bg-blue-50 border-blue-200 text-blue-900',
-                              isCompleted && !isCurrent && 'bg-green-50 border-green-200 text-green-900',
-                              !isCompleted && !isCurrent && canAccess && 'hover:bg-gray-50 border-gray-200',
-                              !canAccess && 'opacity-50 cursor-not-allowed border-gray-100'
-                            )}
-                          >
-                            <div className="flex-shrink-0">
-                              {isCompleted ? (
-                                <CheckCircle className="w-5 h-5 text-green-600" />
-                              ) : isCurrent ? (
-                                <Circle className="w-5 h-5 text-blue-600 fill-current" />
-                              ) : (
-                                <Circle className="w-5 h-5 text-gray-400" />
-                              )}
-                            </div>
-
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium truncate">
-                                {step.name}
-                              </p>
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))}
+              <CardContent className="space-y-4">
+                <p className="text-gray-600">
+                  We found a saved draft of your application. Would you like to continue where you left off?
+                </p>
+                <p className="text-sm text-gray-500">
+                  Last saved: {lastSavedFormatted}
+                </p>
+                <div className="flex space-x-3">
+                  <Button
+                    onClick={handleRestoreDraft}
+                    className="flex-1"
+                  >
+                    <RotateCcw className="w-4 h-4 mr-2" />
+                    Resume Draft
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={handleStartFresh}
+                    className="flex-1"
+                  >
+                    Start Fresh
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </div>
+        )}
 
-          {/* Main Content */}
-          <div className="lg:col-span-3">
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="text-xl">
-                      {currentStep?.name || 'Loading...'}
-                    </CardTitle>
-                    {currentStep && (
-                      <p className="text-sm text-gray-600 mt-1">
-                        Stage {currentStep.stage}: {STAGE_NAMES[currentStep.stage as keyof typeof STAGE_NAMES]}
-                      </p>
+        {/* Form Header */}
+        <div className="bg-white border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16">
+              <div className="flex items-center space-x-4">
+                <FileText className="w-6 h-6 text-primary-600" />
+                <div>
+                  <h1 className="text-lg font-semibold text-gray-900">
+                    Financial Services Application
+                  </h1>
+                  {state.applicationRef && (
+                    <p className="text-sm text-gray-500">
+                      Reference: {state.applicationRef}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-4">
+                {/* Save Status Indicator - Requirement 2.5 */}
+                <SaveStatusIndicator
+                  status={saveStatus}
+                  lastSavedFormatted={lastSavedFormatted}
+                  isAutoSaveActive={isAutoSaveActive}
+                />
+
+                {/* Manual Save Button - Requirement 2.4 */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleManualSave}
+                  disabled={saveStatus === 'saving'}
+                >
+                  <Save className="w-4 h-4 mr-2" />
+                  Save Draft
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Sidebar Navigation */}
+            <div className="lg:col-span-1">
+              <Card className="sticky top-24">
+                <CardHeader className="pb-4">
+                  <CardTitle className="text-lg">Progress</CardTitle>
+                  <div className="space-y-2">
+                    <Progress value={progressPercent} className="h-2" />
+                    <p className="text-sm text-gray-600">
+                      {state.completedSteps.length} of {state.applicableSteps.length} steps completed ({progressPercent}%)
+                    </p>
+                  </div>
+                </CardHeader>
+
+                <CardContent className="space-y-6">
+                  {Object.entries(stepsByStage).map(([stageNum, stageSteps]) => (
+                    <div key={stageNum}>
+                      <h3 className="font-medium text-gray-900 mb-3">
+                        Stage {stageNum}: {STAGE_NAMES[parseInt(stageNum) as keyof typeof STAGE_NAMES]}
+                      </h3>
+
+                      <div className="space-y-2">
+                        {stageSteps.map(({ stepId, step, index }) => {
+                          const isCompleted = state.completedSteps.includes(stepId);
+                          const isCurrent = index === state.currentStepIndex;
+                          const canAccess = canNavigateToStep(index, state.currentStepIndex, state.completedSteps, state.applicableSteps);
+
+                          return (
+                            <button
+                              key={stepId}
+                              onClick={() => navigateToStep(index)}
+                              disabled={!canAccess}
+                              className={cn(
+                                'w-full text-left p-3 rounded-lg border transition-all duration-200',
+                                'flex items-center space-x-3',
+                                isCurrent && 'bg-primary-50 border-primary-600 text-primary-900',
+                                isCompleted && !isCurrent && 'bg-dfsa-gold-50 border-dfsa-gold-600 text-dfsa-gold-800',
+                                !isCompleted && !isCurrent && canAccess && 'hover:bg-gray-50 border-gray-200',
+                                !canAccess && 'opacity-50 cursor-not-allowed border-gray-100'
+                              )}
+                            >
+                              <div className="flex-shrink-0">
+                                {isCompleted ? (
+                                  <CheckCircle className="w-5 h-5 text-dfsa-gold-600" />
+                                ) : isCurrent ? (
+                                  <Circle className="w-5 h-5 text-primary-600 fill-current" />
+                                ) : (
+                                  <Circle className="w-5 h-5 text-gray-400" />
+                                )}
+                              </div>
+
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium truncate">
+                                  {step.name}
+                                </p>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Main Content */}
+            <div className="lg:col-span-3">
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-xl">
+                        {currentStep?.name || 'Loading...'}
+                      </CardTitle>
+                      {currentStep && (
+                        <p className="text-sm text-gray-600 mt-1">
+                          Stage {currentStep.stage}: {STAGE_NAMES[currentStep.stage as keyof typeof STAGE_NAMES]}
+                        </p>
+                      )}
+                    </div>
+
+                    <Badge variant="outline">
+                      Step {state.currentStepIndex + 1} of {state.applicableSteps.length}
+                    </Badge>
+                  </div>
+                </CardHeader>
+
+                <Separator />
+
+                <CardContent className="p-6">
+                  {/* Validation Error Summary - Requirements: 6.2, 6.3 */}
+                  {showValidationErrors && Object.keys(state.errors).length > 0 && (
+                    <div className="mb-6">
+                      <ValidationErrorSummary
+                        errors={state.errors}
+                        title="Please correct the following errors before continuing:"
+                        onDismiss={handleDismissValidationErrors}
+                        collapsible={true}
+                        showFieldLinks={true}
+                      />
+                    </div>
+                  )}
+
+                  {/* Step Content with Error Boundary */}
+                  <StepErrorBoundary
+                    stepName={currentStep?.name || 'Current Step'}
+                    onRetry={() => setState(prev => ({ ...prev }))}
+                  >
+                    {renderStepContent()}
+                  </StepErrorBoundary>
+                </CardContent>
+
+                <Separator />
+
+                {/* Navigation Footer */}
+                <div className="p-6 bg-gray-50 flex items-center justify-between">
+                  <Button
+                    variant="outline"
+                    onClick={goToPreviousStep}
+                    disabled={!canGoPrevious}
+                  >
+                    <ChevronLeft className="w-4 h-4 mr-2" />
+                    Previous
+                  </Button>
+
+                  <div className="flex items-center space-x-4">
+                    {/* Show error count if there are validation errors */}
+                    {Object.keys(state.errors).length > 0 && (
+                      <div className="flex items-center gap-2 text-red-600 text-sm">
+                        <AlertCircle className="w-4 h-4" />
+                        <span>{Object.keys(state.errors).length} error(s)</span>
+                      </div>
+                    )}
+
+                    {isLastStep ? (
+                      <Button
+                        onClick={handleSubmit}
+                        disabled={state.isSubmitting || progressPercent < 100}
+                        className="bg-dfsa-gold-600 hover:bg-dfsa-gold-700 text-white"
+                      >
+                        {state.isSubmitting ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            Submitting...
+                          </>
+                        ) : (
+                          'Submit Application'
+                        )}
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={goToNextStep}
+                        disabled={!canGoNext || isNavigating}
+                        className="bg-primary-600 hover:bg-primary-700 text-white"
+                      >
+                        Next
+                        <ChevronRight className="w-4 h-4 ml-2" />
+                      </Button>
                     )}
                   </div>
-
-                  <Badge variant="outline">
-                    Step {state.currentStepIndex + 1} of {state.applicableSteps.length}
-                  </Badge>
                 </div>
-              </CardHeader>
-
-              <Separator />
-
-              <CardContent className="p-6">
-                {/* Validation Error Summary - Requirements: 6.2, 6.3 */}
-                {showValidationErrors && Object.keys(state.errors).length > 0 && (
-                  <div className="mb-6">
-                    <ValidationErrorSummary
-                      errors={state.errors}
-                      title="Please correct the following errors before continuing:"
-                      onDismiss={handleDismissValidationErrors}
-                      collapsible={true}
-                      showFieldLinks={true}
-                    />
-                  </div>
-                )}
-
-                {/* Step Content with Error Boundary */}
-                <StepErrorBoundary
-                  stepName={currentStep?.name || 'Current Step'}
-                  onRetry={() => setState(prev => ({ ...prev }))}
-                >
-                  {renderStepContent()}
-                </StepErrorBoundary>
-              </CardContent>
-
-              <Separator />
-
-              {/* Navigation Footer */}
-              <div className="p-6 bg-gray-50 flex items-center justify-between">
-                <Button
-                  variant="outline"
-                  onClick={goToPreviousStep}
-                  disabled={!canGoPrevious}
-                >
-                  <ChevronLeft className="w-4 h-4 mr-2" />
-                  Previous
-                </Button>
-
-                <div className="flex items-center space-x-4">
-                  {/* Show error count if there are validation errors */}
-                  {Object.keys(state.errors).length > 0 && (
-                    <div className="flex items-center gap-2 text-red-600 text-sm">
-                      <AlertCircle className="w-4 h-4" />
-                      <span>{Object.keys(state.errors).length} error(s)</span>
-                    </div>
-                  )}
-
-                  {isLastStep ? (
-                    <Button
-                      onClick={handleSubmit}
-                      disabled={state.isSubmitting || progressPercent < 100}
-                      className="bg-green-600 hover:bg-green-700"
-                    >
-                      {state.isSubmitting ? (
-                        <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Submitting...
-                        </>
-                      ) : (
-                        'Submit Application'
-                      )}
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={goToNextStep}
-                      disabled={!canGoNext || isNavigating}
-                    >
-                      Next
-                      <ChevronRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </Card>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </FormErrorBoundary>
   );
 };
