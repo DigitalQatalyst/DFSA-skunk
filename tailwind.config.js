@@ -75,18 +75,6 @@ module.exports = {
           800: '#313233',
           900: '#252526',
         },
-        // Keep existing teal for backward compatibility
-        teal: {
-          DEFAULT: "#00E5D1",
-          dark: "#00665C",
-          light: "#99FFF5",
-        },
-        // Keep existing purple for backward compatibility
-        purple: {
-          DEFAULT: "#954BF9",
-          dark: "#4F2E80",
-          light: "#C499FF",
-        },
       },
       fontFamily: {
         // Primary font: Inter (for all text)

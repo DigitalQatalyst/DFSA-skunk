@@ -90,7 +90,7 @@ export const ReviewSubmitStep: React.FC<ReviewSubmitStepProps> = ({
           disabled={isSubmitting}
           className={`
             px-8 py-3 text-white font-semibold rounded-lg
-            ${isSubmitting ? 'bg-gray-400' : 'bg-green-600 hover:bg-green-700'}
+            ${isSubmitting ? 'bg-gray-400' : 'bg-[#b82933] hover:bg-[#a39143]'}
           `}
         >
           {isSubmitting ? 'Submitting...' : 'Submit Application'}

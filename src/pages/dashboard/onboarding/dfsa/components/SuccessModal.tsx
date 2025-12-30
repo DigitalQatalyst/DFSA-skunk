@@ -42,7 +42,7 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({ onClose, application
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-8 max-w-md w-[90%] text-center">
         {/* Success Icon */}
-        <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 bg-[#b82933] rounded-full flex items-center justify-center mx-auto mb-4">
           <Check size={32} className="text-white" />
         </div>
 
@@ -57,9 +57,9 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({ onClose, application
         </p>
 
         {/* Application Reference Box */}
-        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 text-left">
-          <p className="text-xs font-medium text-blue-800 mb-1">Application Reference</p>
-          <p className="text-lg font-bold text-blue-900">{applicationReference}</p>
+        <div className="bg-[#a39143]/10 border-l-4 border-[#a39143] p-4 mb-6 text-left">
+          <p className="text-xs font-medium text-[#a39143] mb-1">Application Reference</p>
+          <p className="text-lg font-bold text-gray-900">{applicationReference}</p>
         </div>
 
         {/* Processing Information */}
@@ -74,8 +74,9 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({ onClose, application
           onClick={onClose}
           icon={<ArrowRight size={16} />}
           iconPosition="right"
+          className="!bg-[#b82933] hover:!bg-[#a39143] text-white"
         >
-          Return to Dashboard
+          Proceed to Dashboard
         </Button>
       </div>
     </div>

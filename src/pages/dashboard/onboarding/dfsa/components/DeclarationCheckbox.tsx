@@ -68,11 +68,10 @@ export const DeclarationCheckbox: React.FC<DeclarationCheckboxProps> = ({
             className={`
               flex items-start gap-4 p-4 border-2 rounded-lg
               transition-colors
-              ${
-                error
-                  ? 'border-red-500 bg-red-50'
-                  : field.value
-                  ? 'border-green-500 bg-green-50'
+              ${error
+                ? 'border-red-500 bg-red-50'
+                : field.value
+                  ? 'border-[#a39143] bg-[#a39143]/5'
                   : 'border-gray-300 bg-white hover:border-gray-400'
               }
               ${disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}
@@ -95,11 +94,10 @@ export const DeclarationCheckbox: React.FC<DeclarationCheckboxProps> = ({
                 className={`
                   w-5 h-5 rounded border-2
                   focus:ring-2 focus:ring-offset-2
-                  ${
-                    error
-                      ? 'border-red-500 text-red-600 focus:ring-red-500'
-                      : field.value
-                      ? 'border-green-500 text-green-600 focus:ring-green-500'
+                  ${error
+                    ? 'border-red-500 text-red-600 focus:ring-red-500'
+                    : field.value
+                      ? 'border-[#a39143] text-[#a39143] focus:ring-[#a39143]'
                       : 'border-gray-400 text-primary focus:ring-primary'
                   }
                   ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}
@@ -114,7 +112,7 @@ export const DeclarationCheckbox: React.FC<DeclarationCheckboxProps> = ({
               className={`
                 flex-1 text-sm leading-relaxed
                 ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}
-                ${error ? 'text-red-900' : field.value ? 'text-green-900' : 'text-gray-700'}
+                ${error ? 'text-red-900' : field.value ? 'text-[#a39143]' : 'text-gray-700'}
               `}
             >
               {children}
@@ -123,7 +121,7 @@ export const DeclarationCheckbox: React.FC<DeclarationCheckboxProps> = ({
 
             {/* Check Icon */}
             {field.value && !error && (
-              <div className="flex-shrink-0 text-green-600 pt-0.5">
+              <div className="flex-shrink-0 text-[#a39143] pt-0.5">
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                   <path
                     fillRule="evenodd"
