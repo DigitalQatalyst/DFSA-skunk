@@ -59,16 +59,6 @@ module.exports = {
           700: '#8a7a51',
           800: '#6f6241',
         },
-        // DFSA Accent - Teal
-        'dfsa-teal': {
-          DEFAULT: '#0891B2',
-          50: '#ECFEFF',
-          100: '#CFFAFE',
-          500: '#06B6D4',
-          600: '#0891B2',
-          700: '#0E7490',
-          800: '#155E75',
-        },
         // DFSA Gray - for Representation regime
         'dfsa-gray': {
           DEFAULT: '#55565A',
@@ -96,25 +86,6 @@ module.exports = {
           DEFAULT: "#954BF9",
           dark: "#4F2E80",
           light: "#C499FF",
-        },
-        // Professional Services Palette
-        'professional': {
-          'blue': {
-            DEFAULT: '#1E3A8A',
-            dark: '#1E293B',
-            light: '#3B82F6',
-          },
-          'slate': {
-            DEFAULT: '#64748B',
-            dark: '#1E293B',
-            light: '#94A3B8',
-          },
-          'gold': {
-            DEFAULT: '#D97706',
-            dark: '#92400E',
-          },
-          'border': '#E2E8F0',
-          'bg-light': '#F8FAFC',
         },
       },
       fontFamily: {

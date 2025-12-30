@@ -90,11 +90,11 @@ export const Announcements: React.FC<AnnouncementsProps> = ({
       {announcements.slice(0, limit).map((announcement) => (
         <div
           key={announcement.id}
-          className="p-4 bg-white border border-gray-200 rounded-lg hover:border-blue-200 transition-colors"
+          className="p-4 bg-white border border-gray-200 rounded-lg hover:border-primary/20 transition-colors"
         >
           <div className="flex items-start space-x-3">
             <div className="flex-shrink-0 mt-1">
-              <BellIcon className="h-5 w-5 text-blue-500" />
+              <BellIcon className="h-5 w-5 text-primary" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-900">
@@ -114,7 +114,7 @@ export const Announcements: React.FC<AnnouncementsProps> = ({
                 href={announcement.linkUrl}
                 target={announcement.isExternal ? "_blank" : "_self"}
                 rel={announcement.isExternal ? "noopener noreferrer" : undefined}
-                className="mt-2 inline-flex items-center text-xs font-medium text-blue-600 hover:text-blue-800"
+                className="mt-2 inline-flex items-center text-xs font-medium text-primary hover:text-primary-dark"
               >
                 Read more
                 {announcement.isExternal && <ExternalLinkIcon className="ml-1 h-3 w-3" />}
@@ -126,7 +126,7 @@ export const Announcements: React.FC<AnnouncementsProps> = ({
       <div className="pt-2 text-center">
         <button
           onClick={handleViewAllClick}
-          className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
+          className="text-sm text-primary hover:text-primary-dark font-medium transition-colors"
         >
           View All Announcements
         </button>
