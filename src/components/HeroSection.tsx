@@ -1,22 +1,12 @@
 import React, { useState } from "react";
-import { ChevronDown, ArrowRight, Calendar, Send } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import {
   AnimatedText,
   FadeInUpOnScroll,
-  StaggeredFadeIn,
 } from "./AnimationUtils";
 import { useLocation, useNavigate } from "react-router-dom";
-
-declare global {
-  interface Window {
-    voiceflow?: {
-      chat?: {
-        open?: () => void;
-        interact?: (payload: { type: string; payload: string }) => void;
-      };
-    };
-  }
-}
+import { AISearchBar } from "./ai/AISearchBar";
+import { FullScreenChat } from "./FullScreenChat";
 
 interface HeroSectionProps {
   "data-id"?: string;
@@ -29,19 +19,8 @@ interface HeroSectionProps {
 const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const handleQuestionClick = (question: string) => {
-    setIsExpanded(false);
-    setTimeout(() => {
-      if (window.voiceflow?.chat?.open) {
-        window.voiceflow.chat.open();
-      }
-      if (window.voiceflow?.chat?.interact) {
-        window.voiceflow.chat.interact({ type: 'text', payload: question });
-      }
-    }, 100);
-  };
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatInitialMessage, setChatInitialMessage] = useState('');
 
   // Scroll to consultation form
   const scrollToConsultation = () => {
@@ -102,12 +81,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
       </div>
 
       <div className="container mx-auto px-4 py-20 md:py-32 h-full flex flex-col justify-center items-center relative z-10">
-        {/* Main Content */}
+        {/* Main Content - DFSA Agents Hub */}
         <div className="text-center max-w-5xl mx-auto mb-12">
           {/* Headline with animated text */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-6 leading-tight">
             <AnimatedText
-              text="DFSA - The independent regulator of financial services "
+              text="DFSA Regulatory Advisor"
               gap="0.5rem"
             />
           </h1>
@@ -115,88 +94,29 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
           {/* Subheadline */}
           <FadeInUpOnScroll delay={0.8}>
             <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto font-body">
-              conducted in or from the DIFC
+              Get expert guidance on DFSA services and products
             </p>
           </FadeInUpOnScroll>
 
-          {/* Search Bar Section */}
+          {/* Chat Interface - Main CTA */}
           <FadeInUpOnScroll delay={1.0}>
             <div className="w-full max-w-3xl mx-auto mt-8 mb-12">
-              {/* Search Input */}
-              <div className={`relative bg-white rounded-lg shadow-xl transition-all duration-300 ${isExpanded ? 'pb-3' : ''}`}>
-                <div className="p-2 flex items-center">
-                  <input
-                    type="text"
-                    placeholder="Ask about financial services authorisation in the DIFC..."
-                    className="flex-grow px-4 py-3 text-gray-700 outline-none text-lg bg-transparent"
-                    onFocus={() => setIsExpanded(true)}
-                  />
-                  <button className="bg-gray-200 p-3 rounded-md hover:bg-gray-300 transition-colors">
-                    <Send className="text-gray-600" size={20} />
-                  </button>
-                </div>
-
-                {/* Expanded Questions Section */}
-                {isExpanded && (
-                  <div className="px-4 pb-1 animate-in fade-in slide-in-from-top-2 duration-300">
-                    <div className="flex flex-wrap gap-2">
-                      {[
-                        "What documents do I need to apply for a license?",
-                        "Where can I find the AML requirements?",
-                        "What is MLRO?",
-                        "Do I need DFSA authorization to operate a fund?",
-                      ].map((text) => (
-                        <button
-                          key={text}
-                          onClick={() => handleQuestionClick(text)}
-                          className="px-3 py-1.5 text-gray-700 hover:bg-gray-100 rounded-full transition-colors text-xs border border-gray-200"
-                        >
-                          {text}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Click outside to collapse */}
-              {isExpanded && (
-                <div
-                  className="fixed inset-0 z-[-1]"
-                  onClick={() => setIsExpanded(false)}
+              <div
+                onClick={() => {
+                  setIsChatOpen(true);
+                  setChatInitialMessage('');
+                }}
+                className="cursor-pointer"
+              >
+                <AISearchBar
+                  placeholder="Ask me anything about DFSA services and products..."
+                  systemPrompt="You are the DFSA Regulatory Advisor. Your role is to guide users through understanding and using DFSA Services & Products. Follow this conversation flow: Step 00 - Greet and introduce yourself. Step 01 - Ask what type of user they are (DFSA Licensed, DFSA Aspiring, or Other). Step 02 - Ask what type of firms they're enquiring about (DFSA Authorised Firms, DNFBPs, Market Institution, Auditors, or Unsure). Step 03 - Provide targeted guidance based on their selections. Be conversational, helpful, and professional."
+                  className="w-full"
                 />
-              )}
+              </div>
             </div>
           </FadeInUpOnScroll>
         </div>
-
-        {/* Call to Action Buttons */}
-        <StaggeredFadeIn
-          staggerDelay={0.15}
-          className="flex flex-col sm:flex-row gap-4 mt-8"
-        >
-          <button
-            onClick={scrollToConsultation}
-            className="px-8 py-4 bg-white text-primary hover:bg-gray-50 font-bold text-lg rounded-lg shadow-xl
-                       transform transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl
-                       flex items-center justify-center gap-2 group"
-          >
-            <span className="relative z-10">Submit Information Request</span>
-            <ArrowRight
-              size={20}
-              className="relative z-10 group-hover:translate-x-1 transition-transform duration-300"
-            />
-          </button>
-
-          <button
-            onClick={scrollToContact}
-            className="px-8 py-4 bg-dfsa-gold hover:bg-dfsa-gold-700 text-white font-bold text-lg rounded-lg shadow-xl
-                       flex items-center justify-center gap-2 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
-          >
-            <Calendar size={20} />
-            <span>Request Application Information</span>
-          </button>
-        </StaggeredFadeIn>
 
         {/* Trust Indicators */}
         {/* <FadeInUpOnScroll delay={1.6}>
@@ -234,7 +154,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
       </div>
 
       {/* Keyframes for gradient animation */}
-      <style jsx>{`
+      <style>{`
         @keyframes pulse-gradient {
           0% {
             opacity: 0.3;
@@ -247,6 +167,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ "data-id": dataId }) => {
           }
         }
       `}</style>
+
+      {/* Full Screen Chat Modal */}
+      <FullScreenChat
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+        initialMessage={chatInitialMessage}
+        systemPrompt="You are a helpful support assistant for the DFSA (Dubai Financial Services Authority). Guide users through their questions about our platform services, funding applications, and business resources. Provide accurate, professional, and concise responses about DFSA regulations and requirements."
+      />
     </div>
   );
 };

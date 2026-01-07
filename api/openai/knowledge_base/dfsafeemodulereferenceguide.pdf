@@ -1,0 +1,830 @@
+# DFSA Fee Module Reference Guide
+## Dubai Financial Services Authority
+**Version:** FER/VER33/07-25  
+**Document Type:** Knowledge Base for Agent Systems
+
+---
+
+## Table of Contents
+1. [General Payment Rules](#general-payment-rules)
+2. [Application Fees - License Types](#application-fees---license-types)
+3. [Application Fees - Changes & Additions](#application-fees---changes--additions)
+4. [Annual Fees - Authorised Firms](#annual-fees---authorised-firms)
+5. [Annual Fees - Market Institutions](#annual-fees---market-institutions)
+6. [Annual Fees - Auditors & Funds](#annual-fees---auditors--funds)
+7. [Annual Fees - Listed Entities & Other](#annual-fees---listed-entities--other)
+8. [Filing & Takeover Fees](#filing--takeover-fees)
+9. [Other Supervisory Fees](#other-supervisory-fees)
+10. [Quick Reference Tables](#quick-reference-tables)
+
+---
+
+## General Payment Rules
+
+### Payment Deadlines
+| Fee Type | Deadline |
+|----------|----------|
+| Application fees | Before submission |
+| Initial annual fees | Within 21 days of license grant |
+| Subsequent annual fees | January 1 (most entities) |
+| Registered Auditors | March 31 |
+| Passported Funds | Anniversary date of notification |
+| Takeover fees | At filing, before posting |
+
+### Payment Requirements
+- **Currency:** USD only
+- **Method:** Bank transfer to DFSA account
+- **Processing:** Application not considered submitted until payment received
+
+### Late Payment Penalties
+- **Initial Penalty:** Greater of $1,000 or 3% of fee due
+- **Monthly Increase:** 1% per calendar month overdue
+- **Enforcement:** DFSA may withdraw authorization/registration
+
+### Special Provisions
+- **Fee Waivers:** Available in exceptional circumstances at DFSA discretion
+- **Supplementary Fees:** May be charged for complex/novel cases requiring significant DFSA time
+- **Refunds:** DFSA may refund fees if equitable in exceptional circumstances
+- **Pro-rata Calculations:** Based on whole calendar months remaining in year
+
+---
+
+## Application Fees - License Types
+
+### Financial Services License Fees (Rule 2.1.1)
+
+**Payment Rule:** Pay the HIGHEST applicable fee from your authorized services
+
+#### Tier 1: High Value Services
+
+| Service | Fee |
+|---------|-----|
+| Accepting Deposits or Providing Credit | $70,000 |
+| Dealing in Investments as Principal (except Matched Principal) | $40,000 |
+| Effecting/Carrying Out Contracts of Insurance (not Captive/PCC/ISPV) | $40,000 |
+
+#### Tier 2: Standard Services ($25,000)
+
+- Dealing in Investments as Matched Principal
+- Dealing in Investments as Agent
+- Managing Assets
+- Providing Custody
+- Providing Money Services (if issues Stored Value)
+- Managing a Profit Sharing Investment Account
+- Providing Trust Services (as trustee of express trusts)
+- Acting as Trustee of a Fund
+- Acting as Administrator of Employee Money Purchase Scheme
+
+#### Tier 3: Mid-Range Services ($15,000-$20,000)
+
+| Service | Fee |
+|---------|-----|
+| Insurance Management | $20,000 |
+| Operating an Employee Money Purchase Scheme | $20,000 |
+| Arranging Deals in Investments | $15,000 |
+| Advising on Financial Products | $15,000 |
+| Arranging Custody | $15,000 |
+| Arranging Credit and Advising on Credit | $15,000 |
+| Insurance Intermediation | $15,000 |
+| Providing Trust Services (not as trustee) | $15,000 |
+| Providing Fund Administration | $15,000 |
+
+#### Tier 4: Specialized Services
+
+| Service | Fee |
+|---------|-----|
+| Operating a Credit Rating Agency | $10,000 |
+| Managing a Collective Investment Fund (Credit Fund or non-QIF/non-VC) | $10,000 |
+| Providing Money Services (Money Transmission only) | $10,000 |
+| Operating a Crowdfunding Platform | $10,000 |
+| Effecting Contracts of Insurance as PCC (core) | $8,000 |
+| Each PCC cell | +$1,000 |
+| Effecting Contracts as Captive Insurer or ISPV | $5,500 |
+| Managing a Collective Investment Fund (QIF only) | $5,000 |
+| Managing Investment Companies (Corporate Directors) | $5,000 |
+| Arranging or Advising on Money Services | $5,000 |
+| Managing only Venture Capital Funds | $2,000 |
+
+#### Tier 5: Representative Office
+
+| Service | Fee |
+|---------|-----|
+| Operating a Representative Office | $6,000 |
+
+### Complexity Surcharge (100% Additional)
+
+**Add 100% of base fee if ANY of these apply:**
+- Multiple corporate structure levels OR Group members in 2+ jurisdictions (excluding DIFC)
+- Applicant has or proposes Holding Company in DIFC
+- From jurisdiction with no bilateral MOU between DFSA and local regulator
+- DFSA will act as consolidated prudential supervisor of Financial Group
+- DFSA will act as lead supervisor of part of Group
+
+**Example:** $25,000 service + 1 complexity factor = $25,000 + $25,000 = $50,000 total
+
+---
+
+### Market Infrastructure Fees (Rules 2.1.2-2.1.5)
+
+#### Core Infrastructure
+
+| Service | Fee |
+|---------|-----|
+| Operating an Exchange | $150,000 |
+| Operating a Clearing House | $150,000 |
+| Operating Both Exchange & Clearing House | $300,000 |
+| Endorsement to maintain Official List of Securities | +$150,000 |
+
+#### Alternative Trading System (ATS)
+
+| ATS Type | Fee |
+|----------|-----|
+| Trading Security Tokens (not on AMI/Regulated Exchange) | $150,000 |
+| Trading Crypto Tokens | $150,000 |
+| Any other case | $65,000 |
+| **Additional:** If trades Investment/Crypto Tokens with Direct Access Members | +$10,000 |
+
+#### License Endorsements (Rule 2.1.6)
+
+| Endorsement | Fee |
+|-------------|-----|
+| Carry on Financial Service with or for Retail Client | $20,000 |
+| Use a Fund Platform | $20,000 |
+| Act as Trade Repository | $15,000 |
+
+**Note:** These endorsement fees apply only when requested with initial license. Different fees apply for later additions.
+
+---
+
+## Application Fees - Changes & Additions
+
+### Adding Financial Services (Existing License)
+
+#### For Authorised Firms (Rule 2.2.1)
+**Formula:** (New total fee if applying today) - (Current license fee)
+
+**Example:**
+- Current license: Managing Assets ($25,000)
+- Adding: Advising on Financial Products ($15,000)
+- Fee payable: $25,000 - $25,000 = $0 (already paying higher fee)
+
+**Example 2:**
+- Current license: Advising on Financial Products ($15,000)
+- Adding: Managing Assets ($25,000)
+- Fee payable: $25,000 - $15,000 = $10,000
+
+#### For Authorised Market Institutions (Rule 2.2.2)
+
+| Additional Service | Fee |
+|-------------------|-----|
+| Operating a Clearing House | $150,000 |
+| Operating an Exchange | $150,000 |
+| Endorsement for Official List of Securities | $150,000 |
+
+#### Adding ATS Authorization (Rule 2.2.4)
+
+| ATS Type | Fee |
+|----------|-----|
+| Security Tokens (not on AMI/Regulated Exchange) or Crypto Tokens | $150,000 |
+| Any other case | $65,000 |
+| If trades Investment/Crypto Tokens with Direct Access Members | +$10,000 |
+
+### Adding Endorsements (Existing License)
+
+#### For Authorised Persons (Rule 2.2.5)
+
+| Endorsement | Fee |
+|-------------|-----|
+| Act as Trade Repository | $15,000 |
+| Carry on Financial Service with or for Retail Client | $20,000 |
+| Conduct Islamic Financial Business | $5,000 |
+| Hold or Control Client Assets | $5,000 |
+| Hold Insurance Monies | $5,000 |
+| Conduct Insurance Intermediation (Long-Term Insurance) | $5,000 |
+| Use a Fund Platform | $20,000 |
+
+### Adding Crypto Token Coverage (Rule 2.2.6)
+
+**For existing authorization to include Crypto Tokens:**
+
+| Authorization Type | Fee |
+|-------------------|-----|
+| Operating a Clearing House or ATS | $40,000 |
+| Dealing in Investments as Principal or Providing Custody | $20,000 |
+| Dealing as Agent, Managing Assets, or Managing CIF | $10,000 |
+| Advising on Financial Products or Arranging Deals | $5,000 |
+
+### General License Changes (Rule 2.2.7)
+
+| Change Type | Fee |
+|------------|-----|
+| Any scope change (authorization, endorsement, activity, product, restriction, condition) | $10,000 |
+| Removing authorization/endorsement/activity/product only | $500 |
+
+**Scope changes include:** Amending restrictions, changing from Debentures to Shares, adding products to advice list, etc.
+
+---
+
+### Individual Applications
+
+#### Authorised Individuals & Key Individuals (Rules 2.7.1-2.7.2)
+
+**Fee per individual: $750**
+
+Applies to:
+- Granting Authorised Individual or Key Individual status
+- Amending authorization to include new Licensed Function
+- Substituting one individual for another in a Licensed Function
+
+**Note:** No fee if applied simultaneously with initial License application
+
+#### Auditor Registration (Rules 2.3.1-2.3.2)
+
+| Registration Type | Fee |
+|------------------|-----|
+| Registered Auditor | $8,500 |
+| Audit Principal | $750 |
+| Audit Principal (with Registered Auditor application) | Waived |
+
+---
+
+### Fund & Recognition Applications
+
+#### Funds (Rules 2.4.1, 2.5.1, 2.12.1)
+
+| Application Type | Fee |
+|-----------------|-----|
+| Public Fund registration | $1,000 |
+| Passported Fund notification (per fund/sub-fund/cell) | $9,500 |
+| External Fund Manager declaration | $20,000 |
+
+**Note:** For umbrella funds, fee applies per sub-fund/segregated portfolio/cell
+
+#### Recognition (Rules 2.6.1-2.6.2)
+
+| Recognition Type | Fee |
+|-----------------|-----|
+| Recognised Body | $15,000 |
+| Recognised Member | $1,000 |
+
+---
+
+### Securities & Other Applications
+
+#### Securities (Rules 2.9.1, 2.9A.1, 2.9B.1)
+
+| Application Type | Fee |
+|-----------------|-----|
+| Admission of Securities to Official List | $2,500 |
+| Request to delist Shares from Official List | $2,500 |
+| Recognised Crypto Token application | $5,000 |
+
+#### PCC Cells (Rule 2.8.1)
+
+| Application Type | Fee |
+|-----------------|-----|
+| Adding new cell to existing PCC | $1,000 per cell |
+
+#### Business Transfers (Rule 2.10.1)
+
+| Application Type | Fee | When Payable |
+|-----------------|-----|--------------|
+| DFSA consent to transfer scheme (GEN Rule 12.1.5) | $40,000 | With application |
+| Order sanctioning transfer scheme (Article 108 Regulatory Law) | $30,000 | On or before nomination/approval date |
+
+#### Waivers & Modifications (Rule 2.11.1)
+
+| Application Type | Fee |
+|-----------------|-----|
+| Waiver or modification (if novel, complex, or time-intensive) | $5,000 |
+| Waiver or modification (with License application) | Waived |
+| Standard waiver or modification | No fee |
+
+---
+
+## Annual Fees - Authorised Firms
+
+### Initial Period Calculation (Rule 3.1.1)
+
+**Formula:**  
+Initial Annual Fee = (Application Fee under Rule 2.1) × (Whole months remaining / 12)
+
+**Notes:**
+- Excludes the 100% complexity surcharge from Rule 2.1.1(3)
+- Uses whole calendar months only
+- Period: License grant date to December 31
+- Payment due: Within 21 days of license grant
+
+**Example:**
+- License granted: April 15
+- Application fee: $25,000
+- Months remaining: 8 (May through December)
+- Initial annual fee: $25,000 × 8/12 = $16,667
+
+---
+
+### Subsequent Periods - Fee Components (Rule 3.2.1)
+
+**Total Annual Fee = (a) + (b) + (c) + (d) + (e) + (f)**
+
+#### (a) Base Fee - Highest Financial Service
+
+**Tier 1: Highest Base Fees**
+
+| Service | Fee |
+|---------|-----|
+| Accepting Deposits or Providing Credit | $100,000 |
+| Dealing in Investments as Principal (Crypto Tokens) | $70,000 |
+| Dealing in Investments as Principal (other) | $50,000 |
+| Insurance (not Captive/PCC/ISPV, active) | $50,000 |
+| Insurance (in run-off) | $25,000 |
+
+**Tier 2: Standard Services with Crypto Premium**
+
+| Service | Crypto Fee | Non-Crypto Fee |
+|---------|-----------|----------------|
+| Dealing as Matched Principal | $35,000 | $25,000 |
+| Dealing as Agent | $35,000 | $25,000 |
+| Managing Assets | $35,000 | $25,000 |
+| Providing Custody | $35,000 | $25,000 |
+
+**Tier 3: Standard Services ($25,000)**
+
+- Insurance Management
+- Managing a Profit Sharing Investment Account
+- Providing Trust Services (express trusts)
+- Acting as Trustee of a Fund
+- Acting as Administrator of Employee Money Purchase Scheme
+- Providing Money Services (Stored Value)
+
+**Tier 4: Intermediation Services with Crypto Premium**
+
+| Service | Crypto Fee | Non-Crypto Fee |
+|---------|-----------|----------------|
+| Arranging Deals in Investments | $20,000 | $15,000 |
+| Advising on Financial Products | $20,000 | $15,000 |
+
+**Tier 5: Intermediation Services ($15,000)**
+
+- Arranging Custody
+- Arranging Credit and Advising on Credit
+- Insurance Intermediation
+- Providing Trust Services (not express trusts)
+- Operating a Credit Rating Agency
+- Providing Fund Administration
+- Operating an Employee Money Purchase Scheme
+- Providing Money Services (not Stored Value, not only Transmission)
+- Operating a Crowdfunding Platform
+
+**Tier 6: Fund Management**
+
+| Service | Crypto Fee | Non-Crypto Fee |
+|---------|-----------|----------------|
+| Managing CIF (Credit Fund or non-QIF/non-VC) | $15,000 | $10,000 |
+| Managing CIF (QIF only, not Credit Fund, not all VC) | $10,000 | $5,000 |
+| Managing CIF (Investment Companies by Corporate Directors) | $10,000 | $5,000 |
+
+**Tier 7: Specialized**
+
+| Service | Fee |
+|---------|-----|
+| Providing Money Services (Money Transmission only) | $10,000 |
+| Arranging or Advising on Money Services | $10,000 |
+| Effecting Insurance as PCC (core) | $8,000 |
+| Each PCC cell | +$1,000 |
+| Representative Office | $6,000 |
+| Effecting Insurance as Captive/ISPV | $5,500 |
+| Managing only Venture Capital Funds | $2,000 |
+
+---
+
+#### (b) Supervisory Complexity Factors (Rule 3.2.3)
+
+**Each factor adds 100% of base fee (a)**
+
+| Factor | Requirements | Additional Fee |
+|--------|-------------|----------------|
+| **Systemically Important Financial Institution** | Must meet BOTH: (1) Prudential Category 1, 2, or 5 OR is Insurer, AND (2) On FSB global systemically important institutions list | +100% of (a) |
+| **DFSA Consolidated/Lead Supervisor** | DFSA acts as consolidated prudential supervisor of Financial Group OR lead supervisor of part of Group | +100% of (a) |
+
+**If both factors apply:** Add 200% of base fee
+
+**Example:**
+- Base fee (a): $50,000
+- Both factors apply: $50,000 + $50,000 + $50,000 = $150,000
+
+---
+
+#### (c) Expenditure-Based Fee (Rule 3.2.2)
+
+**Formula:** $1,000 for first $1,000,000 + $1 per additional $1,000
+
+**"Expenditure" Definition:**
+
+For **PIB Firms** (Domestic or Branch):
+- Sum of: Administrative expenses + Depreciation + Other operating expenses
+- From PIB regulatory return
+- Covers DIFC business (and branches for Domestic Firms)
+
+For **PIN Insurers**:
+- Per IN100 or IN30 Annual Regulatory Return
+- Covers DIFC business (and branches for Domestic Firms)
+
+**Important Notes:**
+- Based on last submitted financial year to DFSA
+- Pro-rata adjustment if period wasn't 12 months
+- If no Annual Regulatory Return submitted yet: Expenditure = $0
+
+**Examples:**
+
+| Expenditure | Calculation | Fee |
+|------------|-------------|-----|
+| $500,000 | $500,000 ≤ $1M | $1,000 |
+| $1,500,000 | $1,000 + ($500 × $1) | $1,500 |
+| $5,000,000 | $1,000 + ($4,000 × $1) | $5,000 |
+| $10,000,000 | $1,000 + ($9,000 × $1) | $10,000 |
+
+---
+
+#### (d) Alternative Trading System Fee (Rules 3.2.1(2)(d), 3.2.4)
+
+**Standard ATS Fees:**
+
+| ATS Type | Fee |
+|----------|-----|
+| Security Tokens (not on AMI/Regulated Exchange) | $150,000 |
+| Crypto Tokens | Variable (see below) |
+| Any other case | $65,000 |
+
+**Crypto Token ATS - Volume-Based Fees:**
+
+| Average Daily Trading Volume | Fee |
+|------------------------------|-----|
+| Less than $50 million | $150,000 |
+| $50 million to <$100 million | $300,000 |
+| $100 million to <$200 million | $500,000 |
+| $200 million or more | $800,000 |
+
+**Volume Calculation:**
+- Total trading value (up to end of November in previous calendar year)
+- Divided by number of trading days (up to end of November)
+
+**Additional Direct Access Fee (Rule 3.2.5):**
+- If ATS trades Investment Tokens or Crypto Tokens AND has Direct Access Members
+- Additional fee: $10,000
+
+---
+
+#### (e) Multiple Financial Services Fee
+
+**Formula:** $4,000 × Number of additional services
+
+**What to count:**
+- Each Financial Service on license
+- EXCLUDE: The highest fee service (already in component (a))
+- EXCLUDE: ATS (already in component (d))
+
+**Example:**
+- License has: Managing Assets ($25,000), Advising ($15,000), Arranging Deals ($15,000)
+- Highest fee (a): $25,000 (Managing Assets)
+- Additional services: 2 (Advising + Arranging)
+- Component (e) fee: 2 × $4,000 = $8,000
+
+---
+
+#### (f) Endorsement Fees
+
+| Endorsement | Fee |
+|-------------|-----|
+| Carry on Financial Service with or for Retail Client | $4,000 |
+| Use a Fund Platform | $4,000 |
+| Act as Trade Repository | $3,000 |
+| Conduct Islamic Financial Business | $1,000 |
+| Hold or Control Client Assets | $1,000 |
+| Hold Insurance Monies | $1,000 |
+| Conduct Insurance Intermediation (Long-Term Insurance) | $1,000 |
+
+---
+
+### Complete Annual Fee Example
+
+**Firm Profile:**
+- Managing Assets (Crypto): Base $35,000
+- Also Advising on Financial Products
+- Expenditure: $3,000,000
+- Has Retail Client endorsement
+- Has Client Assets endorsement
+- DFSA is lead supervisor
+
+**Calculation:**
+- (a) Base fee: $35,000
+- (b) Lead supervisor: +$35,000 (100% of base)
+- (c) Expenditure: $1,000 + $2,000 = $3,000
+- (d) ATS: $0 (not applicable)
+- (e) Additional services: 1 × $4,000 = $4,000
+- (f) Endorsements: $4,000 + $1,000 = $5,000
+
+**Total Annual Fee: $82,000**
+
+---
+
+## Annual Fees - Market Institutions
+
+### Initial Period (Rule 3.3.1)
+
+**Formula:** $100,000 × (Whole months remaining / 12)
+
+- Period: License grant date to December 31
+- Payment due: Within 21 days of license grant
+
+**Example:**
+- License granted: March 10
+- Months remaining: 9 (April through December)
+- Initial annual fee: $100,000 × 9/12 = $75,000
+
+---
+
+### Subsequent Periods (Rules 3.4.1-3.4.7)
+
+#### Core Services
+
+| Service | Fee |
+|---------|-----|
+| Operating an Exchange (non-Crypto) | $100,000 |
+| Operating an Exchange (Crypto Tokens) | Variable* |
+| Operating a Clearing House | $100,000 |
+| Both Exchange & Clearing House | Sum of both fees |
+
+*See Crypto Trading Volume table below
+
+#### Additional Services & Endorsements
+
+| Service/Endorsement | Fee |
+|--------------------|-----|
+| Maintaining Official List of Securities | $75,000 |
+| Operating ATS (Security Tokens not on AMI/Regulated Exchange) | $150,000 |
+| Operating ATS (Crypto Tokens) | Variable* |
+| Operating ATS (other cases) | $65,000 |
+| Direct Access Members (Investment/Crypto Tokens) | +$10,000 |
+| Trade Repository endorsement | +$3,000 |
+| Islamic Financial Business endorsement | +$1,000 |
+
+*See Crypto Trading Volume table below
+
+---
+
+### Crypto Token Trading Volume Fees (Rule 3.4.6)
+
+**Applies to: Exchange or ATS trading Crypto Tokens**
+
+| Average Daily Trading Volume | Annual Fee |
+|------------------------------|-----------|
+| Less than $50 million | $150,000 |
+| $50 million to <$100 million | $300,000 |
+| $100 million to <$200 million | $500,000 |
+| $200 million or more | $800,000 |
+
+**Volume Calculation Method:**
+1. Take total trading value up to end of November (previous calendar year)
+2. Divide by number of trading days up to end of November (previous calendar year)
+3. Result = Average daily trading volume
+
+**Example:**
+- Total trading value (Jan-Nov): $18 billion
+- Trading days (Jan-Nov): 300 days
+- Average daily volume: $18B ÷ 300 = $60 million
+- Applicable fee: $300,000
+
+---
+
+### AMI Fee Examples
+
+**Example 1: Standard Exchange**
+- Operating an Exchange (non-Crypto): $100,000
+- Maintaining Official List: $75,000
+- **Total: $175,000**
+
+**Example 2: Crypto Exchange with High Volume**
+- Operating Exchange (Crypto, $150M daily volume): $500,000
+- Has Direct Access Members: +$10,000
+- Trade Repository endorsement: +$3,000
+- **Total: $513,000**
+
+**Example 3: Exchange & Clearing House**
+- Operating Exchange: $100,000
+- Operating Clearing House: $100,000
+- Official List: $75,000
+- Islamic Finance endorsement: +$1,000
+- **Total: $276,000**
+
+---
+
+## Annual Fees - Auditors & Funds
+
+### Registered Auditors
+
+#### Initial Period (Rule 3.5.1)
+
+**Formula:** $8,500 × (Whole months remaining / 12)
+
+- Applies to auditors of Authorised Persons (Domestic Firms) or Domestic Funds
+- Period: Registration date to December 31
+- Payment due: Within 21 days of registration
+
+**Example:**
+- Registration: July 20
+- Months remaining: 5 (August through December)
+- Initial annual fee: $8,500 × 5/12 = $3,542
+
+---
+
+#### Subsequent Periods
+
+**Audits of Domestic Firms and Domestic Funds (Rule 3.6.1)**
+
+| Number of Audits | Fee Calculation | Example Fee |
+|-----------------|-----------------|-------------|
+| 0-15 audits | Flat fee | $8,500 |
+| 16-30 audits | $8,500 + ($600 × audits above 15) | 20 audits: $8,500 + (5 × $600) = $11,500 |
+| 31 or more audits | $17,500 + ($1,200 × audits above 30) | 35 audits: $17,500 + (5 × $1,200) = $23,500 |
+
+**Audits of Public Listed Companies (Rule 3.6.2)**
+
+| Number of Audits | Fee Calculation |
+|-----------------|-----------------|
+| Each audit | $7,500 per audit |
+| Zero audits | No fee |
+
+**If Auditor Conducts Both Types (Rule 3.6.3):**
+- Total Fee = Domestic Firms/Funds fee + Public Listed Companies fee
+
+**Example:**
+- 25 audits of Domestic Firms/Funds: $8,500 + (10 × $600) = $14,500
+- 3 audits of Public Listed Companies: 3 × $7,500 = $22,500
+- **Total Annual Fee: $37,000**
+
+**Basis:** Audits reported in Annual Information Return for previous calendar year
+
+---
+
+### Domestic Funds
+
+#### Initial Period (Rule 3.9.1)
+
+**Payment Timing:**
+- Public Funds: At time of registration
+- Exempt Funds or QIF: At time of notification (Article 34 CIL 2010)
+
+**Formula:**
+
+| Fund Type | Calculation |
+|-----------|-------------|
+| Venture Capital Fund | $1,000 × (Whole months remaining / 12) |
+| Any other Fund type | $4,000 × (Whole months remaining / 12) |
+
+**Umbrella Structures:** Fee calculated per sub-fund/segregated portfolio/cell (not for umbrella entity)
+
+**Examples:**
+- VC Fund registered September 1: $1,000 × 4/12 = $333
+- QIF notified September 1: $4,000 × 4/12 = $1,333
+
+---
+
+#### Subsequent Periods (Rule 3.10.1)
+
+| Fund Type | Annual Fee |
+|-----------|-----------|
+| Venture Capital Fund | $1,000 |
+| Any other Fund type | $4,000 |
+
+**Payment:** Due January 1 of calendar year
+
+---
+
+### Passported Funds (Rule 3.10A.1)
+
+**Fee:** $2,000 per fund/sub-fund/segregated portfolio/cell
+
+**Applies when:** DFSA is Home Regulator only (see FPR section 7)
+
+**Fee Periods:**
+- Initial: 12 months following notification of intention
+- Subsequent: 12 months from each anniversary of notification date
+
+**Payment:** Due on anniversary of notification date
+
+**Umbrella Structures:** Fee per sub-fund/portfolio/cell, not umbrella entity
+
+---
+
+### External Fund Managers (Rule 3.10B.1)
+
+#### Initial Period
+
+**Payment Timing:** Day when first managing Domestic Fund under Article 20(5)(b) CIL 2010
+
+**Formula:**  
+Initial Fee = (Subsequent period annual fee) × (Whole months remaining / 12)
+
+#### Subsequent Periods
+
+**Fee:** Use applicable Managing a Collective Investment Fund fee from Rule 3.2.1(3)
+
+| Fund Type Managed | Fee Range |
+|------------------|-----------|
+| Credit Funds or non-QIF/non-VC Funds | $10,000-$15,000 |
+| QIF only (not Credit Funds, not all VC) | $5,000-$10,000 |
+| Investment Companies (Corporate Directors) | $5,000-$10,000 |
+| Venture Capital Funds only | $2,000 |
+
+**Note:** Higher fees apply if any fund invests in Crypto Tokens
+
+---
+
+## Annual Fees - Listed Entities & Other
+
+### Listed Entities with Equity Securities
+
+#### Non-SME Listed Entities (Rule 3.11.1(1))
+
+**Total Fee = Base Fee + Market Capitalization Fee**
+
+**Base Fee:** $2,500
+
+**Market Capitalization Fee Table:**
+
+| Market Cap (USD) | Fee per $1 Million |
+|------------------|-------------------|
+| $0 to $100 million | $0 |
+| >$100M to $500M | $5 |
+| >$500M to $5 billion | $1 |
+| >$5B to $10 billion | $0.50 |
+| Over $10 billion | $0.25 |
+
+**Market Cap Determination:**
+- Date: Last business day of November (year before fee year)
+- Price: AMI official closing price at end of that day
+- Calculation: Number of listed equity securities × closing price
+
+**Equity Securities Definition:**
+- Shares
+- Certificates over Shares
+- Warrants over Shares
+- Units in a Foreign Fund
+
+---
+
+#### Detailed Calculation Examples
+
+**Example 1: $750 Million Market Cap**
+
+| Component | Calculation | Amount |
+|-----------|-------------|---------|
+| Base fee | Fixed | $2,500 |
+| $0-$100M | 100 × $0 | $0 |
+| $100M-$500M | 400 × $5 | $2,000 |
+| $500M-$750M | 250 × $1 | $250 |
+| **Total** | | **$4,750** |
+
+**Example 2: $12 Billion Market Cap**
+
+| Component | Calculation | Amount |
+|-----------|-------------|---------|
+| Base fee | Fixed | $2,500 |
+| $0-$100M | 100 × $0 | $0 |
+| $100M-$500M | 400 × $5 | $2,000 |
+| $500M-$5B | 4,500 × $1 | $4,500 |
+| $5B-$10B | 5,000 × $0.50 | $2,500 |
+| $10B-$12B | 2,000 × $0.25 | $500 |
+| **Total** | | **$12,000** |
+
+**Example 3: $50 Million Market Cap**
+
+| Component | Calculation | Amount |
+|-----------|-------------|---------|
+| Base fee | Fixed | $2,500 |
+| $0-$50M | 50 × $0 | $0 |
+| **Total** | | **$2,500** |
+
+---
+
+#### SME Listed Entities (Rule 3.11.1(2))
+
+**Annual Fee:** $10,000 (flat fee)
+
+**Applies to:** SME with equity securities admitted to Official List
+
+---
+
+### DNFBPs (Designated Non-Financial Businesses & Professions)
+
+| Period | Fee | Rule |
+|--------|-----|------|
+| Initial Period | $6,000 | 3.7.1 |
+| Subsequent Periods | $6,000 | 3.8.1 |
+
+**Payment:** Due January 1 of calendar year
+
+---
+
+### Recognise

@@ -10,6 +10,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AuthProvider } from "./components/Header";
 import { queryClient } from "./lib/react-query";
+import type { AuthenticationResult } from "@azure/msal-browser";
 
 const client = new ApolloClient({
   link: new HttpLink({
@@ -25,7 +26,38 @@ const client = new ApolloClient({
 declare global {
   interface Window {
     __MZN_APP_ROOT__?: Root;
+    /** Flag set when user came from explicit signup flow */
+    __EJ_IS_SIGNUP__?: boolean;
+    /** Return path from login state */
+    __EJ_RETURN_PATH__?: string;
   }
+}
+
+/**
+ * Parse MSAL redirect state to extract signup flag and return path.
+ * State format: "ej-signup|ej-return=/some/path" or "ej-return=/some/path"
+ */
+function parseAuthState(state?: string): {
+  isSignup: boolean;
+  returnPath?: string;
+} {
+  if (!state) return { isSignup: false };
+
+  const isSignup = state.includes("ej-signup");
+  const returnMatch = state.match(/ej-return=([^|]+)/);
+  const returnPath = returnMatch ? decodeURIComponent(returnMatch[1]) : undefined;
+
+  return { isSignup, returnPath };
+}
+
+/**
+ * Check if user is new based on ID token claims.
+ * B2C/CIAM may include newUser claim on first authentication.
+ */
+function isNewUserFromClaims(result: AuthenticationResult | null): boolean {
+  if (!result?.idTokenClaims) return false;
+  const claims = result.idTokenClaims as Record<string, unknown>;
+  return claims.newUser === true || claims.newUser === "true";
 }
 
 const container = document.getElementById("root");
@@ -34,9 +66,8 @@ if (container) {
     window.__MZN_APP_ROOT__ = createRoot(container);
   }
   const root = window.__MZN_APP_ROOT__;
+
   // Ensure MSAL is initialized and redirect response handled before rendering app
-  // Note: All auth/onboarding checks and routing are now handled by ProtectedRoute
-  // via useUnifiedAuthFlow hook, so we don't need to do manual redirects here
   msalInstance
     .initialize()
     .then(() => msalInstance.handleRedirectPromise())
@@ -51,15 +82,36 @@ if (container) {
           msalInstance.setActiveAccount(accounts[0]);
         }
       }
+
+      // Parse state from redirect to detect signup flow and return path
+      const { isSignup, returnPath } = parseAuthState(result?.state);
+      const isNewUser = isNewUserFromClaims(result);
+
+      // Store flags for downstream routing (AuthContext/ProtectedRoute can use these)
+      if (isSignup || isNewUser) {
+        window.__EJ_IS_SIGNUP__ = true;
+        console.log("[MSAL] Signup flow detected - will route to onboarding");
+      }
+      if (returnPath) {
+        window.__EJ_RETURN_PATH__ = returnPath;
+      }
+
+      // Route to onboarding for new signups (if not already on onboarding path)
+      if ((isSignup || isNewUser) && result?.account) {
+        const currentPath = window.location.pathname;
+        if (!currentPath.includes("/onboarding")) {
+          // Let the app render first, then navigate via router
+          // The ProtectedRoute/useUnifiedAuthFlow will handle the actual redirect
+          console.log("[MSAL] New user detected, onboarding routing will be handled by ProtectedRoute");
+        }
+      }
+
       root.render(
         <QueryClientProvider client={queryClient}>
           <ApolloProvider client={client}>
             <MsalProvider instance={msalInstance}>
               <AuthProvider>
                 <AppRouter />
-                {/* {process.env.NODE_ENV === 'development' && (
-                  <ReactQueryDevtools initialIsOpen={false} />
-                )} */}
               </AuthProvider>
             </MsalProvider>
           </ApolloProvider>

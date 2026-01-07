@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import HeroSection from './HeroSection';
-import DFSADecisionAuthoritySection from './DFSADecisionAuthoritySection';
 import WhatWeDoSection from './WhatWeDoSection';
-import AuthorizationJourneySection from './AuthorizationJourneySection';
 import LicenseCategoriesSection from './LicenseCategoriesSection';
-import CallToAction from './CallToAction';
+import { ConversationalChat } from './ConversationalChat';
 
 const HomePage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
