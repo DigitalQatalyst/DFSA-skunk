@@ -1,5 +1,4 @@
-const API_BASE_URL = "https://kfrealexpressserver.vercel.app/api/v1";
-const API2 = "http://localhost:5000/api/v1";
+import { API_BASE_URL } from '../../../config/apiBase';
 
 // Helper function to save Vision & Strategy section
 export async function saveVisionStrategySection(accountId: string, sectionData: any) {
@@ -23,7 +22,7 @@ export async function saveVisionStrategySection(accountId: string, sectionData: 
 }
 
 export async function saveProductsSection(accountId: string, sectionData: any) {
-    const response = await fetch(`${API2}/form/productsandinnovation`, {
+    const response = await fetch(`${API_BASE_URL}/form/productsandinnovation`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

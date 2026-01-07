@@ -19,6 +19,7 @@ interface ImportMetaEnv {
   readonly VITE_SUPABASE_ANON_KEY_KH?: string;
   readonly VITE_SUPABASE_KH_BUCKET_THUMBNAILS?: string;
   readonly VITE_DEMO_AUTH_BYPASS?: string;
+  readonly VITE_DEMO_AUTH_ALLOW_PROD?: string;
 }
 
 interface ImportMeta {

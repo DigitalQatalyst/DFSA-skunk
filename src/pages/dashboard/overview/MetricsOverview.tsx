@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { API_ROOT_URL } from '../../../config/apiBase'
 import { useNavigate } from 'react-router-dom'
 import { TrendingUpIcon, TrendingDownIcon } from 'lucide-react'
 
@@ -33,7 +34,7 @@ interface MetricsOverviewProps {
 // API function to fetch metrics
 const fetchMetric = async (endpoint: string, enterpriseId: string): Promise<Metric | null> => {
   try {
-    const response = await fetch(`http://localhost:5000/api/metrics/${endpoint}/${enterpriseId}`);
+    const response = await fetch(`${API_ROOT_URL}/api/metrics/${endpoint}/${enterpriseId}`);
     const result = await response.json();
     
     if (result.success) {

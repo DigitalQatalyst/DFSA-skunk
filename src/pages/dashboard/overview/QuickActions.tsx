@@ -17,7 +17,7 @@ import {
 
 export const QuickActions: React.FC = () => {
   const navigate = useNavigate();
-  
+
   // Handle navigation to home page services section with scrolling
   const handleCreateRequest = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -99,15 +99,13 @@ export const QuickActions: React.FC = () => {
     <div className="grid grid-cols-2 gap-3">
       {actions.map((action) => {
         const permission = getPermissionForAction(action.id);
-        const actionClassName = `flex flex-col items-center justify-center p-4 rounded-lg transition-colors w-full ${
-          action.primary
-            ? "bg-blue-600 text-white hover:bg-blue-700"
-            : "bg-white border border-gray-200 hover:border-blue-300 hover:bg-gray-50"
-        }`;
+        const actionClassName = `flex flex-col items-center justify-center p-4 rounded-lg transition-colors w-full ${action.primary
+          ? "bg-primary text-white hover:bg-primary-dark"
+          : "bg-white border border-gray-200 hover:border-primary/30 hover:bg-gray-50"
+          }`;
         const iconClassName = `p-2 rounded-full mb-3 `;
-        const labelClassName = `text-sm font-medium ${
-          action.primary ? "text-white" : "text-gray-700"
-        }`;
+        const labelClassName = `text-sm font-medium ${action.primary ? "text-white" : "text-gray-700"
+          }`;
 
         if (action.customHandler) {
           if (!permission) {
@@ -212,7 +210,7 @@ export const QuickActions: React.FC = () => {
               }
 
 
-              
+
               return link;
             }}
           </Can>

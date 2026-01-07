@@ -7,6 +7,7 @@ import {
   saveProgressIndexedDB,
 } from "./idbOnboarding";
 import { ProfileApiResponse } from "../types";
+import { API_BASE_URL } from "../config/apiBase";
 
 // Onboarding form data interface
 interface OnboardingFormData {
@@ -383,7 +384,7 @@ export const fetchAndMapProfileToOnboarding = async (
 ): Promise<Partial<OnboardingFormData> | null> => {
   try {
     const response = await fetch(
-      "https://kfrealexpressserver.vercel.app/api/v1/auth/get-user-profile",
+      `${API_BASE_URL}/auth/get-user-profile`,
       {
         method: "POST",
         headers: {

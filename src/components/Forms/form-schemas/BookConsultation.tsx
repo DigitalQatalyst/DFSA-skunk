@@ -1,6 +1,7 @@
 import * as yup from "yup";
 import { FormSchema, FormField } from "../FormPreview";
 import { PLACEHOLDER_STANDARDS } from "../../../utils/formPlaceholderStandards";
+import { API_BASE_URL } from "../../../config/apiBase";
 
 export const bookConsultationSchema: FormSchema = {
   formId: "book-consultation-form",
@@ -10,7 +11,7 @@ export const bookConsultationSchema: FormSchema = {
   multiStep: true,
   allowSaveAndContinue: true,
   autoSaveInterval: 20000,
-  submitEndpoint: "https://kfrealexpressserver.vercel.app/api/v1/consultation/book-consultation",
+  submitEndpoint: `${API_BASE_URL}/consultation/book-consultation`,
   steps: [
     {
       stepTitle: "Personal & Company Information",

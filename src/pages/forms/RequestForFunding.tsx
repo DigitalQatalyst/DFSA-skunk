@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../../config/apiBase";
 import { ServiceRequestForm } from "../../components/Forms/FormPreview";
 import { RequestForFundingSchema } from "../../components/Forms/form-schemas/RequestForFundingSchema";
 import { getFormConfig } from "../../config/formConfig";
@@ -86,7 +87,7 @@ function RequestForFunding() {
 
       console.log("📤 Submitting Request for Funding:", powerAppsPayload);
 
-      const response = await fetch('https://kfrealexpressserver.vercel.app/api/v1/funding/requestfunding', {
+      const response = await fetch(`${API_BASE_URL}/funding/requestfunding`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

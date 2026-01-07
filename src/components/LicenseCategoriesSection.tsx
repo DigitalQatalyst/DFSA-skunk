@@ -2,16 +2,39 @@ import React, { useEffect, useState, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { licenseCategories } from '../data/dfsa';
 import { LicenseCategoryCard } from './dfsa/LicenseCategoryCard';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * License Categories Section
- * Carousel display of all DFSA license categories
+ * Carousel display showing 3 DFSA license categories at a time
  */
 const LicenseCategoriesSection: React.FC = () => {
+  const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
   const hasMultipleCategories = licenseCategories.length > 1;
+
+  // Calculate how many cards to show per page based on screen size
+  const getCardsPerPage = () => {
+    if (typeof window === 'undefined') return 3;
+    const width = window.innerWidth;
+    if (width < 768) return 1; // Mobile
+    if (width < 1024) return 2; // Tablet
+    return 3; // Desktop
+  };
+
+  const [cardsPerPage, setCardsPerPage] = useState(getCardsPerPage());
+
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setCardsPerPage(getCardsPerPage());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Handle auto-cycling between categories
   useEffect(() => {
@@ -26,29 +49,37 @@ const LicenseCategoriesSection: React.FC = () => {
         clearInterval(autoPlayRef.current);
       }
     };
-  }, [activeIndex, hasMultipleCategories]);
+  }, [activeIndex, hasMultipleCategories, cardsPerPage]);
+
+  const maxIndex = Math.max(0, licenseCategories.length - cardsPerPage);
 
   const nextCategory = () => {
     if (isTransitioning) return;
     setIsTransitioning(true);
     setTimeout(() => {
-      setActiveIndex((prevIndex) => (prevIndex + 1) % licenseCategories.length);
+      setActiveIndex((prevIndex) => {
+        // If at the end, loop back to start
+        if (prevIndex >= maxIndex) return 0;
+        return prevIndex + 1;
+      });
       setIsTransitioning(false);
-    }, 500);
+    }, 300);
   };
 
   const prevCategory = () => {
     if (isTransitioning) return;
     setIsTransitioning(true);
     setTimeout(() => {
-      setActiveIndex((prevIndex) =>
-        prevIndex === 0 ? licenseCategories.length - 1 : prevIndex - 1
-      );
+      setActiveIndex((prevIndex) => {
+        // If at start, loop to end
+        if (prevIndex === 0) return maxIndex;
+        return prevIndex - 1;
+      });
       setIsTransitioning(false);
-    }, 500);
+    }, 300);
   };
 
-  const goToCategory = (index: number) => {
+  const goToIndex = (index: number) => {
     if (isTransitioning || index === activeIndex) return;
     setIsTransitioning(true);
 
@@ -60,15 +91,23 @@ const LicenseCategoriesSection: React.FC = () => {
     setTimeout(() => {
       setActiveIndex(index);
       setIsTransitioning(false);
-    }, 500);
+    }, 300);
   };
-
-  const activeCategory = licenseCategories[activeIndex];
 
   const handleCategoryClick = () => {
-    // Navigate to license category detail page or open modal
-    window.location.href = activeCategory.detailsUrl || `/license-categories/${activeCategory.id}`;
+    navigate('/coming-soon');
   };
+
+  // Get visible categories based on current index
+  const getVisibleCategories = () => {
+    return licenseCategories.slice(activeIndex, activeIndex + cardsPerPage);
+  };
+
+  const visibleCategories = getVisibleCategories();
+
+  // Generate pagination dots based on cards per page
+  const totalPages = Math.ceil(licenseCategories.length / cardsPerPage);
+  const currentPage = Math.floor(activeIndex / cardsPerPage);
 
   return (
     <section className="w-full bg-[#F8FAFC] py-24 md:py-32">
@@ -119,39 +158,48 @@ const LicenseCategoriesSection: React.FC = () => {
             </>
           )}
 
-          {/* Category Card */}
+          {/* Cards Grid */}
           <div
-            className={`transition-opacity duration-500 max-w-2xl mx-auto ${isTransitioning ? 'opacity-0' : 'opacity-100'
+            className={`transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'
               }`}
           >
-            <LicenseCategoryCard
-              category={activeCategory}
-              onClick={handleCategoryClick}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+              {visibleCategories.map((category) => (
+                <LicenseCategoryCard
+                  key={category.id}
+                  category={category}
+                  onClick={handleCategoryClick}
+                  minimal={true}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Navigation Indicators */}
-        {hasMultipleCategories && (
+        {hasMultipleCategories && totalPages > 1 && (
           <div className="flex justify-center mt-8 gap-2">
-            {licenseCategories.map((category, index) => (
-              <button
-                key={category.id}
-                onClick={() => goToCategory(index)}
-                className={`transition-colors duration-300 rounded-full ${index === activeIndex
-                  ? 'bg-primary w-12 h-3'
-                  : 'bg-[#E2E8F0] hover:bg-[#64748B] w-3 h-3'
-                  }`}
-                aria-label={`Go to ${category.name}`}
-                title={category.name}
-              />
-            ))}
+            {Array.from({ length: totalPages }).map((_, index) => {
+              const dotIndex = index * cardsPerPage;
+              return (
+                <button
+                  key={index}
+                  onClick={() => goToIndex(dotIndex)}
+                  className={`transition-colors duration-300 rounded-full ${Math.floor(activeIndex / cardsPerPage) === index
+                      ? 'bg-primary w-12 h-3'
+                      : 'bg-[#E2E8F0] hover:bg-[#64748B] w-3 h-3'
+                    }`}
+                  aria-label={`Go to page ${index + 1}`}
+                  title={`Page ${index + 1}`}
+                />
+              );
+            })}
           </div>
         )}
 
         {/* Category Count */}
         <div className="text-center mt-6 text-[#64748B] text-sm">
-          Viewing {activeIndex + 1} of {licenseCategories.length} license categories
+          Viewing {activeIndex + 1}-{Math.min(activeIndex + cardsPerPage, licenseCategories.length)} of {licenseCategories.length} license categories
         </div>
 
         {/* Mobile Navigation Buttons */}
@@ -182,15 +230,15 @@ const LicenseCategoriesSection: React.FC = () => {
 
         {/* View All Categories CTA */}
         <div className="text-center mt-12">
-          <a
-            href="/license-categories"
+          <button
+            onClick={() => navigate('/coming-soon')}
             className="inline-flex items-center gap-2 px-8 py-3 bg-white text-primary border-2 border-primary
                        hover:bg-[#F8FAFC] font-semibold rounded-md
                        transition-colors shadow-sm"
           >
             <span>View All License Categories</span>
             <ChevronRight size={20} />
-          </a>
+          </button>
         </div>
       </div>
     </section>

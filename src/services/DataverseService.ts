@@ -4,6 +4,7 @@
 import { ProfileApiResponse, ProfileData } from "../types";
 import { getAuthToken } from "../utils/getAuthToken";
 import { isFieldMandatory, SectionConfig } from "../utils/config";
+import { API_BASE_URL } from "../config/apiBase";
 
 interface DocumentMetadata {
     id?: string;
@@ -23,7 +24,7 @@ interface DocumentMetadata {
     previousVersionId?: string;
 }
 
-const API_BASE_URL1 = "https://kfrealexpressserver.vercel.app/api/v1/auth/organization-info";
+const API_ORG_INFO_URL = `${API_BASE_URL}/auth/organization-info`;
 
 export async function fetchBusinessProfileData(userEmail: string, id: string) {
     console.log(`🔍 [BUSINESS PROFILE] Preparing to fetch profile for email: ${userEmail} and azureId: ${id}`);
@@ -35,7 +36,7 @@ export async function fetchBusinessProfileData(userEmail: string, id: string) {
     };
 
     try {
-        const response = await fetch(API_BASE_URL1, {
+        const response = await fetch(API_ORG_INFO_URL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -59,7 +60,7 @@ export async function fetchBusinessProfileData(userEmail: string, id: string) {
         // Handle other non-OK responses
         if (!response.ok) {
             const errorText = await response.text().catch(() => "Unknown error");
-            console.error(`❌ [BUSINESS PROFILE] HTTP error! Status: ${response.status} from ${API_BASE_URL1}`);
+            console.error(`❌ [BUSINESS PROFILE] HTTP error! Status: ${response.status} from ${API_ORG_INFO_URL}`);
             console.error(`❌ [BUSINESS PROFILE] Error response:`, errorText);
             throw new Error(`HTTP error! Status: ${response.status} - Could not fetch profile data.`);
         }
@@ -84,10 +85,8 @@ export async function fetchBusinessProfileData(userEmail: string, id: string) {
 
 
 //Placeholder API to fetch data from both APIs:-
-const API_BASE_URL = "https://kfrealexpressserver.vercel.app/api/v1";
-const API_ORG_INFO_URL = `${API_BASE_URL}/auth/organization-info`;
 const API_ONBOARDING_URL = `${API_BASE_URL}/onboarding`;
-const API_ACCOUNT_DATA_URL = "https://kfrealexpressserver.vercel.app/api/v1/account-data";
+const API_ACCOUNT_DATA_URL = `${API_BASE_URL}/account-data`;
 
 
 // Helper for handling API calls and checking the 'success' flag
@@ -649,9 +648,7 @@ export const getAccountDocuments = async (accountId: string, userId?: string) =>
     }
 
     // Fetch documents from Express server (which queries Dataverse)
-    const expressServerUrl = import.meta.env.VITE_EXPRESS_SERVER_URL || 
-      (import.meta.env.DEV ? 'http://localhost:5000' : 'https://kfrealexpressserver.vercel.app');
-    const url = `${expressServerUrl}/api/v1/documents`;
+    const url = `${API_BASE_URL}/documents`;
     
     console.log(`🔄 Fetching documents from Dataverse via Express server: ${url}`);
     

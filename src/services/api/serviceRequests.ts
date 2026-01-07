@@ -1,6 +1,5 @@
 import { ServiceRequest } from "../../types";
-
-const API_BASE_URL = "https://kfrealexpressserver.vercel.app/api/v1";
+import { API_BASE_URL } from "../../config/apiBase";
 
 export interface ApiServiceRequest {
   // Original fields

@@ -1,4 +1,5 @@
 import { FormSchema } from "../FormPreview";
+import { API_BASE_URL } from "../../../config/apiBase";
 import { PLACEHOLDER_STANDARDS } from "../../../utils/formPlaceholderStandards";
 
 export const RequestForFundingSchema: FormSchema = {
@@ -9,7 +10,7 @@ export const RequestForFundingSchema: FormSchema = {
   multiStep: true,
   allowSaveAndContinue: true,
   autoSaveInterval: 20000, // Auto-save every 20 seconds
-  submitEndpoint: "https://kfrealexpressserver.vercel.app/api/v1/funding/requestfunding",
+  submitEndpoint: `${API_BASE_URL}/funding/requestfunding`,
 
   steps: [
     {

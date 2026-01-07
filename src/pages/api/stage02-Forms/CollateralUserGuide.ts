@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "../../../config/apiBase";
+
 export interface CollateralUserGuidePayload {
     azureId: string;
     name: string;
@@ -21,7 +23,7 @@ export async function submitCollateralUserGuide(
 ): Promise<any> {
     try {
         const response = await fetch(
-            "https://kfrealexpressserver.vercel.app/api/v1/collateral/create-collateraluserguide",
+            `${API_BASE_URL}/collateral/create-collateraluserguide`,
             {
                 method: "POST",
                 headers: {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../../config/apiBase";
 import { ServiceRequestForm } from "../../components/Forms/FormPreview";
 import { DisburseApprovedLoanSchema } from "../../components/Forms/form-schemas/DisburseApprovedLoanSchema";
 import { getFormConfig } from "../../config/formConfig";
@@ -98,7 +99,7 @@ function DisburseApprovedLoan() {
       console.log("📤 Power Apps payload:", powerAppsPayload);
 
       // Submit to Power Apps backend
-      const response = await fetch('https://kfrealexpressserver.vercel.app/api/v1/loan/disburse-loan', {
+      const response = await fetch(`${API_BASE_URL}/loan/disburse-loan`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

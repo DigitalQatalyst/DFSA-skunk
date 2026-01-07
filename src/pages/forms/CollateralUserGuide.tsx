@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../../config/apiBase";
 import { ServiceRequestForm } from "../../components/Forms/FormPreview";
 import { collateralGuideSchema } from "../../components/Forms/form-schemas/CollateralUserGuide";
 import { submitCollateralUserGuide } from "../api/stage02-Forms/CollateralUserGuide";
@@ -84,7 +85,7 @@ function CollateralUserGuide() {
       console.log("📤 Power Apps payload:", powerAppsPayload);
 
       // Submit to Power Apps backend
-      const response = await fetch('https://kfrealexpressserver.vercel.app/api/v1/collateral/create-collateraluserguide', {
+      const response = await fetch(`${API_BASE_URL}/collateral/create-collateraluserguide`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

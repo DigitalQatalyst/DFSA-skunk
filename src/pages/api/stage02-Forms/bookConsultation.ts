@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "../../../config/apiBase";
+
 export interface BookConsultationPayload {
     azureId: string;
     name: string;
@@ -19,7 +21,7 @@ export interface BookConsultationPayload {
 export async function submitBookConsultation(data: BookConsultationPayload): Promise<any> {
     try {
         const response = await fetch(
-            "https://kfrealexpressserver.vercel.app/api/v1/consultation/book-consultation",
+            `${API_BASE_URL}/consultation/book-consultation`,
             {
                 method: "POST",
                 headers: {

@@ -11,18 +11,24 @@ export const DEMO_USER_ID = '22222222-2222-2222-2222-222222222222';
 let demoWarningLogged = false;
 
 /**
- * Check if demo authentication bypass is enabled (dev-only).
+ * Check if demo authentication bypass is enabled.
+ * In production, require an explicit allow flag.
  */
 export function isDemoModeEnabled(): boolean {
-  if (import.meta.env.PROD) {
+  const isBypassRequested = import.meta.env.VITE_DEMO_AUTH_BYPASS === 'true';
+  const allowProdBypass = import.meta.env.VITE_DEMO_AUTH_ALLOW_PROD === 'true';
+
+  if (import.meta.env.PROD && !allowProdBypass) {
     return false;
   }
-  const isEnabled = import.meta.env.VITE_DEMO_AUTH_BYPASS === 'true';
-  if (isEnabled && !demoWarningLogged) {
-    console.warn('DEMO AUTH BYPASS ENABLED');
+
+  if (isBypassRequested && !demoWarningLogged) {
+    const mode = import.meta.env.PROD ? 'PROD' : 'DEV';
+    console.warn(`DEMO AUTH BYPASS ENABLED (${mode})`);
     demoWarningLogged = true;
   }
-  return isEnabled;
+
+  return isBypassRequested;
 }
 
 /**

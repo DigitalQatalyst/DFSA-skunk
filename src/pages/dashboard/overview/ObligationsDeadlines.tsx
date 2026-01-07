@@ -27,11 +27,11 @@ export const ObligationsDeadlines: React.FC<ObligationsDeadlinesProps> = ({
   obligations,
   error,
 }) => {
-  console.log('🎯 [ObligationsDeadlines] Received props:', { 
-    isLoading, 
-    obligationsCount: obligations?.length, 
-    obligations, 
-    error 
+  console.log('🎯 [ObligationsDeadlines] Received props:', {
+    isLoading,
+    obligationsCount: obligations?.length,
+    obligations,
+    error
   });
   const getStatusIcon = (status: string) => {
     if (status === "overdue") {
@@ -113,47 +113,46 @@ export const ObligationsDeadlines: React.FC<ObligationsDeadlinesProps> = ({
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {obligations.map((obligation) => (
-              <tr key={obligation.id} className="hover:bg-gray-50">
-                <td className="px-4 py-3 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 mr-2">
-                      {getStatusIcon(obligation.status)}
-                    </div>
-                    <span
-                      className={`text-sm font-medium ${
-                        obligation.status === "overdue"
-                          ? "text-red-600"
-                          : "text-gray-700"
+            <tr key={obligation.id} className="hover:bg-gray-50">
+              <td className="px-4 py-3 whitespace-nowrap">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0 mr-2">
+                    {getStatusIcon(obligation.status)}
+                  </div>
+                  <span
+                    className={`text-sm font-medium ${obligation.status === "overdue"
+                      ? "text-red-600"
+                      : "text-gray-700"
                       }`}
-                    >
-                      {obligation.title}
-                    </span>
-                  </div>
-                </td>
-                <td className="px-4 py-3 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <FileClockIcon className="h-4 w-4 text-gray-400 mr-1" />
-                    <span className="text-sm text-gray-500">
-                      {formatDate(obligation.dueDate)}
-                    </span>
-                  </div>
-                </td>
-                <td className="px-4 py-3 whitespace-nowrap text-center text-sm">
-                  <Link
-                    to={obligation.actionUrl || "/dashboard/reporting-obligations"}
-                    className="px-3 py-1 border border-gray-300 rounded-md text-xs text-gray-600 hover:text-blue-600 hover:border-blue-300 inline-block"
                   >
-                    Take Action
-                  </Link>
-                </td>
-              </tr>
-            ))}
+                    {obligation.title}
+                  </span>
+                </div>
+              </td>
+              <td className="px-4 py-3 whitespace-nowrap">
+                <div className="flex items-center">
+                  <FileClockIcon className="h-4 w-4 text-gray-400 mr-1" />
+                  <span className="text-sm text-gray-500">
+                    {formatDate(obligation.dueDate)}
+                  </span>
+                </div>
+              </td>
+              <td className="px-4 py-3 whitespace-nowrap text-center text-sm">
+                <Link
+                  to={obligation.actionUrl || "/dashboard/reporting-obligations"}
+                  className="px-3 py-1 border border-gray-300 rounded-md text-xs text-gray-600 hover:text-primary hover:border-primary inline-block"
+                >
+                  Take Action
+                </Link>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
       <div className="mt-4 text-right">
         <Link
           to="/dashboard/reporting-obligations"
-          className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+          className="text-primary hover:text-primary-dark text-sm font-medium"
         >
           View All Obligations
         </Link>

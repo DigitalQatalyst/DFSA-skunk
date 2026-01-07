@@ -1,4 +1,5 @@
 import { FormSchema } from "../FormPreview";
+import { API_BASE_URL } from "../../../config/apiBase";
 
 export const TrainingInEntrepreneurshipSchema: FormSchema = {
     formId: "training-in-entrepreneurship",
@@ -7,7 +8,7 @@ export const TrainingInEntrepreneurshipSchema: FormSchema = {
     multiStep: true,
     allowSaveAndContinue: true,
     autoSaveInterval: 20000, // Auto-save every 20 seconds
-    submitEndpoint: "https://kfrealexpressserver.vercel.app/api/v1/training/entrepreneurshiptraining",
+    submitEndpoint: `${API_BASE_URL}/training/entrepreneurshiptraining`,
 
     steps: [
         {

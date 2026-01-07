@@ -18,6 +18,7 @@ import { type ProfileApiResponse } from "../../../types";
 import { type Role } from "../../../config/abilities";
 import { fetchOrganizationInfo } from "../../../services/organizationService";
 import { type OrganizationInfoRequest, type OrganizationInfoResponse } from "../../../types/organization";
+import { API_BASE_URL } from "../../../config/apiBase";
 
 interface UserProfile {
   id: string;
@@ -339,7 +340,7 @@ export function AuthProvider({
             const body = { azureid: user?.id };
             console.log("[AuthContext] Fetching user profile with body:", body);
             const response = await fetch(
-              "https://kfrealexpressserver.vercel.app/api/v1/auth/get-user-profile",
+              `${API_BASE_URL}/auth/get-user-profile`,
               {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },

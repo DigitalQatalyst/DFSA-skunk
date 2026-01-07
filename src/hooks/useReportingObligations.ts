@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Obligation } from '../pages/dashboard/overview/ObligationsDeadlines';
+import { API_BASE_URL } from '../config/apiBase';
 
 interface ApiObligation {
   id?: string;
@@ -39,7 +40,7 @@ export const useReportingObligations = (limit = 3): UseReportingObligationsRetur
       setError(null);
 
       const response = await fetch(
-        'https://kfrealexpressserver.vercel.app/api/v1/reports/reportingobligations',
+        `${API_BASE_URL}/reports/reportingobligations`,
         {
           method: 'GET',
           headers: {

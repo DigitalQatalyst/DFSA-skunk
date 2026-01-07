@@ -6,6 +6,7 @@ import { useMutation, useQueryClient, UseMutationOptions } from '@tanstack/react
 import { useAuth } from '../components/Header/context/AuthContext';
 import { getAuthToken } from '../utils/getAuthToken';
 import { DocumentVersionDTO } from './useDocumentVersions';
+import { API_BASE_URL } from '../config/apiBase';
 
 interface CreateDocumentVersionResponse {
   version: DocumentVersionDTO;
@@ -30,10 +31,8 @@ async function createDocumentVersion(
   const formData = new FormData();
   formData.append('file', variables.file);
 
-  // Use Express server URL for document operations
-  const expressServerUrl = import.meta.env.VITE_EXPRESS_SERVER_URL || 
-    (import.meta.env.DEV ? 'http://localhost:5000' : 'https://kfrealexpressserver.vercel.app');
-  const url = `${expressServerUrl}/api/v1/documents/${variables.documentId}/versions`;
+  // Use same-origin API base to avoid CORS in demo deployments.
+  const url = `${API_BASE_URL}/documents/${variables.documentId}/versions`;
 
   const response = await fetch(url, {
     method: 'POST',

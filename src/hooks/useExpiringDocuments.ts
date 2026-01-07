@@ -6,6 +6,7 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { useAuth } from '../components/Header/context/AuthContext';
 import { getAuthToken } from '../utils/getAuthToken';
 import { DocumentDTO } from './useDocumentsQuery';
+import { API_BASE_URL } from '../config/apiBase';
 
 interface ExpiringDocumentsResponse {
   documents: DocumentDTO[];
@@ -23,9 +24,7 @@ async function fetchExpiringDocuments(
   }
 
   // Fetch all documents and filter for expiring ones
-  const expressServerUrl = import.meta.env.VITE_EXPRESS_SERVER_URL || 
-    (import.meta.env.DEV ? 'http://localhost:5000' : 'https://kfrealexpressserver.vercel.app');
-  const url = `${expressServerUrl}/api/v1/documents`;
+  const url = `${API_BASE_URL}/documents`;
   
   const response = await fetch(url, {
     method: 'GET',

@@ -2,7 +2,9 @@
  * Utility functions for testing API endpoints
  */
 
-const SUPPORT_ENDPOINT = 'https://kfrealexpressserver.vercel.app/api/v1/support/create-support-request';
+import { API_BASE_URL } from '../config/apiBase';
+
+const SUPPORT_ENDPOINT = `${API_BASE_URL}/support/create-support-request`;
 
 export interface ApiTestResult {
   success: boolean;
