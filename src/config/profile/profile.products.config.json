@@ -146,24 +146,25 @@
                   { "key": "deposit", "label": "Deposit" },
                   { "key": "psia", "label": "PSIA**" }
                 ],
+                "applicableCellsNote": "Aligned to DFSA reference matrix image (2026-01-05)",
                 "applicableCells": {
                   "accepting_deposits": ["financial_service_only", "deposit"],
-                  "advising_financial_products": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant", "deposit", "psia"],
+                  "advising_financial_products": ["certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant", "deposit", "psia"],
                   "arranging_credit": ["financial_service_only"],
-                  "arranging_custody": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
-                  "arranging_deals": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
-                  "dealing_agent": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
-                  "dealing_principal": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "arranging_custody": ["certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "arranging_deals": ["certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "dealing_agent": ["certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "dealing_principal": ["certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
                   "insurance_intermediation": ["financial_service_only"],
                   "insurance_management": ["financial_service_only"],
                   "managing_cif": ["financial_service_only"],
                   "managing_psia": ["financial_service_only"],
-                  "managing_assets": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
-                  "operating_clearing_house": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "managing_assets": ["certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "operating_clearing_house": ["certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
                   "operating_crowdfunding": ["financial_service_only"],
-                  "operating_exchange": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "operating_exchange": ["certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
                   "providing_credit": ["financial_service_only"],
-                  "providing_custody": ["financial_service_only", "certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
+                  "providing_custody": ["certificate", "debenture", "future", "option", "share", "ltic", "structured_product", "unit", "warrant"],
                   "fund_administration": ["financial_service_only"],
                   "trust_services": ["financial_service_only"],
                   "fund_trustee": ["financial_service_only"]
@@ -1135,10 +1136,14 @@
           "fields": [
             {
               "id": "products.endorsement_retail_flag",
-              "label": "Retail Endorsement (derived from Q99 selections)",
+              "label": "Retail Endorsement (auto-derived)",
               "fieldName": "endorsement_retail_flag",
               "fieldType": "Boolean",
               "uiBlockType": "field",
+              "tooltip": {
+                "title": "Auto-derived field",
+                "body": "This endorsement is determined from your selections in Products → Banking & Investment → Activities Matrix. To change this value, update the matrix selections."
+              },
               "visibility": {
                 "type": "always"
               }
@@ -1173,6 +1178,34 @@
               "id": "products.endorsement_insurance_monies_flag",
               "label": "Holding Insurance Monies",
               "fieldName": "endorsement_insurance_monies_flag",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            }
+          ]
+        },
+        {
+          "id": "endorsements_endorsements_end05_additional_endorsements",
+          "uiSection": "Endorsements",
+          "section": "Endorsements",
+          "groupName": "Additional Endorsements",
+          "fields": [
+            {
+              "id": "products.endorsement_fund_platform_icc",
+              "label": "Fund Platform - Incorporated Cell Company",
+              "fieldName": "endorsement_fund_platform_icc",
+              "fieldType": "Boolean",
+              "uiBlockType": "field",
+              "visibility": {
+                "type": "always"
+              }
+            },
+            {
+              "id": "products.endorsement_long_term_insurance",
+              "label": "Long Term Insurance",
+              "fieldName": "endorsement_long_term_insurance",
               "fieldType": "Boolean",
               "uiBlockType": "field",
               "visibility": {

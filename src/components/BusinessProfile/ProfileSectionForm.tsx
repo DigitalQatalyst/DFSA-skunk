@@ -6,6 +6,7 @@
 
 import { useForm, Controller } from 'react-hook-form';
 import { Can } from '../RBAC/Can';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 
 export interface FieldConfig {
   id: string;
@@ -16,6 +17,10 @@ export interface FieldConfig {
   readOnly?: boolean;
   options?: Array<{ label: string; value: string }>;
   placeholder?: string;
+  tooltip?: {
+    title?: string;
+    body?: string;
+  };
   addressFields?: Record<string, {
     label: string;
     fieldName: string;
@@ -77,7 +82,34 @@ export function ProfileSectionForm({
               return (
                 <div key={field.id} className="flex flex-col sm:flex-row sm:items-start gap-2">
                   <label className="text-sm font-medium text-gray-700 sm:w-1/3 sm:pt-2">
-                    {field.label}
+                    <span className="inline-flex items-center gap-1">
+                      <span>{field.label}</span>
+                      {field.tooltip && (
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <button
+                                type="button"
+                                className="text-gray-400 hover:text-gray-600"
+                                aria-label="Auto-derived field info"
+                              >
+                                <span aria-hidden>ⓘ</span>
+                              </button>
+                            </TooltipTrigger>
+                            <TooltipContent className="max-w-xs">
+                              {field.tooltip.title && (
+                                <div className="font-semibold">{field.tooltip.title}</div>
+                              )}
+                              {field.tooltip.body && (
+                                <div className={field.tooltip.title ? 'mt-1 text-xs' : 'text-xs'}>
+                                  {field.tooltip.body}
+                                </div>
+                              )}
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      )}
+                    </span>
                     {isMandatory && <span className="text-red-500 ml-1">*</span>}
                     {isFieldReadOnly && field.readOnly && (
                       <span className="text-xs text-gray-400 ml-2">(System Generated)</span>

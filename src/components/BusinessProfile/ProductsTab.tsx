@@ -19,6 +19,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '../ui/alert-dialog';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 
 const RESTRICTIONS_SECTION_NAME = 'Restrictions';
 const RESTRICTIONS_CONTROL_GROUP_ID = 'restrictions_restrictions_control_questions';
@@ -29,6 +30,8 @@ const CONDITIONS_CONTROL_GROUP_ID = 'conditions_conditions_control_questions';
 const CRA_APPLY_FIELD = 'cra_apply_flag';
 const ATS_APPLY_FIELD = 'ats_apply_flag';
 const ISLAMIC_ENDORSEMENT_APPLY_FIELD = 'endorsement_islamic_flag';
+const ENDORSEMENT_RETAIL_FIELD = 'endorsement_retail_flag';
+const LICENSE_ENDORSEMENT_GROUP_ID = 'endorsements_endorsements_license_endorsement_selections';
 
 const CRA_RECOGNITION_GROUP_ID = 'other_products_services_q104_q107_credit_rating_agency_recognition_type';
 const CRA_DETAILS_GROUP_ID = 'other_products_services_q104_q107_credit_rating_agency_details';
@@ -36,6 +39,16 @@ const ATS_FACILITY_GROUP_ID = 'other_products_services_q108_q111_alternative_tra
 const ATS_DETAILS_GROUP_ID = 'other_products_services_q108_q111_alternative_trading_system_details';
 const ENDORSEMENT_ISLAMIC_GROUP_ID = 'endorsements_endorsements_end01_islamic_financial_business';
 const ENDORSEMENT_ISLAMIC_SUB_GROUP_ID = 'endorsements_endorsements_end01_islamic_sub_options';
+const BANKING_MATRIX_FIELD = 'banking_investment_activities_matrix';
+const MATRIX_ROW_MANAGING_CIF = 'managing_cif';
+const MATRIX_ROW_INSURANCE_INTERMEDIATION = 'insurance_intermediation';
+const MATRIX_ROW_INSURANCE_MANAGEMENT = 'insurance_management';
+const MATRIX_COL_FINANCIAL_SERVICE_ONLY = 'financial_service_only';
+
+const ENDORSEMENT_FUND_PLATFORM_FIELD = 'endorsement_fund_platform_icc';
+const ENDORSEMENT_LONG_TERM_INSURANCE_FIELD = 'endorsement_long_term_insurance';
+
+const LICENSE_ENDORSEMENT_READONLY_FIELDS = new Set([ENDORSEMENT_RETAIL_FIELD]);
 
 const STANDARD_NON_STANDARD_TYPE_OPTIONS: Array<{ label: string; value: string }> = [
   { label: 'Standard', value: 'Standard' },
@@ -295,6 +308,10 @@ type FieldConfig = {
   mandatory?: boolean | string[];
   readOnly?: boolean;
   hidden?: boolean;
+  tooltip?: {
+    title?: string;
+    body?: string;
+  };
 };
 
 type GroupConfig = {
@@ -559,6 +576,29 @@ export function ProductsTab() {
     return processedData;
   }, [rawProductsData]);
 
+  const endorsementMatrixTriggers = useMemo(() => {
+    const matrix = productsData?.[BANKING_MATRIX_FIELD] as MatrixValue | undefined;
+    const hasFinancialServiceOnly = (rowKey: string) =>
+      matrix?.[rowKey]?.[MATRIX_COL_FINANCIAL_SERVICE_ONLY] === true;
+
+    return {
+      fundPlatformIcc: hasFinancialServiceOnly(MATRIX_ROW_MANAGING_CIF),
+      longTermInsurance:
+        hasFinancialServiceOnly(MATRIX_ROW_INSURANCE_INTERMEDIATION) ||
+        hasFinancialServiceOnly(MATRIX_ROW_INSURANCE_MANAGEMENT),
+    };
+  }, [productsData]);
+
+  const isAdditionalEndorsementFieldVisible = (fieldName: string) => {
+    if (fieldName === ENDORSEMENT_FUND_PLATFORM_FIELD) {
+      return endorsementMatrixTriggers.fundPlatformIcc;
+    }
+    if (fieldName === ENDORSEMENT_LONG_TERM_INSURANCE_FIELD) {
+      return endorsementMatrixTriggers.longTermInsurance;
+    }
+    return true;
+  };
+
   const licenseCategoryGroupForSave = useMemo(() => {
     const groups = (schema?.groups as GroupConfig[]) || [];
     return groups.find((g) => g.id === LICENSE_CATEGORY_GROUP_ID) || null;
@@ -798,13 +838,14 @@ export function ProductsTab() {
         }
       } else {
         // Count regular fields
-        const regularFields = section.groups.flatMap(g =>
-          g.fields.filter((f) =>
-            !f.hidden &&
-            !f.readOnly &&
-            f.uiBlockType !== 'matrixAccordion' &&
-            isVisible(f.visibility as VisibilityRule, productsData)
-          )
+        const regularFields = section.groups.flatMap((g) =>
+          g.fields.filter((f) => {
+            if (f.hidden || f.readOnly) return false;
+            if (f.uiBlockType === 'matrixAccordion') return false;
+            if (!isVisible(f.visibility as VisibilityRule, productsData)) return false;
+            if (!isAdditionalEndorsementFieldVisible(f.fieldName)) return false;
+            return true;
+          })
         );
         totalFields = regularFields.length;
         filledFields = regularFields.reduce((acc, f) => {
@@ -883,6 +924,7 @@ export function ProductsTab() {
         return (group.fields || []).some((f) => {
           if (f.hidden || f.readOnly) return false;
           if (!isVisible(f.visibility as VisibilityRule, productsData)) return false;
+          if (!isAdditionalEndorsementFieldVisible(f.fieldName)) return false;
           return isMandatoryField(f);
         });
       });
@@ -977,7 +1019,16 @@ export function ProductsTab() {
   };
 
   const handleSaveGroup = async (group: GroupConfig, dataToSave: Record<string, any>) => {
-    const payload = { ...dataToSave, _groupId: group.id };
+    let payloadData = dataToSave;
+    if (group.id === LICENSE_ENDORSEMENT_GROUP_ID) {
+      payloadData = Object.fromEntries(
+        Object.entries(dataToSave).filter(([key]) => {
+          if (LICENSE_ENDORSEMENT_READONLY_FIELDS.has(key)) return false;
+          return isAdditionalEndorsementFieldVisible(key);
+        })
+      );
+    }
+    const payload = { ...payloadData, _groupId: group.id };
     await updateMutation.mutateAsync(payload);
   };
 
@@ -1784,7 +1835,34 @@ export function ProductsTab() {
           return (
             <div key={field.id} className="flex flex-col sm:flex-row sm:items-start gap-2">
               <label className="text-sm font-medium text-gray-700 sm:w-1/3 sm:pt-2">
-                {field.label}
+                <span className="inline-flex items-center gap-1">
+                  <span>{field.label}</span>
+                  {field.tooltip && (
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button
+                            type="button"
+                            className="text-gray-400 hover:text-gray-600"
+                            aria-label="Auto-derived field info"
+                          >
+                            <span aria-hidden>ⓘ</span>
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          {field.tooltip.title && (
+                            <div className="font-semibold">{field.tooltip.title}</div>
+                          )}
+                          {field.tooltip.body && (
+                            <div className={field.tooltip.title ? 'mt-1 text-xs' : 'text-xs'}>
+                              {field.tooltip.body}
+                            </div>
+                          )}
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  )}
+                </span>
                 {isMandatory && <span className="text-red-500 ml-1">*</span>}
                 {isFieldReadOnly && <span className="text-xs text-gray-400 ml-2">(Read Only)</span>}
               </label>
@@ -2031,16 +2109,80 @@ export function ProductsTab() {
             );
           }
 
+          const fieldVisibility = (field: FieldConfig) =>
+            isVisible(field.visibility as VisibilityRule, productsData) &&
+            isAdditionalEndorsementFieldVisible(field.fieldName);
+
+          if (sectionData.name === 'Endorsements') {
+            const endorsementGroups = sectionData.groups.filter((group) =>
+              isVisible(group.visibility as VisibilityRule, productsData)
+            );
+            const islamicGroups = endorsementGroups.filter(
+              (group) =>
+                group.id === ENDORSEMENT_ISLAMIC_GROUP_ID ||
+                group.id === ENDORSEMENT_ISLAMIC_SUB_GROUP_ID
+            );
+            const nonIslamicGroups = endorsementGroups.filter(
+              (group) =>
+                group.id !== ENDORSEMENT_ISLAMIC_GROUP_ID &&
+                group.id !== ENDORSEMENT_ISLAMIC_SUB_GROUP_ID
+            );
+
+            const consolidatedFields = nonIslamicGroups
+              .flatMap((group) => group.fields)
+              .filter((field) => {
+                if (field.uiBlockType === 'matrixAccordion') return false;
+                if (field.hidden) return false;
+                return fieldVisibility(field);
+              })
+              .map((field) =>
+                field.fieldName === ENDORSEMENT_RETAIL_FIELD
+                  ? { ...field, readOnly: true }
+                  : field
+              );
+
+            const consolidatedGroup: GroupConfig = {
+              id: LICENSE_ENDORSEMENT_GROUP_ID,
+              groupName: 'License Endorsement Selections',
+              fields: consolidatedFields,
+            };
+
+            return (
+              <div className="space-y-6">
+                {islamicGroups.map((group) => {
+                  const simpleFields = group.fields.filter((field) => {
+                    if (field.uiBlockType === 'matrixAccordion') return false;
+                    if (field.hidden) return false;
+                    return fieldVisibility(field);
+                  });
+
+                  if (simpleFields.length === 0) return null;
+                  return (
+                    <div key={group.id} className="space-y-4">
+                      <div className="text-base font-semibold text-gray-900">{group.groupName}</div>
+                      {renderSimpleBlock({ ...group, fields: simpleFields }, simpleFields)}
+                    </div>
+                  );
+                })}
+
+                {consolidatedFields.length > 0 && (
+                  <div className="space-y-4">
+                    <div className="text-base font-semibold text-gray-900">
+                      {consolidatedGroup.groupName}
+                    </div>
+                    {renderSimpleBlock(consolidatedGroup, consolidatedFields)}
+                  </div>
+                )}
+              </div>
+            );
+          }
+
           const renderGroups = sectionData.groups
             .filter((group) => isVisible(group.visibility as VisibilityRule, productsData))
             .flatMap((group) => {
-              const fieldVisibility = (field: FieldConfig) => isVisible(field.visibility as VisibilityRule, productsData);
-              
-              const matrixFields: FieldConfig[] = [];
-
               // Filter simple fields, but hide old boolean lists when unified matrix is present
               const simpleFields = group.fields.filter((f) => {
-                if (f.uiBlockType === 'matrixAccordion' || 
+                if (f.uiBlockType === 'matrixAccordion' ||
                     (typeof f.fieldType === 'string' && f.fieldType.toLowerCase() === 'matrix')) {
                   return false;
                 }
